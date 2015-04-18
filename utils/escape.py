@@ -2,14 +2,13 @@
 
 from datetime import datetime
 import time
-import logging
 import json
 
 from bson.objectid import ObjectId
 
-import loggers
+import log
 
-logger = loggers.getLogger('utils.escape')
+logger = log.getLogger('utils.escape')
 
 def to_list_str(value):
     """递归序列化list

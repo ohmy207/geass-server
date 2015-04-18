@@ -1,10 +1,10 @@
 #-*- coding:utf-8 -*-
 
-import loggers
+import log
 
 from models.topic import model as topic
 
-logger = loggers.getLogger(__file__)
+logger = log.getLogger(__file__)
 
 MODEL_SLOTS = ['Topic']
 

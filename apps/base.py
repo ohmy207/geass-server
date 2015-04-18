@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 
 import tornado.web
 
-import loggers
+import log
 
 from setting import MESSAGE
 from utils import (
@@ -13,7 +13,7 @@ from utils import (
     session
 )
 
-logger = loggers.getLogger(__file__)
+logger = log.getLogger(__file__)
 
 
 class ResponseError(Exception):

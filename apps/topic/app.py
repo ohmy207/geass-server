@@ -2,13 +2,13 @@
 
 #from tornado.web import authenticated
 
-import loggers
+import log
 
 from apps.base import BaseHandler
 
 from helpers import topic
 
-logger = loggers.getLogger(__file__)
+logger = log.getLogger(__file__)
 
 
 class NewTopicHandler(BaseHandler):
@@ -27,7 +27,8 @@ class NewTopicHandler(BaseHandler):
 
     #@authenticated
     def get(self, uid):
-        self.render('new.html', uid=uid)
+        #self.render('new.html', uid=uid)
+        self.write('1111111111111')
 
     #@authenticated
     def POST(self, uid):

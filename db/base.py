@@ -7,11 +7,11 @@ import functools
 from bson.objectid import ObjectId
 from pymongo import ASCENDING, DESCENDING
 
-import loggers
+import log
 
 from utils import escape as _es
 
-logger = loggers.getLogger(__file__)
+logger = log.getLogger(__file__)
 
 
 class Record(dict):

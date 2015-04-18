@@ -1,6 +1,5 @@
 #-*- coding:utf-8 -*-
 
-import logging
 import sys
 import os
 
@@ -10,15 +9,15 @@ import tornado.options
 
 from tornado.options import define, options
 
-import setting
+import log
 
+from setting import APPLICATION_SETTING, LOG_SETTING
 from apps import urlpatterns
-
 #from utils import session
 
 define("port", default=8888, type=int)
 
-logger = logging.getLogger()
+logger = log.getLogger(**LOG_SETTING)
 
 
 class ErrorHandler(tornado.web.RequestHandler):
@@ -35,17 +34,7 @@ class Application(tornado.web.Application):
     def __init__(self):
 
         handlers = urlpatterns
-
-        settings = dict(
-            template_path=setting.TEMPLATE_PATH,
-            static_path=setting.STATIC_PATH,
-            xsrf_cookies=setting.XSRF_COOKIES,
-            cookie_secret=setting.COOKIE_SECRET,
-            login_url="/login",
-            autoescape=None,
-            debug=setting.DEBUG,
-            # session_store=session.RedisSessionStore(setting.REDIS_HOST)
-        )
+        settings = APPLICATION_SETTING
 
         tornado.web.Application.__init__(self, handlers, **settings)
         tornado.web.ErrorHandler = ErrorHandler
