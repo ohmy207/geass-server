@@ -27,6 +27,8 @@ class ErrorHandler(tornado.web.RequestHandler):
 
     def prepare(self):
         self.render('404.html', error_code=self._status_code)
+        #self.write(unicode(self._status_code))
+        #self.redirect('/error')
 
 
 class Application(tornado.web.Application):
@@ -41,7 +43,7 @@ class Application(tornado.web.Application):
 
 
 def main():
-    print 'system started ...'
+    print 'geass-server started!'
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application(), xheaders=True)
     http_server.listen(options.port)
