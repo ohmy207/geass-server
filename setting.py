@@ -16,9 +16,9 @@ sys.path.append(BASE_PROJECT_DIR)
 # tornado web application settings
 # details in http://www.tornadoweb.org/en/stable/web.html#tornado.web.Application.settings
 APPLICATION_SETTING = ObjectDict(
-    #static_path=os.path.join(BASE_APP_DIR, "static"),
-    #template_path=os.path.join(BASE_APP_DIR, "templates"),
-    xsrf_cookies=True,
+    static_path=os.path.join(BASE_APP_DIR, "static"),
+    template_path=os.path.join(BASE_APP_DIR, "templates"),
+    #xsrf_cookies=True,
     cookie_secret="xxx-xxx-xxx",
 )
 
