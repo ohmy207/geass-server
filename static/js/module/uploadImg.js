@@ -234,7 +234,7 @@ define(['jpegMeta', 'imageCompresser'], function(JpegMeta, ImageCompresser) {
 
             }
 
-            var upTokenUrl = '/image/uptoken'
+            var upTokenUrl = '/img/uptoken'
 
             //var xhrToken = new XMLHttpRequest();
             var xhrToken = jq.UTIL.createCORSRequest("GET", upTokenUrl);

@@ -34,7 +34,7 @@ class NewTopicHandler(BaseHandler):
         data = self._params
         data['content'] = data['content'].replace('\n', '<br/>')
         tid = topic['topic'].insert(data)
-        self._jump = '/'+uid+'/topic/'+unicode(tid)
+        self._jump = '/'+uid+'/t/'+unicode(tid)
 
 
 class DetailTopicHandler(BaseHandler):
