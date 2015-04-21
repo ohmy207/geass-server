@@ -7,6 +7,18 @@ from apps.base import BaseHandler
 from apps.setting import QINIU_CONFIG
 
 
+class PageHandler(BaseHandler):
+
+    #@authenticated
+    def get(self, uid, route):
+        route = route.encode('ascii')
+
+        if route not in ['new']:
+            route = 'detail'
+
+        self.render('%s.html'%route, uid=uid)
+
+
 class UploadTokenHandler(BaseHandler):
 
     #@authenticated
