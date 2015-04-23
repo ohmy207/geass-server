@@ -1,6 +1,6 @@
 
 //define('lib/global', ['module/netType', 'lib/jquery.min'], function(require, exports, module) {
-define(['jquery', 'jqueryForm'], function(jQuery) {
+define(['jquery', 'vendor/jquery.form.min', 'vendor/jquery.lazyloadxt.min'], function(jQuery) {
 
     window.jq = jQuery.noConflict();
 

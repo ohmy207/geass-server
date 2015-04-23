@@ -14,14 +14,16 @@ require.config({
 
         "jquery": "vendor/jquery-1.11.2.min",
         "jqueryForm": "vendor/jquery.form.min",
+        "art-template": "vendor/art-template",
         "util": "module/util",
     }
 
 });
 
-require(['uploadImg', 'util'],function (uploadImg, util){
+require(['art-template', 'util'],function (template, util){
 
     jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
+    console.log(template)
 
     var exports = {
         isLoadingNew: true,
@@ -35,12 +37,13 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             start = start || 0;
             action = action || '';
 
-            module.exports.isLoading = true;
+            exports.isLoading = true;
             /**
              * thread.js里调用，发表时新回复时，倒序，新发表的显示在最上面，正序在最下面
              */
-            var desc = window.desc = module.exports.desc;
-            var url = DOMAIN + window.sId + '/t/' + window.tId
+            var desc = window.desc = exports.desc;
+            //var url = DOMAIN + window.sId + '/t/' + window.tId
+            var url = '/img/uptoken'
                 + '?parentId=' + parentId
                 + '&start=' + start
                 + '&desc=' + desc;
@@ -50,19 +53,19 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                         case 'pull':
                             jq('#refreshWait').show();
                             jq('#showAll').hide();
-                            module.exports.isLoadingNew = true;
+                            exports.isLoadingNew = true;
                             break;
                         case 'drag':
                             jq('#loadNext').show();
-                            module.exports.isLoadingNew = true;
+                            exports.isLoadingNew = true;
                             break;
                         case 'sort':
                             jq('#showAll').hide();
-                            module.exports.isLoadingNew = true;
-                            jQuery.DIC.showLoading();
+                            exports.isLoadingNew = true;
+                            jQuery.UTIL.showLoading();
                             break;
                         default:
-                            jq.DIC.showLoading();
+                            jq.UTIL.showLoading();
                     }
                 },
                 'complete': function() {
@@ -70,18 +73,18 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 'success': function(re) {
                     jq('#refreshWait').hide();
                     jq('#loadNext').hide();
-                    jq.DIC.showLoading('none');
+                    jq.UTIL.showLoading('none');
                     if (re.errCode == 0) {
                         var zero = new Date;
-                        module.exports.renderList(re, !start);
+                        exports.renderList(re, !start);
                         stat.reportPoint('listRender', 10, new Date, zero);
                     } else {
-                        jq.DIC.dialog({content: '拉取数据失败，请重试', autoClose: true});
+                        jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
                     }
-                    module.exports.isLoading = false;
+                    exports.isLoading = false;
                 }
             };
-            jq.DIC.ajax(url, '', opts);
+            jq.UTIL.ajax(url, '', opts);
         },
 
         // render data
@@ -91,8 +94,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             }
 
             // 最后无数据不再加载
-            if (jq.DIC.isObjectEmpty(re.data.dataList)) {
-                module.exports.isLoadingNew = false;
+            if (jq.UTIL.isObjectEmpty(re.data.dataList)) {
+                exports.isLoadingNew = false;
                 jq('#loadNext').hide();
                 jq('#showAll').show();
                 return true;
@@ -113,10 +116,10 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 jq('#allReplyList').append(allReplyHtml);
             }
             jq('#loadNext').hide();
-            module.exports.nextStart = re.data.nextStart;
+            exports.nextStart = re.data.nextStart;
 
             if (clear) {
-                if (module.exports.order == 'hot') {
+                if (exports.order == 'hot') {
                     jq('.badge').show();
                 } else {
                     jq('.badge').hide();
@@ -129,12 +132,12 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             var parentId = window.parentId || 0;
 
             // 分享遮罩，一次性
-            var action = jq.DIC.getQuery('action');
+            var action = jq.UTIL.getQuery('action');
             var reapp = /qqdownloader\/([^\s]+)/i;
 
             var jsonData = parseJSON(window.jsonData);
-            module.exports.renderList({data: jsonData}, true);
-            g_ts.first_render_end = new Date();
+            exports.renderList({data: jsonData}, true);
+            //g_ts.first_render_end = new Date();
 
             initLazyload('.warp img');
 
@@ -146,7 +149,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     isMask = true;
                 }
                 var tmpl = template.render('tmpl_pageTip', {'msg':'喜欢这个话题，请点击右上角图标分享'});
-                jq.DIC.dialog({
+                jq.UTIL.dialog({
                     id: 'shareMask',
                     top:0,
                     content: tmpl,
@@ -154,7 +157,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     isMask: isMask,
                     callback: function() {
                         jq('.g-mask').on('click', function() {
-                            jq.DIC.dialog({id:'shareMask'});
+                            jq.UTIL.dialog({id:'shareMask'});
                         });
                         jq('#showShare').on('click', function() {
                             jq(this).hide();
@@ -172,33 +175,33 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             // 头部点击
             jq('.detail').on('click', function() {
                 if (sId && parentId != 0) {
-                    jq.DIC.open('/' + sId + '/v/' + parentId);
+                    jq.UTIL.open('/' + sId + '/v/' + parentId);
                     return false;
                 }
                 if (sId) {
-                    jq.DIC.open('/' + sId);
+                    jq.UTIL.open('/' + sId);
                     return false;
                 }
             });
 
             // 图片横滑
-            module.exports.initShowPic(parentId);
+            //exports.initShowPic(parentId);
 
             // 点击查看大图
-            require.async('module/imageviewCommon', function(imageviewCommon) {
-                imageviewCommon.init('.slideShow li');
-                imageviewCommon.init('.threadPic span');
-                imageviewCommon.init('.replyImg dd');
-                // imageviewCommon.init('.slideBox li');
-            });
+            //require.async('module/imageviewCommon', function(imageviewCommon) {
+            //    imageviewCommon.init('.slideShow li');
+            //    imageviewCommon.init('.threadPic span');
+            //    imageviewCommon.init('.replyImg dd');
+            //    // imageviewCommon.init('.slideBox li');
+            //});
 
-            jq.DIC.touchState('#support');
+            jq.UTIL.touchState('#support');
 
             // 回复内容点击
             jq('.warp').on('click', '.replyUser, .replyShare, .replyPop, .replyPop .replyFloor', function(e) {
                 console.info(e.target);
                 var obj = jq(this);
-                jq.DIC.touchStateNow(obj);
+                jq.UTIL.touchStateNow(obj);
 
                 var divId = obj.parents('li').attr('id'), pId, floorPId;
                 var authorUId = obj.parents('li').attr('uId');
@@ -225,8 +228,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             });
 
             // 主题和底部bar 帖点击回复
-            jq.DIC.touchState('.threadReply', 'commBg', '.warp');
-            jq.DIC.touchState('.threadReply', 'commBg', '#bottomBar');
+            jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
+            jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this);
                 thread.reply(sId, tId, parentId, 0, 0, '', true, false, true);
@@ -242,7 +245,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 parent.html('<video width="'+width+'" height="'+height+'" class="video" autoplay="autoplay" src="'+thisObjUrl+'" controls="controls"></video>')
             });
             //列表点击播放进入详情页
-            if(jq.DIC.getQuery('video')) {
+            if(jq.UTIL.getQuery('video')) {
                 jq("html,body").animate({scrollTop:jq('#videoBox').offset().top - 50},1000);
                 jq('.videoPlay').click();
             }
@@ -266,7 +269,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     }
 
                     e.stopPropagation();
-                    jq.DIC.touchStateNow(jq(this));
+                    jq.UTIL.touchStateNow(jq(this));
 
                     author = thisObj.attr('author');
                     thread.reply(sId, tId, parentId, pId, floorPId, author, true);
@@ -282,12 +285,12 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 var url = '/' + sId + '/f/list?tId=' + tId + '&pId=' + pId + '&start=' + start + '&parentId=' + parentId;
                 var opts = {
                     'beforeSend': function() {
-                        jq.DIC.showLoading();
+                        jq.UTIL.showLoading();
                     },
                     'complete': function() {
                     },
                     'success': function(re) {
-                        jq.DIC.showLoading('none');
+                        jq.UTIL.showLoading('none');
                         var status = parseInt(re.errCode);
                         if (status == 0) {
                             thisObj.attr('start', re.data.nextStart);
@@ -297,15 +300,15 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                                 thisObj.hide();
                             }
                         } else {
-                            jq.DIC.dialog({content: '拉取数据失败，请重试', autoClose: true});
+                            jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
                         }
                     }
                 };
-                jq.DIC.ajax(url, '', opts);
+                jq.UTIL.ajax(url, '', opts);
             });
 
-            // module.exports.picTId = window.picThreadTId;
-            module.exports.nextStart = window.nextStart;
+            // exports.picTId = window.picThreadTId;
+            exports.nextStart = window.nextStart;
 
             // 翻页相关
             var query = '';
@@ -313,20 +316,20 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 query = window.location.search.replace(/\?/g, '&');
             }
             // 消息页过来查看楼中楼 禁用上滑
-            var getFloorPId = jq.DIC.getQuery('floorPId') || 0;
-            var getPId = jq.DIC.getQuery('pId') || 0;
+            var getFloorPId = jq.UTIL.getQuery('floorPId') || 0;
+            var getPId = jq.UTIL.getQuery('pId') || 0;
             if (getFloorPId || getPId) {
-                module.exports.isLoadingNew = false;
+                exports.isLoadingNew = false;
                 jq('#showAllReply').on('click', function() {
                     var url = window.location.href.replace(/&?pId=\d+/, '');
-                    jq.DIC.reload(url);
+                    jq.UTIL.reload(url);
                 }).show();
                 jq('#showAll').hide();
             }
 
             var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
             // 全屏触摸
-            jq.DIC.initTouch({
+            jq.UTIL.initTouch({
                 obj: jq('.warp')[0],
                 end: function(e, offset) {
                     document.ontouchmove = function(e){ return true;}
@@ -335,8 +338,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     // var loadingObjTop = loadingObj.offset().top + loadingObj.height() - jq(window).scrollTop();
                     var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
                     // 向上滑
-                    if (offset.y > 10 && loadingObjTop <= 10 && module.exports.isLoadingNew && !module.exports.isLoading) {
-                        module.exports.load(module.exports.nextStart, 'drag');
+                    if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
+                        exports.load(exports.nextStart, 'drag');
                     }
                     // 向下拉刷新
                     if (offset.y < level && document.body.scrollTop <= 0) {
@@ -346,7 +349,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
             // like
             jq('.topicCon .replyShare,#hotReplyList,#allReplyList').on('click', '.like', function(e) {
-                jq.DIC.touchStateNow(jq(this));
+                jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
 
                 var thisObj = jq(this),
@@ -357,7 +360,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
                 // 晒图结束不能定
                 if (parentId && thisObj.attr('isEnd') == 1 && !pId) {
-                    jq.DIC.dialog({content: '活动已结束，请不要再赞了', autoClose: true});
+                    jq.UTIL.dialog({content: '活动已结束，请不要再赞了', autoClose: true});
                     return false;
                 }
 
@@ -365,7 +368,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     'success': function(result) {
                         if (result.errCode == 0 && result.data && result.data.likeNumber) {
                             if (parentId > 0 && !pId) {
-                                jq.DIC.likeTips(thisObj);
+                                jq.UTIL.likeTips(thisObj);
                             }
                             thisObj.html('<i class="iconPraise f18 cf"></i>' + result.data.likeNumber);
                             // 赞的不是回复时
@@ -382,7 +385,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                                     }
                                 });
                             }
-                            if (isWX && isWeixinLink && jq.DIC.getQuery('source')) {
+                            if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
                                 wxFollow.wxFollowTips();
                             }
                         }
@@ -400,7 +403,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     url = url + '/like';
                 }
 
-                jq.DIC.ajax(url, data, opts);
+                jq.UTIL.ajax(url, data, opts);
             });
             /**
              * @desc 全部回复加倒序查看
@@ -409,7 +412,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             var replySortBtn = jq('.evtReplySort'),
                 replySortIcon = replySortBtn.find('i'),
                 replySortSwitch = function () {
-                    if (!module.exports.desc) {
+                    if (!exports.desc) {
                         replySortIcon.removeClass('iconSequence');
                         replySortIcon.addClass('iconReverse');
                         replySortBtn.html('倒序排列');
@@ -427,10 +430,10 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     allReplyHeight = allReplyWrap.height();
                 allReplyWrap.css({height: allReplyHeight});
                 allReplyWrap.html('');
-                module.exports.nextStart = 0;
-                module.exports.desc = !module.exports.desc ? 1 : 0;
+                exports.nextStart = 0;
+                exports.desc = !exports.desc ? 1 : 0;
                 replySortSwitch();
-                module.exports.load(module.exports.nextStart, 'sort');
+                exports.load(exports.nextStart, 'sort');
                 pgvSendClick({hottag: 'wsq.reply.sort.inverse'});
             });
 
@@ -440,31 +443,31 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             jq('.warp').on('click', '.evtTopicCon',function () {
                 var link = jq(this).attr('data-link') || '';
                 if (link) {
-                    jq.DIC.open(link + '?ADTAG=wsq.xiangqing.tuijian.click');
+                    jq.UTIL.open(link + '?ADTAG=wsq.xiangqing.tuijian.click');
                     return false;
                 }
             }).on('click', '.evtAuthorUrl',function (e) {
                 e.stopPropagation(e);
                 var link = jq(this).attr('data-link') || '';
                 if (link) {
-                    jq.DIC.open(link);
+                    jq.UTIL.open(link);
                 }
                 return false;
             }).on('click', '.evtMoreHot', function (e) {
                 e.stopPropagation(e);
                 var link = jq(this).attr('data-link') || '';
                 if (link) {
-                    jq.DIC.open(link + '&ADTAG=wsq.remenbiaoqian.tuijian.click');
+                    jq.UTIL.open(link + '&ADTAG=wsq.remenbiaoqian.tuijian.click');
                 }
                 return false;
             });
 
             // 话题推荐
-            module.exports.recommendThread();
+            //exports.recommendThread();
             // 全局活动
-            thread.publicEvent();
+            //thread.publicEvent();
             // 管理
-            thread.initPopBtn();
+            //thread.initPopBtn();
         },
 
     };

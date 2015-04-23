@@ -42,13 +42,13 @@
      </div> 
      <div class="detailCon"> 
       <div class="dCon f16">
-       {{ result['content'] }}
+        {{ result['content'] }}
       </div> 
       <div class="threadPic pr"> 
 
-       {% for p in result['pickeys'] %}
-       <span> <img class="dImg" src="{{ 'http://7xi8l3.com1.z0.glb.clouddn.com/'+p }}"/> </span> 
-       {% end %}
+      {% for p in result['pickeys'] %}
+        <span> <img class="dImg" data-original="{{ 'http://7xi8l3.com1.z0.glb.clouddn.com/'+p }}"/> </span> 
+      {% end %}
 
        <!--
        <span> <img class="dImg lazy-loaded" src="./详情_files/600" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1592/600?max-age=2592000&amp;t=0" alt="" /> </span> 
