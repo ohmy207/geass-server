@@ -30,9 +30,9 @@
    <div class="detailBox"> 
     <div class="topicCon" id="t_3569_0_0"> 
      <div class="personImgDate bn pr"> 
-      <i class="perImg mr db fl pr"> <a href="http://m.wsq.qq.com/profile/245300167"><img src="./龙门客栈_files/64" data-original="http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqHqw9gU7QzTsg1icdpgsUKibqInYWGuwnhibrwhQw9qMHmyPIUFzibKg95baHauiaxy4iawhQpz559IccA/64?max-age=1296000" class="bImg brBig lazy-loaded" width="35" height="35" alt="avatar" /></a> </i> 
-      <h3 class="title f13 fn c6">Dr.Liu </h3> 
-      <p class="f11"><span class="time c9 mr">1天前</span><span class="address c6"><i class="iconloc f14 c1 cf"></i>哈尔滨市 通顺街</span></p> 
+         <i class="perImg mr db fl pr"> <a href="http://m.wsq.qq.com/profile/245300167"><img data-src="{{ result['avatar'] }}" class="bImg brBig lazy-loaded" width="35" height="35" alt="avatar" /></a> </i> 
+      <h3 class="title f13 fn c6">{{ result['author'] }} </h3> 
+      <p class="f11"><span class="time c9 mr">{{ result['hctime'] }}</span><span class="address c6"><i class="iconloc f14 c1 cf"></i>哈尔滨市 通顺街</span></p> 
       <a class="iconAd cf f16 c9 pa db PerPopBtn" tid="3569" href="javascript:;"></a> 
       <div class="adPop pa perPop" style="display:none;"> 
        <div class="adBCon pr  f12" tid="3569" uid="245300167" author="Dr.Liu"> 
@@ -47,18 +47,9 @@
       <div class="threadPic pr"> 
 
       {% for p in result['pickeys'] %}
-        <span> <img class="dImg" data-original="{{ 'http://7xi8l3.com1.z0.glb.clouddn.com/'+p }}"/> </span> 
+        <span> <img class="dImg" data-src="{{ p }}"/> </span> 
       {% end %}
 
-       <!--
-       <span> <img class="dImg lazy-loaded" src="./详情_files/600" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1592/600?max-age=2592000&amp;t=0" alt="" /> </span> 
-       <span> <img class="dImg lazy-loaded" src="./详情_files/600(1)" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1593/600?max-age=2592000&amp;t=0" alt="" /> </span> 
-       <span> <img class="dImg lazy-loaded" src="./详情_files/600(2)" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1594/600?max-age=2592000&amp;t=0" alt="" /> </span> 
-
-       <span> <img class="dImg lazy-loaded" src="./龙门客栈_files/600" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1592/600?max-age=2592000&amp;t=0" alt="" /> </span> 
-       <span> <img class="dImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1593/600?max-age=2592000&amp;t=0" alt="" /> </span> 
-       <span> <img class="dImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-original="http://ugc.qpic.cn/quan_pics/0/264151824_1594/600?max-age=2592000&amp;t=0" alt="" /> </span> 
-       -->
       </div>
 
       <div class="operation oh"> 
@@ -69,7 +60,7 @@
      <div id="similarTopicBox" style="">
       <div class="similarTopic"> 
        <div class="similarTopicCon evtTopicCon" data-link="/264151824/t/3346"> 
-        <a href="javascript:;" class="evtAuthorUrl" data-link="/profile/242994209"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-original="http://wx.qlogo.cn/mmopen/vd8yNL3TS9Ab8vXHibQQPtQQ9z8YZibH2UD2sXMAu0BIdeFfcWA8gxnqPNazURPUnwVlB5cHJBEvt2jvbWD3LDbDjyUQm8YvH5/64?max-age=1296000" class="sImg brBig pa db" width="20" height="20" alt="头像" /> <span class="c7">龙斌</span> </a> 
+        <a href="javascript:;" class="evtAuthorUrl" data-link="/profile/242994209"><img data-src="http://wx.qlogo.cn/mmopen/vd8yNL3TS9Ab8vXHibQQPtQQ9z8YZibH2UD2sXMAu0BIdeFfcWA8gxnqPNazURPUnwVlB5cHJBEvt2jvbWD3LDbDjyUQm8YvH5/64?max-age=1296000" class="sImg brBig pa db" width="20" height="20" alt="头像" /> <span class="c7">龙斌</span> </a> 
         <p>本周五录棚，《钟馗伏魔 雪妖魔灵》、《被嫌弃的松子的一生》《告白》、《如父如子》、《北京国际电影节特辑》（上）（下）。就上述影片和选题，留下你们的评论吧。我将在周五前从中选出有价值的评论在节目中与大家一起分享！ps：请在每一个选题下面单独做出评论哦</p> 
        </div> 
        <div class="similarTopicTit"> 
@@ -93,58 +84,6 @@
     </div> 
     <div class="topicList"> 
      <ul id="allReplyList" style="height: auto;"> 
-      <li id="p_3569_12572_0" uid="218262032" author="木子之"> 
-       <div class="f13 c3 replyUser"> 
-        <a href="http://m.wsq.qq.com/profile/218262032"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-original="http://wx.qlogo.cn/mmopen/icicIvSc9Yf6UCeK5zYUH9W8MMCZLH9Kpdib8PEHDxJYOooXAaO7UoqTuaLwxs1qz3QvjKpZxMnoIGBCakOxU26ZJTQx7UMpPBQ/64?max-age=1296000" class="sImg brBig pa db" width="20" height="20" /></a> 
-        <span class="c7">木子之 ： </span> 导演不愧是拍恐怖片的 飞车把我吓尿了 太夸张了 话说楼主你发的图我看不见啊 是灵异事件吗
-        <img class="expimg" src="./龙门客栈_files/e153.gif" /> 
-        <span class="statusBg2 brBig db c2 pa"><i class="iconActiveUser cf f12"></i></span> 
-       </div> 
-       <div class="operation pr"> 
-        <div class="replyImg "> 
-        </div> 
-        <span class="source db c6 f11 fl">1天前</span> 
-        <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" pid="12572"><i class="iconNoPraise f18 cf"></i>赞</a> <a class="c9 replyFloor" href="javascript:;" id="p_3569_12572" uid="218262032" author="木子之"><i class="iconReply f18 cf"></i></a> </span> 
-        <div class="replyPop"> 
-         <div class="replyBg brSmall pr"> 
-          <div class="topicList floorList" id="fl_12572"> 
-           <ul> 
-            <li id="p_3569_12572_12588" author="Dr.Liu" uid="245300167"> 
-             <div class="f13 c3 replyFloor"> 
-              <span class="c7">Dr.Liu<i class="cardBtn br fn db c2">楼主</i>：</span>那是你太灵异了
-              <img class="expimg" src="./龙门客栈_files/e122.gif" /> 
-             </div> </li> 
-           </ul> 
-           <a href="javascript:;" start="0" pid="12572" style="display:none;" class="db f12 moreInReply">更多</a> 
-          </div> 
-         </div> 
-        </div> 
-       </div> </li> 
-      <li id="p_3569_12575_0" uid="218262032" author="木子之"> 
-       <div class="f13 c3 replyUser"> 
-        <a href="http://m.wsq.qq.com/profile/218262032"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-original="http://wx.qlogo.cn/mmopen/icicIvSc9Yf6UCeK5zYUH9W8MMCZLH9Kpdib8PEHDxJYOooXAaO7UoqTuaLwxs1qz3QvjKpZxMnoIGBCakOxU26ZJTQx7UMpPBQ/64?max-age=1296000" class="sImg brBig pa db" width="20" height="20" /></a> 
-        <span class="c7">木子之 ： </span> 怎么把自己名字打上去的 
-        <span class="statusBg2 brBig db c2 pa"><i class="iconActiveUser cf f12"></i></span> 
-       </div> 
-       <div class="operation pr"> 
-        <div class="replyImg "> 
-        </div> 
-        <span class="source db c6 f11 fl">1天前</span> 
-        <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" pid="12575"><i class="iconNoPraise f18 cf"></i>赞</a> <a class="c9 replyFloor" href="javascript:;" id="p_3569_12575" uid="218262032" author="木子之"><i class="iconReply f18 cf"></i></a> </span> 
-        <div class="replyPop"> 
-         <div class="replyBg brSmall pr"> 
-          <div class="topicList floorList" id="fl_12575"> 
-           <ul> 
-            <li id="p_3569_12575_12589" author="Dr.Liu" uid="245300167"> 
-             <div class="f13 c3 replyFloor"> 
-              <span class="c7">Dr.Liu<i class="cardBtn br fn db c2">楼主</i>：</span>秘密 
-             </div> </li> 
-           </ul> 
-           <a href="javascript:;" start="0" pid="12575" style="display:none;" class="db f12 moreInReply">更多</a> 
-          </div> 
-         </div> 
-        </div> 
-       </div> </li> 
      </ul> 
     </div> 
    </div> 

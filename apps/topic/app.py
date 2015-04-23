@@ -4,6 +4,8 @@
 
 import log
 
+from datetime import datetime
+
 from apps.base import BaseHandler
 
 from helpers import topic
@@ -32,8 +34,13 @@ class NewTopicHandler(BaseHandler):
     #@authenticated
     def POST(self, uid):
         data = self._params
+        data['authoruid'] = uid
+        print data['content']
         data['content'] = data['content'].replace('\n', '<br/>')
+        data['ctime'] = datetime.now()
+
         tid = topic['topic'].insert(data)
+
         self._jump = '/'+uid+'/t/'+unicode(tid)
 
 

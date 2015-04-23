@@ -826,7 +826,8 @@ define(['jquery', 'vendor/jquery.form.min', 'vendor/jquery.lazyloadxt.min'], fun
         conf = conf || {};
         var defaultConf = {
             visibleOnly: false,
-            srcAttr: 'data-original',
+            //srcAttr: 'data-original',
+            srcAttr: 'data-src',
             selector: ''
             // threshold : 200
         };

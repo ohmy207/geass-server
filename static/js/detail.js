@@ -22,9 +22,6 @@ require.config({
 
 require(['art-template', 'util'],function (template, util){
 
-    jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
-    console.log(template)
-
     var exports = {
         isLoadingNew: true,
         isLoading: false,
@@ -473,5 +470,7 @@ require(['art-template', 'util'],function (template, util){
     };
 
     exports.init();
+
+    jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
 
 });

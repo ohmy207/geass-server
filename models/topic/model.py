@@ -11,10 +11,12 @@ class Topic(Model):
         'title':            (basestring, ''),
         'content':          (basestring, ''),
 
-        'uid':              (ObjectId, None),
+        'authoruid':        (basestring, ''),
 
         'ispriv':           (bool, False)   ,
         'isanon':           (bool, False)   ,
 
         'pickeys':          (list, [])      ,
+
+        'ctime':            (datetime, None),
     }
