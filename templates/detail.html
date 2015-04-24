@@ -114,8 +114,56 @@
 
   </div> 
   <!--底部bar--> 
+
+  <script id="tmpl_replyForm" type="text/html">
+    <div class="popLayer pSpace brNone" style="width:100%">
+    <form method="post" action="/264151824/r/new/submit" id="replyForm">
+        <input type="hidden" name="CSRFToken" value="2ffef155">
+        <input type="hidden" name="sId" value="<%= data.sId %>">
+        <input type="hidden" name="tId" value="<%= data.tId %>">
+        <input type="hidden" name="pId" value="<%= data.pId %>">
+        <input type="hidden" name="floorPId" value="<%= data.floorPId %>">
+        <input type="hidden" name="parentId" value="<%= data.parentId %>">
+        <div class="sendRCon">
+            <textarea id="content" name="content" cols="" rows="" class="sInput f13" placeholder="回两句吧..."></textarea>
+        </div>
+        <div class="sendNav">
+            <ul>
+                <li>
+                    <a data-id='0' href="javascript:;" class="operatIcon iconExpression f21 db c9 cf"></a>
+                </li>
+                <li class="pr uploadPicBox">
+                    <a data-id='1' href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
+                </li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn brSmall f13 db fr c3 close">取消</a></li>
+                <li><a id="comBtn" href="javascript:;" class="sendBtn brSmall f13 db c2">发送</a>
+                </li>
+            </ul>
+        </div>
+        <div class="operatingBox">
+            <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
+            </div>
+            <div class="operatList photoTipsBox" style="display:none;height:213px;background-color:#efefef;border-top:1px solid #e2e2e2;">
+                <div class="photoList">
+                    <ul>
+                        <li class="on" id="addPic">
+                        <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single>
+                        </li>
+                    </ul>
+                    <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+    </div>
+  </script>
+
   <script id="tmpl_sideBar" type="text/html">
   </script>
+
   <script id="tmpl_customTag" type="text/html">
   </script>
 

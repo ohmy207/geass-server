@@ -20,6 +20,7 @@ APPLICATION_SETTING = ObjectDict(
     template_path=os.path.join(BASE_APP_DIR, "templates"),
     #xsrf_cookies=True,
     cookie_secret="xxx-xxx-xxx",
+    #autoescape=None,
 )
 
 # app setting 

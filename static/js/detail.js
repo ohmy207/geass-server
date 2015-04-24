@@ -16,11 +16,17 @@ require.config({
         "jqueryForm": "vendor/jquery.form.min",
         "art-template": "vendor/art-template",
         "util": "module/util",
+
+        "jpegMeta": "module/jpegMeta",
+        "JPEGEncoder": "module/JPEGEncoder",
+        "imageCompresser": "module/imageCompresser",
+        "uploadImg": "module/uploadImg",
+        "thread": "module/thread",
     }
 
 });
 
-require(['art-template', 'util'],function (template, util){
+require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
         isLoadingNew: true,
@@ -431,7 +437,7 @@ require(['art-template', 'util'],function (template, util){
                 exports.desc = !exports.desc ? 1 : 0;
                 replySortSwitch();
                 exports.load(exports.nextStart, 'sort');
-                pgvSendClick({hottag: 'wsq.reply.sort.inverse'});
+                //pgvSendClick({hottag: 'wsq.reply.sort.inverse'});
             });
 
             /**
