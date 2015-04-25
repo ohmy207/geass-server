@@ -445,7 +445,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null;
-                var replyForm = template.render('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
+                //var replyForm = template.render('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
+                var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
 
                 // 弹出回复框
                 jq.UTIL.dialog({
