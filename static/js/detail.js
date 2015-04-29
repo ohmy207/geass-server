@@ -12,8 +12,8 @@ require.config({
 
     paths: {
 
-        "jquery": "vendor/jquery-1.11.2.min",
-        "jqueryForm": "vendor/jquery.form.min",
+        //"jquery": "vendor/jquery-1.11.2.min",
+        "jquery": "vendor/jquery.min",
         "art-template": "vendor/art-template",
         "util": "module/util",
 
@@ -138,54 +138,54 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var action = jq.UTIL.getQuery('action');
             var reapp = /qqdownloader\/([^\s]+)/i;
 
-            var jsonData = parseJSON(window.jsonData);
-            exports.renderList({data: jsonData}, true);
+            //var jsonData = parseJSON(window.jsonData);
+            //exports.renderList({data: jsonData}, true);
             //g_ts.first_render_end = new Date();
 
             initLazyload('.warp img');
 
             // appbar no share mask
-            if (action == 'share' && !reapp.test(navigator.userAgent)) {
-                var hadShowShareMask = localStorage.getItem('hadShowShareMask'),
-                    isMask = false;
-                if (!hadShowShareMask) {
-                    isMask = true;
-                }
-                var tmpl = template.render('tmpl_pageTip', {'msg':'喜欢这个话题，请点击右上角图标分享'});
-                jq.UTIL.dialog({
-                    id: 'shareMask',
-                    top:0,
-                    content: tmpl,
-                    isHtml: true,
-                    isMask: isMask,
-                    callback: function() {
-                        jq('.g-mask').on('click', function() {
-                            jq.UTIL.dialog({id:'shareMask'});
-                        });
-                        jq('#showShare').on('click', function() {
-                            jq(this).hide();
-                        });
-                    }
-                });
-                localStorage.setItem('hadShowShareMask', 1);
-            }
+            //if (action == 'share' && !reapp.test(navigator.userAgent)) {
+            //    var hadShowShareMask = localStorage.getItem('hadShowShareMask'),
+            //        isMask = false;
+            //    if (!hadShowShareMask) {
+            //        isMask = true;
+            //    }
+            //    var tmpl = template.render('tmpl_pageTip', {'msg':'喜欢这个话题，请点击右上角图标分享'});
+            //    jq.UTIL.dialog({
+            //        id: 'shareMask',
+            //        top:0,
+            //        content: tmpl,
+            //        isHtml: true,
+            //        isMask: isMask,
+            //        callback: function() {
+            //            jq('.g-mask').on('click', function() {
+            //                jq.UTIL.dialog({id:'shareMask'});
+            //            });
+            //            jq('#showShare').on('click', function() {
+            //                jq(this).hide();
+            //            });
+            //        }
+            //    });
+            //    localStorage.setItem('hadShowShareMask', 1);
+            //}
 
             // 默认展开回复
-            if (action == 'reply') {
-                thread.reply(sId, tId, parentId, 0, 0, '', true);
-            }
+            //if (action == 'reply') {
+            //    thread.reply(sId, tId, parentId, 0, 0, '', true);
+            //}
 
             // 头部点击
-            jq('.detail').on('click', function() {
-                if (sId && parentId != 0) {
-                    jq.UTIL.open('/' + sId + '/v/' + parentId);
-                    return false;
-                }
-                if (sId) {
-                    jq.UTIL.open('/' + sId);
-                    return false;
-                }
-            });
+            //jq('.detail').on('click', function() {
+            //    if (sId && parentId != 0) {
+            //        jq.UTIL.open('/' + sId + '/v/' + parentId);
+            //        return false;
+            //    }
+            //    if (sId) {
+            //        jq.UTIL.open('/' + sId);
+            //        return false;
+            //    }
+            //});
 
             // 图片横滑
             //exports.initShowPic(parentId);
@@ -198,7 +198,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //    // imageviewCommon.init('.slideBox li');
             //});
 
-            jq.UTIL.touchState('#support');
+            //jq.UTIL.touchState('#support');
 
             // 回复内容点击
             jq('.warp').on('click', '.replyUser, .replyShare, .replyPop, .replyPop .replyFloor', function(e) {
@@ -239,19 +239,19 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             //点击视频播放
-            jq('.warp').on('click', '.videoPlay', function() {
-                var thisObjUrl = jq(this).attr('data-url') || '';
-                var thisObjVid = jq(this).attr('data-vid') || '';
-                var parent = jq(this).parent();
-                var width = parent.find('img').width();
-                var height = parent.find('img').height();
-                parent.html('<video width="'+width+'" height="'+height+'" class="video" autoplay="autoplay" src="'+thisObjUrl+'" controls="controls"></video>')
-            });
+            //jq('.warp').on('click', '.videoPlay', function() {
+            //    var thisObjUrl = jq(this).attr('data-url') || '';
+            //    var thisObjVid = jq(this).attr('data-vid') || '';
+            //    var parent = jq(this).parent();
+            //    var width = parent.find('img').width();
+            //    var height = parent.find('img').height();
+            //    parent.html('<video width="'+width+'" height="'+height+'" class="video" autoplay="autoplay" src="'+thisObjUrl+'" controls="controls"></video>')
+            //});
             //列表点击播放进入详情页
-            if(jq.UTIL.getQuery('video')) {
-                jq("html,body").animate({scrollTop:jq('#videoBox').offset().top - 50},1000);
-                jq('.videoPlay').click();
-            }
+            //if(jq.UTIL.getQuery('video')) {
+            //    jq("html,body").animate({scrollTop:jq('#videoBox').offset().top - 50},1000);
+            //    jq('.videoPlay').click();
+            //}
 
 
             // 回复楼中楼
@@ -477,6 +477,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     exports.init();
 
-    jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
+    //jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
 
 });

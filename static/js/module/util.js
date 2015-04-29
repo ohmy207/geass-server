@@ -1,6 +1,6 @@
 
-//define('lib/global', ['module/netType', 'lib/jquery.min'], function(require, exports, module) {
-define(['jquery', 'vendor/jquery.form.min', 'vendor/jquery.lazyloadxt.min'], function(jQuery) {
+//define(['jquery', 'vendor/jquery.form.min', 'vendor/jquery.lazyloadxt.min'], function(jQuery) {
+define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
 
     window.jq = jQuery.noConflict();
 
@@ -832,7 +832,7 @@ define(['jquery', 'vendor/jquery.form.min', 'vendor/jquery.lazyloadxt.min'], fun
             // threshold : 200
         };
         jq.extend(jq.lazyLoadXT, defaultConf);
-//        jq.extend(jq.lazyLoadXT, conf);
+        // jq.extend(jq.lazyLoadXT, conf);
 
         // jq.extend(defaultConf, conf);
         // 图片 lazyload
