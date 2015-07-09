@@ -117,12 +117,11 @@
 
   <script id="tmpl_replyForm" type="text/html">
     <div class="popLayer pSpace brNone" style="width:100%">
-    <form method="post" action="/264151824/r/new/submit" id="replyForm">
+    <form method="post" id="replyForm">
         <input type="hidden" name="CSRFToken" value="2ffef155">
         <input type="hidden" name="sId" value="<%= data.sId %>">
-        <input type="hidden" name="tId" value="<%= data.tId %>">
-        <input type="hidden" name="pId" value="<%= data.pId %>">
-        <input type="hidden" name="floorPId" value="<%= data.floorPId %>">
+        <input type="hidden" name="tid" value="<%= data.tId %>">
+        <input type="hidden" name="pid" value="<%= data.pId %>">
         <input type="hidden" name="parentId" value="<%= data.parentId %>">
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f13" placeholder="回两句吧..."></textarea>
@@ -174,9 +173,9 @@
 
   <div class="topBar"> 
    <div class="topBarCon pr"> 
-    <a href="javascript:;" class="qBackBtn" id="goback"><i class="upBtn cf db"></i>返回</a> 
+    <a href="javascript:;" class="qBackBtn" id="goback"> <i class="upBtn cf db"></i>返回</a> 
     <h2 class="qTitle">龙门客栈</h2> 
-    <a href="javascript:;" id="mqOption" issite="1" class="moreC qMore db"><i class="circle">●</i><i class="circle">●</i><i class="circle">●</i><i class="db numP" id="navMsgNum" style="display:none;">0</i></a> 
+    <a href="javascript:;" id="mqOption" issite="1" class="moreC qMore db"> <i class="circle">●</i> <i class="circle">●</i> <i class="circle">●</i> <i class="db numP" id="navMsgNum" style="display:none;">0</i></a> 
    </div>
   </div>
 

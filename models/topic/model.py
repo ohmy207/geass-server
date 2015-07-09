@@ -20,3 +20,18 @@ class Topic(Model):
 
         'ctime':            (datetime, None),
     }
+
+
+class Comment(Model):
+
+    name = 'comment'
+
+    field = {
+        'tid':              (ObjectId, None),
+        'content':          (basestring, ''),
+        'authoruid':        (ObjectId, None),
+        'up':               (list, [])      ,
+        'size':             (int, 0)        ,
+        'atime':            (datetime, None),
+        'status':           (int, 0)        ,
+    }

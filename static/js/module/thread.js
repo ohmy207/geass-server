@@ -426,16 +426,12 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 });
             }
         },
-        reply: function (sId, tId, parentId, pId, floorPId, autor, isViewthread, nodeId, hasTid) {
-            var isViewthread = isViewthread || false;
-            var author = autor || '';
-            var floorPId = floorPId || 0;
-            var nodeId = nodeId || 't_' + tId  + '_0_0';
-            // 未登录且是应用吧页
-            var reapp = /qqdownloader\/([^\s]+)/i;
-            if (authUrl && reapp.test(navigator.userAgent)) {
-                return false;
-            }
+        //reply: function (sId, tId, parentId, pId, floorPId, autor, isViewthread, nodeId, hasTid) {
+        reply: function (tId, parentId, pId, author) {
+            //var isViewthread = isViewthread || false;
+            var author = author || '';
+            //var floorPId = floorPId || 0;
+            //var nodeId = nodeId || 't_' + tId  + '_0_0';
 
             // 未登录
             if (authUrl) {
@@ -445,8 +441,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null;
-                //var replyForm = template.render('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
-                var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
+                //var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
+                var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'parentId':parentId}});
 
                 // 弹出回复框
                 jq.UTIL.dialog({
@@ -459,9 +455,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     callback:function() {
 
                         //非回复主帖，隐藏发图
-                        if(!hasTid){jq('.uploadPicBox').css('visibility', 'hidden')};
+                        //if(!hasTid){jq('.uploadPicBox').css('visibility', 'hidden')};
 
-                        var obj = {pId: pId, isViewthread: isViewthread, nodeId: nodeId, floorPId: floorPId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
+                        //var obj = {pId: pId, isViewthread: isViewthread, nodeId: nodeId, floorPId: floorPId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
+                        var obj = {pId: pId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
                         //初始化回复窗口事件
                         exports.initReplyEvents(obj);
 
@@ -709,15 +706,22 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             //});
 
+            jq('#replyForm').attr('action','/c/new/submit');
             if (obj.pId > 0) {
-                jq('#replyForm').attr('action', '/' + obj.sId + '/f/new/submit');
                 jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
-                jq('input[name="floorPId"]').val(obj.floorPId);
-            } else {
-                jq('#replyForm').attr('action', '/' + obj.sId + '/r/new/submit');
-                // 信息恢复
-                //jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
             }
+
+            //if (obj.pId > 0) {
+            //    //jq('#replyForm').attr('action', '/' + obj.sId + '/f/new/submit');
+            //    jq('#replyForm').attr('action', '/c/new/submit');
+            //    jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
+            //    jq('input[name="floorPId"]').val(obj.floorPId);
+            //} else {
+            //    //jq('#replyForm').attr('action', '/' + obj.sId + '/r/new/submit');
+            //    jq('#replyForm').attr('action', '/r/new/submit');
+            //    // 信息恢复
+            //    //jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
+            //}
 
             // 发送按纽绑定
             var isSendBtnClicked = false;
@@ -727,7 +731,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 }
                 var opt = {
                     success:function(re) {
-                        var status = parseInt(re.errCode);
+                        var status = parseInt(re.code);
                         if (status === 0) {
                             if (re.data.authorUid > 0) {
                                 //localStorage.removeItem(storageKey);

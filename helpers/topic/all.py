@@ -16,13 +16,13 @@ class Topic(topic.Topic):
     @staticmethod
     def callback(record):
         result = {
-            'title': record['title'],
-            'content': record['content'],
-            'authoruid': record['authoruid'],
-            'ispriv': record['ispriv'],
-            'isanon': record['isanon'],
-            #'pickeys': record['pickeys'],
-            'ctime': record['ctime'],
+            'title':      record['title']    ,
+            'content':    record['content']  ,
+            'authoruid':  record['authoruid'],
+            'ispriv':     record['ispriv']   ,
+            'isanon':     record['isanon']   ,
+            #'pickeys':   record['pickeys']  ,
+            'ctime':      record['ctime']    ,
         }
 
         dtime = datetime.fromtimestamp(int(record['ctime']))
@@ -37,3 +37,7 @@ class Topic(topic.Topic):
         result['avatar'] = 'http://7xi8l3.com1.z0.glb.clouddn.com/FravREnqYMS9MmIX5Y_YzaP6RUOJ'
 
         return result
+
+
+class Comment(topic.Comment):
+    pass
