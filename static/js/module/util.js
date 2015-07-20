@@ -498,7 +498,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                             opts.success(result, textStatus, opts);
                         }
 
-                        if (result.errCode == 0) {
+                        if (result.code == 0) {
                             if (!opts.noMsg) {
                                 jQuery.UTIL.dialog({content:result.message, icon:'success', autoClose:true});
                             }
@@ -507,9 +507,9 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                                 var locationTime = result.locationTime || 2000;
                                 jQuery.UTIL.reload(result.jumpURL, locationTime);
                             }
-                        } else if (result.errCode) {
+                        } else if (result.code) {
                             if (!opts.noMsg) {
-                                var msg = result.message + '<span style="display:none;">' + result.errCode + '</span>';
+                                var msg = result.message + '<span style="display:none;">' + result.code + '</span>';
                                 jQuery.UTIL.dialog({content:msg, autoClose:true});
                             }
                         } else {
@@ -587,8 +587,6 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                         return result;
                     },
                     success: function(result, statusText) {
-
-                        console.log(result)
 
                         jQuery.ajax._requestCache[formId] = null;
                         clearTimeout(loadingTimer);

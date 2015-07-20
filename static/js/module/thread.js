@@ -3,6 +3,24 @@
 define(['uploadImg', 'art-template'], function(uploadImg, template) {
     //var followSite = require('module/followSite');
 
+    template.helper('isDOMExist', function (id) {
+        if (jq('#' + id)[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    template.helper('getWinParams', function (name) {
+        return window[name];
+    });
+    template.helper('isObjEmpty', function (obj) {
+        if (jq.isEmptyObject(obj)) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
     exports = {
         popTId: 0,
         uploadTimer: null,
@@ -426,23 +444,23 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 });
             }
         },
-        //reply: function (sId, tId, parentId, pId, floorPId, autor, isViewthread, nodeId, hasTid) {
-        reply: function (tId, parentId, pId, author) {
+        reply: function (tId, parentId, pId, floorPId, autor, isViewthread, nodeId, hasTid) {
+        //reply: function (tId, parentId, pId, author) {
             //var isViewthread = isViewthread || false;
             var author = author || '';
             //var floorPId = floorPId || 0;
             //var nodeId = nodeId || 't_' + tId  + '_0_0';
 
             // 未登录
-            if (authUrl) {
-                jq.UTIL.reload(authUrl);
-                return false;
-            }
+            //if (authUrl) {
+            //    jq.UTIL.reload(authUrl);
+            //    return false;
+            //}
 
             var replyDialog = function() {
                 var replyTimer = null;
-                //var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
-                var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'parentId':parentId}});
+                var replyForm = template('tmpl_replyForm', {data:{'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
+                //var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'parentId':parentId}});
 
                 // 弹出回复框
                 jq.UTIL.dialog({
@@ -457,8 +475,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         //非回复主帖，隐藏发图
                         //if(!hasTid){jq('.uploadPicBox').css('visibility', 'hidden')};
 
-                        //var obj = {pId: pId, isViewthread: isViewthread, nodeId: nodeId, floorPId: floorPId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
-                        var obj = {pId: pId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
+                        var obj = {pId: pId, isViewthread: isViewthread, nodeId: nodeId, floorPId: floorPId, replyTimer: replyTimer, author: author, tId: tId};
+                        //var obj = {pId: pId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
                         //初始化回复窗口事件
                         exports.initReplyEvents(obj);
 
@@ -738,7 +756,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                 if (obj.isViewthread) {
                                     // 回复回复
                                     if (obj.pId) {
-                                        var tmpl = template.render('tmpl_reply_floor', {floorList:{0:re.data}});
+                                        var tmpl = template('tmpl_reply_floor', {floorList:{0:re.data}});
                                         jq('#fl_' + obj.pId + ' ul').append(tmpl);
                                         jq('#fl_' + obj.pId).parent().parent().show();
                                         // 普通回复
@@ -750,7 +768,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                             re.data.authorExps.rank = re.data.authorExpsRank;
                                         }
                                         re.data.restCount = 0;
-                                        var tmpl = template.render('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
+                                        var tmpl = template('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
                                         // 结构变了与列表不同
                                         var allLabelBox = jq('#allLabelBox'),
                                             replyList = jq('#replyList');
@@ -771,7 +789,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     }
                                 } else {
                                     // 直接显示回复的内容到页面
-                                    var tmpl = template.render('tmpl_reply', {replyList:{0:re.data}});
+                                    var tmpl = template('tmpl_reply', {replyList:{0:re.data}});
                                     var replyList = jq('#' + obj.nodeId + ' .replyList');
                                     replyList.append(tmpl);
                                     if (re.data.rCount > 0) {

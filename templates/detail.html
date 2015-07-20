@@ -5,6 +5,10 @@
 
   <title>龙门客栈</title>
 
+  <script type="text/javascript">
+      var tId = "{{result['tid']}}";
+  </script>
+
 {% end %}
 
 
@@ -113,15 +117,89 @@
    <div id="loadNextPos"></div> 
 
   </div> 
-  <!--底部bar--> 
+  <!--底部bar-->
+
+  <script id="tmpl_reply" type="text/html">
+      <%
+      if (typeof(replyList) == 'undefined') {
+      var replyList = dataList;
+      }
+      if (typeof(tmplType) == 'undefined') {
+          var tmplType = 'all';
+      }
+      %>
+
+      <% for (var i in replyList) { %>
+
+      <% if (!isDOMExist('p_' + replyList[i].tId + '_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
+      <li id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>" onclick="location.href='/111111111/t/new';" >
+      <div class="f13 c3 replyUser">
+          <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
+          <span class="c7"><%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">楼主</i><%}%>
+          </span>
+
+          <%== replyList[i].content %>
+
+          </div>
+          <div class="operation pr">
+              <div class="replyImg ">
+
+                  <%if (replyList[i].picUrls.length > 0) { %>
+                      <%if (replyList[i].picUrls.length > 1) { %>
+                      <dl>
+                          <% for (j in replyList[i].picUrls) { %>
+                              <dd> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[j] %>" alt=""></dd>
+                          <% } %>
+                      </dl>
+
+                      <% } else { %>
+                          <dd> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[0] %>" alt=""></dd>
+                      <% } %>
+                  <% } %>
+
+          </div>
+          <span class="source db c6 f11 fl"><%== replyList[i].hCreatedTime %></span>
+          <span class="replyShare db c9 fr f13">
+              <a href="javascript:;" class="like c9" pId="<%= replyList[i].pId %>"> <i class="<% if (replyList[i].liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].likeNum) { %><%= replyList[i].likeNum %> <%  } else { %>赞<%  } %></a>
+              <a class="c9 replyFloor" href="javascript:;" id="p_<%= replyList[i].tId %>_<%= replyList[i].pId %>" uid="<%= replyList[i].authorUid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
+          </span>
+          <div class="replyPop" <%if (!replyList[i].floorList) { %> style="display:none;"<% } %> >
+              <div class="replyBg brSmall pr">
+                  <div class="topicList floorList" id="fl_<%=replyList[i].pId%>">
+                      <ul>
+                      <% include('tmpl_reply_floor', {'floorList':replyList[i].floorList}) %>
+                      </ul>
+                      <a href="javascript:;" start="0" pid="<%=replyList[i].pId%>" <%if (replyList[i].restCount < 1) { %>style="display:none;"<% } %> class="db f12 moreInReply">更多</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </li>
+    <% } %>
+    <% } %>
+  </script>
+
+  <script id="tmpl_reply_floor" type="text/html">
+    <% for (var k in floorList) { %>
+        <% if (!isDOMExist('p_' + floorList[k].tId + '_' + floorList[k].pId + '_' + floorList[k].floorPId)) { %>
+            <% if (floorList[k].floorPId > 0) { %>
+                <li id="p_<%=floorList[k].tId%>_<%=floorList[k].pId%>_<%=floorList[k].floorPId%>" author="<%=floorList[k].author%>" uId="<%=floorList[k].authorUid%>">
+                <div class="f13 c3 replyFloor">
+                    <span class="c7"><%=floorList[k].author%><% if (floorList[k].isLZ) { %><i class="cardBtn br fn db c2">楼主</i><% } %><% if (floorList[k].toPId) { %> 回复 <%=floorList[k].toAuthor%><% } %>：</span><%==floorList[k].content%>
+                </div>
+                </li>
+            <%} %>
+        <% } %>
+    <% } %>
+  </script> 
 
   <script id="tmpl_replyForm" type="text/html">
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         <input type="hidden" name="CSRFToken" value="2ffef155">
-        <input type="hidden" name="sId" value="<%= data.sId %>">
         <input type="hidden" name="tid" value="<%= data.tId %>">
         <input type="hidden" name="pid" value="<%= data.pId %>">
+        <input type="hidden" name="floorPId" value="<%= data.floorPId %>">
         <input type="hidden" name="parentId" value="<%= data.parentId %>">
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f13" placeholder="回两句吧..."></textarea>
@@ -133,6 +211,7 @@
                 </li>
                 <li class="pr uploadPicBox">
                     <a data-id='1' href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
+                    <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
                 </li>
                 <li>&nbsp;</li>
                 <li>&nbsp;</li>
@@ -171,10 +250,11 @@
 
 {% block footer %}
 
-  <div class="topBar"> 
-   <div class="topBarCon pr"> 
-    <a href="javascript:;" class="qBackBtn" id="goback"> <i class="upBtn cf db"></i>返回</a> 
-    <h2 class="qTitle">龙门客栈</h2> 
+  <div class="bottomBar" id="bottomBar">
+   <div class="bottomBarCon">
+    <a href="javascript:;" class="backBtn needsclick" id="goback"><i class="iconAnswer cf back db"></i></a>
+    <!--<a href="javascript:;" class="qBackBtn" id="goback"> <i class="upBtn cf db"></i>返回</a> -->
+    <a href="javascript:;" class="replyBtn db threadReply" ><i class="iconReply f21 mr5 cf"></i>回复</a>
     <a href="javascript:;" id="mqOption" issite="1" class="moreC qMore db"> <i class="circle">●</i> <i class="circle">●</i> <i class="circle">●</i> <i class="db numP" id="navMsgNum" style="display:none;">0</i></a> 
    </div>
   </div>

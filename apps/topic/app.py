@@ -45,49 +45,54 @@ class NewTopicHandler(BaseHandler):
 
 class DetailTopicHandler(BaseHandler):
 
-    _post_params = {
-        'need': [
-            ('title', basestring),
-            ('content', basestring),
-        ],
-        'option': [
-            ('ispriv', bool, False),
-            ('isanon', bool, False),
-            ('pickeys', list, []),
-        ]
-    }
-
     #@authenticated
     def get(self, tid):
         data = topic['topic'].get_one(topic['topic'].to_objectid(tid))
         self.render('detail.html', result=data)
 
 
-class NewCommentHandler(BaseHandler):
+class NewProposalHandler(BaseHandler):
 
     _post_params = {
         'need': [
+            ('tid', basestring),
             ('content', basestring),
         ],
         'option': [
-            ('tid', basestring, ''),
-            ('pid', int, 0),
+            ('pickeys', list, []),
         ]
     }
 
     #@authenticated
     def POST(self):
         data = self._params
-        data['authoruid'] = 111111111 #uid
 
+        data['tid'] = topic['proposal'].to_objectid(data['tid'])
+        data['authoruid'] = 111111111
         data['ctime'] = datetime.now()
 
-        #coid = topic['comment'].insert(data)
+        pid = topic['proposal'].insert(data)
+        data = topic['proposal'].get_one(pid)
 
-        #self._jump = '/'+uid+'/t/'+unicode(tid)
+        self._data = data
+
+
+class ListProposalHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    #@authenticated
+    def GET(self, tid):
+        spec = {'tid': topic['proposal'].to_objectid(tid)}
+        data_list = topic['proposal'].get_all(spec, skip=self._skip, limit=self._limit)
         self._data = {
-                'authorUid': data['authoruid'],
-                'tid': data['tid'],
-                'pid': data['pid'],
-                'content': data['content'],
+                'dataList': data_list,
+                'nextStart': self._skip + self._limit
             }

@@ -46,10 +46,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/img/uptoken'
-                + '?parentId=' + parentId
-                + '&start=' + start
-                + '&desc=' + desc;
+            var url = '/t/' + window.tId
+                //+ '?parentId=' + parentId
+                + '?skip=' + start
+                //+ '&desc=' + desc;
             var opts = {
                 'beforeSend': function() {
                     switch(action) {
@@ -77,10 +77,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     jq('#refreshWait').hide();
                     jq('#loadNext').hide();
                     jq.UTIL.showLoading('none');
-                    if (re.errCode == 0) {
+                    if (re.code == 0) {
                         var zero = new Date;
                         exports.renderList(re, !start);
-                        stat.reportPoint('listRender', 10, new Date, zero);
+                        //stat.reportPoint('listRender', 10, new Date, zero);
                     } else {
                         jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
                     }
@@ -103,16 +103,16 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq('#showAll').show();
                 return true;
             }
-            re.data.isWX = isWX;
+            //re.data.isWX = isWX;
             re.data.tmplType = 'hot';
-            var hotReplyHtml = template.render('tmpl_reply', re.data);
+            var hotReplyHtml = template('tmpl_reply', re.data);
             if(jq.trim(hotReplyHtml)!==''){
                 jq('#hotLabelBox').show();
                 jq('#hotReplyList').append(hotReplyHtml);
             }
 
             re.data.tmplType = 'all';
-            var allReplyHtml = template.render('tmpl_reply', re.data);
+            var allReplyHtml = template('tmpl_reply', re.data);
             if(jq.trim(allReplyHtml)!==''){
                 jq('#allLabelBox').show();
                 jq('#allReplyList').css({height:'auto'})
@@ -202,32 +202,32 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             // 回复内容点击
             jq('.warp').on('click', '.replyUser, .replyShare, .replyPop, .replyPop .replyFloor', function(e) {
-                console.info(e.target);
                 var obj = jq(this);
                 jq.UTIL.touchStateNow(obj);
 
                 var divId = obj.parents('li').attr('id'), pId, floorPId;
                 var authorUId = obj.parents('li').attr('uId');
                 var author = obj.parents('li').attr('author');
-                if (isManager || authorUId == uId) {
-                    if (divId) {
-                        if (match = divId.match(/p_(\d+)_(\d+)_(\d+)/)) {
-                            pId = match[2];
-                            floorPId = match[3];
-                        }
-                    }
 
-                    if (isManager) {
-                        thread.showManagerPanel(tId, parentId, pId, floorPId, authorUId, author, true, true);
-                        return false;
-                    }
+                //if (isManager || authorUId == uId) {
+                //    if (divId) {
+                //        if (match = divId.match(/p_(\d+)_(\d+)_(\d+)/)) {
+                //            pId = match[2];
+                //            floorPId = match[3];
+                //        }
+                //    }
 
-                    if (authorUId == uId) {
-                        thread._delReply(tId, pId, floorPId, true);
-                        return false;
-                    }
+                //    if (isManager) {
+                //        thread.showManagerPanel(tId, parentId, pId, floorPId, authorUId, author, true, true);
+                //        return false;
+                //    }
 
-                }
+                //    if (authorUId == uId) {
+                //        thread._delReply(tId, pId, floorPId, true);
+                //        return false;
+                //    }
+
+                //}
             });
 
             // 主题和底部bar 帖点击回复
@@ -235,7 +235,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this);
-                thread.reply(sId, tId, parentId, 0, 0, '', true, false, true);
+                thread.reply(tId, parentId, 0, 0, '', true, false, true);
             });
 
             //点击视频播放
@@ -254,7 +254,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //}
 
 
-            // 回复楼中楼
+            //* 回复楼中楼
             jq('#hotReplyList,#allReplyList').on('click', '.replyFloor', function(e) {
                 var thisObj = jq(this).parents('li');
                 var authorUId = thisObj.attr('uId');
@@ -275,7 +275,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     jq.UTIL.touchStateNow(jq(this));
 
                     author = thisObj.attr('author');
-                    thread.reply(sId, tId, parentId, pId, floorPId, author, true);
+                    thread.reply(tId, parentId, pId, floorPId, author, true);
                 }
             });
 
@@ -294,10 +294,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     },
                     'success': function(re) {
                         jq.UTIL.showLoading('none');
-                        var status = parseInt(re.errCode);
+                        var status = parseInt(re.code);
                         if (status == 0) {
                             thisObj.attr('start', re.data.nextStart);
-                            var tmpl = template.render('tmpl_reply_floor', re.data);
+                            var tmpl = template('tmpl_reply_floor', re.data);
                             jq('#fl_' + pId + ' ul').append(tmpl);
                             if (re.data.restCount < 1) {
                                 thisObj.hide();
@@ -369,7 +369,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
                 var opts = {
                     'success': function(result) {
-                        if (result.errCode == 0 && result.data && result.data.likeNumber) {
+                        if (result.code == 0 && result.data && result.data.likeNumber) {
                             if (parentId > 0 && !pId) {
                                 jq.UTIL.likeTips(thisObj);
                             }

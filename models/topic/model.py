@@ -22,16 +22,18 @@ class Topic(Model):
     }
 
 
-class Comment(Model):
+class Proposal(Model):
 
-    name = 'comment'
+    name = 'proposal'
 
     field = {
         'tid':              (ObjectId, None),
-        'content':          (basestring, ''),
         'authoruid':        (ObjectId, None),
-        'up':               (list, [])      ,
-        'size':             (int, 0)        ,
-        'atime':            (datetime, None),
-        'status':           (int, 0)        ,
+
+        'content':          (basestring, ''),
+
+        'vote':             (list, [])      ,
+        'pickeys':          (list, [])      ,
+
+        'ctime':            (datetime, None),
     }
