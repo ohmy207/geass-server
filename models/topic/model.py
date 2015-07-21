@@ -37,3 +37,20 @@ class Proposal(Model):
 
         'ctime':            (datetime, None),
     }
+
+
+class Comment(Model):
+
+    name = 'comment'
+
+    field = {
+        'tid':              (ObjectId, None),
+        'authoruid':        (ObjectId, None),
+
+        'content':          (basestring, ''),
+
+        'vote':             (list, [])      ,
+        'pickeys':          (list, [])      ,
+
+        'ctime':            (datetime, None),
+    }

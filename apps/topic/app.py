@@ -29,7 +29,7 @@ class NewTopicHandler(BaseHandler):
 
     #@authenticated
     def get(self, uid):
-        self.render('new.html', uid=uid)
+        self.render('topic_new.html', uid=uid)
 
     #@authenticated
     def POST(self, uid):
@@ -48,7 +48,7 @@ class DetailTopicHandler(BaseHandler):
     #@authenticated
     def get(self, tid):
         data = topic['topic'].get_one(topic['topic'].to_objectid(tid))
-        self.render('detail.html', result=data)
+        self.render('topic_detail.html', result=data)
 
 
 class NewProposalHandler(BaseHandler):
@@ -93,6 +93,35 @@ class ListProposalHandler(BaseHandler):
         spec = {'tid': topic['proposal'].to_objectid(tid)}
         data_list = topic['proposal'].get_all(spec, skip=self._skip, limit=self._limit)
         self._data = {
-                'dataList': data_list,
-                'nextStart': self._skip + self._limit
-            }
+            'dataList': data_list,
+            'nextStart': self._skip + self._limit
+        }
+
+
+class DetailProposalHandler(BaseHandler):
+
+    #@authenticated
+    def get(self, pid):
+        data = topic['proposal'].get_one(topic['proposal'].to_objectid(pid))
+        self.render('proposal_detail.html', result=data)
+
+
+class ListCommentHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    #@authenticated
+    def GET(self, tid):
+        spec = {'tid': topic['comment'].to_objectid(tid)}
+        data_list = topic['comment'].get_all(spec, skip=self._skip, limit=self._limit)
+        self._data = {
+            'dataList': data_list,
+            'nextStart': self._skip + self._limit
+        }
