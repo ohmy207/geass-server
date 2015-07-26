@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 
+from bson import json_util
 from bson.objectid import ObjectId
 
 import tornado.web
@@ -82,6 +83,19 @@ class BaseHandler(tornado.web.RequestHandler):
     # write output json
     def wo_json(self, data):
         self.write(self.json_encode(data))
+
+    def get_son(self, name):
+        try:
+            json_str = self.get_argument(name, '{}')
+            obj = json.loads(json_str, object_hook=json_util.object_hook)
+        except (ValueError, TypeError):
+            logger.error('couldn\'t parse json: %s' % json_str)
+            return None
+
+        if getattr(obj, '__iter__', False) == False:
+            logger.error('type is not iterable: %s' % json_str)
+            return None
+        return obj
 
     def get(self, *args, **kwargs):
         try:

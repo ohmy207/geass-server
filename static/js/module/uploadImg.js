@@ -182,7 +182,7 @@ define(['jpegMeta', 'imageCompresser'], function(JpegMeta, ImageCompresser) {
                 var result = jq.parseJSON(e.target.response);
                 if ('key' in result) {
                     //var input = '<input type="hidden" id="input' + result.data.id + '" name="picIds[]" value="' + result.data.picId + '">';
-                    var input = '<input type="hidden" name="pickeys" value="' + result.hash + '">';
+                    var input = '<input type="hidden" id="input' + id + '" name="pickeys" value="' + result.hash + '">';
                     if(type == 'replyForm'){
                         jq('#replyForm').append(input);
                     }else{

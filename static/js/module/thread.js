@@ -444,8 +444,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 });
             }
         },
-        reply: function (tId, parentId, pId, floorPId, autor, isViewthread, nodeId, hasTid) {
-        //reply: function (tId, parentId, pId, author) {
+
+        reply: function (tId, toPId, author, replyType) {
             //var isViewthread = isViewthread || false;
             var author = author || '';
             //var floorPId = floorPId || 0;
@@ -459,8 +459,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null;
-                var replyForm = template('tmpl_replyForm', {data:{'tId':tId, 'pId':pId, 'floorPId':floorPId, 'parentId':parentId}});
-                //var replyForm = template('tmpl_replyForm', {data:{'sId':sId, 'tId':tId, 'pId':pId, 'parentId':parentId}});
+                var replyForm = template('tmpl_replyForm', {data:{'tId':tId, 'toPId':toPId}});
 
                 // 弹出回复框
                 jq.UTIL.dialog({
@@ -475,8 +474,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         //非回复主帖，隐藏发图
                         //if(!hasTid){jq('.uploadPicBox').css('visibility', 'hidden')};
 
-                        var obj = {pId: pId, isViewthread: isViewthread, nodeId: nodeId, floorPId: floorPId, replyTimer: replyTimer, author: author, tId: tId};
-                        //var obj = {pId: pId, replyTimer: replyTimer, author: author, tId: tId, sId: sId};
+                        var obj = {replyTimer: replyTimer, toPId: toPId, author: author, tId: tId, replyType: replyType};
                         //初始化回复窗口事件
                         exports.initReplyEvents(obj);
 
@@ -501,6 +499,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             return true;
         },
+
         checkReplyForm: function() {
             var content = jq('textarea[name="content"]').val();
             var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
@@ -724,9 +723,15 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             //});
 
-            jq('#replyForm').attr('action','/c/new/submit');
-            if (obj.pId > 0) {
-                jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
+            if (obj.replyType === 'proposal') {
+                jq('#replyForm').attr('action','/c/new/submit');
+            }
+            else if (obj.replyType === 'comment') {
+                jq('#replyForm').attr('action','/111111111/t/' + window.tId +'/c/new');
+
+                if (obj.toPId) {
+                    jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
+                }
             }
 
             //if (obj.pId > 0) {
@@ -753,52 +758,39 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         if (status === 0) {
                             if (re.data.authorUid > 0) {
                                 //localStorage.removeItem(storageKey);
-                                if (obj.isViewthread) {
-                                    // 回复回复
-                                    if (obj.pId) {
-                                        var tmpl = template('tmpl_reply_floor', {floorList:{0:re.data}});
-                                        jq('#fl_' + obj.pId + ' ul').append(tmpl);
-                                        jq('#fl_' + obj.pId).parent().parent().show();
-                                        // 普通回复
-                                    } else {
-                                        // 直接显示回复的内容到页面
-                                        // 格式化用户等级
-                                        if(re.data.authorExpsRank){
-                                            re.data.authorExps = {};
-                                            re.data.authorExps.rank = re.data.authorExpsRank;
-                                        }
-                                        re.data.restCount = 0;
-                                        var tmpl = template('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
-                                        // 结构变了与列表不同
-                                        var allLabelBox = jq('#allLabelBox'),
-                                            replyList = jq('#replyList');
-                                        allLabelBox.show();
-                                        allLabelBox.next('.topicList').show();
-                                        /**
-                                         * @desc    window.desc from viewthread.js, 回复列表排序 0 或者 1, 默认 0
-                                         *          如果为1，发表的新内容插入到列表最上面，否则插入到列表最下面
-                                         */
-                                        if (!window.desc) {
-                                            jq('#allReplyList').append(tmpl);
-                                        } else {
-                                            jq('#allReplyList').prepend(tmpl);
-                                        }
-
-                                        jq('#rCount').html(re.data.rCount);
-                                        replyList.parent().show();
-                                    }
-                                } else {
+                                // 回复回复
+                                //if (obj.parentId) {
+                                //    var tmpl = template('tmpl_reply_floor', {floorList:{0:re.data}});
+                                //    jq('#fl_' + obj.parentId + ' ul').append(tmpl);
+                                //    jq('#fl_' + obj.parentId).parent().parent().show();
+                                //    // 普通回复
+                                //} else {
                                     // 直接显示回复的内容到页面
-                                    var tmpl = template('tmpl_reply', {replyList:{0:re.data}});
-                                    var replyList = jq('#' + obj.nodeId + ' .replyList');
-                                    replyList.append(tmpl);
-                                    if (re.data.rCount > 0) {
-                                        var rCount = parseInt(jq('#rCount_' + obj.tId).attr('rCount') || 0) + 1;
-                                        jq('#rCount_' + obj.tId).html('查看全部' + re.data.rCount + '条回复');
-                                        jq('#t_'+obj.tId+'_0_0').find('.threadReply').html('<i class="iconReply f18 cf"></i>'+re.data.rCount);
+                                    // 格式化用户等级
+                                    if(re.data.authorExpsRank){
+                                        re.data.authorExps = {};
+                                        re.data.authorExps.rank = re.data.authorExpsRank;
                                     }
+                                    re.data.restCount = 0;
+                                    var tmpl = template('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
+                                    // 结构变了与列表不同
+                                    var allLabelBox = jq('#allLabelBox'),
+                                        replyList = jq('#replyList');
+                                    allLabelBox.show();
+                                    allLabelBox.next('.topicList').show();
+                                    /**
+                                     * @desc    window.desc from viewthread.js, 回复列表排序 0 或者 1, 默认 0
+                                     *          如果为1，发表的新内容插入到列表最上面，否则插入到列表最下面
+                                     */
+                                    if (!window.desc) {
+                                        jq('#allReplyList').append(tmpl);
+                                    } else {
+                                        jq('#allReplyList').prepend(tmpl);
+                                    }
+
+                                    jq('#rCount').html(re.data.rCount);
                                     replyList.parent().show();
-                                }
+                                //}
                             }
                             // initLazyload('.warp img');
 

@@ -11,7 +11,7 @@ class Topic(Model):
         'title':            (basestring, ''),
         'content':          (basestring, ''),
 
-        'authoruid':        (basestring, ''),
+        'auid':             (basestring, ''),
 
         'ispriv':           (bool, False)   ,
         'isanon':           (bool, False)   ,
@@ -28,12 +28,14 @@ class Proposal(Model):
 
     field = {
         'tid':              (ObjectId, None),
-        'authoruid':        (ObjectId, None),
+        'auid':             (ObjectId, None),
 
         'content':          (basestring, ''),
 
         'vote':             (list, [])      ,
         'pickeys':          (list, [])      ,
+
+        'vnum':            (int, 0)        ,
 
         'ctime':            (datetime, None),
     }
@@ -45,12 +47,15 @@ class Comment(Model):
 
     field = {
         'tid':              (ObjectId, None),
-        'authoruid':        (ObjectId, None),
+        'auid':             (ObjectId, None),
+        'toauid':           (ObjectId, None),
+        'topid':            (ObjectId, None),
 
         'content':          (basestring, ''),
 
-        'vote':             (list, [])      ,
-        'pickeys':          (list, [])      ,
+        'like':             (list, [])      ,
+
+        'lnum':            (int, 0)        ,
 
         'ctime':            (datetime, None),
     }
