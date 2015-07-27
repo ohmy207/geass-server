@@ -57,6 +57,6 @@ class CheckSignatureHandler(BaseHandler):
         hashcode = hashlib.sha1("%s%s%s" % tuple(tmp_list)).hexdigest()
 
         if hashcode == self._params['signature']:
-            self.wo_json(self._params['echostr'])
+            self.write(self._params['echostr'])
         else:
-            print 'wrong !!!!!!!!!!!'
+            self.write('error,code 403')
