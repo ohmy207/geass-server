@@ -1,5 +1,7 @@
 #-*- coding:utf-8 -*-
 
+import hashlib
+
 #from tornado.web import authenticated
 from qiniu import Auth
 
@@ -32,3 +34,29 @@ class UploadTokenHandler(BaseHandler):
         )
 
         self.wo_json({'token': token})
+
+
+class CheckSignatureHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+            ('signature', basestring),
+            ('timestamp', basestring),
+            ('nonce', basestring),
+            ('echostr', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    #@authenticated
+    def get(self):
+        token = 'geass'
+        tmp_list = [token, self._params['timestamp'], self._params['nonce']]
+        tmp_list.sort()
+        hashcode = hashlib.sha1("%s%s%s" % tuple(tmp_list)).hexdigest()
+
+        if hashcode == self._params['signature']:
+            return self._params['nonce']
+        else:
+            print 'wrong !!!!!!!!!!!'
