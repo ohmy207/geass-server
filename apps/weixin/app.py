@@ -25,11 +25,11 @@ class WeiXinHandler(BaseHandler):
     }
 
     # server verify
-    #def get(self):
+    # def get(self):
     #    if wx.check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
     #        self.write(self._params['echostr'])
 
     def post(self):
-        #if wx.check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
+        # if wx.check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
         #   body_text = self.request.body
         pass

@@ -6,7 +6,7 @@ from helpers import weixin as wx
 
 
 menu_data = {
-    'button':[
+    'button': [
 
         {
             'type': 'view',
