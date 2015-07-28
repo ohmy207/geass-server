@@ -3,6 +3,9 @@
 import log
 
 from wechat_sdk import WechatBasic
+from wechat_sdk.messages import (
+    TextMessage, VoiceMessage, ImageMessage, VideoMessage, LinkMessage, LocationMessage, EventMessage
+)
 #from tornado.web import authenticated
 
 from apps.base import BaseHandler
