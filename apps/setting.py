@@ -4,22 +4,8 @@
 INSTALLED_APPS = (
     'support',
     'topic',
+    'weixin',
 )
-
-# qiniu
-QINIU_CONFIG = {
-    'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
-    'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
-
-    'bucket_name': 'excalibur',
-    'expires': 3600,
-
-    'policy': {
-        #'saveKey': '$(etag)$(ext)',
-        'saveKey': '$(etag)',
-        #'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
-    },
-}
 
 # response message
 #0-100 reseved
@@ -44,3 +30,19 @@ MESSAGE = {
 
     404: u'not found',
 }
+
+# qiniu
+QINIU_CONFIG = {
+    'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
+    'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
+
+    'bucket_name': 'excalibur',
+    'expires': 3600,
+
+    'policy': {
+        #'saveKey': '$(etag)$(ext)',
+        'saveKey': '$(etag)',
+        #'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
+    },
+}
+

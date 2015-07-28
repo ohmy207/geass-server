@@ -6,6 +6,6 @@ prefix = ''
 
 urls = [
 
-    ('/img/uptoken', app.UploadTokenHandler),
+    ('/wx', app.WeiXinHandler),
 
 ]
