@@ -39,34 +39,34 @@ class WeiXinHandler(BaseHandler):
 
         response = None
         if isinstance(message, TextMessage):
-            response = wechat.response_text(content=u'ÎÄ×ÖĞÅÏ¢')
+            response = wechat.response_text(content=u'æ–‡å­—ä¿¡æ¯')
         elif isinstance(message, VoiceMessage):
-            response = wechat.response_text(content=u'ÓïÒôĞÅÏ¢')
+            response = wechat.response_text(content=u'è¯­éŸ³ä¿¡æ¯')
         elif isinstance(message, ImageMessage):
-            response = wechat.response_text(content=u'Í¼Æ¬ĞÅÏ¢')
+            response = wechat.response_text(content=u'å›¾ç‰‡ä¿¡æ¯')
         elif isinstance(message, VideoMessage):
-            response = wechat.response_text(content=u'ÊÓÆµĞÅÏ¢')
+            response = wechat.response_text(content=u'è§†é¢‘ä¿¡æ¯')
         elif isinstance(message, LinkMessage):
-            response = wechat.response_text(content=u'Á´½ÓĞÅÏ¢')
+            response = wechat.response_text(content=u'é“¾æ¥ä¿¡æ¯')
         elif isinstance(message, LocationMessage):
-            response = wechat.response_text(content=u'µØÀíÎ»ÖÃĞÅÏ¢')
-        elif isinstance(message, EventMessage):  # ÊÂ¼şĞÅÏ¢
-            if message.type == 'subscribe':  # ¹Ø×¢ÊÂ¼ş(°üÀ¨ÆÕÍ¨¹Ø×¢ÊÂ¼şºÍÉ¨Ãè¶şÎ¬ÂëÔì³ÉµÄ¹Ø×¢ÊÂ¼ş)
-                if message.key and message.ticket:  # Èç¹û key ºÍ ticket ¾ù²»Îª¿Õ£¬ÔòÊÇÉ¨Ãè¶şÎ¬ÂëÔì³ÉµÄ¹Ø×¢ÊÂ¼ş
-                    response = wechat.response_text(content=u'ÓÃ»§ÉĞÎ´¹Ø×¢Ê±µÄ¶şÎ¬ÂëÉ¨Ãè¹Ø×¢ÊÂ¼ş')
+            response = wechat.response_text(content=u'åœ°ç†ä½ç½®ä¿¡æ¯')
+        elif isinstance(message, EventMessage):  # äº‹ä»¶ä¿¡æ¯
+            if message.type == 'subscribe':  # å…³æ³¨äº‹ä»¶(åŒ…æ‹¬æ™®é€šå…³æ³¨äº‹ä»¶å’Œæ‰«æäºŒç»´ç é€ æˆçš„å…³æ³¨äº‹ä»¶)
+                if message.key and message.ticket:  # å¦‚æœ key å’Œ ticket å‡ä¸ä¸ºç©ºï¼Œåˆ™æ˜¯æ‰«æäºŒç»´ç é€ æˆçš„å…³æ³¨äº‹ä»¶
+                    response = wechat.response_text(content=u'ç”¨æˆ·å°šæœªå…³æ³¨æ—¶çš„äºŒç»´ç æ‰«æå…³æ³¨äº‹ä»¶')
                 else:
-                    response = wechat.response_text(content=u'ÆÕÍ¨¹Ø×¢ÊÂ¼ş')
+                    response = wechat.response_text(content=u'æ™®é€šå…³æ³¨äº‹ä»¶')
             elif message.type == 'unsubscribe':
-                response = wechat.response_text(content=u'È¡Ïû¹Ø×¢ÊÂ¼ş')
+                response = wechat.response_text(content=u'å–æ¶ˆå…³æ³¨äº‹ä»¶')
             elif message.type == 'scan':
-                response = wechat.response_text(content=u'ÓÃ»§ÒÑ¹Ø×¢Ê±µÄ¶şÎ¬ÂëÉ¨ÃèÊÂ¼ş')
+                response = wechat.response_text(content=u'ç”¨æˆ·å·²å…³æ³¨æ—¶çš„äºŒç»´ç æ‰«æäº‹ä»¶')
             elif message.type == 'location':
-                response = wechat.response_text(content=u'ÉÏ±¨µØÀíÎ»ÖÃÊÂ¼ş')
+                response = wechat.response_text(content=u'ä¸ŠæŠ¥åœ°ç†ä½ç½®äº‹ä»¶')
             elif message.type == 'click':
-                response = wechat.response_text(content=u'×Ô¶¨Òå²Ëµ¥µã»÷ÊÂ¼ş')
+                response = wechat.response_text(content=u'è‡ªå®šä¹‰èœå•ç‚¹å‡»äº‹ä»¶')
             elif message.type == 'view':
-                response = wechat.response_text(content=u'×Ô¶¨Òå²Ëµ¥Ìø×ªÁ´½ÓÊÂ¼ş')
+                response = wechat.response_text(content=u'è‡ªå®šä¹‰èœå•è·³è½¬é“¾æ¥äº‹ä»¶')
             elif message.type == 'templatesendjobfinish':
-                response = wechat.response_text(content=u'Ä£°åÏûÏ¢ÊÂ¼ş')
+                response = wechat.response_text(content=u'æ¨¡æ¿æ¶ˆæ¯äº‹ä»¶')
 
         self.write(response)
