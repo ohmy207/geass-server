@@ -7,7 +7,7 @@ import tornado.web
 
 import log
 
-from setting import MESSAGE
+from setting import MESSAGE, CDN
 from utils import (
     escape as _es,
     httputil as _ht,
