@@ -203,3 +203,17 @@ class BaseHandler(tornado.web.RequestHandler):
             filter_parameter(key, tp, default)
 
         return rpd
+
+    def static_url(self,  path, include_host=None, v=None, **kwargs):
+        is_debug = self.application.settings.get('debug', False)
+
+        # In debug mode, load static files from localhost
+        if is_debug or is_debug ^ CDN['is_available']:
+            return super(BaseHandler, self).static_url(path, include_host, **kwargs)
+
+        v = kwargs.get('v', '')
+
+        if v:
+            return '%s/%s?v=%s' % (CDN['host'], path, v)
+        else:
+            return '%s/%s' % (CDN['host'], path)

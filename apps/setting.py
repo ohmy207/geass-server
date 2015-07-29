@@ -36,7 +36,7 @@ QINIU_CONFIG = {
     'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
     'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
 
-    'bucket_name': 'excalibur',
+    'bucket_name': 'geass-images',
     'expires': 3600,
 
     'policy': {
@@ -44,5 +44,10 @@ QINIU_CONFIG = {
         'saveKey': '$(etag)',
         #'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
     },
+}
+
+CDN = {
+    'is_available': True,
+    'host': 'https://dn-geass-static.qbox.me/static'
 }
 
