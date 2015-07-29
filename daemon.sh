@@ -2,7 +2,7 @@
 
 usage="Usage: $0 [start | stop]"
 
-PORT_RANGE="31540 31559"
+PORT_RANGE="31550 31551"
 service="rest_server"
 SERVER_DIR="/data/picasso/server/$service"
 LOG_DIR="/tmp/picasso/$service"
