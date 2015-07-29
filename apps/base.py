@@ -208,7 +208,7 @@ class BaseHandler(tornado.web.RequestHandler):
         is_debug = self.application.settings.get('debug', False)
 
         # In debug mode, load static files from localhost
-        if is_debug or is_debug ^ CDN['is_unavailable']:
+        if is_debug or is_debug ^ CDN['is_disabled']:
             return super(BaseHandler, self).static_url(path, include_host, **kwargs)
 
         v = kwargs.get('v', '')
