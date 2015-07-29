@@ -47,7 +47,7 @@ QINIU_CONFIG = {
 }
 
 CDN = {
-    'is_available': True,
+    'is_unavailable': False,
     'host': 'https://dn-geass-static.qbox.me/static'
 }
 
