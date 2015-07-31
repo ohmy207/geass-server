@@ -18,13 +18,12 @@ from binascii import crc32
 
 class Session(object):
 
-    def __init__(self, session_store, session_transmission, key_prefix='picasso'):
+    def __init__(self, session_store, session_transmission):
         self._store = session_store
-        self.key_prefix = key_prefix
 
         self._sessionid = session_transmission.get_session_id()
         if not self._sessionid:
-            self._sessionid = self._generate_sid()
+            self._sessionid = self._store.generate_sid()
         session_transmission.set_session_id(self._sessionid)
 
         self._sessiondata = self._store.get_session(self._sessionid)
@@ -65,12 +64,6 @@ class Session(object):
     def clear(self):
         self._store.delete_session(self._sessionid)
 
-    def _generate_sid(self):
-        sid = '%s:%s' % (self.key_prefix, uuid4().get_hex())
-        if self._store.session_id_exists(sid):
-            sid = self._generate_sid()
-        return sid
-
     def _dirty(self):
         self.dirty = True
 
@@ -81,18 +74,15 @@ class Session(object):
 
 class CookieSessionIdTransmission(object):
 
-    def __init__(self, handler, cookie_name='__sid', domain='.adesk.com'):
+    def __init__(self, handler, cookie_name='__sid'):
         self.handler = handler
         self.cookie_name = cookie_name
-        self.domain = domain
 
     def get_session_id(self):
-
         return self.handler.get_secure_cookie(self.cookie_name)
 
     def set_session_id(self, sid):
-
-        self.handler.set_secure_cookie(self.cookie_name, sid, domain=self.domain)
+        self.handler.set_secure_cookie(self.cookie_name, sid)
 
 
 class UrlSessionIdTransmission(object):
@@ -125,28 +115,42 @@ class HeaderSessionIdTransmission(object):
 class RedisSessionStore(object):
 
     def __init__(self, redis_hosts, **options):
+        self.options = {
+            'key_prefix': 'session',
+            'expire': 43200,
+        }
+        self.options.update(options)
         self.redis_pool = [redis.Redis(host=h, port=p, db=db) for h, p, db in redis_hosts]
 
     def __get_redis_connection(self, sid):
         idx = crc32(sid) % len(self.redis_pool)
         return self.redis_pool[idx]
 
+    def prefixed(self, sid):
+        return '%s:%s' % (self.options['key_prefix'], sid)
+
+    def generate_sid(self):
+        sid = uuid4().get_hex()
+        if self.session_id_exists(sid):
+            sid = self.generate_sid()
+        return sid
+
     def get_session(self, sid):
-        # TODO get
-        data = self.__get_redis_connection(sid).hget(sid, 'data')
+        data = self.__get_redis_connection(sid).hget(self.prefixed(sid), 'data')
+        session = pickle.loads(data) if data else dict()
+        return session
 
-        return pickle.loads(data) if data else dict()
-
-    def set_session(self, sid, session_data, expire=43200):
-        self.__get_redis_connection(sid).hset(
-            sid, 'data', pickle.dumps(session_data))
-        self.__get_redis_connection(sid).expire(sid, expire)
+    def set_session(self, sid, session_data):
+        expire = self.options['expire']
+        self.__get_redis_connection(sid).hset(self.prefixed(sid), 'data', pickle.dumps(session_data))
+        if expire:
+            self.__get_redis_connection(sid).expire(self.prefixed(sid), expire)
 
     def delete_session(self, sid):
-        self.__get_redis_connection(sid).delete(sid)
+        self.__get_redis_connection(sid).delete(self.prefixed(sid))
 
     def session_id_exists(self, sid):
-        return sid and self.__get_redis_connection(sid).exists(sid)
+        return sid and self.__get_redis_connection(sid).exists(self.prefixed(sid))
 
 
 if __name__ == '__main__':
@@ -157,20 +161,17 @@ if __name__ == '__main__':
     class MainHandler(tornado.web.RequestHandler):
 
         def get(self, name):
-
-            oname = self.get_current_user() or 'world'
-            self.write("Hello, %s, the old name is %s." % (name, oname))
-            if oname != name:
+            old_name = self.get_current_user() or 'world'
+            self.write("Hello, %s, the old name is %s." % (name, old_name))
+            if old_name != name:
                 self.session['user'] = name
                 self.write("<br />Name not equal set new name %s." % name)
 
         def get_current_user(self):
-
             return self.session['user'] if self.session and 'user' in self.session else None
 
         @property
         def session(self):
-
             return Session(self.application.settings['session_store'], CookieSessionIdTransmission(self))
 
     # TODO session_store
