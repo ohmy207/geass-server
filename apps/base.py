@@ -7,7 +7,7 @@ import tornado.web
 
 import log
 
-from setting import MESSAGE, CDN
+from config.global_setting import MESSAGE, CDN
 from utils import (
     escape as _es,
     httputil as _ht,
@@ -48,6 +48,8 @@ class BaseHandler(tornado.web.RequestHandler):
     _types = [ObjectId, None, basestring, int, float, list, bool]
     _data = None
     _jump = None
+
+    _session = None
 
     def initialize(self):
         super(BaseHandler, self).initialize()
@@ -203,6 +205,24 @@ class BaseHandler(tornado.web.RequestHandler):
             filter_parameter(key, tp, default)
 
         return rpd
+
+    @property
+    def session(self):
+        if not self._session:
+            self._session = session.Session(self.application.settings['session_store'], session.CookieSessionIdTransmission(self))
+        return self._session
+
+    def update_session(self, user):
+        if user:
+            self.session['uid'] = user['id']
+            self.session['avatar'] = user['avatar']
+            self.session['nickname'] = user['name']
+            self.session['email'] = user['email']
+            self.session['super'] = user['super']
+            self.session['artist'] = user['artist']
+            self.session['auth'] = user.get('auth', 'adesk')
+        else:
+            self.session.clear()
 
     def static_url(self,  path, include_host=None, v=None, **kwargs):
         is_debug = self.application.settings.get('debug', False)

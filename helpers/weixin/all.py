@@ -7,7 +7,7 @@ from wechat_sdk.messages import (
     TextMessage, VoiceMessage, ImageMessage, VideoMessage, LinkMessage, LocationMessage, EventMessage
 )
 
-from helpers.setting import WX_CONFIG
+from config.global_setting import WX_CONFIG
 
 logger = log.getLogger(__file__)
 

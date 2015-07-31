@@ -4,7 +4,7 @@
 from qiniu import Auth
 
 from apps.base import BaseHandler
-from apps.setting import QINIU_CONFIG
+from config.global_setting import QINIU_CONFIG
 
 
 #class PageHandler(BaseHandler):
