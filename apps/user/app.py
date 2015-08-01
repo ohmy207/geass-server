@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 
 #from tornado.web import authenticated
+from urllib import quote
 
 import log
 import tornado.web
@@ -31,8 +32,8 @@ class WeiXinAuthorizeHandler(BaseHandler, OAuth2Mixin):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        print self._params
-        print self.request.uri
+        redirect_uri = quote('http://geass.t207.me/wx/authorize')
+        print redirect_uri
 
         if self._params['code']:
             user = yield self.get_authenticated_user(
@@ -42,7 +43,8 @@ class WeiXinAuthorizeHandler(BaseHandler, OAuth2Mixin):
         else:
             self.authorize_redirect(
                 authorize_url=WX_URL['authorize_url'](
-                    redirect_uri=self.request.host + self.request.uri,
+                    #redirect_uri=self.request.host + self.request.uri,
+                    redirect_uri=redirect_uri,
                     scope=WX['scope_base'],
                     state=None,
                 )
