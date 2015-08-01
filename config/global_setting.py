@@ -44,8 +44,8 @@ MESSAGE = {
     404: u'not found',
 }
 
-# qiniu
-QINIU_CONFIG = {
+# qiniu config
+QINIU = {
     'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
     'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
 
@@ -60,8 +60,11 @@ QINIU_CONFIG = {
 }
 
 # weixin config
-WX_CONFIG = {
+WEIXIN = {
     'token': 'geass',
     'appid': 'wx02a1f4a182252307',
     'appsecret': 'a20441c7c4ffc64e193ed1c67f087441',
+
+    'authorize_base': lambda appid, redirect_uri, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (WEIXIN['appid'], redirect_uri, 'snsapi_base', state=None),
+    'authorize_userinfo': lambda appid, redirect_uri, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (WEIXIN['appid'], redirect_uri, 'snsapi_userinfo', state=None),
 }
