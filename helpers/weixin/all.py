@@ -7,7 +7,7 @@ from wechat_sdk.messages import (
     TextMessage, VoiceMessage, ImageMessage, VideoMessage, LinkMessage, LocationMessage, EventMessage
 )
 
-from config.global_setting import WX_CONFIG
+from config.global_setting import WX
 
 logger = log.getLogger(__file__)
 
@@ -18,7 +18,7 @@ class WeiXin(WechatBasic):
 
     def __init__(self):
         super(WeiXin, self).__init__(
-            token=WX_CONFIG['token'],
-            appid=WX_CONFIG['appid'],
-            appsecret=WX_CONFIG['appsecret']
+            token=WX['token'],
+            appid=WX['appid'],
+            appsecret=WX['appsecret']
         )

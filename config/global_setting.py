@@ -4,7 +4,11 @@ import os
 
 
 def is_test_file_exists():
-    fname = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '__test__')
+    fname = os.path.join(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.abspath(__file__))),
+        '__test__')
     return os.path.isfile(fname)
 
 if is_test_file_exists():
@@ -21,7 +25,7 @@ CDN = {
 }
 
 # response message
-#0-100 reseved
+# 0-100 reseved
 MESSAGE = {
     0: u'成功',
     1: u'未知错误',
@@ -44,6 +48,8 @@ MESSAGE = {
     404: u'not found',
 }
 
+## Third-party
+
 # qiniu config
 QINIU = {
     'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
@@ -60,11 +66,24 @@ QINIU = {
 }
 
 # weixin config
-WEIXIN = {
+WX = {
+
+    # general
     'token': 'geass',
     'appid': 'wx02a1f4a182252307',
     'appsecret': 'a20441c7c4ffc64e193ed1c67f087441',
 
-    'authorize_base': lambda appid, redirect_uri, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (WEIXIN['appid'], redirect_uri, 'snsapi_base', state=None),
-    'authorize_userinfo': lambda appid, redirect_uri, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (WEIXIN['appid'], redirect_uri, 'snsapi_userinfo', state=None),
+    # authorize
+    'scope_base': 'snsapi_base',
+    'scope_userinfo': 'snsapi_userinfo',
+
+}
+
+# TODO line so long
+WX_URL = {
+
+    'authorize_url': lambda redirect_uri, scope, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (WX['appid'], redirect_uri, scope, state),
+
+    'access_token_url': lambda code: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code' % (WX['appid'], WX['appsecret'], code),
+
 }

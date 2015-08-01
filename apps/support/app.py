@@ -4,7 +4,7 @@
 from qiniu import Auth
 
 from apps.base import BaseHandler
-from config.global_setting import QINIU_CONFIG
+from config.global_setting import QINIU
 
 
 #class PageHandler(BaseHandler):
@@ -23,12 +23,12 @@ class UploadTokenHandler(BaseHandler):
 
     #@authenticated
     def get(self):
-        q = Auth(QINIU_CONFIG['access_key'], QINIU_CONFIG['secret_key'])
+        q = Auth(QINIU['access_key'], QINIU['secret_key'])
 
         token = q.upload_token(
-            bucket=QINIU_CONFIG['bucket_name'],
-            expires=QINIU_CONFIG['expires'],
-            policy=QINIU_CONFIG['policy'],
+            bucket=QINIU['bucket_name'],
+            expires=QINIU['expires'],
+            policy=QINIU['policy'],
         )
 
         self.wo_json({'token': token})

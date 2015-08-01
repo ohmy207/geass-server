@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-#from tornado.web import authenticated
+from tornado.web import authenticated
 
 import log
 
@@ -28,7 +28,7 @@ class NewTopicHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def get(self, uid):
         self.render('topic_new.html', uid=uid)
 
