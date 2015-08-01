@@ -4,7 +4,7 @@ import os
 
 
 def is_test_file_exists():
-    fname = os.path.join(os.path.dirname(os.path.abspath(__file__)), '__test__')
+    fname = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '__test__')
     return os.path.isfile(fname)
 
 if is_test_file_exists():

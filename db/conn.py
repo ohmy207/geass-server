@@ -4,13 +4,11 @@ import os
 
 from pymongo import MongoClient
 
-from . import setting
+from config.global_setting import TEST_MODE
 
 
-if os.path.exists(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), '__test__')):
+if TEST_MODE:
     mc = MongoClient(host='localhost:27017')
-    print '-- IN DEBUG --'
 else:
     mc = MongoClient(host='localhost:27017')
 
