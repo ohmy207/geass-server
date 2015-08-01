@@ -42,7 +42,7 @@ class WeiXinAuthorizeHandler(BaseHandler, OAuth2Mixin):
         else:
             self.authorize_redirect(
                 authorize_url=WX_URL['authorize_url'](
-                    redirect_uri=self.request.uri,
+                    redirect_uri=self.request.host + self.request.uri,
                     scope=WX['scope_base'],
                     state=None,
                 )
