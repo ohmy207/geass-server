@@ -18,6 +18,8 @@ else:
     TEST_MODE = False
 
 
+APP_HOST = 'http://geass.t207.me'
+
 # cdn setting
 CDN = {
     'is_disabled': False,
@@ -48,7 +50,7 @@ MESSAGE = {
     404: u'not found',
 }
 
-## Third-party
+# Third-party
 
 # qiniu config
 QINIU = {
@@ -66,7 +68,7 @@ QINIU = {
 }
 
 # weixin config
-WX = {
+WEIXIN = {
 
     # general
     'token': 'geass',
@@ -80,10 +82,9 @@ WX = {
 }
 
 # TODO line so long
-WX_URL = {
+WEIXIN['authorize_url'] = lambda redirect_uri, scope, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (
+    WEIXIN['appid'], redirect_uri, scope, state)
 
-    'authorize_url': lambda redirect_uri, scope, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (WX['appid'], redirect_uri, scope, state),
+WEIXIN['access_token_url'] = lambda code: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code' % (
+    WEIXIN['appid'], WEIXIN['appsecret'], code)
 
-    'access_token_url': lambda code: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code' % (WX['appid'], WX['appsecret'], code),
-
-}

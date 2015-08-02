@@ -10,7 +10,7 @@ from tornado.concurrent import Future
 from tornado.auth import OAuth2Mixin, _auth_return_future, AuthError
 
 from apps import base
-from config.global_setting import WX_URL
+from config.global_setting import WEIXIN
 
 try:
     import urlparse
@@ -43,21 +43,18 @@ class OAuth2Mixin(OAuth2Mixin):
 
         http.fetch(access_token_url, self.async_callback(self._on_access_token, callback, fields))
 
-    def _oauth_request_token_url(self, code=None):
-        pass
-
     def _on_access_token(self, callback, fields, response):
         if response.error:
             future.set_exception(AuthError('weixin auth error %s' % str(response)))
             return
 
         args = escape.native_str(response.body).split('&')
-        print args
         print response.body
-        #session = {
-        #    'access_token': args[0].split('=')[1],
-        #    'expires': args[1].split('=')[1],
-        #    }
+        session = {
+            'access_token': args[0].split('=')[1],
+            'expires': args[1].split('=')[1],
+            }
+        print session
 
         #http = self.get_auth_http_client()
         #http.fetch(url_concat('https://graph.qq.com/oauth2.0/me?', {'access_token': session['access_token']}), 
