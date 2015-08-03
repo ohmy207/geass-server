@@ -16,24 +16,11 @@ class User(user.User):
     @staticmethod
     def callback(record):
         result = {
-            'tId':  record['_id'],
-            'title': record['title'],
-            'content': record['content'],
-            'authorUid': record['auid'],
-            'isPrivate': record['ispriv'],
-            'isAnonymous': record['isanon'],
+            'uid': record['_id'],
+            'nickname': record['nickname'] or record['open']['wx']['nickname'],
+            'avatar': record['avatar'] or record['open']['wx']['headimgurl'],
+            'sex': record['sex'] or record['open']['wx']['sex'],
         }
-
-        dtime = datetime.fromtimestamp(int(record['ctime']))
-        htime = (datetime.now() - dtime).seconds
-
-        result['fCreatedTime'] = dtime.strftime('%Y-%m-%d %H:%M:%S')
-        # TODO str to unicode
-        result['hCreatedTime'] = str(htime/24/60/60)+'天前' if htime > 24*60*60 else str(htime/60/60)+'小时前' if htime > 60*60 else str(htime/60)+'分钟前' if htime > 60 else '刚刚'
-
-        result['picUrls'] = map(lambda p:'https://dn-geass-images.qbox.me/'+p, record['pickeys'])
-        result['author'] = '一起去偷牛'
-        result['avatar'] = 'http://7xi8l3.com1.z0.glb.clouddn.com/FravREnqYMS9MmIX5Y_YzaP6RUOJ'
 
         return result
 

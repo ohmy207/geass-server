@@ -214,13 +214,10 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def update_session(self, user):
         if user:
-            self.session['uid'] = user['id']
+            self.session['uid'] = user['uid']
+            self.session['sex'] = user['sex']
             self.session['avatar'] = user['avatar']
-            self.session['nickname'] = user['name']
-            self.session['email'] = user['email']
-            self.session['super'] = user['super']
-            self.session['artist'] = user['artist']
-            self.session['auth'] = user.get('auth', 'adesk')
+            self.session['nickname'] = user['nickname']
         else:
             self.session.clear()
 

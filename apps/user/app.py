@@ -33,7 +33,7 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
     @gen.coroutine
     def get(self):
         code = self._params['code']
-        redirect_uri = APP_HOST + self.request.uri,
+        redirect_uri = APP_HOST + self.request.uri
 
         if code:
             res = yield self.get_access_token(code=code)
@@ -61,7 +61,8 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
                 if 'errcode' in user:
                     raise ResponseError(5, user['errmsg'])
 
-                db_user['user'].create({'open': {'wx': user}})
+                uid = db_user['user'].create({'open': {'wx': user}})
+                user = db_user['user'].get_one({'_id': uid})
 
             self.update_session(user)
             self.redirect(self._params['next'] or '/')

@@ -19,6 +19,7 @@ else:
 
 
 APP_HOST = 'http://geass.t207.me'
+REDIS_HOSTS = [('localhost', 6379, 0)]
 
 # cdn setting
 CDN = {

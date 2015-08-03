@@ -50,7 +50,7 @@ class WeiXinMixin(OAuth2Mixin):
         self.redirect('%s%s' % (url_concat(self._AUTHORIZE_URL, args), self._AUTHORIZE_URL_SUFFIX))
 
     @_auth_return_future
-    def get_access_token(self, code, future, grant_type='authorization_code'):
+    def get_access_token(self, code, callback, grant_type='authorization_code'):
         args = {
             'appid': self._APP_ID,
             'secret': self._APP_SECRET,
@@ -60,10 +60,10 @@ class WeiXinMixin(OAuth2Mixin):
 
         http = self.get_auth_http_client()
         http.fetch(url_concat(self._ACCESS_TOKEN_URL, args),
-                   self.async_callback(self._on_access_token, future))
+                   self.async_callback(self._on_access_token, callback))
 
     @_auth_return_future
-    def get_authenticated_user(self, code, future, lang='zh_CN'):
+    def get_authenticated_user(self, code, callback, lang='zh_CN'):
         args = {
             'access_token': access_token,
             'openid': openid,
@@ -72,7 +72,7 @@ class WeiXinMixin(OAuth2Mixin):
 
         http = self.get_auth_http_client()
         http.fetch(url_concat(self._USERINFO_URL, args),
-                   self.async_callback(self._on_authenticated_user, future))
+                   self.async_callback(self._on_authenticated_user, callback))
 
     def _on_access_token(self, future, response):
         if response.error:
