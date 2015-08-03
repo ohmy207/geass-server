@@ -27,39 +27,51 @@ class BaseHandler(base.BaseHandler):
     pass
 
 
-class OAuth2Mixin(OAuth2Mixin):
+class WeiXinMixin(OAuth2Mixin):
 
-    def authorize_redirect(self, authorize_url):
-        self.redirect(authorize_url)
+    _APP_ID = WEIXIN['appid']
+    _APP_SECRET = WEIXIN['appsecret']
+
+    _SCOPE = WEIXIN['scope']
+    _AUTHORIZE_URL = WEIXIN['authorize_url']
+    _AUTHORIZE_URL_SUFFIX = WEIXIN['authorize_url_suffix']
+    _ACCESS_TOKEN_URL = WEIXIN['access_token_url']
+    _USERINFO_URL = WEIXIN['userinfo_url']
+
+    def authorize_redirect(self, redirect_uri=None, response_type='code', scope=None, state=None):
+        args = {
+            'appid': self._APP_ID,
+            'redirect_uri': redirect_uri,
+            'response_type': response_type,
+            'scope': scope,
+            'state': state,
+        }
+
+        self.redirect('%s%s' % (url_concat(self._AUTHORIZE_URL, args), self._AUTHORIZE_URL_SUFFIX))
 
     @_auth_return_future
-    def get_authenticated_user(self, access_token_url, callback, extra_fields=None):
+    def get_access_token(self, code, callback, grant_type='authorization_code'):
+    #def get_authenticated_user(self, code, callback, grant_type='authorization_code'):
+        args = {
+            'appid': self._APP_ID,
+            'secret': self._APP_SECRET,
+            'code': code,
+            'grant_type': grant_type,
+        }
+
         http = self.get_auth_http_client()
+        http.fetch(url_concat(self._ACCESS_TOKEN_URL, args),
+                   self.async_callback(self._on_access_token, callback))
 
-        fields = set(['nickname', 'figureurl'])
-
-        if extra_fields:
-            fields.update(extra_fields)
-
-        http.fetch(access_token_url, self.async_callback(self._on_access_token, callback, fields))
-
-    def _on_access_token(self, callback, fields, response):
+    def _on_access_token(self, callback, response):
         if response.error:
             future.set_exception(AuthError('weixin auth error %s' % str(response)))
             return
 
-        args = escape.native_str(response.body).split('&')
-        print response.body
-        session = {
-            'access_token': args[0].split('=')[1],
-            'expires': args[1].split('=')[1],
-            }
-        print session
+        future.set_result(escape.json_decode(response.body))
 
         #http = self.get_auth_http_client()
-        #http.fetch(url_concat('https://graph.qq.com/oauth2.0/me?', {'access_token': session['access_token']}), 
-        #           self.async_callback(self._on_access_openid, redirect_uri, client_id,
-        #                               client_secret, session, callback, fields))
+        #http.fetch(url_concat(self._USERINFO_URL, args), self.async_callback(self._on_access_openid, redirect_uri, client_id, client_secret, session, callback, fields))
 
     def _on_access_openid(self, redirect_uri, client_id, client_secret, session,
                           future, fields, response):

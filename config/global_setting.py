@@ -76,15 +76,15 @@ WEIXIN = {
     'appsecret': 'a20441c7c4ffc64e193ed1c67f087441',
 
     # authorize
-    'scope_base': 'snsapi_base',
-    'scope_userinfo': 'snsapi_userinfo',
+    'scope': {
+        'scope_base': 'snsapi_base',
+        'scope_userinfo': 'snsapi_userinfo',
+    },
+
+    'authorize_url_suffix': '#wechat_redirect',
+    'authorize_url': 'https://open.weixin.qq.com/connect/oauth2/authorize',
+    'access_token_url': 'https://api.weixin.qq.com/sns/oauth2/access_token',
+    'userinfo_url': 'https://api.weixin.qq.com/sns/userinfo',
 
 }
-
-# TODO line so long
-WEIXIN['authorize_url'] = lambda redirect_uri, scope, state: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' % (
-    WEIXIN['appid'], redirect_uri, scope, state)
-
-WEIXIN['access_token_url'] = lambda code: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code' % (
-    WEIXIN['appid'], WEIXIN['appsecret'], code)
 
