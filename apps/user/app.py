@@ -47,10 +47,11 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
             if scope == self._SCOPE['scope_base']:
                 user =  db_user['user'].get_one({'open.wx.openid': openid})
                 if not user:
-                    return self.authorize_redirect(
+                    self.authorize_redirect(
                         redirect_uri=redirect_uri,
                         scope=self._SCOPE['scope_userinfo']
                     )
+                    return
 
             else:
             #elif scope == self._SCOPE['scope_userinfo']:
