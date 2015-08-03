@@ -3,6 +3,7 @@
 # installed helper list
 INSTALLED_HELPERS = (
     'topic',
+    'user',
     'weixin',
 )
 
