@@ -63,7 +63,7 @@ class WeiXinMixin(OAuth2Mixin):
         http.fetch(url_concat(self._ACCESS_TOKEN_URL, args),
                    self.async_callback(self._on_access_token, callback))
 
-    def _on_access_token(self, callback, response):
+    def _on_access_token(self, future, response):
         if response.error:
             future.set_exception(AuthError('weixin auth error %s' % str(response)))
             return

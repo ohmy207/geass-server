@@ -32,7 +32,7 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        redirect_uri = quote(APP_HOST) + self.request.uri
+        redirect_uri = APP_HOST + self.request.uri
 
         if self._params['code']:
             res = yield self.get_access_token(code=self._params['code'])
