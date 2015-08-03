@@ -39,24 +39,24 @@ class WeiXinMixin(OAuth2Mixin):
     _USERINFO_URL = WEIXIN['userinfo_url']
 
     def authorize_redirect(self, redirect_uri=None, response_type='code', scope=None, state=None):
-        args = {
-            'appid': self._APP_ID,
-            'redirect_uri': redirect_uri,
-            'response_type': response_type,
-            'scope': scope,
-            'state': state,
-        }
+        args = [
+            ('appid', self._APP_ID),
+            ('redirect_uri', redirect_uri),
+            ('response_type', response_type),
+            ('scope', scope),
+            ('state', state),
+        ]
 
         self.redirect('%s%s' % (url_concat(self._AUTHORIZE_URL, args), self._AUTHORIZE_URL_SUFFIX))
 
     @_auth_return_future
     def get_access_token(self, code, callback, grant_type='authorization_code'):
-        args = {
-            'appid': self._APP_ID,
-            'secret': self._APP_SECRET,
-            'code': code,
-            'grant_type': grant_type,
-        }
+        args = [
+            ('appid', self._APP_ID),
+            ('secret', self._APP_SECRET),
+            ('code', code),
+            ('grant_type', grant_type),
+        ]
 
         http = self.get_auth_http_client()
         http.fetch(url_concat(self._ACCESS_TOKEN_URL, args),
@@ -64,11 +64,11 @@ class WeiXinMixin(OAuth2Mixin):
 
     @_auth_return_future
     def get_authenticated_user(self, code, callback, lang='zh_CN'):
-        args = {
-            'access_token': access_token,
-            'openid': openid,
-            'lang': lang,
-        }
+        args = [
+            ('access_token', access_token),
+            ('openid', openid),
+            ('lang', lang),
+        ]
 
         http = self.get_auth_http_client()
         http.fetch(url_concat(self._USERINFO_URL, args),
