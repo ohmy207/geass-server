@@ -221,6 +221,9 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             self.session.clear()
 
+    def get_current_user(self):
+        return self.session['uid'] if self.session and 'uid' in self.session else None
+
     def static_url(self,  path, include_host=None, v=None, **kwargs):
         is_debug = self.application.settings.get('debug', False)
 
