@@ -63,7 +63,7 @@ class WeiXinMixin(OAuth2Mixin):
                    self.async_callback(self._on_access_token, callback))
 
     @_auth_return_future
-    def get_authenticated_user(self, code, callback, lang='zh_CN'):
+    def get_authenticated_user(self, access_token, openid, callback, lang='zh_CN'):
         args = [
             ('access_token', access_token),
             ('openid', openid),

@@ -11,6 +11,7 @@ from tornado import gen
 
 from .base import BaseHandler
 from .base import WeiXinMixin
+from apps.base import ResponseError
 
 from helpers import user as db_user
 from config.global_setting import WEIXIN, APP_HOST
