@@ -35,7 +35,7 @@ class NewTopicHandler(BaseHandler):
     #@authenticated
     def POST(self, uid):
         data = self._params
-        data['auid'] = uid
+        data['auid'] = self.session['uid']
         #data['content'] = data['content'].replace('\n', '<br/>')
         data['ctime'] = datetime.now()
 
@@ -69,7 +69,7 @@ class NewProposalHandler(BaseHandler):
         data = self._params
 
         data['tid'] = topic['proposal'].to_objectid(data['tid'])
-        data['auid'] = 111111111
+        data['auid'] = self.session['uid']
         data['ctime'] = datetime.now()
 
         pid = topic['proposal'].insert(data)
@@ -127,7 +127,7 @@ class NewCommentHandler(BaseHandler):
         data['tid'] = topic['comment'].to_objectid(data['tid'])
         data['topid'] = topic['comment'].to_objectid(data['topid'])
         data['toauid'] = topic['comment'].find_one({'_id': data['topid']}).get('auid', None) if data['topid'] else None
-        data['auid'] = 111111111
+        data['auid'] = self.session['uid']
         data['ctime'] = datetime.now()
 
         coid = topic['comment'].insert(data)
@@ -180,7 +180,7 @@ class LikeCommentHandler(BaseHandler):
     #@authenticated
     def POST(self):
         data = self._params
-        uid = 111111111
+        uid = self.session['uid']
 
         coid = topic['comment'].to_objectid(data['coid'])
         comment = topic['comment'].find_one({'_id': coid})
