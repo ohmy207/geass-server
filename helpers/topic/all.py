@@ -36,7 +36,7 @@ class Topic(topic.Topic):
 
         result['picUrls'] = map(lambda p:'https://dn-geass-images.qbox.me/'+p, record['pickeys'])
 
-        user = self._user.get_one({'_id': elf._user.to_objectid(record['auid'])})
+        user = Topic._user.get_one({'_id': Topic._user.to_objectid(record['auid'])})
         result['author'] = user['nickname']
         result['avatar'] = user['avatar']
 
@@ -66,7 +66,7 @@ class Proposal(topic.Proposal):
 
         result['picUrls'] = map(lambda p:'https://dn-geass-images.qbox.me/'+p, record['pickeys'])
 
-        user = self._user.get_one({'_id': elf._user.to_objectid(record['auid'])})
+        user = Proposal._user.get_one({'_id': Proposal._user.to_objectid(record['auid'])})
         result['author'] = user['nickname']
         result['avatar'] = user['avatar']
 
@@ -97,8 +97,8 @@ class Comment(topic.Comment):
         # TODO str to unicode
         result['hCreatedTime'] = str(htime/24/60/60)+'天前' if htime > 24*60*60 else str(htime/60/60)+'小时前' if htime > 60*60 else str(htime/60)+'分钟前' if htime > 60 else '刚刚'
 
-        user = self._user.get_one({'_id': elf._user.to_objectid(record['auid'])})
-        touser = self._user.get_one({'_id': self._user.to_objectid(record['toauid'])})
+        user = Comment._user.get_one({'_id': Comment._user.to_objectid(record['auid'])})
+        touser = Comment._user.get_one({'_id': Comment._user.to_objectid(record['toauid'])})
         result['author'] = user['nickname']
         result['avatar'] = user['avatar']
         result['toAuthor'] = touser['nickname'] if touser else None
