@@ -5,7 +5,7 @@ import log
 from datetime import datetime
 
 from models.topic import model as topic
-from helpers import user as db_user
+from models.user import model as user
 
 logger = log.getLogger(__file__)
 
@@ -13,6 +13,8 @@ MODEL_SLOTS = ['Topic', 'Proposal', 'Comment']
 
 
 class Topic(topic.Topic):
+
+    _user = user.User()
 
     @staticmethod
     def callback(record):
@@ -34,7 +36,7 @@ class Topic(topic.Topic):
 
         result['picUrls'] = map(lambda p:'https://dn-geass-images.qbox.me/'+p, record['pickeys'])
 
-        user = db_user['user'].get_one({'_id': db_user['user'].to_objectid(record['auid'])})
+        user = self._user.get_one({'_id': elf._user.to_objectid(record['auid'])})
         result['author'] = user['nickname']
         result['avatar'] = user['avatar']
 
@@ -42,6 +44,8 @@ class Topic(topic.Topic):
 
 
 class Proposal(topic.Proposal):
+
+    _user = user.User()
 
     @staticmethod
     def callback(record):
@@ -62,7 +66,7 @@ class Proposal(topic.Proposal):
 
         result['picUrls'] = map(lambda p:'https://dn-geass-images.qbox.me/'+p, record['pickeys'])
 
-        user = db_user['user'].get_one({'_id': db_user['user'].to_objectid(record['auid'])})
+        user = self._user.get_one({'_id': elf._user.to_objectid(record['auid'])})
         result['author'] = user['nickname']
         result['avatar'] = user['avatar']
 
@@ -72,6 +76,8 @@ class Proposal(topic.Proposal):
 
 
 class Comment(topic.Comment):
+
+    _user = user.User()
 
     @staticmethod
     def callback(record):
@@ -91,8 +97,8 @@ class Comment(topic.Comment):
         # TODO str to unicode
         result['hCreatedTime'] = str(htime/24/60/60)+'天前' if htime > 24*60*60 else str(htime/60/60)+'小时前' if htime > 60*60 else str(htime/60)+'分钟前' if htime > 60 else '刚刚'
 
-        user = db_user['user'].get_one({'_id': db_user['user'].to_objectid(record['auid'])})
-        touser = db_user['user'].get_one({'_id': db_user['user'].to_objectid(record['toauid'])})
+        user = self._user.get_one({'_id': elf._user.to_objectid(record['auid'])})
+        touser = self._user.get_one({'_id': self._user.to_objectid(record['toauid'])})
         result['author'] = user['nickname']
         result['avatar'] = user['avatar']
         result['toAuthor'] = touser['nickname'] if touser else None
