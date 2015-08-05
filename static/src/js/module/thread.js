@@ -756,7 +756,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     success:function(re) {
                         var status = parseInt(re.code);
                         if (status === 0) {
-                            if (re.data.authorUid > 0) {
+                            if (re.data.authorUid) {
                                 //localStorage.removeItem(storageKey);
                                 // 回复回复
                                 //if (obj.parentId) {
