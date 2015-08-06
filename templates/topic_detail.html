@@ -24,31 +24,32 @@
     <img class="topicMImg" src="" alt="图片" id="pEventImg" />
    </div> 
 
-   <div class="detail"> 
-    <div class="detailTitle pr">
-     <h2 class="c6 f16">话题来自：<span class="c7">龙门客栈</span></h2> 
-     <span class="iconArrowR db pa c9 cf"></span> 
-    </div> 
-   </div> 
-
    <div class="detailBox"> 
     <div class="topicCon" id="t_3569_0_0"> 
-     <div class="personImgDate bn pr"> 
-         <i class="perImg mr db fl pr"> <a href="http://m.wsq.qq.com/profile/245300167"><img data-src="{{ result['avatar'] }}" class="bImg brBig lazy-loaded" width="35" height="35" alt="avatar" /></a> </i> 
-      <h3 class="title f13 fn c6">{{ result['author'] }} </h3> 
-      <p class="f11"><span class="time c9 mr">{{ result['hCreatedTime'] }}</span><span class="address c6"><i class="iconloc f14 c1 cf"></i>哈尔滨市 通顺街</span></p> 
-      <a class="iconAd cf f16 c9 pa db PerPopBtn" tid="3569" href="javascript:;"></a> 
-      <div class="adPop pa perPop" style="display:none;"> 
-       <div class="adBCon pr  f12" tid="3569" uid="245300167" author="Dr.Liu"> 
-        <p btntype="markAd">屏蔽</p> 
-       </div> 
-      </div> 
-     </div> 
-     <div class="detailCon"> 
-      <div class="dCon f16">
+
+     <div class="titleWrap c11">
+
+      <div class="titleDetail allowCopy">{{ result['title'] }}</div>
+      <div class="personImgDate row pr"> 
+       <div class="perImg pr"><img data-src="{{ result['avatar'] }}" class="bImg brBig lazy-loaded" width="25" height="25" alt="avatar" /></div>
+
+       <div class="col titleBottomWrap pr">
+        <div class="nameWrap">
+         <span class="userNick f14">{{ result['author'] }} </span>
+         <span class="time f12">{{ result['hCreatedTime'] }}</span>
+        </div>
+
+        <div class="private">私有</div>
+       </div>
+      </div>
+
+     </div>
+
+     <div class="detailCon c11 allowCopy">
+      <div class="dCon f17">
         {{ result['content'] }}
       </div> 
-      <div class="threadPic pr"> 
+      <div class="threadPic pr">
 
       {% for p in result['picUrls'] %}
         <span> <img class="dImg" data-src="{{ p }}"/> </span> 

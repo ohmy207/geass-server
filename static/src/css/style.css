@@ -1,5 +1,13 @@
 
 html {
+    /*
+    display: -webkit-flex;
+    display: flex;
+    */
+    width: 100%;
+    min-height: 100%;
+    font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    background: #f8f8f8;
     -webkit-text-size-adjust: none;
     -ms-text-size-adjust: 100%
 }
@@ -12,11 +20,22 @@ body,ul,li,dl,dt,dd,h1,h2,h3,h4,p,a,img {
 }
 
 body {
-    margin: 0
-auto;
+    margin: 0 auto;
     padding-bottom: 55px;
     background-color: #ebebeb;
-    color: #1d1d1d
+    /*
+    background-color: #f6f6f6;
+    background-color: #f8f8f8;
+    background-color: #EEF1F1;
+    color: #1d1d1d;
+    */
+}
+
+html, body {
+    font-family: -apple-system-font,"Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    -webkit-user-select: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-user-drag: none;
 }
 
 ul,ol {
@@ -101,6 +120,10 @@ none;
     font-size: 16px
 }
 
+.f17 {
+    font-size: 17px
+}
+
 .f18 {
     font-size: 18px
 }
@@ -156,6 +179,10 @@ none;
 
 .c10 {
     color: #9D9D9D
+}
+
+.c11 {
+    color: #454545
 }
 
 .pr {
@@ -758,13 +785,42 @@ img {
 }
 
 .topicCon {
+    /*
     padding: 5px
+    */
 }
 
-.personImgDate {
-    padding: 8px
-40px 0 10px;
+.titleWrap {
+    padding: 10px 15px 20px;
+}
+
+.titleWrap .titleDetail {
+    margin-bottom: 5px;
+    font-size: 24px;
+    line-height: 34px;
+    text-align: left;
+    word-break: break-all;
+}
+
+.titleWrap .personImgDate {
+    padding-bottom: 10px;
     border-bottom: 1px solid #e9e9e9
+}
+
+.titleWrap .personImgDate .perImg {
+    padding-right: 10px;
+    width: 25px;
+}
+
+.titleWrap .personImgDate .titleBottomWrap {
+    padding-top: 5px;
+}
+
+.nameWrap {
+    overflow: hidden;
+    padding-right: 84px;
+    height: 19px;
+    display: inline-block;
 }
 
 .personImgDate
@@ -772,14 +828,38 @@ p {
     line-height: 19px
 }
 
-.pImg {
-    width: 35px;
-    height: 35px
+.nameWrap .userNick {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 70px;
+    font-weight: 400!important;
+    line-height: 19px;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #777!important;
 }
 
-.personImgDate
-.title {
-    line-height: 18px
+.nameWrap .time {
+    display: inline-block;
+    margin-top: 0;
+    padding-top: 3px;
+    vertical-align: top;
+    color: #bbb;
+}
+
+.private {
+    overflow: hidden;
+    position: absolute;
+    top: -7px;
+    right: 0;
+    z-index: 2;
+    padding: 14px 0;
+    max-width: 100px;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #324d82;
 }
 
 .iconloc:before {
@@ -797,13 +877,15 @@ p {
 }
 
 .detailCon {
-    padding: 13px
-13px 0
+    padding: 0 13px 0
 }
 
 .dCon {
-    line-height: 23px;
-    word-break: break-all
+    clear: both;
+    margin-bottom: 5px;
+    line-height: 27px;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .dImg {
@@ -1283,8 +1365,7 @@ li {
     border: none
 }
 
-.detailBox .topicList .operation,.detailBox .topicList .topicList,.detailBox .topicList li:last-child,.replyShare a:last-child,.detailBox .personImgDate,.topicBox
-.personImgDate {
+.detailBox .topicList .operation,.detailBox .topicList .topicList,.detailBox .topicList li:last-child,.replyShare a:last-child,.topicBox .personImgDate {
     border: none
 }
 
@@ -1306,11 +1387,6 @@ li {
 .detailBox .topicList
 .sImg {
     top: 10px
-}
-
-.detailBox
-.personImgDate {
-    padding-bottom: 13px
 }
 
 .time em,.source
@@ -4354,4 +4430,17 @@ i {
     line-height: 37px;
     resize: none;
     float:left;
+}
+.row {
+    display: -webkit-box;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.row .col {
+    -webkit-box-flex: 1;
+    width: 0;
+    box-flex: 1;
+}
+.allowCopy {
+    -webkit-user-select: initial;
 }
