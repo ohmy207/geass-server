@@ -51,7 +51,7 @@
       <div class="threadPic pr"> 
 
       {% for p in result['picUrls'] %}
-        <span> <img class="dImg" data-src="{{ p }}"/> </span> 
+        <span> <img class="dImg" data-src="{{ p['origin'] }}"/> </span> 
       {% end %}
 
       </div>

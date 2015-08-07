@@ -73,8 +73,7 @@ none;
 }
 
 img {
-    border: 0
-none;
+    border: 0 none;
     vertical-align: bottom;
     -ms-interpolation-mode: bicubic
 }
@@ -228,9 +227,14 @@ none;
 }
 
 .brBig {
+    /*
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
     border-radius: 50px
+    */
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px
 }
 
 .commBg {
@@ -890,8 +894,7 @@ p {
 
 .dImg {
     display: block;
-    margin: 5px
-auto;
+    margin: 5px auto;
     min-width: 200px;
     max-width: 100%
 }
@@ -1076,22 +1079,153 @@ a {
 }
 
 .topicList {
-    padding: 10px
-13px 7px;
+    padding: 10px 13px 7px;
     border-top: 1px solid #e9e9e9;
     background-color: #fbfbfb;
     -webkit-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px
 }
 
-.topicList
-li {
-    padding: 0
-0 5px 25px;
+.topicList.proposal {
+    padding: 10px 0 7px!important;
+}
+
+.topicList li {
+    padding: 0 0 5px 25px;
     position: relative;
     line-height: 20px;
     word-break: break-all;
-    font-size: 13px
+    font-size: 13px;
+}
+
+.topicList .proposalList {
+    position: relative;
+    z-index: 1;
+    border-radius: 2px;
+    padding: 14px 10px 0 50px;
+    background-color: #fff;
+}
+
+.detailBox .topicList .proposalList {
+    padding-bottom: 0!important;
+}
+
+.topicList .proposalWrap {
+    padding-top: 1px;
+    padding-bottom: 15px;
+}
+
+.topicList .proposalWrap .sImg {
+    left: 13px;
+    width: 30px;
+    height: 30px;
+}
+
+.topicList .proposalWrap .imgGallary {
+    display: inline-block;
+    position: relative;
+    background-size: 100% 100%;
+    background-color: #D6D8DA;
+
+    float: right;
+    overflow: hidden;
+    margin-top: 1px;
+    margin-left: 12px;
+    border-radius: 1px;
+    width: 80px;
+    height: 80px;
+}
+
+.imgGallary img {
+    width: 100%;
+    height: 100%;
+}
+
+.imgGallary .picCount {
+    right: 0;
+    bottom: 0;
+    left: auto;
+    border-radius: 1px;
+    padding: 0 2px;
+    width: auto;
+    min-width: 24px;
+    font-size: 12px;
+
+    position: absolute;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    color: #fff;
+    background: rgba(0,0,0,.6);
+}
+
+.topicList .proposalWrap .textContainer {
+    height: 80px;
+    overflow: hidden;
+    max-height: 80px;
+}
+
+.topicList .listContent {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    margin-bottom: 2px;
+    padding-top: 2px;
+    font-size: 15px;
+    line-height: 18px;
+    word-break: break-all;
+    color: gray;
+    -webkit-line-clamp: 3;
+}
+
+.topicList .info {
+    /*
+    margin-top: 2px;
+    */
+    display: none;
+    overflow: hidden;
+    position: relative;
+    margin-top: 2px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #a6a6a6;
+}
+
+.topicList .info .flRight {
+    float: right;
+    margin-top: -1px;
+}
+
+.topicList .info span {
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+    max-width: 250px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.topicList .info span .time {
+    display: block;
+    float: left;
+    overflow: hidden;
+    max-width: 70px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.topicList .nick {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    position: relative;
+    margin-bottom: 2px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 20px;
+    word-break: break-all;
+    color: #454545;
+    -webkit-line-clamp: 2;
 }
 
 .sImg {
@@ -1150,18 +1284,21 @@ li {
     overflow: hidden
 }
 
-.replyImg
-dd {
+.replyImg dd {
     width: 60px;
     height: 60px;
-    margin: 0
-5px 5px 0;
+    margin: 0 5px 5px 0;
     float: left;
-    overflow: hidden
+    overflow: hidden;
+    background-color: #D6D8DA;
 }
 
-.rsingleImg
-dd {
+.replyImg dd img {
+    width: 100%;
+    height: 100%;
+}
+
+.rsingleImg dd {
     width: 100%;
     height: 100%
 }
@@ -1343,8 +1480,7 @@ li {
     overflow: hidden
 }
 
-.detailBox
-.topicList {
+.detailBox .topicList {
     background-color: #fff;
     padding-top: 0;
     border: none;

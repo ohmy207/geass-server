@@ -90,7 +90,7 @@
      <h3 class="fl allTitle pr"><i class="iconDetailReply cf f16 mr5 c7"></i>全部回复</h3> 
      <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
     </div> 
-    <div class="topicList"> 
+    <div class="topicList proposal"> 
      <ul id="allReplyList" style="height: auto;"> 
      </ul> 
     </div> 
@@ -133,48 +133,41 @@
       <% for (var i in replyList) { %>
 
       <% if (!isDOMExist('p_' + replyList[i].tId + '_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
-      <li id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
-      <div class="f13 c3 replyUser">
-          <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
-          <span class="c7"><%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">楼主</i><%}%>
-          </span>
+      <li class="proposalList" id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
 
-          <%== replyList[i].content %>
+          <div class="proposalWrap">
+              <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
 
-          </div>
-          <div class="operation pr">
-              <div class="replyImg ">
-
-                  <%if (replyList[i].picUrls.length > 0) { %>
+              <%if (replyList[i].picUrls.length > 0) { %>
+                  <div class="imgGallary">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[0]['thumb'] %>" alt="">
                       <%if (replyList[i].picUrls.length > 1) { %>
-                      <dl>
-                          <% for (j in replyList[i].picUrls) { %>
-                              <dd> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[j] %>" alt=""></dd>
-                          <% } %>
-                      </dl>
-
-                      <% } else { %>
-                          <dd> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[0] %>" alt=""></dd>
+                          <div class="picCount"><%= replyList[i].picUrls.length %>图</div>
                       <% } %>
-                  <% } %>
+                  </div>
+              <% } %>
 
-          </div>
-          <span class="source db c6 f11 fl"><%== replyList[i].hCreatedTime %></span>
-          <span class="replyShare db c9 fr f13">
-              <a href="javascript:;" class="like c9" pId="<%= replyList[i].pId %>"> <i class="<% if (replyList[i].liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].likeNum) { %><%= replyList[i].likeNum %> <%  } else { %>赞<%  } %></a>
-              <a class="c9 replyFloor" href="javascript:;" id="p_<%= replyList[i].tId %>_<%= replyList[i].pId %>" uid="<%= replyList[i].authorUid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
-          </span>
-          <div class="replyPop" <%if (!replyList[i].floorList) { %> style="display:none;"<% } %> >
-              <div class="replyBg brSmall pr">
-                  <div class="topicList floorList" id="fl_<%=replyList[i].pId%>">
-                      <ul>
-                      <% include('tmpl_reply_floor', {'floorList':replyList[i].floorList}) %>
-                      </ul>
-                      <a href="javascript:;" start="0" pid="<%=replyList[i].pId%>" <%if (replyList[i].restCount < 1) { %>style="display:none;"<% } %> class="db f12 moreInReply">更多</a>
+              <div class="textContainer">
+                  <h3 class="nick">
+                      <%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">题主</i><%}%>
+                  </h3>
+
+                  <div class="listContent ">
+                      <%== replyList[i].content %>
                   </div>
               </div>
+
+              <div class="info">
+                  <div>
+                      <span>
+                          <span class="time"><%== replyList[i].hCreatedTime %></span>
+                      </span>
+                  </div>
+                  <div class="flRight"></div>
+              </div>
+
           </div>
-      </div>
+
       </li>
     <% } %>
     <% } %>
