@@ -86,11 +86,28 @@ class ListProposalHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 5),
+            ('type', basestring, 'all'),
         ]
     }
 
     #@authenticated
     def GET(self, tid):
+
+        print self._params['type']
+        if self._params['type'] == 'default':
+            spec = {'tid': topic['proposal'].to_objectid(tid)}
+            data_list = topic['proposal'].get_all(spec, skip=0, limit=3)
+            result = []
+            for d in data_list:
+                d['hotReply'] = True
+                result.append(d)
+
+            self._data = {
+                'dataList': result,
+                'nextStart': self._skip,
+            }
+            return
+
         spec = {'tid': topic['proposal'].to_objectid(tid)}
         data_list = topic['proposal'].get_all(spec, skip=self._skip, limit=self._limit)
         self._data = {
@@ -106,6 +123,37 @@ class DetailProposalHandler(BaseHandler):
         data = topic['proposal'].get_one(topic['proposal'].to_objectid(pid))
         self.render('proposal_detail.html', result=data)
 
+
+class VoteProposalHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('tid', basestring),
+            ('pid', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    #@authenticated
+    def POST(self):
+        data = self._params
+        uid = self.to_objectid(self.session['uid'])
+
+        pid = topic['proposal'].to_objectid(data['pid'])
+        proposal = topic['proposal'].find_one({'_id': pid})
+
+        if not proposal:
+            raise ResponseError(404)
+
+        if uid in proposal['vote']:
+            raise ResponseError(404)
+
+        topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}, '$push': {'vote': uid}}, w=1)
+
+        self._data = {
+            'voteNum': 1,
+        }
 
 
 class NewCommentHandler(BaseHandler):

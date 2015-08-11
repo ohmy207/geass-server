@@ -11,6 +11,7 @@ urls = [
     ('/c/new/submit', app.NewProposalHandler),
     ('/t/([0-9a-f]{24})', app.ListProposalHandler),
     ('/[0-9]{9}/p/([0-9a-f]{24})', app.DetailProposalHandler),
+    ('/[0-9]{9}/p/vote', app.VoteProposalHandler),
 
     ('/[0-9]{9}/t/[0-9a-f]{24}/c/new', app.NewCommentHandler),
     ('/[0-9]{9}/t/([0-9a-f]{24})/c/page', app.PageCommentHandler),
