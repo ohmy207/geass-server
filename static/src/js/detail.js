@@ -36,9 +36,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         nextStart: 0,
 
         // load data,all in one
-        load: function(start, action) {
+        load: function(start, action, type) {
             start = start || 0;
             action = action || '';
+            type = type || 'all';
 
             exports.isLoading = true;
             /**
@@ -49,6 +50,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var url = '/t/' + window.tId
                 //+ '?parentId=' + parentId
                 + '?skip=' + start
+                + '&type=' + type;
                 //+ '&desc=' + desc;
             var opts = {
                 'beforeSend': function() {
@@ -343,7 +345,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
                     // 向上滑
                     if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
-                        exports.load(exports.nextStart, 'drag');
+                        exports.load(exports.nextStart, 'drag', 'all');
                     }
                     // 向下拉刷新
                     if (offset.y < level && document.body.scrollTop <= 0) {
@@ -370,42 +372,45 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
                 var opts = {
                     'success': function(result) {
-                        if (result.code == 0 && result.data && result.data.likeNumber) {
-                            if (parentId > 0 && !pId) {
-                                jq.UTIL.likeTips(thisObj);
-                            }
-                            thisObj.html('<i class="iconPraise f18 cf"></i>' + result.data.likeNumber);
+                        if (result.code == 0 && result.data && result.data.voteNum) {
+                            //if (parentId > 0 && !pId) {
+                            jq.UTIL.likeTips(thisObj);
+                            //}
+                            thisObj.html('<i class="iconPraise f18 cf"></i>' + '<span class="readNumText">' + result.data.voteNum + '</span>');
                             // 赞的不是回复时
-                            if (!pId) {
-                                //移除掉blur遮罩
-                                jq('.blur').each(function(obj){
-                                    if(jq(this).attr('alt') == tId){
-                                        jq(this).removeClass();
-                                    }
-                                });
-                                jq('.slideText').each(function(obj){
-                                    if(jq(this).attr('alt') == tId){
-                                        jq(this).css('display', 'none');
-                                    }
-                                });
-                            }
-                            if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
-                                wxFollow.wxFollowTips();
-                            }
+                            //if (!pId) {
+                            //    //移除掉blur遮罩
+                            //    jq('.blur').each(function(obj){
+                            //        if(jq(this).attr('alt') == tId){
+                            //            jq(this).removeClass();
+                            //        }
+                            //    });
+                            //    jq('.slideText').each(function(obj){
+                            //        if(jq(this).attr('alt') == tId){
+                            //            jq(this).css('display', 'none');
+                            //        }
+                            //    });
+                            //}
+                            //if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
+                            //    wxFollow.wxFollowTips();
+                            //}
                         }
                     },
                     'noShowLoading' : true,
                     'noMsg' : true
                 }
 
-                var url = '/' + sId;
-                var data = {'tId':tId, 'parentId': parentId, 'CSRFToken':CSRFToken};
-                if (pId) {
-                    url = url + '/r/like';
-                    data.pId = pId;
-                } else {
-                    url = url + '/like';
-                }
+                var url = '/111111111';
+                var data = {'tid':tId, 'pid': pId};
+                url = url + '/p/vote';
+                //var url = '/' + sId;
+                //var data = {'tId':tId, 'parentId': parentId, 'CSRFToken':CSRFToken};
+                //if (pId) {
+                //    url = url + '/r/like';
+                //    data.pId = pId;
+                //} else {
+                //    url = url + '/like';
+                //}
 
                 jq.UTIL.ajax(url, data, opts);
             });
@@ -466,6 +471,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 return false;
             });
 
+            exports.load(exports.nextStart, 'drag', 'default');
             // 话题推荐
             //exports.recommendThread();
             // 全局活动
