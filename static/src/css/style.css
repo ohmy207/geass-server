@@ -45,8 +45,7 @@ ul,ol {
 a,button,input {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-tap-highlight-color: transparent;
-    outline: 0
-none;
+    outline: 0 none;
     text-decoration: none
 }
 
@@ -775,8 +774,11 @@ img {
 }
 
 .topicBox,.detailBox {
-    margin-bottom: 8px;
+    /*
     background-color: #fff
+    */
+    margin-bottom: 8px;
+    background-color: #fafafa;
 }
 
 .topicBox {
@@ -1087,7 +1089,11 @@ a {
 }
 
 .topicList.proposal {
-    padding: 10px 0 7px!important;
+    padding: 0 0 0!important;
+    /*
+    padding: 10px 0 0!important;
+    background-color: #ebebeb!important;
+    */
 }
 
 .topicList li {
@@ -1099,11 +1105,13 @@ a {
 }
 
 .topicList .proposalList {
-    position: relative;
+    /*
     z-index: 1;
+    */
+    position: relative;
     border-radius: 2px;
     padding: 14px 10px 0 50px;
-    background-color: #fff;
+    background-color: #fafafa;
 }
 
 .detailBox .topicList .proposalList {
@@ -1160,9 +1168,9 @@ a {
 }
 
 .topicList .proposalWrap .textContainer {
-    height: 80px;
+    height: 62px;
     overflow: hidden;
-    max-height: 80px;
+    max-height: 62px;
 }
 
 .topicList .listContent {
@@ -1181,8 +1189,8 @@ a {
 .topicList .info {
     /*
     margin-top: 2px;
-    */
     display: none;
+    */
     overflow: hidden;
     position: relative;
     margin-top: 2px;
@@ -1226,6 +1234,20 @@ a {
     word-break: break-all;
     color: #454545;
     -webkit-line-clamp: 2;
+}
+
+.readNumText {
+    display: inline-block;
+    overflow: hidden;
+    margin-top: 2px;
+    margin-right: 5px;
+    max-width: 80px;
+    height: 15px;
+    font-size: 10px;
+    line-height: 15px;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .sImg {
@@ -1481,10 +1503,13 @@ li {
 }
 
 .detailBox .topicList {
+    /*
     background-color: #fff;
+    margin-bottom: 13px
+    */
+    background-color: #fafafa;
     padding-top: 0;
     border: none;
-    margin-bottom: 13px
 }
 
 .detailBox .topicList
@@ -1991,8 +2016,7 @@ a {
 }
 
 .cFont {
-    margin: 15px
-auto;
+    margin: 15px auto;
     font-size: 80px
 }
 
@@ -3149,19 +3173,46 @@ em {
 }
 
 .hotLabel {
+    display: none;
+    position: relative;
+    border-top: 15px solid #eef1f1;
+    border-bottom: 1px solid #e5e5e5;
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+    text-align: center;
+    background: #fafafa;
+
+    /*
     height: 25px;
     padding-bottom: 5px;
     margin: -5px 13px 3px;
     border-bottom: 1px solid #e0e0e0;
-    line-height: 25px
+    line-height: 25px;
+    */
 }
 
-.hotLabel
-h3 {
-    padding: 0
-0 3px 0;
-    border-bottom: 1px solid #db5f40;
-    bottom: 0
+.leftSideIcon {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 0;
+    width: 5px;
+    content: "";
+}
+
+.leftSideIcon.all {
+    background: #1fbbf3;
+}
+
+.leftSideIcon.default {
+    background: #F3951F;
+}
+
+.hotLabel span {
+    float: left;
+    margin-left: 15px;
+    font-size: 14px;
 }
 
 .hotLabel
@@ -3496,55 +3547,6 @@ solid #8ec46c;
     font-size: 15px
 }
 
-.bottomBarHQ,.bottomBar {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-    padding: 5px
-0;
-    text-align: center;
-    z-index: 9988
-}
-
-.bottomBarHQ {
-    border-top: 1px solid #cdcdcd;
-    background: -webkit-gradient(linear,0% 0%, 0% 100%, from(#f9f9f9), to(#e1e1e1));
-    background: -moz-linear-gradient(0% 0% 270deg, #f9f9f9,#e1e1e1)
-}
-
-.bottomBarHQ
-.rL {
-    position: absolute;
-    top: -5px;
-    left: 0;
-    width: 1px;
-    height: 50px;
-    background-color: #cdcdcd
-}
-
-.bottomBarHQ .two
-li {
-    width: 50%;
-    float: left
-}
-
-.bottomBarHQ .three
-li {
-    width: 33.33%;
-    float: left
-}
-
-.bottomBarHQ
-a {
-    width: 100%;
-    font-size: 17px;
-    line-height: 40px;
-    color: #00a5e0;
-    position: relative
-}
-
 .iconMore {
     display: inline-block
 }
@@ -3553,12 +3555,6 @@ a {
     content: "\e012";
     margin-right: 5px;
     vertical-align: 0%
-}
-
-.bottomBarHQ .numP,.bottomBarHQ
-.redP {
-    left: 65%;
-    top: 6px
 }
 
 .iconPost:before {
@@ -3613,37 +3609,35 @@ a {
     height: 10px
 }
 
-.bottomBarHQ .iconPrfile:before {
-    padding: 0
-3px
-}
-
-.bottomBarHQ .iconJoin,.bottomBar
-.iconJoin {
-    vertical-align: 3%
-}
-
-.bottomBarHQ .iconPrfile .numP,.bottomBarHQ .iconPrfile
-.redP {
-    left: 14px;
-    top: -6px;
-    right: auto
-}
-
-.bottomBarHQ .iconMore .numP,.bottomBarHQ .iconMore
-.redP {
-    left: 55px;
-    top: -2px;
-    right: auto
-}
-
-.bottomBarHQ .iconPrfile:before,.bottomBarHQ .iconExit:before {
-    color: #00a5e0
-}
-
 .bottomBar {
-    background-color: #f9f9f9;
-    border-top: 1px solid #EBEBEB
+    /*
+    visibility: hidden;
+    */
+    display: -webkit-box;
+    visibility: visible;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    color: #00a5e0;
+    background: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#fafafa));
+    box-shadow: 0 0 2px rgba(0,0,0,.3);
+}
+
+.bottomBar .item {
+    display: block;
+    -webkit-box-flex: 1;
+    position: relative;
+    width: 0;
+    font-size: 16px;
+    text-align: center;
+    vertical-align: middle;
+    color: #777;
+    box-flex: 1;
 }
 
 .iconAtticon:before {
@@ -3929,15 +3923,13 @@ li {
 
 .similarTopicTit {
     height: 35px;
-    margin: 0
--12px -9px;
-    background-color: #fff;
+    margin: 0 -12px -9px;
+    background-color: #fafafa;
     overflow: hidden;
     line-height: 35px
 }
 
-.similarTopicTit
-a {
+.similarTopicTit a {
     font-size: 13px;
     display: block;
     text-align: center;

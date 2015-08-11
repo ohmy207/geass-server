@@ -80,16 +80,20 @@
     </div> 
 
     <div id="hotLabelBox" class="hotLabel" style="display: none">
-     <h3 class="fl pr"><i class="iconDetailReply cf f16 mr5 c4"></i>热门回复</h3>
+     <div class="leftSideIcon default"></div><span>题主预置</span>
     </div> 
-    <div class="topicList"> 
-     <ul id="hotReplyList"> 
+    <div class="topicList proposal">
+     <ul id="hotReplyList">
      </ul> 
     </div> 
+
     <div id="allLabelBox" class="hotLabel" style=""> 
-     <h3 class="fl allTitle pr"><i class="iconDetailReply cf f16 mr5 c7"></i>全部回复</h3> 
+     <div class="leftSideIcon all"></div><span>全部评论</span>
+     <!--
      <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
-    </div> 
+     -->
+    </div>
+
     <div class="topicList proposal"> 
      <ul id="allReplyList" style="height: auto;"> 
      </ul> 
@@ -133,7 +137,7 @@
       <% for (var i in replyList) { %>
 
       <% if (!isDOMExist('p_' + replyList[i].tId + '_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
-      <li class="proposalList" id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
+      <li class="proposalList" id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>">
 
           <div class="proposalWrap">
               <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
@@ -147,7 +151,7 @@
                   </div>
               <% } %>
 
-              <div class="textContainer">
+              <div class="textContainer" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
                   <h3 class="nick">
                       <%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">题主</i><%}%>
                   </h3>
@@ -163,7 +167,12 @@
                           <span class="time"><%== replyList[i].hCreatedTime %></span>
                       </span>
                   </div>
-                  <div class="flRight"></div>
+                  <div class="flRight">
+                      <a href="javascript:;" class="like c9" pId="<%= replyList[i].pId %>">
+                          <i class="<% if (replyList[i].liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i>
+                          <span class="readNumText"><% if (replyList[i].voteNum) { %><%= replyList[i].voteNum %> <%  } else { %>赞<%  } %> </span>
+                      </a>
+                  </div>
               </div>
 
           </div>
@@ -241,13 +250,10 @@
 
 {% block footer %}
 
-  <div class="bottomBar" id="bottomBar">
-   <div class="bottomBarCon">
-    <a href="javascript:;" class="backBtn needsclick" id="goback"><i class="iconAnswer cf back db"></i></a>
-    <!--<a href="javascript:;" class="qBackBtn" id="goback"> <i class="upBtn cf db"></i>返回</a> -->
-    <a href="/111111111/t/{{ result['tId'] }}/c/page" class="replyBtn db" ><i class="iconReply f21 mr5 cf"></i>评论</a>
-    <a href="javascript:;" id="mqOption" issite="1" class="moreC qMore db"> <i class="circle">●</i> <i class="circle">●</i> <i class="circle">●</i> <i class="db numP" id="navMsgNum" style="display:none;">0</i></a> 
-   </div>
+  <div class="bottomBar pr" id="bottomBar">
+   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
+   <a href="/111111111/t/{{ result['tId'] }}/c/page" class="item cf iconReply" id="to_reply">29</a>
+   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">
