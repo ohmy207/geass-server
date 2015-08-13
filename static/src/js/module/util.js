@@ -718,7 +718,8 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
             },
             likeTips: function(obj) {
                 if (!jq('.praiseCon')[0]) {
-                    var praiseCon = '<span class="praiseCon db" style="opacity:0;height:30px"><i class="praisePop db">明日再赞哦~</i></span>';
+                    //var praiseCon = '<span class="praiseCon db" style="opacity:0;height:30px"><i class="praisePop db">明日再赞哦~</i></span>';
+                    var praiseCon = '<span class="praiseCon db" style="opacity:0;height:30px"><i class="praisePop db">+1</i></span>';
                     jq(praiseCon).appendTo('body');
                 }
                 var otop = obj.offset().top - 20;

@@ -24,7 +24,7 @@
     <img class="topicMImg" src="" alt="图片" id="pEventImg" />
    </div> 
 
-   <div class="detail"> 
+   <div class="detail" style="display: none;"> 
     <div class="detailTitle pr">
      <h2 class="c6 f16">话题来自：<span class="c7">龙门客栈</span></h2> 
      <span class="iconArrowR db pa c9 cf"></span> 
@@ -33,15 +33,8 @@
 
    <div class="detailBox"> 
 
-    <div id="hotLabelBox" class="hotLabel" style="display: none">
-     <h3 class="fl pr"><i class="iconDetailReply cf f16 mr5 c4"></i>热门回复</h3>
-    </div> 
-    <div class="topicList"> 
-     <ul id="hotReplyList"> 
-     </ul> 
-    </div> 
-    <div id="allLabelBox" class="hotLabel" style=""> 
-     <h3 class="fl allTitle pr"><i class="iconDetailReply cf f16 mr5 c7"></i>全部回复</h3> 
+    <div id="allLabelBoxStop" class="hotLabel" style=""> 
+     <div class="leftSideIcon all"></div><span>全部看法</span>
      <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
     </div> 
     <div class="topicList"> 
@@ -88,16 +81,19 @@
 
       <% if (!isDOMExist('p_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
       <li id="p_<%=replyList[i].pId%>" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>" >
-      <div class="f13 c3 replyUser">
-          <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
-          <span class="c7"><%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">楼主</i><%}%><% if (replyList[i].toAuthor) { %> 回复 <%=replyList[i].toAuthor%><% } %>：
-          </span>
 
-          <%== replyList[i].content %>
-
+          <div class="f15 c3 replyUser">
+              <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
+              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">楼主</i><%}%><% if (replyList[i].toAuthor) { %> 回复 <%=replyList[i].toAuthor%><% } %>：
+              </span>
           </div>
+
+          <div class="commContent">
+              <%== replyList[i].content %>
+          </div>
+
           <div class="operation pr">
-          <span class="source db c6 f11 fl"><%== replyList[i].hCreatedTime %></span>
+          <span class="source db c6 f12 fl"><%== replyList[i].hCreatedTime %></span>
           <span class="replyShare db c9 fr f13">
               <a href="javascript:;" class="like c9" pId="<%= replyList[i].pId %>"> <i class="<% if (replyList[i].liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].likeNum) { %><%= replyList[i].likeNum %> <%  } else { %>赞<%  } %></a>
               <a class="c9 replyFloor" href="javascript:;" id="p_<%= replyList[i].pId %>" uid="<%= replyList[i].authorUid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
@@ -183,9 +179,7 @@
 {% block footer %}
 
   <div class="bottomBar" id="bottomBar">
-   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
-   <a href="javascript:;" class="item cf iconReply threadReply" id="to_reply">29</a>
-   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
+   <a href="javascript:;" class="item cf iconReply threadReply" id="to_reply">添加评论</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">
@@ -197,7 +191,7 @@
    <input type="hidden" name="tIds[]" />
   </form>
 
-  <div onclick="location.href='http://m.wsq.qq.com/93617818'" class="copyRight ht">
+  <div onclick="location.href='http://m.wsq.qq.com/93617818'" class="copyRight ht" style="display:none;">
    微社区，精彩在你身边
   </div>
 

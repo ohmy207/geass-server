@@ -17,6 +17,7 @@
 
         "new": "new",
         "detail": "detail",
+        "proposal": "proposal",
         "comment": "comment",
     },
     shim:{
@@ -28,6 +29,9 @@
         },
         {
             name: "detail",
+        },
+        {
+            name: "proposal",
         },
         {
             name: "comment",

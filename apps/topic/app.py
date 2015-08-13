@@ -121,6 +121,7 @@ class DetailProposalHandler(BaseHandler):
     #@authenticated
     def get(self, pid):
         data = topic['proposal'].get_one(topic['proposal'].to_objectid(pid))
+        data['title'] = topic['topic'].find_one({'_id': topic['proposal'].to_objectid(data['tId'])}, {'title': 1})['title']
         self.render('proposal_detail.html', result=data)
 
 

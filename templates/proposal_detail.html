@@ -26,26 +26,32 @@
 
    <div class="detail"> 
     <div class="detailTitle pr">
-     <h2 class="c6 f16">话题来自：<span class="c7">龙门客栈</span></h2> 
-     <span class="iconArrowR db pa c9 cf"></span> 
-    </div> 
-   </div> 
+     <div>{{ result['title'] }}</div>
+    </div>
+   </div>
 
-   <div class="detailBox"> 
-    <div class="topicCon" id="t_3569_0_0"> 
-     <div class="personImgDate bn pr"> 
-         <i class="perImg mr db fl pr"> <a href="http://m.wsq.qq.com/profile/245300167"><img data-src="{{ result['avatar'] }}" class="bImg brBig lazy-loaded" width="35" height="35" alt="avatar" /></a> </i> 
-      <h3 class="title f13 fn c6">{{ result['author'] }} </h3> 
-      <p class="f11"><span class="time c9 mr">{{ result['hCreatedTime'] }}</span><span class="address c6"><i class="iconloc f14 c1 cf"></i>哈尔滨市 通顺街</span></p> 
-      <a class="iconAd cf f16 c9 pa db PerPopBtn" tid="3569" href="javascript:;"></a> 
-      <div class="adPop pa perPop" style="display:none;"> 
-       <div class="adBCon pr  f12" tid="3569" uid="245300167" author="Dr.Liu"> 
-        <p btntype="markAd">屏蔽</p> 
-       </div> 
-      </div> 
-     </div> 
-     <div class="detailCon"> 
-      <div class="dCon f16">
+   <div class="detailBox">
+    <div class="topicCon">
+
+     <div class="titleWrap c11">
+
+      <div class="personImgDate row pr"> 
+       <div class="perImg pr"><img data-src="{{ result['avatar'] }}" class="bImg brBig lazy-loaded" width="25" height="25" alt="avatar" /></div>
+
+       <div class="col titleBottomWrap pr">
+        <div class="nameWrap">
+         <span class="userNick f14">{{ result['author'] }} </span>
+         <span class="time f12">{{ result['hCreatedTime'] }}</span>
+        </div>
+
+        <div class="private">私有</div>
+       </div>
+      </div>
+
+     </div>
+
+     <div class="detailCon c11 allowCopy"> 
+      <div class="dCon f17">
         {{ result['content'] }}
       </div> 
       <div class="threadPic pr"> 
@@ -57,14 +63,11 @@
       </div>
 
       <div class="operation oh"> 
-       <!--
-       <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a> <a href="javascript:;" id="support" class="shareBtn c9" _qzone="http://m.wsq.qq.com/shareDirect?site=%E9%BE%99%E9%97%A8%E5%AE%A2%E6%A0%88&amp;title=%E5%88%86%E4%BA%AB%E8%87%AA%23%E9%BE%99%E9%97%A8%E5%AE%A2%E6%A0%88%23&amp;summary=%E7%9C%9F%E6%98%AF%E9%9A%BE%E4%B8%BA%E7%BC%96%E5%89%A7%E4%BA%86%EF%BC%8C%E4%B8%8A%E4%B8%80%E9%83%A8%E9%A3%9E%E6%9C%BA%E3%80%81%E5%9D%A6%E5%85%8B%E3%80%81%E5%A4%A7%E7%82%AE%E9%83%BD%E7%94%A8%E5%AE%8C%E4%BA%86%EF%BC%8C%E8%BF%99%E4%B8%80%E9%83%A8%E7%8E%A9%E8%B5%B7%E4%BA%86%E7%A9%BA%E4%B8%AD%E9%A3%9E%E8%BD%A6%E3%80%82%E7%9C%9F%E6%9C%9F%E5%BE%85%E4%B8%8B%E4%B8%80%E9%83%A8%E5%AF%BC%E6%BC%94%E5%92%8C%E7%BC%96%E5%89%A7%E4%BC%9A...&amp;targetUrl=http%3A%2F%2Fm.wsq.qq.com%2Fttp%3A%2F%2Fm.wsq.qq.com%2F264151824%2Ft%2F3569%3F_wv%3D1%26source%3Dcustom&amp;pageUrl=http%3A%2F%2Fm.wsq.qq.com%2F264151824&amp;imageUrl=http%3A%2F%2Fugc.qpic.cn%2Fquan_pics%2F0%2F264151824_1592%2F1280%3Fmax-age%3D2592000%26t%3D0&amp;type=qzone"><i class="iconShare f18 cf"></i></a> <a href="javascript:;" class="threadReply c9" tid="3569" onclick="pgvSendClick({hottag:'QUAN.INDEX.REPLY.LINK'});"><i class="iconReply f18 cf"></i><span id="rCount">2</span></a> </span> 
-       -->
        <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a> <a href="javascript:;" id="support" class="shareBtn c9" _qzone=""><i class="iconShare f18 cf"></i></a> <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a> </span> 
       </div> 
      </div> 
 
-     <div id="similarTopicBox" style="">
+     <div id="similarTopicBox" style="display: none;">
       <div class="similarTopic"> 
        <div class="similarTopicCon evtTopicCon" data-link="/264151824/t/3346"> 
         <a href="javascript:;" class="evtAuthorUrl" data-link="/profile/242994209"><img data-src="http://wx.qlogo.cn/mmopen/vd8yNL3TS9Ab8vXHibQQPtQQ9z8YZibH2UD2sXMAu0BIdeFfcWA8gxnqPNazURPUnwVlB5cHJBEvt2jvbWD3LDbDjyUQm8YvH5/64?max-age=1296000" class="sImg brBig pa db" width="20" height="20" alt="头像" /> <span class="c7">龙斌</span> </a> 
@@ -250,13 +253,10 @@
 
 {% block footer %}
 
-  <div class="bottomBar" id="bottomBar">
-   <div class="bottomBarCon">
-    <a href="javascript:;" class="backBtn needsclick" id="goback"><i class="iconAnswer cf back db"></i></a>
-    <!--<a href="javascript:;" class="qBackBtn" id="goback"> <i class="upBtn cf db"></i>返回</a> -->
-    <a href="javascript:;" class="replyBtn db threadReply" ><i class="iconReply f21 mr5 cf"></i>回复</a>
-    <a href="javascript:;" id="mqOption" issite="1" class="moreC qMore db"> <i class="circle">●</i> <i class="circle">●</i> <i class="circle">●</i> <i class="db numP" id="navMsgNum" style="display:none;">0</i></a> 
-   </div>
+  <div class="bottomBar pr" id="bottomBar">
+   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
+   <a href="/111111111/t/{{ result['tId'] }}/c/page" class="item cf iconReply" id="to_reply">29</a>
+   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">
@@ -268,7 +268,7 @@
    <input type="hidden" name="tIds[]" />
   </form>
 
-  <div onclick="location.href='http://m.wsq.qq.com/93617818'" class="copyRight ht">
+  <div onclick="location.href='http://m.wsq.qq.com/93617818'" class="copyRight ht" style="display: none;">
    微社区，精彩在你身边
   </div>
 
@@ -279,6 +279,6 @@
     shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
   </script>
 
-  <script data-main="{{ static_url('js/detail') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+  <script data-main="{{ static_url('js/proposal') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
 
 {% end %}

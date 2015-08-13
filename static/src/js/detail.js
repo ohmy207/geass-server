@@ -102,7 +102,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             if (jq.UTIL.isObjectEmpty(re.data.dataList)) {
                 exports.isLoadingNew = false;
                 jq('#loadNext').hide();
-                jq('#showAll').show();
+                //jq('#showAll').show();
                 return true;
             }
             //re.data.isWX = isWX;
@@ -376,7 +376,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                             //if (parentId > 0 && !pId) {
                             jq.UTIL.likeTips(thisObj);
                             //}
-                            thisObj.html('<i class="iconPraise f18 cf"></i>' + '<span class="readNumText">' + result.data.voteNum + '</span>');
+                            //thisObj.html('<i class="iconPraise f18 cf"></i>' + '<span class="readNumText">' + result.data.voteNum + '</span>');
+                            thisObj.attr('class', 'voteCount voted like');
+                            thisObj.html(result.data.voteNum)
                             // 赞的不是回复时
                             //if (!pId) {
                             //    //移除掉blur遮罩

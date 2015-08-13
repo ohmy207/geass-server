@@ -58,37 +58,37 @@
       </div>
 
       <div class="operation oh"> 
-       <!--
-       <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a> <a href="javascript:;" id="support" class="shareBtn c9" _qzone="http://m.wsq.qq.com/shareDirect?site=%E9%BE%99%E9%97%A8%E5%AE%A2%E6%A0%88&amp;title=%E5%88%86%E4%BA%AB%E8%87%AA%23%E9%BE%99%E9%97%A8%E5%AE%A2%E6%A0%88%23&amp;summary=%E7%9C%9F%E6%98%AF%E9%9A%BE%E4%B8%BA%E7%BC%96%E5%89%A7%E4%BA%86%EF%BC%8C%E4%B8%8A%E4%B8%80%E9%83%A8%E9%A3%9E%E6%9C%BA%E3%80%81%E5%9D%A6%E5%85%8B%E3%80%81%E5%A4%A7%E7%82%AE%E9%83%BD%E7%94%A8%E5%AE%8C%E4%BA%86%EF%BC%8C%E8%BF%99%E4%B8%80%E9%83%A8%E7%8E%A9%E8%B5%B7%E4%BA%86%E7%A9%BA%E4%B8%AD%E9%A3%9E%E8%BD%A6%E3%80%82%E7%9C%9F%E6%9C%9F%E5%BE%85%E4%B8%8B%E4%B8%80%E9%83%A8%E5%AF%BC%E6%BC%94%E5%92%8C%E7%BC%96%E5%89%A7%E4%BC%9A...&amp;targetUrl=http%3A%2F%2Fm.wsq.qq.com%2Fttp%3A%2F%2Fm.wsq.qq.com%2F264151824%2Ft%2F3569%3F_wv%3D1%26source%3Dcustom&amp;pageUrl=http%3A%2F%2Fm.wsq.qq.com%2F264151824&amp;imageUrl=http%3A%2F%2Fugc.qpic.cn%2Fquan_pics%2F0%2F264151824_1592%2F1280%3Fmax-age%3D2592000%26t%3D0&amp;type=qzone"><i class="iconShare f18 cf"></i></a> <a href="javascript:;" class="threadReply c9" tid="3569" onclick="pgvSendClick({hottag:'QUAN.INDEX.REPLY.LINK'});"><i class="iconReply f18 cf"></i><span id="rCount">2</span></a> </span> 
-       -->
-       <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a> <a href="javascript:;" id="support" class="shareBtn c9" _qzone=""><i class="iconShare f18 cf"></i></a> <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a> </span> 
+       <span class="replyShare db c9 fr f13">
+        <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
+       </span> 
       </div> 
      </div> 
 
      <div id="similarTopicBox" style="">
       <div class="similarTopic"> 
        <div class="similarTopicCon evtTopicCon" data-link="/264151824/t/3346"> 
-        <a href="javascript:;" class="evtAuthorUrl" data-link="/profile/242994209"><img data-src="http://wx.qlogo.cn/mmopen/vd8yNL3TS9Ab8vXHibQQPtQQ9z8YZibH2UD2sXMAu0BIdeFfcWA8gxnqPNazURPUnwVlB5cHJBEvt2jvbWD3LDbDjyUQm8YvH5/64?max-age=1296000" class="sImg brBig pa db" width="20" height="20" alt="头像" /> <span class="c7">龙斌</span> </a> 
-        <p>本周五录棚，《钟馗伏魔 雪妖魔灵》、《被嫌弃的松子的一生》《告白》、《如父如子》、《北京国际电影节特辑》（上）（下）。就上述影片和选题，留下你们的评论吧。我将在周五前从中选出有价值的评论在节目中与大家一起分享！ps：请在每一个选题下面单独做出评论哦</p> 
+        <p>小编提示：每个人都可以发表多次看法，但只有一次投票机会哦，可以取消之前的投票重新选择！</p> 
        </div> 
        <div class="similarTopicTit"> 
-        <a href="javascript:;" class="evtMoreHot" data-link="/264151824/recommend?tId=3569">更多相关话题<i class="iconReply f18 cf"></i></a> 
+        <a href="javascript:;" class="threadReply">添加看法<i class="iconReply f18 cf"></i></a> 
        </div> 
       </div>
      </div> 
 
     </div> 
 
-    <div id="hotLabelBox" class="hotLabel" style="display: none">
-     <div class="leftSideIcon default"></div><span>题主预置</span>
+    <div id="hotLabelBox" class="hotLabel tzDefLabel" style="display: none">
+     <div class="leftSideIcon"></div>
+     <img data-src="{{ result['avatar'] }}" class="brBig pr db"/>
+     <span>题主预置</span>
     </div> 
-    <div class="topicList proposal">
+    <div class="topicList proposal tzDefList">
      <ul id="hotReplyList">
      </ul> 
     </div> 
 
     <div id="allLabelBox" class="hotLabel" style=""> 
-     <div class="leftSideIcon all"></div><span>全部评论</span>
+     <div class="leftSideIcon all"></div><span>全部看法</span>
      <!--
      <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
      -->
@@ -139,9 +139,13 @@
       <% if (!isDOMExist('p_' + replyList[i].tId + '_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
       <li class="proposalList" id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>">
 
-          <div class="proposalWrap">
+          <%if (!replyList[i].hotReply) { %>
               <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
+          <% } %>
 
+          <a class="voteCount <% if (replyList[i].voted) { %>voted<%  } %> like" href="javascript:;" pId="<%= replyList[i].pId %>"><% if (replyList[i].voteNum) { %>22<%= replyList[i].voteNum %> <%  } else { %>0<%  } %></a>
+
+          <div class="proposalWrap" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
               <%if (replyList[i].picUrls.length > 0) { %>
                   <div class="imgGallary">
                       <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[0]['thumb'] %>" alt="">
@@ -151,29 +155,29 @@
                   </div>
               <% } %>
 
-              <div class="textContainer" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
+              <div class="textContainer">
+              <%if (!replyList[i].hotReply) { %>
                   <h3 class="nick">
-                      <%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">题主</i><%}%>
+                      <%= replyList[i].author %>
                   </h3>
+              <% } %>
 
                   <div class="listContent ">
                       <%== replyList[i].content %>
                   </div>
               </div>
 
-              <div class="info">
-                  <div>
-                      <span>
-                          <span class="time"><%== replyList[i].hCreatedTime %></span>
-                      </span>
+              <%if (!replyList[i].hotReply && false) { %>
+                  <div class="info">
+                      <div>
+                          <span>
+                              <span class="time"><%== replyList[i].hCreatedTime %></span>
+                          </span>
+                      </div>
+                      <div class="flRight">
+                      </div>
                   </div>
-                  <div class="flRight">
-                      <a href="javascript:;" class="like c9" pId="<%= replyList[i].pId %>">
-                          <i class="<% if (replyList[i].liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i>
-                          <span class="readNumText"><% if (replyList[i].voteNum) { %><%= replyList[i].voteNum %> <%  } else { %>赞<%  } %> </span>
-                      </a>
-                  </div>
-              </div>
+              <% } %>
 
           </div>
 
@@ -265,8 +269,7 @@
    <input type="hidden" name="tIds[]" />
   </form>
 
-  <div onclick="location.href='http://m.wsq.qq.com/93617818'" class="copyRight ht">
-   微社区，精彩在你身边
+  <div class="hotLabel recommendTitle">
   </div>
 
   <script type="text/javascript">
