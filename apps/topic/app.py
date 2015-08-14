@@ -32,7 +32,7 @@ class NewTopicHandler(BaseHandler):
     def get(self, uid):
         self.render('topic_new.html', uid=uid)
 
-    #@authenticated
+    @authenticated
     def POST(self, uid):
         data = self._params
         data['auid'] = self.to_objectid(self.session['uid'])
@@ -46,7 +46,7 @@ class NewTopicHandler(BaseHandler):
 
 class DetailTopicHandler(BaseHandler):
 
-    #@authenticated
+    @authenticated
     def get(self, tid):
         data = topic['topic'].get_one(topic['topic'].to_objectid(tid))
         self.render('topic_detail.html', result=data)
@@ -64,7 +64,7 @@ class NewProposalHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def POST(self):
         data = self._params
 
@@ -90,7 +90,7 @@ class ListProposalHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def GET(self, tid):
 
         print self._params['type']
@@ -118,7 +118,7 @@ class ListProposalHandler(BaseHandler):
 
 class DetailProposalHandler(BaseHandler):
 
-    #@authenticated
+    @authenticated
     def get(self, pid):
         data = topic['proposal'].get_one(topic['proposal'].to_objectid(pid))
         data['title'] = topic['topic'].find_one({'_id': topic['proposal'].to_objectid(data['tId'])}, {'title': 1})['title']
@@ -136,7 +136,7 @@ class VoteProposalHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def POST(self):
         data = self._params
         uid = self.to_objectid(self.session['uid'])
@@ -169,7 +169,7 @@ class NewCommentHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def POST(self):
         data = self._params
 
@@ -187,7 +187,7 @@ class NewCommentHandler(BaseHandler):
 
 class PageCommentHandler(BaseHandler):
 
-    #@authenticated
+    @authenticated
     def get(self, tid):
         data = {'tId': tid}
         self.render('comment_list.html', result=data)
@@ -204,7 +204,7 @@ class ListCommentHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def GET(self, tid):
         spec = {'tid': topic['comment'].to_objectid(tid)}
         data_list = topic['comment'].get_all(spec, skip=self._skip, limit=self._limit)
@@ -226,7 +226,7 @@ class LikeCommentHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    @authenticated
     def POST(self):
         data = self._params
         uid = self.to_objectid(self.session['uid'])
