@@ -35,7 +35,9 @@ class Proposal(Model):
         'vote':             (list, [])      ,
         'pickeys':          (list, [])      ,
 
-        'vnum':            (int, 0)        ,
+        'vnum':             (int, 0)        ,
+
+        'istz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }
@@ -55,7 +57,9 @@ class Comment(Model):
 
         'like':             (list, [])      ,
 
-        'lnum':            (int, 0)        ,
+        'lnum':             (int, 0)        ,
+
+        'istz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }
