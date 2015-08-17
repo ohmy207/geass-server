@@ -4,6 +4,8 @@ import log
 
 from datetime import datetime
 
+from tornado import escape as es
+
 from models.topic import model as topic
 from models.user import model as user
 
@@ -21,7 +23,7 @@ class Topic(topic.Topic):
         result = {
             'tId':  record['_id'],
             'title': record['title'],
-            'content': record['content'],
+            'content': es.xhtml_escape(record['content']),
             'authorUid': record['auid'],
             'isPrivate': record['ispriv'],
             'isAnonymous': record['isanon'],
@@ -52,7 +54,7 @@ class Proposal(topic.Proposal):
         result = {
             'tId': record['tid'],
             'pId': record['_id'],
-            'content': record['content'],
+            'content': es.xhtml_escape(record['content']),
             'authorUid': record['auid'],
             'voteNum': record['vnum'],
         }
@@ -85,7 +87,7 @@ class Comment(topic.Comment):
             'tId': record['tid'],
             'pId': record['_id'],
             #'toPId': record['topid'],
-            'content': record['content'],
+            'content': es.xhtml_escape(record['content']),
             'authorUid': record['auid'],
             'likeNum': record['lnum'],
         }

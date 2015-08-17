@@ -5,12 +5,12 @@ import app
 prefix = ''
 
 urls = [
-    ('/([0-9]{9})/t/new', app.NewTopicHandler),
-    ('/[0-9]{9}/t/([0-9a-f]{24})', app.DetailTopicHandler),
+    ('/t/new', app.NewTopicHandler),
+    ('/t/([0-9a-f]{24})', app.DetailTopicHandler),
 
     ('/c/new/submit', app.NewProposalHandler),
-    ('/t/([0-9a-f]{24})', app.ListProposalHandler),
-    ('/[0-9]{9}/p/([0-9a-f]{24})', app.DetailProposalHandler),
+    ('/t/([0-9a-f]{24})/proposals', app.ListProposalHandler),
+    ('/p/([0-9a-f]{24})', app.DetailProposalHandler),
     ('/[0-9]{9}/p/vote', app.VoteProposalHandler),
 
     ('/[0-9]{9}/t/[0-9a-f]{24}/c/new', app.NewCommentHandler),

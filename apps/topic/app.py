@@ -29,32 +29,39 @@ class NewTopicHandler(BaseHandler):
     }
 
     @authenticated
-    def get(self, uid):
-        self.render('topic_new.html')
-
-    @authenticated
-    def POST(self, uid):
+    def POST(self):
         data = self._params
         data['auid'] = self.to_objectid(self.session['uid'])
-        #data['content'] = data['content'].replace('\n', '<br/>')
         data['ctime'] = datetime.now()
 
-        tid = db_topic['topic'].insert(data)
+        tid = db_topic['topic'].create(data)
 
-        self._jump = '/'+uid+'/t/'+unicode(tid)
+        self._jump = '/topic/?tid='+unicode(tid)
 
 
 class DetailTopicHandler(BaseHandler):
 
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
     @authenticated
-    def get(self, tid):
+    def GET(self, tid):
         tid = db_topic['topic'].to_objectid(tid)
 
         topic = db_topic['topic'].get_one({'_id': tid})
-        proposals = db_topic['proposal'].get_all({'tid': tid}, skip=0, limit=5)
-        json_data = self.json_encode({'dataList': proposals})
+        proposals = db_topic['proposal'].get_all({'tid': tid}, skip=self._skip, limit=self._limit)
 
-        self.render('topic_detail.html', topic=topic, json_data=json_data)
+        self._data = {
+            'topic': topic,
+            'dataList': proposals,
+            'nextStart': self._skip + self._limit
+        }
 
 
 class NewProposalHandler(BaseHandler):
@@ -132,10 +139,13 @@ class ListProposalHandler(BaseHandler):
 class DetailProposalHandler(BaseHandler):
 
     @authenticated
-    def get(self, pid):
+    def GET(self, pid):
         data = db_topic['proposal'].get_one(db_topic['proposal'].to_objectid(pid))
         data['title'] = db_topic['topic'].find_one({'_id': db_topic['proposal'].to_objectid(data['tId'])}, {'title': 1})['title']
-        self.render('proposal_detail.html', result=data)
+
+        self._data = {
+            'proposal': data,
+        }
 
 
 class VoteProposalHandler(BaseHandler):

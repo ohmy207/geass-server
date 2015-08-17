@@ -8,4 +8,6 @@ urls = [
 
     ('/img/uptoken', app.UploadTokenHandler),
 
+    ('/(new|topic|proposal|comments)', app.PageHandler),
+
 ]

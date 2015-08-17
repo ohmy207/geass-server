@@ -3,11 +3,12 @@ html {
     /*
     display: -webkit-flex;
     display: flex;
+    background: #f8f8f8;
     */
     width: 100%;
     min-height: 100%;
     font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;
-    background: #f8f8f8;
+    background: #fafafa;
     -webkit-text-size-adjust: none;
     -ms-text-size-adjust: 100%
 }
@@ -242,7 +243,11 @@ img {
 }
 
 .commBg {
-    background-color: #d9d9d9
+    /*
+    background-color: #d9d9d9;
+    background-color: #D6D8DA;
+    */
+    background-color: #E6E6E6;
 }
 
 .honorBg,.honorBg1,.master,.iconWoman,.iconMan,.gBg1,.gBg2,.gBg3 {
@@ -1112,11 +1117,11 @@ a {
 .topicList .proposalList {
     /*
     z-index: 1;
+    background-color: #fafafa;
     */
     position: relative;
     border-radius: 2px;
     padding: 14px 10px 0 52px;
-    background-color: #fafafa;
 }
 
 .detailBox .topicList .proposalList {
@@ -1531,9 +1536,8 @@ a {
 }
 
 .detail {
-    padding: 0
-5px;
-    background-color: #fff
+    padding: 0 15px;
+    background-color: #E6E6E6;
 }
 
 .detailBox .topicList
@@ -1543,15 +1547,22 @@ li {
 
 .detailTitle {
     height: 40px;
-    padding: 0 15px 0 15px;
-    background-color: #E6E6E6;
-    margin: 0 -5px;
     line-height: 40px;
 
     color: gray;
     font-size: 18px;
     word-break: break-all;
+
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+
     /*
+    text-overflow: ellipsis;
+    background-color: #E6E6E6;
+    padding: 0 15px 0 15px;
+    margin: 0 -5px;
     font-weight: 600;
     */
 }
@@ -2408,8 +2419,12 @@ i.t2 {
 }
 
 .loading,.moreP {
-    line-height: 32px;
+    padding: 20px 0;
+    font-size: 14px;
+    line-height: 23px;
     text-align: center;
+    vertical-align: top;
+    color: #a6a6a6;
     background-color: #fafafa;
     /*
     border: 1px solid #e5e5e5;
@@ -2422,7 +2437,7 @@ i.t2 {
     color: #666
 }
 
-.loadicon {
+.spinner {
     position: relative;
     width: 17px;
     height: 21px;
@@ -2431,7 +2446,7 @@ i.t2 {
     vertical-align: -20%
 }
 
-.blockG {
+.circleG {
     display: block;
     position: absolute;
     background-color: #ccc;
@@ -4688,3 +4703,4 @@ i {
     word-wrap: break-word;
     word-break: break-all;
 }
+

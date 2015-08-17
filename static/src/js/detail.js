@@ -30,16 +30,16 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
         isLoadingNew: true,
+        isLoadingFirst: true,
         isLoading: false,
         isNoShowToTop: false,
         desc: 0,
         nextStart: 0,
 
         // load data,all in one
-        load: function(start, action, type) {
+        load: function(start, action) {
             start = start || 0;
             action = action || '';
-            type = type || 'all';
 
             exports.isLoading = true;
             /**
@@ -47,19 +47,22 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/t/' + window.tId
-                //+ '?parentId=' + parentId
+            var url = '/t/' + window.tId + '/proposals'
                 + '?skip=' + start
-                + '&type=' + type;
-                //+ '&desc=' + desc;
+                + '&desc=' + desc;
+
+            if (exports.isLoadingFirst){
+                url = '/t/' + window.tId;
+            }
+
             var opts = {
                 'beforeSend': function() {
                     switch(action) {
-                        case 'pull':
-                            jq('#refreshWait').show();
-                            jq('#showAll').hide();
-                            exports.isLoadingNew = true;
-                            break;
+                        //case 'pull':
+                        //    jq('#refreshWait').show();
+                        //    jq('#showAll').hide();
+                        //    exports.isLoadingNew = true;
+                        //    break;
                         case 'drag':
                             jq('#loadNext').show();
                             exports.isLoadingNew = true;
@@ -79,10 +82,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     jq('#refreshWait').hide();
                     jq('#loadNext').hide();
                     jq.UTIL.showLoading('none');
+
                     if (re.code == 0) {
-                        var zero = new Date;
+                        if (exports.isLoadingFirst){
+                            exports.render(re);
+                        }
                         exports.renderList(re, !start);
-                        //stat.reportPoint('listRender', 10, new Date, zero);
                     } else {
                         jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
                     }
@@ -93,6 +98,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         // render data
+        render: function(re) {
+            var topicHtml = template('tmpl_topic', re.data);
+            jq('.detailBox').prepend(topicHtml);
+
+            exports.isLoadingFirst = false;
+            jq('.warp, #bottomBar, .recommendTitle').show()
+        },
+
         renderList: function(re, clear) {
             if (clear) {
                 jq('#allReplyList').html('');
@@ -123,13 +136,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('#loadNext').hide();
             exports.nextStart = re.data.nextStart;
 
-            if (clear) {
-                if (exports.order == 'hot') {
-                    jq('.badge').show();
-                } else {
-                    jq('.badge').hide();
-                }
-            }
+            //if (clear) {
+            //    if (exports.order == 'hot') {
+            //        jq('.badge').show();
+            //    } else {
+            //        jq('.badge').hide();
+            //    }
+            //}
         },
 
         init: function() {
@@ -140,6 +153,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var action = jq.UTIL.getQuery('action');
             var reapp = /qqdownloader\/([^\s]+)/i;
 
+            exports.load(exports.nextStart, 'drag');
             //var jsonData = parseJSON(window.jsonData);
             //exports.renderList({data: jsonData}, true);
             //g_ts.first_render_end = new Date();
@@ -345,7 +359,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
                     // 向上滑
                     if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
-                        exports.load(exports.nextStart, 'drag', 'all');
+                        exports.load(exports.nextStart, 'drag');
                     }
                     // 向下拉刷新
                     if (offset.y < level && document.body.scrollTop <= 0) {
@@ -353,8 +367,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 }
             });
 
+            jq('#hotReplyList,#allReplyList').on('click', '.proposalWrap', function(e) {
+                jq.UTIL.touchStateNow(jq(this).parent());
+                jq.UTIL.reload(jq(this).data('link'));
+            });
+
             // like
-            jq('.topicCon .replyShare,#hotReplyList,#allReplyList').on('click', '.like', function(e) {
+            jq('#hotReplyList,#allReplyList').on('click', '.like', function(e) {
                 jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
 
@@ -473,7 +492,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 return false;
             });
 
-            exports.load(exports.nextStart, 'drag', 'default');
             // 话题推荐
             //exports.recommendThread();
             // 全局活动

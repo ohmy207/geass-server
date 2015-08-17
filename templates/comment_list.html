@@ -5,10 +5,6 @@
 
   <title>龙门客栈</title>
 
-  <script type="text/javascript">
-      var tId = "{{result['tId']}}";
-  </script>
-
 {% end %}
 
 
@@ -19,17 +15,6 @@
   </style>
 
   <div class="warp" onselectstart="return false;"> 
-
-   <div class="topicM worldC" style="display:none;" id="pEvent">
-    <img class="topicMImg" src="" alt="图片" id="pEventImg" />
-   </div> 
-
-   <div class="detail" style="display: none;"> 
-    <div class="detailTitle pr">
-     <h2 class="c6 f16">话题来自：<span class="c7">龙门客栈</span></h2> 
-     <span class="iconArrowR db pa c9 cf"></span> 
-    </div> 
-   </div> 
 
    <div class="detailBox"> 
 
@@ -43,25 +28,6 @@
     </div> 
    </div> 
 
-   <div class="loading" id="loadNext" style="display: none;"> 
-    <div class="loadicon"> 
-     <span class="blockG" id="rotateG_01"></span> 
-     <span class="blockG" id="rotateG_02"></span> 
-     <span class="blockG" id="rotateG_03"></span> 
-     <span class="blockG" id="rotateG_04"></span> 
-     <span class="blockG" id="rotateG_05"></span> 
-     <span class="blockG" id="rotateG_06"></span> 
-     <span class="blockG" id="rotateG_07"></span> 
-     <span class="blockG" id="rotateG_08"></span> 
-    </div> 正在加载... 
-   </div> 
-
-   <div class="loading" id="showAll" style="display:none;">
-    已显示全部
-   </div> 
-   <div class="loading" id="showAllReply" style="display:none;">
-    点击查看全部回复
-   </div> 
    <div id="loadNextPos"></div> 
 
   </div> 
@@ -191,9 +157,25 @@
    <input type="hidden" name="tIds[]" />
   </form>
 
-  <div onclick="location.href='http://m.wsq.qq.com/93617818'" class="copyRight ht" style="display:none;">
-   微社区，精彩在你身边
+  <div class="loading" id="loadNext" >
+   <div class="spinner">
+    <span class="circleG" id="rotateG_01"></span>
+    <span class="circleG" id="rotateG_02"></span>
+    <span class="circleG" id="rotateG_03"></span>
+    <span class="circleG" id="rotateG_04"></span>
+    <span class="circleG" id="rotateG_05"></span>
+    <span class="circleG" id="rotateG_06"></span>
+    <span class="circleG" id="rotateG_07"></span>
+    <span class="circleG" id="rotateG_08"></span>
+   </div>正在加载...
+  </div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
   </div>
+
+  <script type="text/javascript">
+      var tId = "{{ state['tid'] }}";
+  </script>
 
   <script type="text/javascript">
     var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',

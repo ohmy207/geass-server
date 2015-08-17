@@ -5,10 +5,6 @@
 
   <title>龙门客栈</title>
 
-  <script type="text/javascript">
-      var tId = "{{result['tId']}}";
-  </script>
-
 {% end %}
 
 
@@ -18,25 +14,53 @@
    #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
   </style>
 
-  <div class="warp" onselectstart="return false;"> 
+  <div class="warp" style="display:none;" onselectstart="return false;"> 
 
-   <div class="topicM worldC" style="display:none;" id="pEvent">
-    <img class="topicMImg" src="" alt="图片" id="pEventImg" />
+   <div class="detailBox">
+
+    <div class="topicList proposal tzDefList">
+     <ul id="hotReplyList">
+     </ul> 
+    </div> 
+
+    <div id="allLabelBox" class="hotLabel" style=""> 
+     <div class="leftSideIcon all"></div><span>全部看法</span>
+     <!--
+     <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
+     -->
+    </div>
+
+    <div class="topicList proposal"> 
+     <ul id="allReplyList" style="height: auto;"> 
+     </ul>
+    </div>
+
+   </div>
+
+   <div class="loading" id="showAll" style="display:none;">
+    已显示全部
+   </div> 
+   <div class="loading" id="showAllReply" style="display:none;">
+    点击查看全部回复
    </div> 
 
-   <div class="detailBox"> 
-    <div class="topicCon" id="t_3569_0_0"> 
+   <div id="loadNextPos"></div> 
 
+  </div>
+
+  <script id="tmpl_topic" type="text/html">
+
+    <div class="topicCon">
      <div class="titleWrap c11">
 
-      <div class="titleDetail allowCopy">{{ result['title'] }}</div>
+      <div class="titleDetail allowCopy"><%= topic['title'] %></div>
       <div class="personImgDate row pr"> 
-       <div class="perImg pr"><img data-src="{{ result['avatar'] }}" class="bImg brBig lazy-loaded" width="25" height="25" alt="avatar" /></div>
+       <div class="perImg pr"><img src="<%= topic['avatar'] %>" class="bImg brBig" width="25" height="25" alt="avatar" /></div>
 
        <div class="col titleBottomWrap pr">
         <div class="nameWrap">
-         <span class="userNick f14">{{ result['author'] }} </span>
-         <span class="time f12">{{ result['hCreatedTime'] }}</span>
+         <span class="userNick f14"><%= topic['author'] %> </span>
+         <span class="time f12"><%= topic['hCreatedTime'] %></span>
         </div>
 
         <div class="private">私有</div>
@@ -47,13 +71,13 @@
 
      <div class="detailCon c11 allowCopy">
       <div class="dCon f17">
-        {{ result['content'] }}
-      </div> 
+        <%== topic['content'].replace(/\n/g, '<br>') %>
+      </div>
       <div class="threadPic pr">
 
-      {% for p in result['picUrls'] %}
-        <span> <img class="dImg" data-src="{{ p }}"/> </span> 
-      {% end %}
+      <% for (var i in topic['picUrls']) { %>
+        <span> <img class="dImg" data-src="<%= topic['picUrls'][i] %>"/> </span>
+      <% } %>
 
       </div>
 
@@ -79,50 +103,11 @@
 
     <div id="hotLabelBox" class="hotLabel tzDefLabel" style="display: none">
      <div class="leftSideIcon"></div>
-     <img data-src="{{ result['avatar'] }}" class="brBig pr db"/>
+     <img data-src="<%= topic['avatar'] %>" class="brBig pr db"/>
      <span>题主预置</span>
     </div> 
-    <div class="topicList proposal tzDefList">
-     <ul id="hotReplyList">
-     </ul> 
-    </div> 
 
-    <div id="allLabelBox" class="hotLabel" style=""> 
-     <div class="leftSideIcon all"></div><span>全部看法</span>
-     <!--
-     <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
-     -->
-    </div>
-
-    <div class="topicList proposal"> 
-     <ul id="allReplyList" style="height: auto;"> 
-     </ul> 
-    </div> 
-   </div> 
-
-   <div class="loading" id="loadNext" style="display: none;"> 
-    <div class="loadicon"> 
-     <span class="blockG" id="rotateG_01"></span> 
-     <span class="blockG" id="rotateG_02"></span> 
-     <span class="blockG" id="rotateG_03"></span> 
-     <span class="blockG" id="rotateG_04"></span> 
-     <span class="blockG" id="rotateG_05"></span> 
-     <span class="blockG" id="rotateG_06"></span> 
-     <span class="blockG" id="rotateG_07"></span> 
-     <span class="blockG" id="rotateG_08"></span> 
-    </div> 正在加载... 
-   </div> 
-
-   <div class="loading" id="showAll" style="display:none;">
-    已显示全部
-   </div> 
-   <div class="loading" id="showAllReply" style="display:none;">
-    点击查看全部回复
-   </div> 
-   <div id="loadNextPos"></div> 
-
-  </div> 
-  <!--底部bar-->
+  </script>
 
   <script id="tmpl_reply" type="text/html">
       <%
@@ -145,7 +130,7 @@
 
           <a class="voteCount <% if (replyList[i].voted) { %>voted<%  } %> like" href="javascript:;" pId="<%= replyList[i].pId %>"><% if (replyList[i].voteNum) { %>22<%= replyList[i].voteNum %> <%  } else { %>0<%  } %></a>
 
-          <div class="proposalWrap" onclick="location.href='/111111111/p/<%=replyList[i].pId%>';" >
+          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tId%>&pid=<%=replyList[i].pId%>" >
               <%if (replyList[i].picUrls.length > 0) { %>
                   <div class="imgGallary">
                       <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[0]['thumb'] %>" alt="">
@@ -171,7 +156,7 @@
                   <div class="info">
                       <div>
                           <span>
-                              <span class="time"><%== replyList[i].hCreatedTime %></span>
+                              <span class="time"><%= replyList[i].hCreatedTime %></span>
                           </span>
                       </div>
                       <div class="flRight">
@@ -185,20 +170,6 @@
     <% } %>
     <% } %>
   </script>
-
-  <script id="tmpl_reply_floor" type="text/html">
-    <% for (var k in floorList) { %>
-        <% if (!isDOMExist('p_' + floorList[k].tId + '_' + floorList[k].pId + '_' + floorList[k].floorPId)) { %>
-            <% if (floorList[k].floorPId > 0) { %>
-                <li id="p_<%=floorList[k].tId%>_<%=floorList[k].pId%>_<%=floorList[k].floorPId%>" author="<%=floorList[k].author%>" uId="<%=floorList[k].authorUid%>">
-                <div class="f13 c3 replyFloor">
-                    <span class="c7"><%=floorList[k].author%><% if (floorList[k].isLZ) { %><i class="cardBtn br fn db c2">楼主</i><% } %><% if (floorList[k].toPId) { %> 回复 <%=floorList[k].toAuthor%><% } %>：</span><%==floorList[k].content%>
-                </div>
-                </li>
-            <%} %>
-        <% } %>
-    <% } %>
-  </script> 
 
   <script id="tmpl_replyForm" type="text/html">
     <div class="popLayer pSpace brNone" style="width:100%">
@@ -237,16 +208,10 @@
                     <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
                 </div>
             </div>
-            
+
         </div>
     </form>
     </div>
-  </script>
-
-  <script id="tmpl_sideBar" type="text/html">
-  </script>
-
-  <script id="tmpl_customTag" type="text/html">
   </script>
 
 {% end %}
@@ -254,9 +219,9 @@
 
 {% block footer %}
 
-  <div class="bottomBar pr" id="bottomBar">
+  <div class="bottomBar pr" id="bottomBar" style="display:none;">
    <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
-   <a href="/111111111/t/{{ result['tId'] }}/c/page" class="item cf iconReply" id="to_reply">29</a>
+   <a href="/comments?tid={{ state['tid'] }}" class="item cf iconReply" id="to_reply">29</a>
    <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
   </div>
 
@@ -269,8 +234,25 @@
    <input type="hidden" name="tIds[]" />
   </form>
 
-  <div class="hotLabel recommendTitle">
+  <div class="loading" id="loadNext">
+   <div class="spinner">
+    <span class="circleG" id="rotateG_01"></span>
+    <span class="circleG" id="rotateG_02"></span>
+    <span class="circleG" id="rotateG_03"></span>
+    <span class="circleG" id="rotateG_04"></span>
+    <span class="circleG" id="rotateG_05"></span>
+    <span class="circleG" id="rotateG_06"></span>
+    <span class="circleG" id="rotateG_07"></span>
+    <span class="circleG" id="rotateG_08"></span>
+   </div>正在加载...
+  </div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
   </div>
+
+  <script type="text/javascript">
+      var tId = "{{ state['tid'] }}";
+  </script>
 
   <script type="text/javascript">
     var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',
