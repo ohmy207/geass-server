@@ -46,7 +46,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/111111111/t/' + window.tId + '/c/list'
+            var url = '/t/' + window.tId + '/comments'
                 //+ '?parentId=' + parentId
                 + '?skip=' + start
                 //+ '&desc=' + desc;
@@ -334,11 +334,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 }
 
                 //var url = '/' + sId;
-                var url = '/111111111';
+                var url = '/c/like';
                 var data = {'tid':tId, 'coid': pId};
                 //var data = {'tId':tId, 'parentId': parentId, 'CSRFToken':CSRFToken};
                 //if (pId) {
-                url = url + '/c/like';
                 //data.pid = pId;
                 //} else {
                 //    url = url + '/like';

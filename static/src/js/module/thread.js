@@ -726,10 +726,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             //});
 
             if (obj.replyType === 'proposal') {
-                jq('#replyForm').attr('action','/c/new/submit');
+                jq('#replyForm').attr('action','/p/new/submit');
             }
             else if (obj.replyType === 'comment') {
-                jq('#replyForm').attr('action','/111111111/t/' + window.tId +'/c/new');
+                jq('#replyForm').attr('action','/c/new/submit');
 
                 if (obj.toPId) {
                     jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');

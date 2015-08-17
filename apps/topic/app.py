@@ -36,7 +36,7 @@ class NewTopicHandler(BaseHandler):
 
         tid = db_topic['topic'].create(data)
 
-        self._jump = '/topic/?tid='+unicode(tid)
+        self._jump = '/topic?tid='+unicode(tid)
 
 
 class DetailTopicHandler(BaseHandler):
@@ -216,14 +216,6 @@ class NewCommentHandler(BaseHandler):
         data = db_topic['comment'].get_one(coid)
 
         self._data = data
-
-
-class PageCommentHandler(BaseHandler):
-
-    @authenticated
-    def get(self, tid):
-        data = {'tId': tid}
-        self.render('comment_list.html', result=data)
 
 
 class ListCommentHandler(BaseHandler):

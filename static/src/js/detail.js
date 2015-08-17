@@ -421,9 +421,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     'noMsg' : true
                 }
 
-                var url = '/111111111';
+                var url = '/p/vote';
                 var data = {'tid':tId, 'pid': pId};
-                url = url + '/p/vote';
                 //var url = '/' + sId;
                 //var data = {'tId':tId, 'parentId': parentId, 'CSRFToken':CSRFToken};
                 //if (pId) {
