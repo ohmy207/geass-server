@@ -137,12 +137,17 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //}
 
             // 主题和底部bar 帖点击回复
-            jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
-            jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
+            //jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
+            //jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this);
                 //thread.reply(tId, parentId, '', 'proposal');
                 thread.reply(tId, null, '', 'proposal');
+            });
+
+            jq('.warp').on('click', '.detail', function(e) {
+                jq.UTIL.touchStateNow(jq(this), 'tapBg1');
+                jq.UTIL.reload(jq(this).data('link'));
             });
 
             // like

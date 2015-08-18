@@ -242,12 +242,16 @@ img {
     border-radius: 5px
 }
 
-.commBg {
+.tapBg {
     /*
     background-color: #d9d9d9;
     background-color: #D6D8DA;
     */
-    background-color: #E6E6E6;
+    background-color: #E6E6E6!important;
+}
+
+.tapBg1 {
+    background-color: #66B3FF!important;
 }
 
 .honorBg,.honorBg1,.master,.iconWoman,.iconMan,.gBg1,.gBg2,.gBg3 {

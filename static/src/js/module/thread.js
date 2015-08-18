@@ -59,9 +59,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 e.stopPropagation();
                 var thisObj = jq(this);
                 // todo 点击态移走
-                thisObj.addClass('commBg');
+                thisObj.addClass('tapBg');
                 setTimeout(function(){
-                    thisObj.removeClass('commBg');
+                    thisObj.removeClass('tapBg');
                     exports._foldSwith.call(thisObj);
                 }, 50);
 

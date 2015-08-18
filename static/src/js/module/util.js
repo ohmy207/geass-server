@@ -666,7 +666,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
             },
             // 统一触摸态
             touchState: function(rule, style, containerRule)  {
-                style = style || 'commBg';
+                style = style || 'tapBg';
                 containerRule = containerRule || '';
                 if (containerRule) {
                     jq(containerRule).on('tap', rule, function() {
@@ -693,7 +693,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 }
             },
             touchStateNow: function(obj, style) {
-                style = style || 'commBg';
+                style = style || 'tapBg';
                 obj.addClass(style);
                 setTimeout(function() {
                     obj.removeClass(style);

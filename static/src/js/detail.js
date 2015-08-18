@@ -247,8 +247,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             // 主题和底部bar 帖点击回复
-            jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
-            jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
+            //jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
+            //jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this);
                 //thread.reply(tId, parentId, '', 'proposal');
