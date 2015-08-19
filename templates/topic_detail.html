@@ -128,7 +128,7 @@
               <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
           <% } %>
 
-          <a class="voteCount <% if (replyList[i].voted) { %>voted<%  } %> like" href="javascript:;" pId="<%= replyList[i].pId %>"><% if (replyList[i].voteNum) { %>22<%= replyList[i].voteNum %> <%  } else { %>0<%  } %></a>
+          <a class="voteCount <% if (replyList[i].isvoted) { %>voted<%  } %> like" href="javascript:;" pId="<%= replyList[i].pId %>"><% if (replyList[i].voteNum) { %> <%= replyList[i].voteNum %> <%  } else { %>0<%  } %></a>
 
           <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tId%>&pid=<%=replyList[i].pId%>" >
               <%if (replyList[i].picUrls.length > 0) { %>
