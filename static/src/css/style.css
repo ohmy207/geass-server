@@ -4707,6 +4707,7 @@ i {
     word-break: break-all;
 }
 
+/*
 .g-mask {
     position: fixed;
     top: 0;
@@ -4728,3 +4729,4 @@ i {
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
+*/
