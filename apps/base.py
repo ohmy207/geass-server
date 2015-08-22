@@ -226,7 +226,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     @property
     def current_user(self):
-        return self.get_current_user()
+        return self.to_objectid(self.get_current_user())
 
     def static_url(self,  path, include_host=None, v=None, **kwargs):
         is_debug = self.application.settings.get('debug', False)
