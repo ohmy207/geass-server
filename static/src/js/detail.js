@@ -119,7 +119,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 return true;
             }
             //re.data.isWX = isWX;
-            re.data.tmplType = 'hot';
+            re.data.tmplType = 'default';
             var hotReplyHtml = template('tmpl_reply', re.data);
             if(jq.trim(hotReplyHtml)!==''){
                 jq('#hotLabelBox').show();

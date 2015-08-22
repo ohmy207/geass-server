@@ -38,19 +38,16 @@
       if (typeof(replyList) == 'undefined') {
       var replyList = dataList;
       }
-      if (typeof(tmplType) == 'undefined') {
-          var tmplType = 'all';
-      }
       %>
 
       <% for (var i in replyList) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
-      <li id="p_<%=replyList[i].pId%>" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>" >
+      <% if (!isDOMExist('p_' + replyList[i].coid)) { %>
+      <li id="p_<%=replyList[i].coid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>" >
 
           <div class="f15 c3 replyUser">
-              <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
-              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].isLZ) { %> <i class="cardBtn br fn db c2">楼主</i><%}%><% if (replyList[i].toAuthor) { %> 回复 <%=replyList[i].toAuthor%><% } %>：
+              <a href="/profile/<%=replyList[i].author_uid %>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
+              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].is_tz) { %> <i class="cardBtn br fn db c2">楼主</i><%}%><% if (replyList[i].to_author) { %> 回复 <%=replyList[i].to_author%><% } %>：
               </span>
           </div>
 
@@ -59,40 +56,17 @@
           </div>
 
           <div class="operation pr">
-          <span class="source db c6 f12 fl"><%== replyList[i].hCreatedTime %></span>
-          <span class="replyShare db c9 fr f13">
-              <a href="javascript:;" class="like c9" pId="<%= replyList[i].pId %>"> <i class="<% if (replyList[i].liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].likeNum) { %><%= replyList[i].likeNum %> <%  } else { %>赞<%  } %></a>
-              <a class="c9 replyFloor" href="javascript:;" id="p_<%= replyList[i].pId %>" uid="<%= replyList[i].authorUid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
-          </span>
-          <div class="replyPop" <%if (!replyList[i].floorList) { %> style="display:none;"<% } %> >
-              <div class="replyBg brSmall pr">
-                  <div class="topicList floorList" id="fl_<%=replyList[i].pId%>">
-                      <ul>
-                      <% include('tmpl_reply_floor', {'floorList':replyList[i].floorList}) %>
-                      </ul>
-                      <a href="javascript:;" start="0" pid="<%=replyList[i].pId%>" <%if (replyList[i].restCount < 1) { %>style="display:none;"<% } %> class="db f12 moreInReply">更多</a>
-                  </div>
-              </div>
+              <span class="source db c6 f12 fl"><%== replyList[i].f_created_time %></span>
+              <span class="replyShare db c9 fr f13">
+                  <a href="javascript:;" class="like c9" pId="<%= replyList[i].coid %>"> <i class="<% if (replyList[i].is_liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].like_num) { %><%= replyList[i].like_num %> <%  } else { %>赞<%  } %></a>
+                  <a class="c9 replyFloor" href="javascript:;" id="p_<%= replyList[i].coid %>" uid="<%= replyList[i].author_uid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
+              </span>
           </div>
-      </div>
+
       </li>
     <% } %>
     <% } %>
   </script>
-
-  <script id="tmpl_reply_floor" type="text/html">
-    <% for (var k in floorList) { %>
-        <% if (!isDOMExist('p_' + floorList[k].tId + '_' + floorList[k].pId + '_' + floorList[k].floorPId)) { %>
-            <% if (floorList[k].floorPId > 0) { %>
-                <li id="p_<%=floorList[k].tId%>_<%=floorList[k].pId%>_<%=floorList[k].floorPId%>" author="<%=floorList[k].author%>" uId="<%=floorList[k].authorUid%>">
-                <div class="f13 c3 replyFloor">
-                    <span class="c7"><%=floorList[k].author%><% if (floorList[k].isLZ) { %><i class="cardBtn br fn db c2">楼主</i><% } %><% if (floorList[k].toPId) { %> 回复 <%=floorList[k].toAuthor%><% } %>：</span><%==floorList[k].content%>
-                </div>
-                </li>
-            <%} %>
-        <% } %>
-    <% } %>
-  </script> 
 
   <script id="tmpl_replyForm" type="text/html">
     <div class="popLayer pSpace brNone" style="width:100%">

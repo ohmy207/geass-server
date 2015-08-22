@@ -32,7 +32,6 @@ class Proposal(Model):
 
         'content':          (basestring, ''),
 
-        'vote':             (list, [])      ,
         'pickeys':          (list, [])      ,
 
         'vnum':             (int, 0)        ,
@@ -40,6 +39,17 @@ class Proposal(Model):
         'istz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
+    }
+
+
+class Vote2Proposal(Model):
+
+    name = 'vote2proposal'
+
+    field = {
+        'tid':             (ObjectId, None),
+        'pid':             (ObjectId, None),
+        'uid':             (ObjectId, None),
     }
 
 
@@ -63,3 +73,4 @@ class Comment(Model):
 
         'ctime':            (datetime, None),
     }
+

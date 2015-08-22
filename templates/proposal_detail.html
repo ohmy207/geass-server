@@ -19,7 +19,7 @@
 
   <script id="tmpl_proposal" type="text/html">
 
-<div class="detail" data-link="/topic?tid=<%= proposal['tId'] %>">
+   <div class="detail" data-link="/topic?tid=<%= proposal['tid'] %>">
     <div class="detailTitle pr">
      <%= proposal['title'] %>
     </div>
@@ -36,7 +36,7 @@
        <div class="col titleBottomWrap pr">
         <div class="nameWrap">
          <span class="userNick f14"><%= proposal['author'] %> </span>
-         <span class="time f12"><%= proposal['hCreatedTime'] %></span>
+         <span class="time f12"><%= proposal['f_created_time'] %></span>
         </div>
 
         <div class="private">私有</div>
@@ -52,8 +52,8 @@
       </div>
       <div class="threadPic pr"> 
 
-      <% for (var i in proposal['picUrls']) { %>
-        <span> <img class="dImg" data-src="<%= proposal['picUrls'][i]['origin'] %>"/> </span>
+      <% for (var i in proposal['picture_urls']) { %>
+        <span> <img class="dImg" data-src="<%= proposal['picture_urls'][i]['origin'] %>"/> </span>
       <% } %>
 
       </div>

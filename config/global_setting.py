@@ -67,6 +67,9 @@ QINIU = {
         'saveKey': '$(etag)',
         #'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
     },
+
+    'img_url': 'https://dn-geass-images.qbox.me/',
+    'thumb_suffix': '?imageView2/1/w/200/h/200',
 }
 
 # weixin config
@@ -90,3 +93,7 @@ WEIXIN = {
 
 }
 
+PIC_URL = {
+    #'avatar': '',
+    'img': lambda pickey: {'origin': '%s%s' % (QINIU['img_url'], pickey), 'thumb': '%s%s%s' % (QINIU['img_url'], pickey, QINIU['thumb_suffix'])},
+}

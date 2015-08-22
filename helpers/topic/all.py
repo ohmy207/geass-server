@@ -4,106 +4,122 @@ import log
 
 from datetime import datetime
 
-from tornado import escape as es
+from tornado.escape import xhtml_escape
 
-from models.topic import model as topic
-from models.user import model as user
+from models.topic import model as topic_model
+from models.user import model as user_model
+from helpers.base import DataProvider
+from config.global_setting import PIC_URL
 
 logger = log.getLogger(__file__)
 
 MODEL_SLOTS = ['Topic', 'Proposal', 'Comment']
 
 
-class Topic(topic.Topic):
+class Topic(DataProvider, topic_model.Topic):
 
-    _user = user.User()
+    _user = user_model.User()
 
-    @staticmethod
-    def callback(record):
+    #@staticmethod
+    def callback(self, record):
         result = {
-            'tId':  record['_id'],
+            'tid':  record['_id'],
             'title': record['title'],
-            'content': es.xhtml_escape(record['content']),
-            'authorUid': record['auid'],
-            'isPrivate': record['ispriv'],
-            'isAnonymous': record['isanon'],
+            'author_uid': record['auid'],
+            'is_private': record['ispriv'],
+            'is_anonymous': record['isanon'],
         }
 
-        dtime = datetime.fromtimestamp(int(record['ctime']))
-        htime = (datetime.now() - dtime).seconds
+        result['content'] = self.xhtml_escape(record['content'])
+        result['f_created_time'] = self._format_time(record['ctime'])
+        result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
 
-        result['fCreatedTime'] = dtime.strftime('%Y-%m-%d %H:%M:%S')
-        # TODO str to unicode
-        result['hCreatedTime'] = str(htime/24/60/60)+'天前' if htime > 24*60*60 else str(htime/60/60)+'小时前' if htime > 60*60 else str(htime/60)+'分钟前' if htime > 60 else '刚刚'
-
-        result['picUrls'] = map(lambda p:'https://dn-geass-images.qbox.me/'+p, record['pickeys'])
-
-        user = Topic._user.get_one({'_id': Topic._user.to_objectid(record['auid'])})
-        result['author'] = user['nickname']
-        result['avatar'] = user['avatar']
+        simple_user = self.get_simple_user(record['auid'])
+        result['author'] = simple_user['nickname']
+        result['avatar'] = simple_user['avatar']
 
         return result
 
 
-class Proposal(topic.Proposal):
+class Proposal(DataProvider, topic_model.Proposal):
 
-    _user = user.User()
+    _user = user_model.User()
+    _topic = topic_model.Topic()
+    _vote2proposal = topic_model.Vote2Proposal()
 
-    @staticmethod
-    def callback(record):
+    def is_voted(self, spec):
+        spec = {k: self.to_objectid(v) for k, v in spec.items()}
+        return True if self._vote2proposal.find_one(spec) else False
+
+    # TODO fix 2 return
+    def vote_proposal(self, tid, pid, uid):
+        tid, pid, uid = map(self.to_objectid, [tid, pid, uid])
+
+        if self.find_one({'_id': pid, 'tid': tid}):
+            self._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid})
+            self.update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+            return True
+
+        return False
+
+    def format(self, record, uid):
         result = {
-            'tId': record['tid'],
-            'pId': record['_id'],
-            'content': es.xhtml_escape(record['content']),
-            'authorUid': record['auid'],
-            'voteNum': record['vnum'],
+            'tid': record['tid'],
+            'pid': record['_id'],
+            'author_uid': record['auid'],
+            'vote_num': record['vnum'],
         }
 
-        dtime = datetime.fromtimestamp(int(record['ctime']))
-        htime = (datetime.now() - dtime).seconds
+        result['content'] = self.xhtml_escape(record['content'])
+        result['f_created_time'] = self._format_time(record['ctime'])
+        result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
+        result['is_voted'] =  self.is_voted({'uid': uid, 'pid': record['_id']})
+        result['is_tz'] = True if self._topic.find_one({'_id': self.to_objectid(record['tid']), 'auid': self.to_objectid(record['auid'])}) else False
 
-        result['fCreatedTime'] = dtime.strftime('%Y-%m-%d %H:%M:%S')
-        # TODO str to unicode
-        result['hCreatedTime'] = str(htime/24/60/60)+'天前' if htime > 24*60*60 else str(htime/60/60)+'小时前' if htime > 60*60 else str(htime/60)+'分钟前' if htime > 60 else '刚刚'
-
-        result['picUrls'] = map(lambda p:{'thumb': 'https://dn-geass-images.qbox.me/'+p+'?imageView2/1/w/200/h/200', 'origin': 'https://dn-geass-images.qbox.me/'+p}, record['pickeys'])
-
-        user = Proposal._user.get_one({'_id': Proposal._user.to_objectid(record['auid'])})
-        result['author'] = user['nickname']
-        result['avatar'] = user['avatar']
-
-        result['isLZ'] = True
+        simple_user = self.get_simple_user(record['auid'])
+        result['author'] = simple_user['nickname']
+        result['avatar'] = simple_user['avatar']
 
         return result
 
+    def get_proposals(self, tid, uid=None, skip=0, limit=10):
+        spec = {'tid': self.to_objectid(tid)}
+        sort = [('vnum', -1), ('ctime', 1)]
+        proposals = self.get_all(spec, skip=skip, limit=limit, sort=sort)
 
-class Comment(topic.Comment):
+        return [self.format(p, uid) for p in proposals if p]
 
-    _user = user.User()
 
-    @staticmethod
-    def callback(record):
+class Comment(DataProvider, topic_model.Comment):
+
+    _user = user_model.User()
+    _topic = topic_model.Topic()
+
+    def format(self, record, uid):
         result = {
-            'tId': record['tid'],
-            'pId': record['_id'],
-            #'toPId': record['topid'],
-            'content': es.xhtml_escape(record['content']),
-            'authorUid': record['auid'],
-            'likeNum': record['lnum'],
+            'tid': record['tid'],
+            'coid': record['_id'],
+            'author_uid': record['auid'],
+            'like_num': record['lnum'],
         }
 
-        dtime = datetime.fromtimestamp(int(record['ctime']))
-        htime = (datetime.now() - dtime).seconds
+        result['content'] = self.xhtml_escape(record['content'])
+        result['f_created_time'] = self._format_time(record['ctime'])
+        result['is_liked'] = True if unicode(uid) in record['like'] else False
+        result['is_tz'] = True if self._topic.find_one({'_id': self.to_objectid(record['tid']), 'auid': self.to_objectid(record['auid'])}) else False
 
-        result['fCreatedTime'] = dtime.strftime('%Y-%m-%d %H:%M:%S')
-        # TODO str to unicode
-        result['hCreatedTime'] = str(htime/24/60/60)+'天前' if htime > 24*60*60 else str(htime/60/60)+'小时前' if htime > 60*60 else str(htime/60)+'分钟前' if htime > 60 else '刚刚'
+        simple_user = self.get_simple_user(record['auid'])
+        result['author'] = simple_user['nickname']
+        result['avatar'] = simple_user['avatar']
 
-        user = Comment._user.get_one({'_id': Comment._user.to_objectid(record['auid'])})
-        touser = Comment._user.get_one({'_id': Comment._user.to_objectid(record['toauid'])})
-        result['author'] = user['nickname']
-        result['avatar'] = user['avatar']
-        result['toAuthor'] = touser['nickname'] if touser else None
-        result['isLZ'] = True
+        to_user = self._user.get_one({'_id': self.to_objectid(record['toauid'])})
+        result['to_author'] = to_user['nickname'] if to_user else None
 
         return result
+
+    def get_comments(self, tid, uid=None, skip=0, limit=10, order=1):
+        spec = {'tid': self.to_objectid(tid)}
+        sort = [('ctime', order)]
+        comments = self.get_all(spec, skip=skip, limit=limit, sort=sort)
+
+        return [self.format(co, uid) for co in comments]

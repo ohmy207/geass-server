@@ -1,10 +1,14 @@
 #-*- coding:utf-8 -*-
 
-import redis
+from datetime import datetime
 import cPickle as pickle
 
-from pymongo import DESCENDING, ASCENDING
+import redis
 
+from tornado.escape import xhtml_escape
+#from pymongo import DESCENDING, ASCENDING
+
+from models.user import model as user_model
 from setting import COLLECTION_PREFIX as _PREFIX
 
 
@@ -32,6 +36,26 @@ class Helper(dict):
                 as_list.append(i.lower())
 
         return ''.join(as_list)
+
+
+class DataProvider(object):
+
+    _user = user_model.User()
+
+    def xhtml_escape(self, value):
+        return xhtml_escape(value)
+
+    def _format_time(self, time):
+        time = datetime.fromtimestamp(int(time))
+        total_seconds = (datetime.now() - time).total_seconds()
+        #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
+        ftime = time.strftime('%Y-%m-%d')
+
+        return ftime if total_seconds > 2*24*60*60 else unicode(total_seconds/24/60/60)+'天前' if total_seconds > 24*60*60 else unicode(total_seconds/60/60)+'小时前' if total_seconds > 60*60 else unicode(total_seconds/60)+'分钟前' if total_seconds > 60 else '刚刚'
+
+    def get_simple_user(self, uid):
+        user = self._user.get_one({'_id': self._user.to_objectid(uid)})
+        return {'nickname': user['nickname'], 'avatar': user['avatar']} if user else {'nickname': '', 'avatar': ''}
 
 
 #class DataProvider(object):

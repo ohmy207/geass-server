@@ -60,7 +60,7 @@
        <div class="col titleBottomWrap pr">
         <div class="nameWrap">
          <span class="userNick f14"><%= topic['author'] %> </span>
-         <span class="time f12"><%= topic['hCreatedTime'] %></span>
+         <span class="time f12"><%= topic['f_created_time'] %></span>
         </div>
 
         <div class="private">私有</div>
@@ -75,8 +75,8 @@
       </div>
       <div class="threadPic pr">
 
-      <% for (var i in topic['picUrls']) { %>
-        <span> <img class="dImg" data-src="<%= topic['picUrls'][i] %>"/> </span>
+      <% for (var i in topic['picture_urls']) { %>
+        <span> <img class="dImg" data-src="<%= topic['picture_urls'][i]['origin'] %>"/> </span>
       <% } %>
 
       </div>
@@ -121,27 +121,27 @@
 
       <% for (var i in replyList) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].tId + '_' + replyList[i].pId) && ((tmplType==='hot' && replyList[i].hotReply) || (tmplType!='hot' && !replyList[i].hotReply))) { %>
-      <li class="proposalList" id="p_<%=replyList[i].tId%>_<%=replyList[i].pId%>_0" uId="<%=replyList[i].authorUid%>" author="<%= replyList[i].author %>">
+      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid) && ((tmplType==='default' && replyList[i].is_tz) || (tmplType!='default' && !replyList[i].is_tz))) { %>
+      <li class="proposalList" id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
-          <%if (!replyList[i].hotReply) { %>
-              <a href="/profile/<%=replyList[i].authorUid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
+          <%if (!replyList[i].is_tz) { %>
+              <a href="/profile/<%=replyList[i].author_uid%>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
           <% } %>
 
-          <a class="voteCount <% if (replyList[i].isvoted) { %>voted<%  } %> like" href="javascript:;" pId="<%= replyList[i].pId %>"><% if (replyList[i].voteNum) { %> <%= replyList[i].voteNum %> <%  } else { %>0<%  } %></a>
+          <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> like" href="javascript:;" pId="<%= replyList[i].pid %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
 
-          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tId%>&pid=<%=replyList[i].pId%>" >
-              <%if (replyList[i].picUrls.length > 0) { %>
+          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
+              <%if (replyList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picUrls[0]['thumb'] %>" alt="">
-                      <%if (replyList[i].picUrls.length > 1) { %>
-                          <div class="picCount"><%= replyList[i].picUrls.length %>图</div>
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" alt="">
+                      <%if (replyList[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= replyList[i].picture_urls.length %>图</div>
                       <% } %>
                   </div>
               <% } %>
 
               <div class="textContainer">
-              <%if (!replyList[i].hotReply) { %>
+              <%if (!replyList[i].is_tz) { %>
                   <h3 class="nick">
                       <%= replyList[i].author %>
                   </h3>
@@ -152,11 +152,11 @@
                   </div>
               </div>
 
-              <%if (!replyList[i].hotReply && false) { %>
+              <%if (false && !replyList[i].is_tz) { %>
                   <div class="info">
                       <div>
                           <span>
-                              <span class="time"><%= replyList[i].hCreatedTime %></span>
+                              <span class="time"><%= replyList[i].f_created_time %></span>
                           </span>
                       </div>
                       <div class="flRight">
