@@ -93,7 +93,7 @@ class NewProposalHandler(BaseHandler):
         data['tid'] = tid
         data['auid'] = self.current_user
         data['ctime'] = datetime.now()
-        data['istz'] = True if data['auid'] == topic['auid'] else False
+        #data['istz'] = True if data['auid'] == topic['auid'] else False
 
         pid = db_topic['proposal'].create(data)
         data['_id'] = pid
@@ -217,7 +217,7 @@ class NewCommentHandler(BaseHandler):
         data['tocoid'] = self.to_objectid(data['tocoid'])
         data['auid'] = self.current_user
         data['ctime'] = datetime.now()
-        data['istz'] = True if data['auid'] == topic['auid'] else False
+        #data['istz'] = True if data['auid'] == topic['auid'] else False
 
         to_comment = db_topic['comment'].find_one({'_id': data['tocoid']}, {'auid': 1}) if data['tocoid'] else None
         data['toauid'] = to_comment['auid'] if to_comment else None
