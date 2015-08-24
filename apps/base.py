@@ -142,6 +142,9 @@ class BaseHandler(tornado.web.RequestHandler):
     def GET(self, *args, **kwargs):
         pass
 
+    def route(self, route, *args, **kwargs):
+        getattr(self,  "do_%s"%route, lambda *args, **kwargs: None)(*args, **kwargs)
+
     def wo_resp(self, resp):
         if resp['code'] != 0:
             return self.wo_json(resp)
