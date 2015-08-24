@@ -465,12 +465,18 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 }
             });
 
-            var content = jq('#content').val();
-            var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-            if (contentLen < 15) {
-                jq.UTIL.dialog({content:'内容过短', autoClose:true});
+            var title = jq('#title').val();
+            var titleLen = jq.UTIL.mb_strlen(jq.UTIL.trim(title));
+            if (titleLen < 3) {
+                jq.UTIL.dialog({content:'话题字数有点少', autoClose:true});
                 return false;
             }
+            //var content = jq('#content').val();
+            //var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
+            //if (contentLen < 15) {
+            //    jq.UTIL.dialog({content:'内容过短', autoClose:true});
+            //    return false;
+            //}
 
             return true;
         }

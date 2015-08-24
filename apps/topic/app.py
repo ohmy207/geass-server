@@ -31,7 +31,7 @@ class NewTopicHandler(BaseHandler):
     @authenticated
     def POST(self):
         data = self._params
-        data['auid'] = self.to_objectid(self.session['uid'])
+        data['auid'] = self.current_user
         data['ctime'] = datetime.now()
 
         tid = db_topic['topic'].create(data)
@@ -52,15 +52,18 @@ class DetailTopicHandler(BaseHandler):
 
     @authenticated
     def GET(self, tid):
-        tid = db_topic['topic'].to_objectid(tid)
+        tid = self.to_objectid(tid)
+        uid = self.current_user
 
         topic = db_topic['topic'].get_one({'_id': tid})
-        proposals = db_topic['proposal'].get_all({'tid': tid}, skip=self._skip, limit=self._limit)
+        proposals = db_topic['proposal'].get_proposals(tid, uid=uid, skip=self._skip, limit=self._limit)
+        has_voted = db_topic['proposal'].is_voted({'tid': tid, 'uid': uid})
 
         self._data = {
             'topic': topic,
             'dataList': proposals,
-            'nextStart': self._skip + self._limit
+            'nextStart': self._skip + self._limit,
+            'has_voted': has_voted,
         }
 
 
@@ -80,7 +83,7 @@ class NewProposalHandler(BaseHandler):
     def POST(self):
         data = self._params
 
-        tid = db_topic['proposal'].to_objectid(data['tid'])
+        tid = self.to_objectid(data['tid'])
         topic = db_topic['topic'].find_one({'_id': tid})
 
         # TODO error code
@@ -88,16 +91,14 @@ class NewProposalHandler(BaseHandler):
             raise ResponseError(404)
 
         data['tid'] = tid
-        data['auid'] = self.to_objectid(self.session['uid'])
+        data['auid'] = self.current_user
         data['ctime'] = datetime.now()
+        data['istz'] = True if data['auid'] == topic['auid'] else False
 
-        if data['auid'] == topic['auid']:
-            data['istz'] = True
+        pid = db_topic['proposal'].create(data)
+        data['_id'] = pid
 
-        pid = db_topic['proposal'].insert(data)
-        data = db_topic['proposal'].get_one(pid)
-
-        self._data = data
+        self._data = db_topic['proposal'].format(db_topic['proposal'].to_one_str(data), data['auid'])
 
 
 class ListProposalHandler(BaseHandler):
@@ -108,30 +109,18 @@ class ListProposalHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 5),
+            # TODO
             ('type', basestring, 'all'),
         ]
     }
 
     @authenticated
     def GET(self, tid):
-        if self._params['type'] == 'default':
-            spec = {'tid': db_topic['proposal'].to_objectid(tid)}
-            data_list = db_topic['proposal'].get_all(spec, skip=0, limit=3)
-            result = []
-            for d in data_list:
-                d['hotReply'] = True
-                result.append(d)
+        # TODO tz default
+        proposals = db_topic['proposal'].get_proposals(tid, uid=self.current_user, skip=self._skip, limit=self._limit)
 
-            self._data = {
-                'dataList': result,
-                'nextStart': self._skip,
-            }
-            return
-
-        spec = {'tid': db_topic['proposal'].to_objectid(tid)}
-        data_list = db_topic['proposal'].get_all(spec, skip=self._skip, limit=self._limit)
         self._data = {
-            'dataList': data_list,
+            'dataList': proposals,
             'nextStart': self._skip + self._limit
         }
 
@@ -140,8 +129,9 @@ class DetailProposalHandler(BaseHandler):
 
     @authenticated
     def GET(self, pid):
-        data = db_topic['proposal'].get_one(db_topic['proposal'].to_objectid(pid))
-        data['title'] = db_topic['topic'].find_one({'_id': db_topic['proposal'].to_objectid(data['tId'])}, {'title': 1})['title']
+        data = db_topic['proposal'].get_one(self.to_objectid(pid))
+        data = db_topic['proposal'].format(data, self.current_user)
+        data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
 
         self._data = {
             'proposal': data,
@@ -160,24 +150,44 @@ class VoteProposalHandler(BaseHandler):
     }
 
     @authenticated
-    def POST(self):
-        data = self._params
-        uid = self.to_objectid(self.session['uid'])
+    def POST(self, route):
+        uid = self.current_user
+        pid = self.to_objectid(self._params['pid'])
+        tid = self.to_objectid(self._params['tid'])
 
-        pid = db_topic['proposal'].to_objectid(data['pid'])
-        proposal = db_topic['proposal'].find_one({'_id': pid})
-
-        if not proposal:
+        if not db_topic['proposal'].find_one({'_id': pid, 'tid': tid}):
             raise ResponseError(404)
 
-        if uid in proposal['vote']:
+        self.route(route, tid, pid, uid)
+
+    def do_vote(self, tid, pid, uid):
+        if db_topic['proposal'].is_voted({'uid': uid, 'tid': tid}):
             raise ResponseError(404)
 
-        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}, '$push': {'vote': uid}}, w=1)
+        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid})
+        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
-        self._data = {
-            'voteNum': 1,
-        }
+    def do_unvote(self, tid, pid, uid):
+        if not db_topic['proposal'].is_voted({'uid': uid, 'tid': tid}):
+            raise ResponseError(404)
+
+        db_topic['proposal']._vote2proposal.remove({'tid': tid, 'pid': pid, 'uid': uid})
+        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
+
+    def do_revote(self, tid, pid, uid):
+        if db_topic['proposal'].is_voted({'uid': uid, 'tid': tid, 'pid': pid}):
+            raise ResponseError(404)
+
+        old_proposal = db_topic['proposal']._vote2proposal.find_one({'tid': tid, 'uid': uid})
+        if not old_proposal:
+            raise ResponseError(404)
+        old_pid = old_proposal['pid']
+
+        db_topic['proposal']._vote2proposal.remove({'tid': tid, 'uid': uid})
+        db_topic['proposal'].update({'_id': old_pid}, {'$inc': {'vnum': -1}}, w=1)
+
+        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid})
+        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
 
 class NewCommentHandler(BaseHandler):
@@ -188,7 +198,7 @@ class NewCommentHandler(BaseHandler):
             ('content', basestring),
         ],
         'option': [
-            ('topid', basestring, None),
+            ('tocoid', basestring, None),
         ]
     }
 
@@ -196,26 +206,26 @@ class NewCommentHandler(BaseHandler):
     def POST(self):
         data = self._params
 
-        tid = db_topic['comment'].to_objectid(data['tid'])
+        tid = self.to_objectid(data['tid'])
         topic = db_topic['topic'].find_one({'_id': tid})
 
         # TODO error code
         if not topic:
             raise ResponseError(404)
 
-        data['tid'] = db_topic['comment'].to_objectid(data['tid'])
-        data['topid'] = db_topic['comment'].to_objectid(data['topid'])
-        data['toauid'] = db_topic['comment'].find_one({'_id': data['topid']}).get('auid', None) if data['topid'] else None
-        data['auid'] = self.to_objectid(self.session['uid'])
+        data['tid'] = tid
+        data['tocoid'] = self.to_objectid(data['tocoid'])
+        data['auid'] = self.current_user
         data['ctime'] = datetime.now()
+        data['istz'] = True if data['auid'] == topic['auid'] else False
 
-        if data['auid'] == topic['auid']:
-            data['istz'] = True
+        to_comment = db_topic['comment'].find_one({'_id': data['tocoid']}, {'auid': 1}) if data['tocoid'] else None
+        data['toauid'] = to_comment['auid'] if to_comment else None
 
-        coid = db_topic['comment'].insert(data)
-        data = db_topic['comment'].get_one(coid)
+        coid = db_topic['comment'].create(data)
+        data['_id'] = coid
 
-        self._data = data
+        self._data = db_topic['comment'].format(db_topic['comment'].to_one_str(data), data['auid'])
 
 
 class ListCommentHandler(BaseHandler):
@@ -231,8 +241,7 @@ class ListCommentHandler(BaseHandler):
 
     @authenticated
     def GET(self, tid):
-        spec = {'tid': db_topic['comment'].to_objectid(tid)}
-        data_list = db_topic['comment'].get_all(spec, skip=self._skip, limit=self._limit)
+        data_list = db_topic['comment'].get_comments(self.to_objectid(tid), uid=self.current_user, skip=self._skip, limit=self._limit)
 
         self._data = {
             'dataList': data_list,
@@ -254,9 +263,9 @@ class LikeCommentHandler(BaseHandler):
     @authenticated
     def POST(self):
         data = self._params
-        uid = self.to_objectid(self.session['uid'])
+        uid = self.current_user
 
-        coid = db_topic['comment'].to_objectid(data['coid'])
+        coid = self.to_objectid(data['coid'])
         comment = db_topic['comment'].find_one({'_id': coid})
 
         if not comment:
@@ -267,6 +276,3 @@ class LikeCommentHandler(BaseHandler):
 
         db_topic['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
 
-        self._data = {
-            'likeNum': 1,
-        }

@@ -51,16 +51,15 @@ class Proposal(DataProvider, topic_model.Proposal):
         spec = {k: self.to_objectid(v) for k, v in spec.items()}
         return True if self._vote2proposal.find_one(spec) else False
 
-    # TODO fix 2 return
-    def vote_proposal(self, tid, pid, uid):
-        tid, pid, uid = map(self.to_objectid, [tid, pid, uid])
+    #def vote_proposal(self, tid, pid, uid, method):
+    #    tid, pid, uid = self.to_objectids(tid, pid, uid)
+    #    collection_method = {
+    #        'create': self._vote2proposal.create,
+    #        'remove': self._vote2proposal.remove,
+    #    }
 
-        if self.find_one({'_id': pid, 'tid': tid}):
-            self._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid})
-            self.update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
-            return True
-
-        return False
+    #    collection_method[method]({'tid': tid, 'pid': pid, 'uid': uid})
+    #    self.update({'_id': pid}, {'$inc': {'vnum': 1 if method == 'create' else -1}}, w=1)
 
     def format(self, record, uid):
         result = {

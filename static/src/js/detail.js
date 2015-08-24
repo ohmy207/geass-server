@@ -33,6 +33,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         isLoadingFirst: true,
         isLoading: false,
         isNoShowToTop: false,
+        hasVoted: false,
         desc: 0,
         nextStart: 0,
 
@@ -103,7 +104,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.detailBox').prepend(topicHtml);
 
             exports.isLoadingFirst = false;
-            jq('.warp, #bottomBar, .recommendTitle').show()
+            jq('.warp, #bottomBar, .recommendTitle').show();
+
+            exports.hasVoted = re.data.has_voted || false;
         },
 
         renderList: function(re, clear) {
@@ -372,67 +375,100 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq.UTIL.reload(jq(this).data('link'));
             });
 
-            // like
-            jq('#hotReplyList,#allReplyList').on('click', '.like', function(e) {
+            // vote
+            jq('#hotReplyList,#allReplyList').on('click', '.vote', function(e) {
                 jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
 
                 var thisObj = jq(this),
-                    pId = thisObj.attr('pId') || 0;
-                if(thisObj.children('i').hasClass('iconPraise')) {
-                    return;
+                    pId = thisObj.attr('pId') || 0,
+                    isVoted = thisObj.hasClass('voted'),
+                    voteNum = parseInt(thisObj.data('num'));
+
+                if(isVoted && exports.hasVoted) {
+                    var opts = {
+                        'id':'operationConfirm',
+                        'isMask':true,
+                        'content':'可以取消这次投票重新选择，确定要取消吗',
+                        'okValue':'确定',
+                        'cancelValue':'取消',
+                        'ok':function() {
+                            var opts = {
+                                'success': function(result) {
+                                    if (result.code == 0) {
+                                        exports.hasVoted = false;
+                                        jq.UTIL.likeTips(thisObj, '-1');
+                                        thisObj.attr('class', 'voteCount vote');
+                                        thisObj.html(voteNum - 1);
+                                        thisObj.data('num', voteNum - 1);
+                                    }
+                                },
+                                'noShowLoading' : true,
+                                'noMsg' : true
+                            }
+
+                            var url = '/p/unvote';
+                            var data = {'tid':tId, 'pid': pId};
+
+                            jq.UTIL.ajax(url, data, opts);
+                        },
+                    };
+                    jq.UTIL.dialog(opts);
+                } else if (!isVoted && !exports.hasVoted){
+                    var opts = {
+                        'success': function(result) {
+                            if (result.code == 0) {
+                                exports.hasVoted = true;
+                                jq.UTIL.likeTips(thisObj, '+1');
+                                thisObj.attr('class', 'voteCount voted vote');
+                                thisObj.html(voteNum + 1);
+                                thisObj.data('num', voteNum + 1)
+                            }
+                        },
+                        'noShowLoading' : true,
+                        'noMsg' : true
+                    }
+
+                    var url = '/p/vote';
+                    var data = {'tid':tId, 'pid': pId};
+
+                    jq.UTIL.ajax(url, data, opts);
+                } else if (!isVoted && exports.hasVoted) {
+                    var opts = {
+                        'id':'operationConfirm',
+                        'isMask':true,
+                        'content':'要取消之前的投票重新选择吗?',
+                        'okValue':'确定',
+                        'cancelValue':'取消',
+                        'ok':function() {
+                            var opts = {
+                                'success': function(result) {
+                                    if (result.code == 0) {
+                                        var votedObj = jq('.voted');
+                                        oldVoteNum = parseInt(votedObj.data('num'));
+                                        votedObj.attr('class', 'voteCount vote');
+                                        votedObj.html(oldVoteNum - 1);
+                                        votedObj.data('num', oldVoteNum - 1);
+
+                                        jq.UTIL.likeTips(thisObj, '+1');
+                                        thisObj.attr('class', 'voteCount voted vote');
+                                        thisObj.html(voteNum + 1);
+                                        thisObj.data('num', voteNum + 1)
+                                    }
+                                },
+                                'noShowLoading' : true,
+                                'noMsg' : true
+                            }
+
+                            var url = '/p/revote';
+                            var data = {'tid':tId, 'pid': pId};
+
+                            jq.UTIL.ajax(url, data, opts);
+                        },
+                    };
+                    jq.UTIL.dialog(opts);
+
                 }
-
-                // 晒图结束不能定
-                if (parentId && thisObj.attr('isEnd') == 1 && !pId) {
-                    jq.UTIL.dialog({content: '活动已结束，请不要再赞了', autoClose: true});
-                    return false;
-                }
-
-                var opts = {
-                    'success': function(result) {
-                        if (result.code == 0 && result.data && result.data.voteNum) {
-                            //if (parentId > 0 && !pId) {
-                            jq.UTIL.likeTips(thisObj);
-                            //}
-                            //thisObj.html('<i class="iconPraise f18 cf"></i>' + '<span class="readNumText">' + result.data.voteNum + '</span>');
-                            thisObj.attr('class', 'voteCount voted like');
-                            thisObj.html(result.data.voteNum)
-                            // 赞的不是回复时
-                            //if (!pId) {
-                            //    //移除掉blur遮罩
-                            //    jq('.blur').each(function(obj){
-                            //        if(jq(this).attr('alt') == tId){
-                            //            jq(this).removeClass();
-                            //        }
-                            //    });
-                            //    jq('.slideText').each(function(obj){
-                            //        if(jq(this).attr('alt') == tId){
-                            //            jq(this).css('display', 'none');
-                            //        }
-                            //    });
-                            //}
-                            //if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
-                            //    wxFollow.wxFollowTips();
-                            //}
-                        }
-                    },
-                    'noShowLoading' : true,
-                    'noMsg' : true
-                }
-
-                var url = '/p/vote';
-                var data = {'tid':tId, 'pid': pId};
-                //var url = '/' + sId;
-                //var data = {'tId':tId, 'parentId': parentId, 'CSRFToken':CSRFToken};
-                //if (pId) {
-                //    url = url + '/r/like';
-                //    data.pId = pId;
-                //} else {
-                //    url = url + '/like';
-                //}
-
-                jq.UTIL.ajax(url, data, opts);
             });
             /**
              * @desc 全部回复加倒序查看

@@ -1826,8 +1826,7 @@ h3 {
 }
 
 .editTCon {
-    margin: 10px
-10px 20px;
+    margin: 10px 10px 20px;
     text-align: center;
     line-height: 25px;
     color: #434343
@@ -1835,10 +1834,8 @@ h3 {
 
 .editArea {
     height: 50px;
-    padding: 13px
-15px 0;
-    margin: 0
--10px;
+    padding: 13px 15px 0;
+    margin: 0 -10px;
     border-top: 1px solid #e5e5e5;
     background-color: #f8f8f8;
     text-align: center
@@ -1846,10 +1843,8 @@ h3 {
 
 .editBtn1,.editBtn2 {
     display: inline-block;
-    padding: 0
-20px;
-    margin: 0
-10px;
+    padding: 0 20px;
+    margin: 0 10px;
     height: 30px;
     line-height: 30px;
     color: #fff;
@@ -1866,8 +1861,7 @@ h3 {
 }
 
 .tipsCon {
-    padding: 10px
-10px 0
+    padding: 10px 10px 0
 }
 
 .btWrap {

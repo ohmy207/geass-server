@@ -260,7 +260,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                         dialogHtmlArr.push('<div style="position:fixed;z-index:' + dialogZIndex +';" id="' + dialogId + '"><div class="tips br5">');
                         if (dId == 'loading') {
                             // 菊花
-                            dialogHtmlArr.push('<div class="loadicon tipL" style="vertical-align: -5px;"><span class="blockG" id="rotateG_01"></span><span class="blockG" id="rotateG_02"></span><span class="blockG" id="rotateG_03"></span><span class="blockG" id="rotateG_04"></span><span class="blockG" id="rotateG_05"></span><span class="blockG" id="rotateG_06"></span><span class="blockG" id="rotateG_07"></span><span class="blockG" id="rotateG_08"></span></div> ');
+                            dialogHtmlArr.push('<div class="spinner tipL" style="vertical-align: -5px;"><span class="circleG" id="rotateG_01"></span><span class="circleG" id="rotateG_02"></span><span class="circleG" id="rotateG_03"></span><span class="circleG" id="rotateG_04"></span><span class="circleG" id="rotateG_05"></span><span class="circleG" id="rotateG_06"></span><span class="circleG" id="rotateG_07"></span><span class="circleG" id="rotateG_08"></span></div> ');
                         }
                         dialogHtmlArr.push(content + '</div></div>');
                     } else if (isConfirm) {
@@ -716,14 +716,15 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                     });
                 }
             },
-            likeTips: function(obj) {
+            likeTips: function(obj, content) {
                 if (!jq('.praiseCon')[0]) {
                     //var praiseCon = '<span class="praiseCon db" style="opacity:0;height:30px"><i class="praisePop db">明日再赞哦~</i></span>';
-                    var praiseCon = '<span class="praiseCon db" style="opacity:0;height:30px"><i class="praisePop db">+1</i></span>';
+                    var praiseCon = '<span class="praiseCon db" style="opacity:0;height:30px"><i class="praisePop db"></i></span>';
                     jq(praiseCon).appendTo('body');
                 }
                 var otop = obj.offset().top - 20;
                 var offTop = otop - 15;
+                jq('.praiseCon i').html(content);
                 jq('.praiseCon').css({top:otop, right:jq(window).width() - obj.offset().left - obj.width()}).animate({top:offTop + 'px', opacity:1},'normal',function(){}).animate({opacity:0}, 'normal', function() {});
             },
 

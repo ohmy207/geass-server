@@ -58,7 +58,7 @@
           <div class="operation pr">
               <span class="source db c6 f12 fl"><%== replyList[i].f_created_time %></span>
               <span class="replyShare db c9 fr f13">
-                  <a href="javascript:;" class="like c9" pId="<%= replyList[i].coid %>"> <i class="<% if (replyList[i].is_liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].like_num) { %><%= replyList[i].like_num %> <%  } else { %>赞<%  } %></a>
+                  <a href="javascript:;" class="like c9" pId="<%= replyList[i].coid %>" data-num="<%= replyList[i].like_num %>" > <i class="<% if (replyList[i].is_liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].like_num) { %><%= replyList[i].like_num %> <%  } else { %>赞<%  } %></a>
                   <a class="c9 replyFloor" href="javascript:;" id="p_<%= replyList[i].coid %>" uid="<%= replyList[i].author_uid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
               </span>
           </div>
@@ -73,7 +73,7 @@
     <form method="post" id="replyForm">
         <input type="hidden" name="CSRFToken" value="2ffef155">
         <input type="hidden" name="tid" value="<%= data.tId %>">
-        <input type="hidden" name="topid" value="<%= data.toPId %>">
+        <input type="hidden" name="tocoid" value="<%= data.toPId %>">
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的评论..."></textarea>
         </div>

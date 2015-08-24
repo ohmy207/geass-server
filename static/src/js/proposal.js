@@ -171,7 +171,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     'success': function(result) {
                         if (result.code == 0 && result.data && result.data.voteNum) {
                             //if (parentId > 0 && !pId) {
-                            jq.UTIL.likeTips(thisObj);
+                            jq.UTIL.likeTips(thisObj, '+1');
                             //}
                             //thisObj.html('<i class="iconPraise f18 cf"></i>' + '<span class="readNumText">' + result.data.voteNum + '</span>');
                             thisObj.attr('class', 'voteCount voted like');

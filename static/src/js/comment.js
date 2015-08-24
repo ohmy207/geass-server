@@ -305,11 +305,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
                 var opts = {
                     'success': function(result) {
-                        if (result.code == 0 && result.data && result.data.likeNum) {
+                        if (result.code == 0) {
+                        //if (result.code == 0 && result.data && result.data.likeNum) {
                             //if (parentId > 0 && !pId) {
-                            jq.UTIL.likeTips(thisObj);
+                            jq.UTIL.likeTips(thisObj, '+1');
                             //}
-                            thisObj.html('<i class="iconPraise f18 cf"></i>' + result.data.likeNum);
+                            thisObj.html('<i class="iconPraise f18 cf"></i>' + (parseInt(thisObj.data('num')) + 1));
                             // 赞的不是回复时
                             //if (!pId) {
                             //    //移除掉blur遮罩

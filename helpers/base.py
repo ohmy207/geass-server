@@ -10,6 +10,7 @@ from tornado.escape import xhtml_escape
 
 from models.user import model as user_model
 from setting import COLLECTION_PREFIX as _PREFIX
+from utils import escape as _es
 
 
 class Helper(dict):
@@ -42,6 +43,9 @@ class DataProvider(object):
 
     _user = user_model.User()
 
+    def to_objectids(self, *objids):
+        return map(_es.to_objectid, objids)
+
     def xhtml_escape(self, value):
         return xhtml_escape(value)
 
@@ -51,7 +55,7 @@ class DataProvider(object):
         #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
         ftime = time.strftime('%Y-%m-%d')
 
-        return ftime if total_seconds > 2*24*60*60 else unicode(total_seconds/24/60/60)+'天前' if total_seconds > 24*60*60 else unicode(total_seconds/60/60)+'小时前' if total_seconds > 60*60 else unicode(total_seconds/60)+'分钟前' if total_seconds > 60 else '刚刚'
+        return ftime if total_seconds > 2*24*60*60 else str(total_seconds/24/60/60)+'天前' if total_seconds > 24*60*60 else str(total_seconds/60/60)+'小时前' if total_seconds > 60*60 else str(total_seconds/60)+'分钟前' if total_seconds > 60 else '刚刚'
 
     def get_simple_user(self, uid):
         user = self._user.get_one({'_id': self._user.to_objectid(uid)})

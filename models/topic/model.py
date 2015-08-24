@@ -61,7 +61,7 @@ class Comment(Model):
         'tid':              (ObjectId, None),
         'auid':             (ObjectId, None),
         'toauid':           (ObjectId, None),
-        'topid':            (ObjectId, None),
+        'tocoid':           (ObjectId, None),
 
         'content':          (basestring, ''),
 
