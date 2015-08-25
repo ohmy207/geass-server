@@ -26,11 +26,9 @@ REDIS = {
 
     'db': {
         'session': 0,
-        'temp': 1,
     },
 
     'key': {
-        'avatar_new_user_set': 'avatar_new_user_set',
     },
 }
 

@@ -5,7 +5,6 @@ from urllib import quote
 
 import log
 import tornado.web
-import redis
 
 #from datetime import datetime
 from tornado import gen
@@ -15,7 +14,7 @@ from .base import WeiXinMixin
 from apps.base import ResponseError
 
 from helpers import user as db_user
-from config.global_setting import WEIXIN, APP_HOST, REDIS
+from config.global_setting import WEIXIN, APP_HOST
 
 logger = log.getLogger(__file__)
 
@@ -30,8 +29,6 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
             ('code', basestring, None),
         ]
     }
-
-    conn = redis.Redis(host=REDIS['host'], port=REDIS['port'], db=REDIS['db']['temp'])
 
     @tornado.web.asynchronous
     @gen.coroutine
@@ -68,8 +65,6 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
 
                 uid = db_user['user'].create({'open': {'wx': user}})
                 user = db_user['user'].get_one({'_id': uid})
-
-                self.conn.sadd(REDIS['key']['avatar_new_user_set'], unicode(uid))
 
             self.update_session(user)
             self.redirect(self._params['next'] or '/')
