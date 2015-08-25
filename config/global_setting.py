@@ -19,7 +19,11 @@ else:
 
 
 APP_HOST = 'http://geass.t207.me'
-REDIS_HOSTS = [('localhost', 6379, 0)]
+REDIS_HOSTS = [('localhost', 6379, 0), ('localhost', 6379, 1)]
+
+REDIS_KEYS = {
+    'avatar_new_user_set': 'avatar_new_user_set',
+}
 
 # cdn setting
 CDN = {
@@ -69,6 +73,8 @@ QINIU = {
     },
 
     'img_url': 'https://dn-geass-images.qbox.me/',
+    #'avatar_url': 'https://dn-geass-avatar.qbox.me/',
+    'avatar_url': 'http://7xlbmo.com1.z0.glb.clouddn.com/',
     'thumb_suffix': '?imageView2/1/w/200/h/200',
 }
 
@@ -94,6 +100,6 @@ WEIXIN = {
 }
 
 PIC_URL = {
-    #'avatar': '',
-    'img': lambda pickey: {'origin': '%s%s' % (QINIU['img_url'], pickey), 'thumb': '%s%s%s' % (QINIU['img_url'], pickey, QINIU['thumb_suffix'])},
+    'avatar': lambda key: '%s%s' % (QINIU['avatar_url'], key),
+    'img': lambda key: {'origin': '%s%s' % (QINIU['img_url'], key), 'thumb': '%s%s%s' % (QINIU['img_url'], key, QINIU['thumb_suffix'])},
 }
