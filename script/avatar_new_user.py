@@ -7,14 +7,14 @@ import redis
 from qiniu import Auth, BucketManager
 
 from models.user import model as user_model
-from config.global_setting import QINIU, REDIS_HOSTS, REDIS_KEYS
+from config.global_setting import QINIU, REDIS
 
 
 bucket_name = 'geass-avatar'
 q = Auth(QINIU['access_key'], QINIU['secret_key'])
 bucket = BucketManager(q)
 
-conn = redis.Redis(host=REDIS_HOSTS[0][0], port=6379, db=1)
+conn = redis.Redis(host=REDIS['host'], port=REDIS['port'], db=REDIS['db']['temp'])
 _user = user_model.User()
 
 
@@ -24,7 +24,7 @@ def get_avatar_by_uid(uid):
 
 
 def update_avatar():
-    uids =  conn.smembers(REDIS_KEYS['avatar_new_user_set'])
+    uids =  conn.smembers(REDIS['key']['avatar_new_user_set'])
     print uids
 
     for uid in uids:

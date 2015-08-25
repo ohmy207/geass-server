@@ -19,10 +19,19 @@ else:
 
 
 APP_HOST = 'http://geass.t207.me'
-REDIS_HOSTS = [('localhost', 6379, 0), ('localhost', 6379, 1)]
+#REDIS_HOSTS = [('localhost', 6379, 0)]
+REDIS = {
+    'host': 'localhost',
+    'port': 6379,
 
-REDIS_KEYS = {
-    'avatar_new_user_set': 'avatar_new_user_set',
+    'db': {
+        'session': 0,
+        'temp': 1,
+    },
+
+    'key': {
+        'avatar_new_user_set': 'avatar_new_user_set',
+    },
 }
 
 # cdn setting

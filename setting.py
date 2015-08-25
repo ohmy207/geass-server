@@ -4,7 +4,7 @@ import logging
 
 from tornado.util import ObjectDict
 from utils import session
-from config.global_setting import REDIS_HOSTS
+from config.global_setting import REDIS
 
 # app name
 APP_NAME = 'geass-server'
@@ -23,7 +23,7 @@ APPLICATION_SETTING = ObjectDict(
     #xsrf_cookies=True,
     cookie_secret="xxx-xxx-xxx",
     login_url="/wx/authorize",
-    session_store=session.RedisSessionStore(REDIS_HOSTS)
+    session_store=session.RedisSessionStore([(REDIS['host'], REDIS['port'], REDIS['db']['session'])])
     #autoescape=None,
 )
 
