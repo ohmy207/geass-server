@@ -74,10 +74,11 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
             self.update_session(user)
             self.redirect(self._params['next'] or '/')
         else:
-            self.authorize_redirect(
+            redirect_url = self.get_authorize_redirect(
                 redirect_uri=redirect_uri,
                 scope=self._SCOPE['scope_base']
             )
+            self.render('spinner.html', redirect_url=redirect_url)
 
     def backup_avatar(self, uid, avatar):
         if not avatar.startswith('http'):

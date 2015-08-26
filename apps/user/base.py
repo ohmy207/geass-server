@@ -38,7 +38,15 @@ class WeiXinMixin(OAuth2Mixin):
     _ACCESS_TOKEN_URL = WEIXIN['access_token_url']
     _USERINFO_URL = WEIXIN['userinfo_url']
 
-    def authorize_redirect(self, redirect_uri=None, response_type='code', scope=None, state=None):
+    def authorize_redirect(self, redirect_uri=None, scope=None, state=None):
+        self.redirect(
+            self.get_authorize_redirect(
+                redirect_uri=redirect_uri,
+                scope=scope,
+                state=state,
+            ))
+
+    def get_authorize_redirect(self, redirect_uri=None, response_type='code', scope=None, state=None):
         args = [
             ('appid', self._APP_ID),
             ('redirect_uri', redirect_uri),
@@ -47,7 +55,7 @@ class WeiXinMixin(OAuth2Mixin):
             ('state', state),
         ]
 
-        self.redirect('%s%s' % (url_concat(self._AUTHORIZE_URL, args), self._AUTHORIZE_URL_SUFFIX))
+        return '%s%s' % (url_concat(self._AUTHORIZE_URL, args), self._AUTHORIZE_URL_SUFFIX)
 
     @_auth_return_future
     def get_access_token(self, code, callback, grant_type='authorization_code'):
