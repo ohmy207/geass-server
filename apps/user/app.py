@@ -41,7 +41,7 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
             res = yield self.get_access_token(code=code)
 
             if 'errcode' in res:
-                raise ResponseError(5)
+                raise ResponseError(5, res['errmsg'])
 
             access_token,openid,scope = res['access_token'],res['openid'],res['scope']
 
@@ -66,7 +66,7 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
 
                 uid = db_user['user'].create({'open': {'wx': user}})
                 #user = db_user['user'].get_one({'_id': uid})
-                thread.start_new_thread(backup_avatar, (uid, user['headimgurl']))
+                thread.start_new_thread(self.backup_avatar, (uid, user['headimgurl']))
 
             self.update_session({'uid': unicode(uid)})
             self.redirect(self._params['next'] or '/')
