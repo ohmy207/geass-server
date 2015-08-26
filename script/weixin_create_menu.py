@@ -11,13 +11,13 @@ menu_data = {
         {
             'type': 'view',
             'name': '创建话题',
-            'url': 'http://geass.t207.me/111111111/t/new'
+            'url': 'http://geass.t207.me/new'
         },
 
         {
             'type': 'view',
             'name': '我的话题',
-            'url': 'http://geass.t207.me/111111111/t/new'
+            'url': 'http://geass.t207.me/new'
         },
 
         {
