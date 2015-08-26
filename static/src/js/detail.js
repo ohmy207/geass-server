@@ -371,7 +371,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             jq('#hotReplyList,#allReplyList').on('click', '.proposalWrap', function(e) {
-                jq.UTIL.touchStateNow(jq(this).parent());
+                jq.UTIL.touchStateNow(jq(this).parent('li'));
                 jq.UTIL.reload(jq(this).data('link'));
             });
 
