@@ -65,7 +65,8 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
                     raise ResponseError(5, user['errmsg'])
 
                 uid = db_user['user'].create({'open': {'wx': user}})
-                user['uid'] = unicode(uid)
+                # TODO format user
+                user = {'uid': unicode(uid)}
                 #user = db_user['user'].get_one({'_id': uid})
                 thread.start_new_thread(self.backup_avatar, (uid, user['headimgurl']))
 
