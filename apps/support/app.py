@@ -38,7 +38,7 @@ class UploadTokenHandler(BaseHandler):
         q = Auth(QINIU['access_key'], QINIU['secret_key'])
 
         token = q.upload_token(
-            bucket=QINIU['bucket_name'],
+            bucket=QINIU['bucket_name']['image'],
             expires=QINIU['expires'],
             policy=QINIU['policy'],
         )

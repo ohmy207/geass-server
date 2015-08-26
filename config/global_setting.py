@@ -70,7 +70,11 @@ QINIU = {
     'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
     'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
 
-    'bucket_name': 'geass-images',
+    'bucket_name': {
+        'image': 'geass-images',
+        'avatar': 'geass-avatar',
+    },
+
     'expires': 3600,
 
     'policy': {

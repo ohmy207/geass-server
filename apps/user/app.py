@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 
+import thread
 #from tornado.web import authenticated
 from urllib import quote
 
@@ -14,7 +15,7 @@ from .base import WeiXinMixin
 from apps.base import ResponseError
 
 from helpers import user as db_user
-from config.global_setting import WEIXIN, APP_HOST
+from config.global_setting import WEIXIN, APP_HOST, QINIU
 
 logger = log.getLogger(__file__)
 
@@ -64,12 +65,25 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
                     raise ResponseError(5, user['errmsg'])
 
                 uid = db_user['user'].create({'open': {'wx': user}})
-                user = db_user['user'].get_one({'_id': uid})
+                #user = db_user['user'].get_one({'_id': uid})
+                thread.start_new_thread(backup_avatar, (uid, user['headimgurl']))
 
-            self.update_session(user)
+            self.update_session({'uid': unicode(uid)})
             self.redirect(self._params['next'] or '/')
         else:
             self.authorize_redirect(
                 redirect_uri=redirect_uri,
                 scope=self._SCOPE['scope_base']
             )
+
+    def backup_avatar(self, uid, avatar):
+        if not avatar.startswith('http'):
+            logger.error('avatar url is error, url: %s' % avatar)
+            return
+
+        ret, info = bucket.fetch(avatar, QINIU['bucket_name']['avatar'])
+        if not ret or 'error' in ret:
+            logger.error('upload avatar failed, info: %s avatar url: %s' % (info, avatar))
+            return
+
+        db_user['user'].update({'_id': self.to_objectid(uid)}, {'$set': {'avatar': ret['key']}}, w=1)
