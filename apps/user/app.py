@@ -9,6 +9,7 @@ import tornado.web
 
 #from datetime import datetime
 from tornado import gen
+from qiniu import Auth, BucketManager
 
 from .base import BaseHandler
 from .base import WeiXinMixin
@@ -83,6 +84,9 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
             logger.error('avatar url is error, url: %s' % avatar)
             return
 
+        # TODO storge q
+        q = Auth(QINIU['access_key'], QINIU['secret_key'])
+        bucket = BucketManager(q)
         ret, info = bucket.fetch(avatar, QINIU['bucket_name']['avatar'])
         if not ret or 'error' in ret:
             logger.error('upload avatar failed, info: %s avatar url: %s' % (info, avatar))
