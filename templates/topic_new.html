@@ -101,10 +101,16 @@
   </div> 
 
   <script type="text/javascript">
-    var shareUrl = 'http://m.wsq.qq.com/264151824?_wv=1&filterType=&source=custom',
-    shareTitle = '分享自#龙门客栈#',
-    shareDesc = '《龙斌大话电影》是互联网首档超人气影评脱口秀节目，每周一、四更新。主播龙斌用最接地气的犀利吐槽...',
-    shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
+      var isRegistered = ("{{ state['is_registered'] }}" === "1");
+      alert(isRegistered)
+      alert(typeof isRegistered)
+  </script>
+
+  <script type="text/javascript">
+      var shareUrl = 'http://m.wsq.qq.com/264151824?_wv=1&filterType=&source=custom',
+      shareTitle = '分享自#龙门客栈#',
+      shareDesc = '《龙斌大话电影》是互联网首档超人气影评脱口秀节目，每周一、四更新。主播龙斌用最接地气的犀利吐槽...',
+      shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
   </script> 
 
   <script data-main="{{ static_url('js/new') }}" src="{{ static_url('js/vendor/require.js') }}"></script>

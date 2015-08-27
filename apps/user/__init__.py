@@ -6,6 +6,7 @@ prefix = ''
 
 urls = [
 
-    ('/wx/authorize', app.WeiXinAuthorizeHandler),
+    ('/forbidden', app.ForbiddenHandler),
+    ('/wx/authorize/(openid|userinfo)', app.WeiXinAuthorizeHandler),
 
 ]

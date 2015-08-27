@@ -216,16 +216,24 @@ class BaseHandler(tornado.web.RequestHandler):
         return self._session
 
     def update_session(self, user):
-        if user:
-            self.session['uid'] = user['uid']
-            #self.session['sex'] = user['sex']
-            #self.session['avatar'] = user['avatar']
-            #self.session['nickname'] = user['nickname']
-        else:
-            self.session.clear()
+        if not user:
+            return self.session.clear()
+
+        for k,v in user.iteritems():
+            if k in ['uid', 'openid']:
+                self.session[k] = v
+        #if user:
+        #    self.session['uid'] = user['uid']
+        #    self.session['openid'] = user['openid']
+        #    #self.session['sex'] = user['sex']
+        #    #self.session['avatar'] = user['avatar']
+        #    #self.session['nickname'] = user['nickname']
+        #else:
+        #    self.session.clear()
 
     def get_current_user(self):
-        return self.to_objectid(self.session['uid']) if self.session and 'uid' in self.session else None
+        return self.to_objectid(self.session['uid'])
+        #return self.to_objectid(self.session['uid']) if self.session and 'uid' in self.session else None
 
     def static_url(self,  path, include_host=None, v=None, **kwargs):
         is_debug = self.application.settings.get('debug', False)

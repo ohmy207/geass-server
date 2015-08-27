@@ -1,5 +1,10 @@
 #-*- coding:utf-8 -*-
 
+try:
+    from urllib import urlencode  # py2
+except ImportError:
+    from urllib.parse import urlencode  # py3
+
 from tornado.web import authenticated
 from qiniu import Auth
 
@@ -18,8 +23,12 @@ class PageHandler(BaseHandler):
         ]
     }
 
-    @authenticated
     def get(self, route):
+        if not self.session['openid']:
+            url = '/wx/authorize/openid'
+            url += "?" + urlencode(dict(next=self.request.uri))
+            self.redirect(url)
+            return
 
         pages = {
             'new': 'topic_new',
@@ -27,8 +36,10 @@ class PageHandler(BaseHandler):
             'proposal': 'proposal_detail',
             'comments': 'comment_list',
         }
+        state = self._params
+        state['is_registered'] = 1 if self.current_user else 0
 
-        self.render('%s.html'%pages[route], state=self._params)
+        self.render('%s.html'%pages[route], state=state)
 
 
 class UploadTokenHandler(BaseHandler):

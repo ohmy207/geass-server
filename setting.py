@@ -22,7 +22,8 @@ APPLICATION_SETTING = ObjectDict(
     template_path=os.path.join(BASE_APP_DIR, "templates"),
     #xsrf_cookies=True,
     cookie_secret="xxx-xxx-xxx",
-    login_url="/wx/authorize",
+    #login_url="/wx/authorize/openid",
+    login_url="/forbidden",
     session_store=session.RedisSessionStore([(REDIS['host'], REDIS['port'], REDIS['db']['session'])])
     #autoescape=None,
 )
