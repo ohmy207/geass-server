@@ -47,6 +47,7 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
                 raise ResponseError(5, res['errmsg'])
 
             self.route(route, res)
+            return
 
         if route == 'openid':
             redirect_url = self.get_authorize_redirect(
