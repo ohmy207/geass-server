@@ -1,14 +1,15 @@
 #-*- coding:utf-8 -*-
 
 import thread
-#from tornado.web import authenticated
 from urllib import quote
+from urllib import urlencode
 
 import log
 import tornado.web
 
 #from datetime import datetime
 from tornado import gen
+from tornado.web import authenticated
 from qiniu import Auth, BucketManager
 
 from .base import BaseHandler
@@ -25,6 +26,52 @@ class ForbiddenHandler(BaseHandler):
 
     def GET(self):
         raise ResponseError(403)
+
+
+class UploadTokenHandler(BaseHandler):
+
+    @authenticated
+    def get(self):
+        q = Auth(QINIU['access_key'], QINIU['secret_key'])
+
+        token = q.upload_token(
+            bucket=QINIU['bucket_name']['image'],
+            expires=QINIU['expires'],
+            policy=QINIU['policy'],
+        )
+
+        self.wo_json({'token': token})
+
+
+class PageHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('tid', basestring, None),
+            ('pid', basestring, None),
+        ]
+    }
+
+    _URL = '/wx/authorize/openid'
+
+    def get(self, route):
+        if not self.session['openid']:
+            url = "%s?%s" % (self._URL, urlencode(dict(next=self.request.uri)))
+            self.redirect(url)
+            return
+
+        pages = {
+            'new': 'topic_new',
+            'topic': 'topic_detail',
+            'proposal': 'proposal_detail',
+            'comments': 'comment_list',
+        }
+        state = self._params
+        state['is_registered'] = 1 if self.current_user else 0
+
+        self.render('%s.html'%pages[route], state=state)
 
 
 class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
