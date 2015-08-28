@@ -242,6 +242,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
         init: function() {
 
+            exports.checkIsRegistered();
+
             exports.contentHeight = jq('.sendCon').height();
 
             // 发送
@@ -311,7 +313,6 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
             exports.initUpload();
 
-            exports.checkIsRegistered();
             // 表情开关
             //jq(".tagBox a").on("click", function() {
             //    jq(".tagBox").find('a').attr('class', '');
