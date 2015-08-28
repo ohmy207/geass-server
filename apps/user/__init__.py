@@ -10,6 +10,7 @@ urls = [
     ('/(new|topic|proposal|comments)', app.PageHandler),
 
     ('/forbidden', app.ForbiddenHandler),
-    ('/wx/authorize/(openid|userinfo)', app.WeiXinAuthorizeHandler),
+    ('/wx/authorize/base', app.BaseAuthorizeHandler),
+    ('/wx/authorize/userinfo', app.UserinfoAuthorizeHandler),
 
 ]

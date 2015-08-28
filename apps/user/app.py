@@ -59,7 +59,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
         next_url = urlencode(dict(next=self.request.uri))
 
         if not self.session['openid']:
-            url = "/wx/authorize/openid?%s" % next_url
+            url = "/wx/authorize/base?%s" % next_url
             self.redirect(url)
             return
 
@@ -79,7 +79,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
         self.render('%s.html'%pages[route], state=state)
 
 
-class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
+class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
 
     _get_params = {
         'need': [
@@ -92,38 +92,50 @@ class WeiXinAuthorizeHandler(BaseHandler, WeiXinMixin):
 
     @tornado.web.asynchronous
     @gen.coroutine
-    def get(self, route):
-        if self._params['code']:
-            res = yield self.get_access_token(code=self._params['code'])
-            if 'errcode' in res:
-                raise ResponseError(5, res['errmsg'])
-
-            self.route(route, res)
-            return
-
-        if route == 'openid':
+    def get(self):
+        if not self._params['code']:
             redirect_url = self.get_authorize_redirect(
                 redirect_uri=APP_HOST + self.request.uri,
                 scope=self._SCOPE['scope_base']
             )
             self.render('spinner.html', redirect_url=redirect_url)
 
-        if route == 'userinfo':
+        res = yield self.get_access_token(code=self._params['code'])
+        if 'errcode' in res:
+            raise ResponseError(5, res['errmsg'])
+
+        user = db_user['user'].get_one({'open.wx.openid': res['openid']}) or {}
+        user['openid'] = res['openid']
+
+        self.update_session(user)
+        self.redirect(self._params['next'])
+
+
+class UserinfoAuthorizeHandler(BaseHandler, WeiXinMixin):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('next', basestring, '/'),
+            ('code', basestring, None),
+        ]
+    }
+
+    @tornado.web.asynchronous
+    @gen.coroutine
+    def get(self):
+        if not self._params['code']:
             self.authorize_redirect(
                 redirect_uri=APP_HOST + '/wx/authorize/userinfo',
                 scope=self._SCOPE['scope_userinfo']
             )
             return
 
-    def do_openid(self, res):
-        user = db_user['user'].get_one({'open.wx.openid': res['openid']}) or {}
-        user['openid'] = res['openid']
-        self.update_session(user)
-        self.redirect(self._params['next'])
+        res = yield self.get_access_token(code=self._params['code'])
+        if 'errcode' in res:
+            raise ResponseError(5, res['errmsg'])
 
-    @tornado.web.asynchronous
-    @gen.coroutine
-    def do_userinfo(self, res):
         user = yield self.get_authenticated_user(
             access_token=res['access_token'],
             openid=res['openid'],
