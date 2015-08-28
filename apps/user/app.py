@@ -99,6 +99,7 @@ class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
                 scope=self._SCOPE['scope_base']
             )
             self.render('spinner.html', redirect_url=redirect_url)
+            return
 
         res = yield self.get_access_token(code=self._params['code'])
         if 'errcode' in res:
