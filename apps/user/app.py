@@ -43,7 +43,7 @@ class UploadTokenHandler(BaseHandler):
         self.wo_json({'token': token})
 
 
-class PageHandler(BaseHandler):
+class PageHandler(BaseHandler, WeiXinMixin):
 
     _get_params = {
         'need': [
@@ -54,11 +54,12 @@ class PageHandler(BaseHandler):
         ]
     }
 
-    _URL = '/wx/authorize/openid'
-
+    # TODO code chou
     def get(self, route):
+        next_url = urlencode(dict(next=self.request.uri))
+
         if not self.session['openid']:
-            url = "%s?%s" % (self._URL, urlencode(dict(next=self.request.uri)))
+            url = "/wx/authorize/openid?%s" % next_url
             self.redirect(url)
             return
 
@@ -70,6 +71,10 @@ class PageHandler(BaseHandler):
         }
         state = self._params
         state['is_registered'] = 1 if self.current_user else 0
+        state['redirect_url'] = self.get_authorize_redirect(
+            redirect_uri='%s%s?%s' % (APP_HOST, '/wx/authorize/userinfo', next_url),
+            scope=self._SCOPE['scope_userinfo']
+        )
 
         self.render('%s.html'%pages[route], state=state)
 
