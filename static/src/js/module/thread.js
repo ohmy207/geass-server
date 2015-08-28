@@ -852,6 +852,21 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             exports.initUpload();
 
         },
+        checkIsRegistered: function() {
+            if (!window.isRegistered) {
+                var opts = {
+                    'id':'operationConfirm',
+                    'isMask':true,
+                    'content':'本操作需要获取用户昵称及头像信息，要继续吗？',
+                    'okValue':'确定',
+                    'cancelValue':'取消',
+                    'ok':function() {
+                        jq.UTIL.reload(window.registerURL)
+                    },
+                };
+                jq.UTIL.dialog(opts);
+            }
+        },
         checkForm: function() {
 
             jq.each(uploadImg.uploadInfo, function(i,n) {

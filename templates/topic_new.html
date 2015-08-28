@@ -102,9 +102,7 @@
 
   <script type="text/javascript">
       var isRegistered = ("{{ state['is_registered'] }}" === "1");
-      if (!isRegistered){
-          window.location.replace("{% raw state['redirect_url'] %}")
-      }
+      var registerURL = "{% raw state['redirect_url'] %}";
   </script>
 
   <script type="text/javascript">
