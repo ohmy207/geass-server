@@ -101,8 +101,8 @@
   </div> 
 
   <script type="text/javascript">
-      var isRegistered = ("{{ state['is_registered'] }}" === "1");
-      var registerURL = "{% raw state['redirect_url'] %}";
+      var isRegistered = ("{{ state['is_authorized'] }}" === "1");
+      var registerURL = "{% raw state['authorize_url'] %}";
   </script>
 
   <script type="text/javascript">

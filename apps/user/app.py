@@ -54,13 +54,26 @@ class PageHandler(BaseHandler, WeiXinMixin):
         ]
     }
 
-    # TODO code chou
+    # TODO code ugly
     def get(self, route):
-        next_url = urlencode(dict(next=self.request.uri))
-
         if not self.session['openid']:
-            url = "/wx/authorize/base?%s" % next_url
-            self.redirect(url)
+            self.redirect('%s?%s' % (
+                self._AUTH_BASE_URL,
+                urlencode(dict(next=self.request.uri)),
+            ))
+            return
+
+        authorize_url = self.get_authorize_redirect(
+            redirect_uri='%s%s?%s' % (
+                APP_HOST,
+                self._AUTH_USERINFO_URL,
+                urlencode(dict(next=self.request.uri)),
+            ),
+            scope=self._SCOPE['scope_userinfo']
+        )
+
+        if not self.current_user and route in ['new']:
+            self.redirect(authorize_url)
             return
 
         pages = {
@@ -70,11 +83,8 @@ class PageHandler(BaseHandler, WeiXinMixin):
             'comments': 'comment_list',
         }
         state = self._params
-        state['is_registered'] = 1 if self.current_user else 0
-        state['redirect_url'] = self.get_authorize_redirect(
-            redirect_uri='%s%s?%s' % (APP_HOST, '/wx/authorize/userinfo', next_url),
-            scope=self._SCOPE['scope_userinfo']
-        )
+        state['is_authorized'] = 1 if self.current_user else 0
+        state['authorize_url'] = authorize_url
 
         self.render('%s.html'%pages[route], state=state)
 
@@ -94,11 +104,11 @@ class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
     @gen.coroutine
     def get(self):
         if not self._params['code']:
-            redirect_url = self.get_authorize_redirect(
+            authorize_url = self.get_authorize_redirect(
                 redirect_uri=APP_HOST + self.request.uri,
                 scope=self._SCOPE['scope_base']
             )
-            self.render('spinner.html', redirect_url=redirect_url)
+            self.render('spinner.html', authorize_url=authorize_url)
             return
 
         res = yield self.get_access_token(code=self._params['code'])
@@ -128,7 +138,7 @@ class UserinfoAuthorizeHandler(BaseHandler, WeiXinMixin):
     def get(self):
         if not self._params['code']:
             self.authorize_redirect(
-                redirect_uri=APP_HOST + '/wx/authorize/userinfo',
+                redirect_uri=APP_HOST+self._AUTH_USERINFO_URL,
                 scope=self._SCOPE['scope_userinfo']
             )
             return

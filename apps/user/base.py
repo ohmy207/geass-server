@@ -29,6 +29,9 @@ class BaseHandler(base.BaseHandler):
 
 class WeiXinMixin(OAuth2Mixin):
 
+    _AUTH_BASE_URL = '/wx/authorize/base'
+    _AUTH_USERINFO_URL = '/wx/authorize/userinfo'
+
     _APP_ID = WEIXIN['appid']
     _APP_SECRET = WEIXIN['appsecret']
 
