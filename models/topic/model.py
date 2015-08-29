@@ -36,7 +36,7 @@ class Proposal(Model):
 
         'vnum':             (int, 0)        ,
 
-        #'istz':             (bool, False)   ,
+        'istz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }
@@ -69,7 +69,7 @@ class Comment(Model):
 
         'lnum':             (int, 0)        ,
 
-        #'istz':             (bool, False)   ,
+        'istz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }
