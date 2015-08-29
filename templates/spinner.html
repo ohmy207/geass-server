@@ -33,7 +33,9 @@
 {% block footer %}
 
   <script type="text/javascript">
-      window.location.replace('{% raw redirect_url %}')
+      window.onload=function(){
+          window.location.replace('{% raw redirect_url %}')
+      }
   </script>
 
   <script type="text/javascript">
