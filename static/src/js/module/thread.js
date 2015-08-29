@@ -852,7 +852,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             exports.initUpload();
 
         },
-        checkIsRegistered: function() {
+        checkIsRegistered: function(callback) {
             if (!window.isRegistered) {
                 var opts = {
                     'id':'operationConfirm',
@@ -865,6 +865,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     },
                 };
                 jq.UTIL.dialog(opts);
+            } else {
+                callback();
             }
         },
         checkForm: function() {

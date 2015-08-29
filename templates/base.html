@@ -27,13 +27,20 @@
 
   {% end %}
 
-  <!--debug--> 
+  {% block script %}
+
+  <!--debug-->
   <script type="text/javascript">
       document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
           WeixinJSBridge.call('hideToolbar');
           WeixinJSBridge.call('showOptionMenu');
       });
+
+      var isRegistered = ("{{ state['is_authorized'] }}" === "1"),
+          registerURL = "{% raw state['authorize_url'] %}";
   </script>
+
+  {% end %}
 
  </head>
  <body class="" style="zoom: 1;">

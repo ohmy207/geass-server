@@ -50,7 +50,7 @@ class DetailTopicHandler(BaseHandler):
         ]
     }
 
-    @authenticated
+    #@authenticated
     def GET(self, tid):
         tid = self.to_objectid(tid)
         uid = self.current_user
@@ -114,7 +114,7 @@ class ListProposalHandler(BaseHandler):
         ]
     }
 
-    @authenticated
+    #@authenticated
     def GET(self, tid):
         # TODO tz default
         proposals = db_topic['proposal'].get_proposals(tid, uid=self.current_user, skip=self._skip, limit=self._limit)
@@ -127,7 +127,7 @@ class ListProposalHandler(BaseHandler):
 
 class DetailProposalHandler(BaseHandler):
 
-    @authenticated
+    #@authenticated
     def GET(self, pid):
         data = db_topic['proposal'].get_one(self.to_objectid(pid))
         data = db_topic['proposal'].format(data, self.current_user)
@@ -239,7 +239,7 @@ class ListCommentHandler(BaseHandler):
         ]
     }
 
-    @authenticated
+    #@authenticated
     def GET(self, tid):
         data_list = db_topic['comment'].get_comments(self.to_objectid(tid), uid=self.current_user, skip=self._skip, limit=self._limit)
 

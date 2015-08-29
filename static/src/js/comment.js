@@ -235,8 +235,11 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
             //jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
-                var thisObj = jq(this);
-                thread.reply(tId, null, '', 'comment');
+                var thisObj = jq(this),
+                    callback = function() {
+                        thread.reply(tId, null, '', 'comment');
+                    };
+                thread.checkIsRegistered(callback);
             });
 
             // 回复楼中楼
@@ -245,22 +248,26 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 var authorUId = thisObj.attr('uId');
                 // 获取帖子id
                 var divId = thisObj.attr('id'), pId, floorPId, author;
-                if (/p_[0-9a-f]{24}/.test(divId)) {
-                    if (match = divId.match(/p_([0-9a-f]{24})/)) {
-                        toPId = match[1];
+
+                var callback = function() {
+                    if (/p_[0-9a-f]{24}/.test(divId)) {
+                        if (match = divId.match(/p_([0-9a-f]{24})/)) {
+                            toPId = match[1];
+                        }
+                        // console.log(floorPId);
+                        // 管理员点击楼中楼，进入管理流程
+                        //if ((isManager || authorUId == uId) && floorPId > 0) {
+                        //    return;
+                        //}
+
+                        e.stopPropagation();
+                        jq.UTIL.touchStateNow(jq(this));
+
+                        author = thisObj.attr('author');
+                        thread.reply(tId, toPId, author, 'comment');
                     }
-                    // console.log(floorPId);
-                    // 管理员点击楼中楼，进入管理流程
-                    //if ((isManager || authorUId == uId) && floorPId > 0) {
-                    //    return;
-                    //}
-
-                    e.stopPropagation();
-                    jq.UTIL.touchStateNow(jq(this));
-
-                    author = thisObj.attr('author');
-                    thread.reply(tId, toPId, author, 'comment');
-                }
+                };
+                thread.checkIsRegistered(callback);
             });
 
             // exports.picTId = window.picThreadTId;
@@ -293,58 +300,55 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
                 var thisObj = jq(this),
                     pId = thisObj.attr('pId') || null;
-                if(thisObj.children('i').hasClass('iconPraise')) {
-                    return;
-                }
 
-                // 晒图结束不能定
-                if (parentId && thisObj.attr('isEnd') == 1 && !pId) {
-                    jq.UTIL.dialog({content: '活动已结束，请不要再赞了', autoClose: true});
-                    return false;
-                }
+                var callback = function() {
+                    if(thisObj.children('i').hasClass('iconPraise')) {
+                        return;
+                    }
 
-                var opts = {
-                    'success': function(result) {
-                        if (result.code == 0) {
-                        //if (result.code == 0 && result.data && result.data.likeNum) {
-                            //if (parentId > 0 && !pId) {
-                            jq.UTIL.likeTips(thisObj, '+1');
-                            //}
-                            thisObj.html('<i class="iconPraise f18 cf"></i>' + (parseInt(thisObj.data('num')) + 1));
-                            // 赞的不是回复时
-                            //if (!pId) {
-                            //    //移除掉blur遮罩
-                            //    jq('.blur').each(function(obj){
-                            //        if(jq(this).attr('alt') == tId){
-                            //            jq(this).removeClass();
-                            //        }
-                            //    });
-                            //    jq('.slideText').each(function(obj){
-                            //        if(jq(this).attr('alt') == tId){
-                            //            jq(this).css('display', 'none');
-                            //        }
-                            //    });
-                            //}
-                            //if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
-                            //    wxFollow.wxFollowTips();
-                            //}
-                        }
-                    },
-                    'noShowLoading' : true,
-                    'noMsg' : true
-                }
+                    // 晒图结束不能定
+                    if (parentId && thisObj.attr('isEnd') == 1 && !pId) {
+                        jq.UTIL.dialog({content: '活动已结束，请不要再赞了', autoClose: true});
+                        return false;
+                    }
 
-                //var url = '/' + sId;
-                var url = '/c/like';
-                var data = {'tid':tId, 'coid': pId};
-                //var data = {'tId':tId, 'parentId': parentId, 'CSRFToken':CSRFToken};
-                //if (pId) {
-                //data.pid = pId;
-                //} else {
-                //    url = url + '/like';
-                //}
+                    var opts = {
+                        'success': function(result) {
+                            if (result.code == 0) {
+                            //if (result.code == 0 && result.data && result.data.likeNum) {
+                                //if (parentId > 0 && !pId) {
+                                jq.UTIL.likeTips(thisObj, '+1');
+                                //}
+                                thisObj.html('<i class="iconPraise f18 cf"></i>' + (parseInt(thisObj.data('num')) + 1));
+                                // 赞的不是回复时
+                                //if (!pId) {
+                                //    //移除掉blur遮罩
+                                //    jq('.blur').each(function(obj){
+                                //        if(jq(this).attr('alt') == tId){
+                                //            jq(this).removeClass();
+                                //        }
+                                //    });
+                                //    jq('.slideText').each(function(obj){
+                                //        if(jq(this).attr('alt') == tId){
+                                //            jq(this).css('display', 'none');
+                                //        }
+                                //    });
+                                //}
+                                //if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
+                                //    wxFollow.wxFollowTips();
+                                //}
+                            }
+                        },
+                        'noShowLoading' : true,
+                        'noMsg' : true
+                    }
 
-                jq.UTIL.ajax(url, data, opts);
+                    var url = '/c/like';
+                    var data = {'tid':tId, 'coid': pId};
+
+                    jq.UTIL.ajax(url, data, opts);
+                };
+                thread.checkIsRegistered(callback);
             });
             /**
              * @desc 全部回复加倒序查看
