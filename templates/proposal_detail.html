@@ -36,7 +36,7 @@
        <div class="col titleBottomWrap pr">
         <div class="nameWrap">
          <span class="userNick f14"><%= proposal['author'] %> </span>
-         <span class="time f12"><%= proposal['f_created_time'] %></span>
+         <span class="time f12" style="display:none;"><%= proposal['f_created_time'] %></span>
         </div>
 
         <div class="private">私有</div>
@@ -58,8 +58,13 @@
 
       </div>
 
-      <div class="operation oh"> 
-       <span class="replyShare db c9 fr f13"> <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a> <a href="javascript:;" id="support" class="shareBtn c9" _qzone=""><i class="iconShare f18 cf"></i></a> <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a> </span> 
+      <div class="detailTime"> 
+       <span class="time fr f15">编辑于 <%= proposal['f_created_time'] %></span>
+       <span class="replyShare db c9 fr f13" style="display:none;">
+        <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a>
+        <a href="javascript:;" id="support" class="shareBtn c9" _qzone=""><i class="iconShare f18 cf"></i></a>
+        <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
+       </span> 
       </div>
      </div>
     </div>

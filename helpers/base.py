@@ -51,7 +51,14 @@ class DataProvider(object):
 
     def _format_time(self, time):
         time = datetime.fromtimestamp(int(time))
-        total_seconds = (datetime.now() - time).total_seconds()
+        total_seconds = int((datetime.now() - time).total_seconds())
+        #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
+        return time.strftime('%Y-%m-%d')
+
+    # TODO
+    def _simple_time(self, time):
+        time = datetime.fromtimestamp(int(time))
+        total_seconds = int((datetime.now() - time).total_seconds())
         #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
         ftime = time.strftime('%Y-%m-%d')
 

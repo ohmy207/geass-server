@@ -1051,12 +1051,22 @@ img {
     bottom: 0;
     right: 0;
     background-color: #000;
-    padding: 0
-5px
+    padding: 0 5px;
 }
 
 .operation {
     line-height: 35px;
+}
+
+.detailTime {
+    overflow: hidden;
+    margin-top: 27px;
+    line-height: 35px;
+}
+
+.detailTime .time {
+    display: inline-block;
+    color: #bbb;
 }
 
 .iconPraise:before,.iconNoPraise:before,.iconReply:before {

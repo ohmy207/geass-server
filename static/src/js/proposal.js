@@ -92,7 +92,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp').prepend(proposalHtml);
 
             exports.isLoadingFirst = false;
-            jq('.warp, #bottomBar, .recommendTitle').show()
+            jq('.warp, #bottomBar').show()
+            //jq('.warp, #bottomBar, .recommendTitle').show()
         },
 
         init: function() {

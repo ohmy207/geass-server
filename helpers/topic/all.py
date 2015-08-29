@@ -109,7 +109,7 @@ class Comment(DataProvider, topic_model.Comment):
         }
 
         result['content'] = self.xhtml_escape(record['content'])
-        result['f_created_time'] = self._format_time(record['ctime'])
+        result['f_created_time'] = self._simple_time(record['ctime'])
         result['is_liked'] = True if unicode(uid) in record['like'] else False
         #result['is_tz'] = True if self._topic.find_one({'_id': self.to_objectid(record['tid']), 'auid': self.to_objectid(record['auid'])}) else False
 
