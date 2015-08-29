@@ -7,11 +7,22 @@
 
 {% end %}
 
+{% block script %}
+
+  <!--debug-->
+  <script type="text/javascript">
+      document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+          WeixinJSBridge.call('hideToolbar');
+          WeixinJSBridge.call('showOptionMenu');
+      });
+  </script>
+
+{% end %}
 
 {% block body %}
 
   <style>
-   #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
+   #wrap>div{-webkit-transform:translateZ(0);}
   </style>
 
   <div class="loading" id="loadNext">
