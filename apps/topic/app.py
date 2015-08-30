@@ -131,10 +131,13 @@ class DetailProposalHandler(BaseHandler):
     def GET(self, pid):
         data = db_topic['proposal'].get_one(self.to_objectid(pid))
         data = db_topic['proposal'].format(data, self.current_user)
+
         data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
+        has_voted = db_topic['proposal'].is_voted({'tid': data['tid'], 'uid': self.current_user})
 
         self._data = {
             'proposal': data,
+            'has_voted': has_voted,
         }
 
 

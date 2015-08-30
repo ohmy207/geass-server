@@ -1202,6 +1202,12 @@ a {
     line-height: 23px;
 }
 
+.titleBottomWrap .voteCount {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
 .topicList .proposalWrap .imgGallary {
     display: inline-block;
     position: relative;
