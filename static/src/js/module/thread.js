@@ -769,29 +769,50 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                 //} else {
                                     // 直接显示回复的内容到页面
                                     // 格式化用户等级
-                                    if(re.data.authorExpsRank){
-                                        re.data.authorExps = {};
-                                        re.data.authorExps.rank = re.data.authorExpsRank;
+                                    //if(re.data.authorExpsRank){
+                                    //    re.data.authorExps = {};
+                                    //    re.data.authorExps.rank = re.data.authorExpsRank;
+                                    //}
+                                    //re.data.restCount = 0;
+                                    //var tmpl = template('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
+                                // 结构变了与列表不同
+                                var allLabelBox = jq('#allLabelBox'),
+                                    //replyList = jq('#replyList'),
+                                    replyData = {replyList:{0:re.data}};
+
+                                if (obj.replyType === 'proposal') {
+                                    replyData.tmplType = 'all';
+                                    var allReplyHtml = template('tmpl_reply', replyData);
+                                    if(jq.trim(allReplyHtml)!==''){
+                                        allLabelBox.show();
+                                        jq('#allReplyList').append(allReplyHtml);
                                     }
-                                    re.data.restCount = 0;
-                                    var tmpl = template('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
-                                    // 结构变了与列表不同
-                                    var allLabelBox = jq('#allLabelBox'),
-                                        replyList = jq('#replyList');
+
+                                    replyData.tmplType = 'default';
+                                    var defaultReplyHtml = template('tmpl_reply', replyData);
+                                    if(jq.trim(defaultReplyHtml)!==''){
+                                        jq('#hotLabelBox').show();
+                                        jq('#hotReplyList').append(defaultReplyHtml);
+                                    }
+
+                                } else if (obj.replyType === 'comment') {
+                                    var tmpl = template('tmpl_reply', replyData);
                                     allLabelBox.show();
-                                    allLabelBox.next('.topicList').show();
-                                    /**
-                                     * @desc    window.desc from viewthread.js, 回复列表排序 0 或者 1, 默认 0
-                                     *          如果为1，发表的新内容插入到列表最上面，否则插入到列表最下面
-                                     */
+                                    //allLabelBox.next('.topicList').show();
+
                                     if (!window.desc) {
                                         jq('#allReplyList').append(tmpl);
                                     } else {
                                         jq('#allReplyList').prepend(tmpl);
                                     }
+                                }
+                                    /**
+                                     * @desc    window.desc from viewthread.js, 回复列表排序 0 或者 1, 默认 0
+                                     *          如果为1，发表的新内容插入到列表最上面，否则插入到列表最下面
+                                     */
 
-                                    jq('#rCount').html(re.data.rCount);
-                                    replyList.parent().show();
+                                    //jq('#rCount').html(re.data.rCount);
+                                    //replyList.parent().show();
                                 //}
                             }
                             // initLazyload('.warp img');
