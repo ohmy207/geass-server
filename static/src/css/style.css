@@ -1345,7 +1345,8 @@ a {
     width: 20px;
     height: 20px;
     display: inline-block;
-    vertical-align: middle
+    vertical-align: middle;
+    background-color: #D6D8DA;
 }
 
 .expimg {

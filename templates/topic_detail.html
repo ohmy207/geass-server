@@ -55,7 +55,7 @@
 
       <div class="titleDetail allowCopy"><%= topic['title'] %></div>
       <div class="personImgDate row pr"> 
-       <div class="perImg pr"><img src="<%= topic['avatar'] %>" class="bImg brBig" width="25" height="25" alt="avatar" /></div>
+       <div class="perImg pr"><img src="<%= topic['avatar'] %>" class="bImg brBig" width="25" height="25" /></div>
 
        <div class="col titleBottomWrap pr">
         <div class="nameWrap">
@@ -133,7 +133,7 @@
           <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
               <%if (replyList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" alt="">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
                       <%if (replyList[i].picture_urls.length > 1) { %>
                           <div class="picCount"><%= replyList[i].picture_urls.length %>图</div>
                       <% } %>
