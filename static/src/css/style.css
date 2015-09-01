@@ -1212,7 +1212,7 @@ a {
     display: inline-block;
     position: relative;
     background-size: 100% 100%;
-    background-color: #D6D8DA;
+    background-color: #ECEEED;
 
     float: right;
     overflow: hidden;
@@ -1346,7 +1346,7 @@ a {
     height: 20px;
     display: inline-block;
     vertical-align: middle;
-    background-color: #D6D8DA;
+    background-color: #ECEEED;
 }
 
 .expimg {
