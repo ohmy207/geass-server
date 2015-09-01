@@ -258,6 +258,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     //thread.reply(tId, parentId, '', 'proposal');
                     thread.reply(tId, null, '', 'proposal');
                 };
+                jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
                 thread.checkIsRegistered(callback);
             });
 
