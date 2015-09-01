@@ -46,7 +46,7 @@
       <li id="p_<%=replyList[i].coid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>" >
 
           <div class="f15 c3">
-              <a href="/profile/<%=replyList[i].author_uid %>"> <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20"></a>
+              <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
               <span class="commNick"><%= replyList[i].author %><% if (replyList[i].is_tz) { %> <i class="cardBtn br fn db c2">楼主</i><%}%><% if (replyList[i].to_author) { %> 回复 <%=replyList[i].to_author%><% } %>：
               </span>
           </div>
