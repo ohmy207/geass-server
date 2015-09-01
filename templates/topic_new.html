@@ -15,16 +15,16 @@
     <input type="hidden" name="CSRFToken" value="29bd4b09" />
     <input type="hidden" name="sId" value="264151824" />
 
-    <div class="sendInfo wot pr"> 
+    <div class="sendInfo wot pr" style="display:none;">
      <span class="locationCon address f13 c1" closestatus="2">问题：</span> 
     </div>
     
     <div class="sendTit pr"> 
      <span class="tagTopic db pa" style="width:50px;display:none;"></span> 
-     <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的问题"></textarea> 
+     <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的话题"></textarea> 
     </div> 
 
-    <div class="sendInfo wot pr"> 
+    <div class="sendInfo wot pr" style="display:none;">
      <span class="locationCon address f13 c1" closestatus="2">详细说明：</span> 
       <div class="pa sendOperBtn">
         <a data-id="1" href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
@@ -34,31 +34,33 @@
 
     <div class="sendCon pr"> 
      <span class="tagTopic db pa" style="width:50px;display:none;"></span> 
-     <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="问题背景、条件等详细信息"></textarea> 
+     <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="添加话题说明（可选）"></textarea> 
     </div> 
 
-    <div class="photoList" style="display:none;"> 
-     <ul> 
-      <li class="on" id="addPic"> <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single="" /> </li> 
-     </ul> 
-     <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p> 
-    </div> 
+    <div class="sendInfo wot pr">
+     <label class="f13" >
+      <input type="checkbox" name="isprivate" value="1">
+       私有
+     </label>
 
-    <div class="sendInfo wot pr"> 
-     <label>
-       <input type="checkbox" name="isprivate" value="1">
-       <span class="address f13 c6">私有</span>
+     <span class="form-split">&nbsp;</span>
 
-       <span class="form-split">&nbsp;</span>
-
-       <input type="checkbox" name="isanon" value="1">
-       <span class="address f13 c6">匿名</span>
+     <label class="f13" >
+      <input type="checkbox" name="isanon" value="1">
+      匿名
      </label>
 
      <div class="sendOperBtn pa"> 
       <a href="javascript:;" class="sendBtn brSmall f13 db c2" id="submitButton">发送</a> 
      </div>
     </div>
+
+    <div class="photoList" style="display:nonn;background-color:#fafafa;"> 
+     <ul> 
+      <li class="on" id="addPic"> <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single="" /> </li> 
+     </ul> 
+     <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p> 
+    </div> 
 
     <div class="operatingBox"> 
      <div class="operatList tipLayer" style="display:none;margin:0;border:0;"> 
@@ -88,17 +90,6 @@
 {% end %}
 
 {% block footer %}
-
-  <div class="topBar">
-   <div class="topBarCon pr"> 
-    <a href="javascript:;" class="qBackBtn" id="goback"><i class="upBtn cf db"></i>返回</a> 
-    <h2 class="qTitle">发表话题</h2> 
-   </div> 
-  </div> 
-
-  <div onclick="location.href='javascript:;'" class="copyRight ht">
-   微社区，精彩在你身边
-  </div> 
 
   <script type="text/javascript">
       var shareUrl = 'http://m.wsq.qq.com/264151824?_wv=1&filterType=&source=custom',
