@@ -167,7 +167,7 @@ class VoteProposalHandler(BaseHandler):
         if db_topic['proposal'].is_voted({'uid': uid, 'tid': tid}):
             raise ResponseError(404)
 
-        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid})
+        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
         db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
     def do_unvote(self, tid, pid, uid):
@@ -189,7 +189,7 @@ class VoteProposalHandler(BaseHandler):
         db_topic['proposal']._vote2proposal.remove({'tid': tid, 'uid': uid})
         db_topic['proposal'].update({'_id': old_pid}, {'$inc': {'vnum': -1}}, w=1)
 
-        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid})
+        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
         db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
 

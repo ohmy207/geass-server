@@ -50,6 +50,7 @@ class Vote2Proposal(Model):
         'tid':             (ObjectId, None),
         'pid':             (ObjectId, None),
         'uid':             (ObjectId, None),
+        'ctime':           (datetime, None),
     }
 
 
