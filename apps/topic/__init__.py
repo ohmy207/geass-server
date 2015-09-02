@@ -7,6 +7,8 @@ prefix = ''
 urls = [
     ('/t/new', app.NewTopicHandler),
     ('/t/([0-9a-f]{24})', app.DetailTopicHandler),
+    ('/t/(follow|unfollow)', app.FollowTopicHandler),
+    ('/follow/t', app.ListFollowTopicHandler),
 
     ('/p/new/submit', app.NewProposalHandler),
     ('/t/([0-9a-f]{24})/proposals', app.ListProposalHandler),

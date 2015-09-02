@@ -379,6 +379,46 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq.UTIL.reload(jq(this).data('link'));
             });
 
+            // follow
+            jq('#bottomBar').on('click', '#follow', function(e) {
+
+                jq.UTIL.touchStateNow(jq(this));
+                e.stopPropagation();
+
+                var thisObj = jq(this),
+                    tId = window.tId || null,
+                    isFollowed = thisObj.hasClass('iconPraise');
+
+                var opts = {
+                    'noShowLoading' : true,
+                    'noMsg' : true
+                };
+
+                var callback = function() {
+                    if (isFollowed) {
+                        opts.success = function(result) {
+                            if (result.code == 0) {
+                                thisObj.attr('class', 'item cf iconNoPraise');
+                            }
+                        };
+
+                        var url = '/t/unfollow';
+                        var data = {'tid':tId};
+                    } else {
+                        opts.success = function(result) {
+                            if (result.code == 0) {
+                                thisObj.attr('class', 'item cf iconPraise');
+                            }
+                        };
+
+                        var url = '/t/follow';
+                        var data = {'tid':tId};
+                    }
+                    jq.UTIL.ajax(url, data, opts);
+                };
+                thread.checkIsRegistered(callback);
+            });
+
             // vote
             jq('#hotReplyList,#allReplyList').on('click', '.vote', function(e) {
 

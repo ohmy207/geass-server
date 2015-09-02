@@ -67,6 +67,61 @@ class DetailTopicHandler(BaseHandler):
         }
 
 
+class ListFollowTopicHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    @authenticated
+    def GET(self):
+        # TODO tz default
+        topics = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
+
+        self._data = {
+            'dataList': topics,
+            'nextStart': self._skip + self._limit
+        }
+
+
+class FollowTopicHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('tid', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    @authenticated
+    def POST(self, route):
+        uid = self.current_user
+        tid = self.to_objectid(self._params['tid'])
+
+        if not db_topic['topic'].find_one({'_id': tid}):
+            raise ResponseError(404)
+
+        self.route(route, tid, uid)
+
+    def do_follow(self, tid, uid):
+        if db_topic['follow'].is_followed(uid, tid):
+            raise ResponseError(404)
+
+        db_topic['follow'].follow_topic(uid, tid)
+
+    def do_unfollow(self, tid, uid):
+        if not db_topic['follow'].is_followed(uid, tid):
+            raise ResponseError(404)
+
+        db_topic['follow'].unfollow_topic(uid, tid)
+
+
 class NewProposalHandler(BaseHandler):
 
     _post_params = {

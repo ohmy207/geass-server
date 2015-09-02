@@ -22,6 +22,17 @@ class Topic(Model):
     }
 
 
+class User2Topic(Model):
+
+    name = 'user2topic'
+
+    field = {
+        'uid':             (ObjectId, None),
+        'tid':             (ObjectId, None),
+        'ctime':           (datetime, None),
+    }
+
+
 class Proposal(Model):
 
     name = 'proposal'
