@@ -51,6 +51,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'option': [
             ('tid', basestring, None),
             ('pid', basestring, None),
+            ('type', basestring, ''),
         ]
     }
 
@@ -81,6 +82,8 @@ class PageHandler(BaseHandler, WeiXinMixin):
             'topic': 'topic_detail',
             'proposal': 'proposal_detail',
             'comments': 'comment_list',
+            'personal': 'personal',
+            'personal_list': 'personal_list',
         }
         state = self._params
         state['is_authorized'] = 1 if self.current_user else 0

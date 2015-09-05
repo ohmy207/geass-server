@@ -4,6 +4,7 @@ html {
     display: -webkit-flex;
     display: flex;
     background: #f8f8f8;
+    background: #ebebeb;
     */
     width: 100%;
     min-height: 100%;
@@ -1209,7 +1210,7 @@ a {
     right: 0;
 }
 
-.topicList .proposalWrap .imgGallary {
+.imgGallary {
     display: inline-block;
     position: relative;
     background-size: 100% 100%;
@@ -1252,7 +1253,7 @@ a {
     background: rgba(0,0,0,.6);
 }
 
-.topicList .proposalWrap .textContainer {
+.textContainer {
     height: 80px;
     overflow: hidden;
     max-height: 80px;
@@ -1263,7 +1264,7 @@ a {
     max-height: 62px!important;
 }
 
-.topicList .listContent {
+.listContent {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
@@ -1276,7 +1277,7 @@ a {
     -webkit-line-clamp: 3;
 }
 
-.topicList .info {
+.info {
     /*
     margin-top: 2px;
     display: none;
@@ -1289,12 +1290,12 @@ a {
     color: #a6a6a6;
 }
 
-.topicList .info .flRight {
+.info .flRight {
     float: right;
     margin-top: -1px;
 }
 
-.topicList .info span {
+.info span {
     display: inline-block;
     float: left;
     overflow: hidden;
@@ -1303,7 +1304,7 @@ a {
     text-overflow: ellipsis;
 }
 
-.topicList .info span .time {
+.info span .time {
     display: block;
     float: left;
     overflow: hidden;
@@ -1312,7 +1313,7 @@ a {
     text-overflow: ellipsis;
 }
 
-.topicList .nick {
+h3.text {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
@@ -3285,7 +3286,7 @@ em {
 .hotLabel {
     display: none;
     position: relative;
-    border-top: 10px solid #ebebeb;
+    border-top: 10px solid #f3f3f3;
     border-bottom: 1px solid #e5e5e5;
     height: 40px;
     line-height: 40px;
@@ -3294,6 +3295,7 @@ em {
     background: #fafafa;
 
     /*
+    border-top: 10px solid #ebebeb;
     border-top: 15px solid #eef1f1;
     */
 }
@@ -4724,6 +4726,125 @@ i {
     line-height: 27px;
     word-wrap: break-word;
     word-break: break-all;
+}
+
+.person {
+    background-color: #f3f3f3;
+    /*
+    padding-bottom: 55px;
+    */
+}
+
+.person .pWrap {
+    margin-bottom: 15px;
+    background-color: #fafafa;
+}
+
+.person .listWrap {
+    background-color: #fafafa;
+}
+
+.person .loading {
+    background-color: #f3f3f3;
+}
+
+.person .pTitle {
+    font: inherit;
+    vertical-align: baseline;
+
+    padding: 0 15px;
+    font-size: 17px;
+    line-height: 44px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.person .iconArrowR {
+    float: right;
+    margin-right: 0;
+    color: #C5C5C5;
+}
+
+.person .topicWrap {
+    /*
+    padding-top: 1px;
+    padding-bottom: 15px;
+    */
+}
+
+.person li {
+    position: relative;
+    border-radius: 2px;
+    padding: 15px 15px;
+    line-height: 20px;
+    word-break: break-all;
+    font-size: 13px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.person h3.text {
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.person .imgGallary {
+    width: 60px;
+    height: 60px;
+}
+
+.person .textContainer {
+    height: 62px!important;
+    max-height: 62px!important;
+}
+
+.person .pHeader {
+    position: relative;
+    margin-bottom: 15px;
+    overflow: hidden;
+
+    z-index: 2;
+    min-height: 75px;
+    background-color: #fafafa;
+}
+
+.person .pHeader .pInfo {
+    top: 0;
+    left: 0;
+    padding-top: 26px;
+    padding-left: 75px;
+    font-size: 12px;
+}
+
+.person .pHeader .pName {
+    height: 22px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    line-height: 20px;
+    color: #000;
+
+    font-size: 15px;
+}
+
+.person .pAvatar {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 52px;
+    height: 52px;
+    border-radius: 90px;
+    background-color: #fff;
+}
+
+.person .pImg {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    z-index: 2;
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
 }
 
 /*

@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block html_style %}
+<html style="background-color: #f3f3f3;">
+{% end %}
+
+{% block header %}
+
+  <title>列表</title>
+
+{% end %}
+
+{% block body_style %}
+ <body class="person" style="zoom: 1;">
+{% end %}
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
+  </style>
+
+  <div class="warp" onselectstart="return false;"> 
+
+   <div class="listWrap pr" id="list" >
+   </div>
+
+   <div id="loadNextPos"></div> 
+
+  </div> 
+  <!--底部bar-->
+
+  <script id="tmpl_topicList" type="text/html">
+
+    <%
+    if (typeof(topicList) == 'undefined') {
+        var topicList = dataList;
+    }
+    %>
+
+     <ul class="pTopicList" style="height: auto;">
+
+      <% for (var i in topicList) { %>
+
+      <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
+      <li class="" id="t_<%=topicList[i].tid%>" >
+
+          <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
+              <%if (topicList[i].picture_urls.length > 0) { %>
+                  <div class="imgGallary">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
+                      <%if (topicList[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
+                      <% } %>
+                  </div>
+              <% } %>
+
+              <div class="textContainer">
+               <h3 class="text">
+                   <%= topicList[i].title %>
+               </h3>
+
+               <div class="listContent">
+                   <%== topicList[i].content %>
+               </div>
+              </div>
+
+              <div class="info">
+                  <div>
+                      <span>
+                          <span class="time"><%= topicList[i].f_created_time %></span>
+                      </span>
+                  </div>
+                  <div class="flRight">
+                  </div>
+              </div>
+
+          </div>
+
+      </li>
+    <% } %>
+    <% } %>
+
+     </ul>
+
+  </script>
+
+  <script id="tmpl_replyForm" type="text/html">
+    <div class="popLayer pSpace brNone" style="width:100%">
+    <form method="post" id="replyForm">
+        <input type="hidden" name="CSRFToken" value="2ffef155">
+        <input type="hidden" name="tid" value="<%= data.tId %>">
+        <input type="hidden" name="tocoid" value="<%= data.toPId %>">
+        <div class="sendRCon">
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的评论..."></textarea>
+        </div>
+        <div class="sendNav">
+            <ul>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn brSmall f13 db fr c3 close">取消</a></li>
+                <li><a id="comBtn" href="javascript:;" class="sendBtn brSmall f13 db c2">发送</a>
+                </li>
+            </ul>
+        </div>
+        <div class="operatingBox">
+            <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
+            </div>
+            <div class="operatList photoTipsBox" style="display:none;height:213px;background-color:#efefef;border-top:1px solid #e2e2e2;">
+                <div class="photoList">
+                    <ul>
+                        <li class="on" id="addPic">
+                        <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single>
+                        </li>
+                    </ul>
+                    <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+    </div>
+  </script>
+
+{% end %}
+
+
+{% block footer %}
+
+  <div class="bottomBar" id="bottomBar" style="display:none;">
+   <a href="javascript:;" class="item cf iconReply threadReply" id="to_reply">添加评论</a>
+  </div>
+
+  <div id="goTop" class="floatLayer br db" style="display: none;">
+   <a href="javascript:;" class="upBtn cf db"></a>
+  </div>
+
+  <form id="delThreadForm" name="delThreadForm" action="http://m.wsq.qq.com/264151824/t/del" method="post"> 
+   <input type="hidden" name="CSRFToken" value="29bd4b09" /> 
+   <input type="hidden" name="tIds[]" />
+  </form>
+
+  <div class="loading" id="loadNext" >
+   <div class="spinner">
+    <span class="circleG" id="rotateG_01"></span>
+    <span class="circleG" id="rotateG_02"></span>
+    <span class="circleG" id="rotateG_03"></span>
+    <span class="circleG" id="rotateG_04"></span>
+    <span class="circleG" id="rotateG_05"></span>
+    <span class="circleG" id="rotateG_06"></span>
+    <span class="circleG" id="rotateG_07"></span>
+    <span class="circleG" id="rotateG_08"></span>
+   </div>正在加载...
+  </div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
+  </div>
+
+  <script type="text/javascript">
+      var listType = "{{ state['type'] }}";
+  </script>
+
+  <script type="text/javascript">
+    var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',
+    shareTitle = '分享自#龙门客栈#',
+    shareDesc = '真是难为编剧了，上一部飞机、坦克、大炮都用完了，这一部玩起了空中飞车。真期待下一部导演和编剧会...',
+    shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
+  </script>
+
+  <script data-main="{{ static_url('js/personal_list') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+
+{% end %}

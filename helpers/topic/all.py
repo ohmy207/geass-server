@@ -132,7 +132,7 @@ class Comment(DataProvider, topic_model.Comment):
 
 class Follow(DataProvider):
 
-    _topic = topic_model.Topic()
+    _topic = Topic()
     _user2topic = topic_model.User2Topic()
 
     def is_followed(self, uid, tid):
@@ -159,3 +159,6 @@ class Follow(DataProvider):
                 topics.append(topic)
 
         return topics
+
+    def get_follows_count(self, uid):
+        return self._user2topic.find({'uid': uid}).count()

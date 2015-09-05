@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block html_style %}
+<html style="background-color: #f3f3f3;">
+{% end %}
+
+{% block header %}
+
+  <title>龙门客栈</title>
+
+{% end %}
+
+{% block body_style %}
+ <body class="person" style="zoom: 1;">
+{% end %}
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
+  </style>
+
+  <div class="warp" style="display:none;" onselectstart="return false;"> 
+
+   <div id="header">
+   </div>
+
+   <div id="news">
+    <div class="pWrap pr">
+     <h1 class="pTitle pr" ><span class="cf iconHonor"></span>我的消息<span class="cf iconArrowR"></span></h1>
+    </div>
+   </div>
+
+   <div id="follow">
+   </div>
+
+   <div id="publish">
+   </div>
+
+  </div>
+
+  <script id="tmpl_header" type="text/html">
+    <div class="pHeader">
+
+     <div class="pAvatar">
+      <img class="pImg" src="<%= user['avatar'] %>">
+     </div>
+
+     <div class="pInfo">
+      <div class="pName"><strong><%= user['nickname'] %></strong></div>
+     </div>
+
+    </div>
+  </script>
+
+  <script id="tmpl_topicList" type="text/html">
+
+    <%
+    if (typeof(topicList) == 'undefined') {
+        var topicList = dataList;
+    }
+    %>
+
+    <div class="pWrap pr">
+
+     <h1 class="pTitle pr" data-link="/personal_list?type=<%= type %>" ><span class="cf iconHonor"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
+     </h1>
+
+     <ul class="pTopicList">
+
+      <% for (var i in topicList) { %>
+
+      <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
+      <li class="" id="t_<%=topicList[i].tid%>" >
+
+          <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
+              <%if (topicList[i].picture_urls.length > 0) { %>
+                  <div class="imgGallary">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
+                      <%if (topicList[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
+                      <% } %>
+                  </div>
+              <% } %>
+
+              <div class="textContainer">
+               <h3 class="text">
+                   <%= topicList[i].title %>
+               </h3>
+
+               <div class="listContent">
+                   <%== topicList[i].content %>
+               </div>
+              </div>
+
+              <div class="info">
+                  <div>
+                      <span>
+                          <span class="time"><%= topicList[i].f_created_time %></span>
+                      </span>
+                  </div>
+                  <div class="flRight">
+                  </div>
+              </div>
+
+          </div>
+
+      </li>
+    <% } %>
+    <% } %>
+
+     </ul>
+
+    </div>
+
+  </script>
+
+{% end %}
+
+
+{% block footer %}
+
+  <div class="bottomBar pr" id="bottomBar" style="display:none;">
+   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
+   <a href="/comments?tid={{ state['tid'] }}" class="item cf iconReply" id="to_reply">29</a>
+   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
+  </div>
+
+  <div id="goTop" class="floatLayer br db" style="display: none;">
+   <a href="javascript:;" class="upBtn cf db"></a>
+  </div>
+
+  <form id="delThreadForm" name="delThreadForm" action="http://m.wsq.qq.com/264151824/t/del" method="post"> 
+   <input type="hidden" name="CSRFToken" value="29bd4b09" /> 
+   <input type="hidden" name="tIds[]" />
+  </form>
+
+  <div class="loading" id="loadNext" >
+   <div class="spinner">
+    <span class="circleG" id="rotateG_01"></span>
+    <span class="circleG" id="rotateG_02"></span>
+    <span class="circleG" id="rotateG_03"></span>
+    <span class="circleG" id="rotateG_04"></span>
+    <span class="circleG" id="rotateG_05"></span>
+    <span class="circleG" id="rotateG_06"></span>
+    <span class="circleG" id="rotateG_07"></span>
+    <span class="circleG" id="rotateG_08"></span>
+   </div>正在加载...
+  </div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
+  </div>
+
+  <script type="text/javascript">
+      var tId = "{{ state['tid'] }}";
+      var pId = "{{state['pid']}}";
+  </script>
+
+  <script type="text/javascript">
+    var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',
+    shareTitle = '分享自#龙门客栈#',
+    shareDesc = '真是难为编剧了，上一部飞机、坦克、大炮都用完了，这一部玩起了空中飞车。真期待下一部导演和编剧会...',
+    shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
+  </script>
+
+  <script data-main="{{ static_url('js/personal') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+
+{% end %}

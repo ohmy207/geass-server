@@ -137,7 +137,7 @@
 
               <div class="textContainer">
               <%if (!replyList[i].is_tz) { %>
-                  <h3 class="nick">
+                  <h3 class="text">
                       <%= replyList[i].author %>
                   </h3>
               <% } %>
@@ -218,6 +218,7 @@
    <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
    <a href="/comments?tid={{ state['tid'] }}" class="item cf iconReply" id="to_reply">29</a>
    <a href="javascript:;" class="item cf iconNoPraise" id="follow">2</a>
+   <a href="/personal" class="item cf iconReply" id="to_reply">29</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">

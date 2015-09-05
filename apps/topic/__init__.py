@@ -8,7 +8,8 @@ urls = [
     ('/t/new', app.NewTopicHandler),
     ('/t/([0-9a-f]{24})', app.DetailTopicHandler),
     ('/t/(follow|unfollow)', app.FollowTopicHandler),
-    ('/follow/t', app.ListFollowTopicHandler),
+    ('/u/personal', app.PersonalHandler),
+    ('/u/(news|publish|follow)/list', app.PersonalListHandler),
 
     ('/p/new/submit', app.NewProposalHandler),
     ('/t/([0-9a-f]{24})/proposals', app.ListProposalHandler),

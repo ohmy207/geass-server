@@ -10,6 +10,7 @@ from apps.base import BaseHandler
 from apps.base import ResponseError
 
 from helpers import topic as db_topic
+from helpers import user as db_user
 
 logger = log.getLogger(__file__)
 
@@ -67,7 +68,37 @@ class DetailTopicHandler(BaseHandler):
         }
 
 
-class ListFollowTopicHandler(BaseHandler):
+class PersonalHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 3),
+        ]
+    }
+
+    @authenticated
+    def GET(self):
+        sort = [('ctime', -1)]
+
+        user = db_user['user'].get_one({'_id': self.current_user})
+        follow_topics = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
+        publish_topics = db_topic['topic'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
+        follow_topics_count = db_topic['follow'].get_follows_count(self.current_user)
+        publish_topics_count = db_topic['topic'].find({'auid': self.current_user}).count()
+
+        self._data = {
+            'user': user,
+            'news': {},
+            'follow': {'data_list': follow_topics, 'count': follow_topics_count},
+            'publish': {'data_list': publish_topics, 'count': publish_topics_count},
+            #'nextStart': self._skip + self._limit,
+        }
+
+
+class PersonalListHandler(BaseHandler):
 
     _get_params = {
         'need': [
@@ -79,14 +110,22 @@ class ListFollowTopicHandler(BaseHandler):
     }
 
     @authenticated
-    def GET(self):
-        # TODO tz default
-        topics = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
+    def GET(self, route):
+        sort = [('ctime', -1)]
 
         self._data = {
-            'dataList': topics,
-            'nextStart': self._skip + self._limit
+            'nextStart': self._skip + self._limit,
         }
+
+        self.route(route, sort)
+
+    def do_follow(self, sort):
+        data_list = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
+        self._data['dataList'] = data_list
+
+    def do_publish(self, sort):
+        data_list = db_topic['topic'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
+        self._data['dataList'] = data_list
 
 
 class FollowTopicHandler(BaseHandler):

@@ -19,6 +19,8 @@
         "detail": "detail",
         "proposal": "proposal",
         "comment": "comment",
+        "personal": "personal",
+        "personal_list": "personal_list",
     },
     shim:{
         "util": ['jquery', 'vendor/jquery.form.min'],
@@ -35,6 +37,12 @@
         },
         {
             name: "comment",
+        },
+        {
+            name: "personal",
+        },
+        {
+            name: "personal_list",
         },
     ],
     //fileExclusionRegExp: /^(?:module|vendor|(?:r|build)\.js)$/,

@@ -7,7 +7,7 @@ prefix = ''
 urls = [
 
     ('/img/uptoken', app.UploadTokenHandler),
-    ('/(new|topic|proposal|comments)', app.PageHandler),
+    ('/(new|topic|proposal|comments|personal|personal_list)', app.PageHandler),
 
     ('/forbidden', app.ForbiddenHandler),
     ('/wx/authorize/base', app.BaseAuthorizeHandler),
