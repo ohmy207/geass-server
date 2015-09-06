@@ -127,6 +127,20 @@ class BaseHandler(tornado.web.RequestHandler):
 
         self.wo_resp(resp)
 
+    def delete(self, *args, **kwargs):
+        try:
+            self.DELETE(*args, **kwargs)
+        except ResponseError as e:
+            e.msg = MESSAGE.get(e.code)
+            resp = self.init_resp(e.code)
+        except Exception as e:
+            logger.exception(e)
+            resp = self.init_resp(1)
+        else:
+            resp = self.init_resp()
+
+        self.wo_resp(resp)
+
     @staticmethod
     def init_resp(code=0, msg=None):
         resp = {
@@ -136,10 +150,13 @@ class BaseHandler(tornado.web.RequestHandler):
 
         return resp
 
+    def GET(self, *args, **kwargs):
+        pass
+
     def POST(self, *args, **kwargs):
         pass
 
-    def GET(self, *args, **kwargs):
+    def DELETE(self, *args, **kwargs):
         pass
 
     def route(self, route, *args, **kwargs):
