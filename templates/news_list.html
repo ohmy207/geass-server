@@ -6,7 +6,7 @@
 
 {% block header %}
 
-  <title>龙门客栈</title>
+  <title>列表</title>
 
 {% end %}
 
@@ -20,38 +20,23 @@
    #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
   </style>
 
-  <div class="warp" style="display:none;" onselectstart="return false;"> 
-
-   <div id="header">
-   </div>
-
-   <div id="news">
-    <div class="pWrap pr">
-     <h1 class="pTitle pr" data-link="/personal_list?type=news"><span class="cf iconHonor"></span>我的消息<span class="cf iconArrowR"></span></h1>
-    </div>
-   </div>
-
-   <div id="follow">
-   </div>
-
-   <div id="publish">
-   </div>
-
+  <div class="switchBar">
+   <ul class="groupBtn">
+    <li class="selected" id="replyme" >话题</li>
+    <li id="replyme" >看法</li>
+    <li id="replyme" >评论</li>
+   </ul>
   </div>
 
-  <script id="tmpl_header" type="text/html">
-    <div class="pHeader">
+  <div class="warp" onselectstart="return false;"> 
 
-     <div class="pAvatar">
-      <img class="pImg" src="<%= user['avatar'] %>">
-     </div>
+   <div class="listWrap pr" id="list" >
+   </div>
 
-     <div class="pInfo">
-      <div class="pName"><strong><%= user['nickname'] %></strong></div>
-     </div>
+   <div id="loadNextPos"></div> 
 
-    </div>
-  </script>
+  </div> 
+  <!--底部bar-->
 
   <script id="tmpl_topicList" type="text/html">
 
@@ -61,12 +46,7 @@
     }
     %>
 
-    <div class="pWrap pr">
-
-     <h1 class="pTitle pr" data-link="/personal_list?type=<%= type %>" ><span class="cf iconHonor"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
-     </h1>
-
-     <ul class="pTopicList">
+     <ul class="pTopicList" style="height: auto;">
 
       <% for (var i in topicList) { %>
 
@@ -111,8 +91,45 @@
 
      </ul>
 
-    </div>
+  </script>
 
+  <script id="tmpl_replyForm" type="text/html">
+    <div class="popLayer pSpace brNone" style="width:100%">
+    <form method="post" id="replyForm">
+        <input type="hidden" name="CSRFToken" value="2ffef155">
+        <input type="hidden" name="tid" value="<%= data.tId %>">
+        <input type="hidden" name="tocoid" value="<%= data.toPId %>">
+        <div class="sendRCon">
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的评论..."></textarea>
+        </div>
+        <div class="sendNav">
+            <ul>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn brSmall f13 db fr c3 close">取消</a></li>
+                <li><a id="comBtn" href="javascript:;" class="sendBtn brSmall f13 db c2">发送</a>
+                </li>
+            </ul>
+        </div>
+        <div class="operatingBox">
+            <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
+            </div>
+            <div class="operatList photoTipsBox" style="display:none;height:213px;background-color:#efefef;border-top:1px solid #e2e2e2;">
+                <div class="photoList">
+                    <ul>
+                        <li class="on" id="addPic">
+                        <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single>
+                        </li>
+                    </ul>
+                    <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+    </div>
   </script>
 
 {% end %}
@@ -120,10 +137,8 @@
 
 {% block footer %}
 
-  <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
-   <a href="/comments?tid={{ state['tid'] }}" class="item cf iconReply" id="to_reply">29</a>
-   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
+  <div class="bottomBar" id="bottomBar" style="display:none;">
+   <a href="javascript:;" class="item cf iconReply threadReply" id="to_reply">添加评论</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">
@@ -152,8 +167,7 @@
   </div>
 
   <script type="text/javascript">
-      var tId = "{{ state['tid'] }}";
-      var pId = "{{state['pid']}}";
+      var listType = "{{ state['type'] }}";
   </script>
 
   <script type="text/javascript">
@@ -163,6 +177,6 @@
     shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
   </script>
 
-  <script data-main="{{ static_url('js/personal') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+  <script data-main="{{ static_url('js/news_list') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
 
 {% end %}

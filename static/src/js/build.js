@@ -21,6 +21,7 @@
         "comment": "comment",
         "personal": "personal",
         "personal_list": "personal_list",
+        "news_list": "news_list",
     },
     shim:{
         "util": ['jquery', 'vendor/jquery.form.min'],
@@ -43,6 +44,9 @@
         },
         {
             name: "personal_list",
+        },
+        {
+            name: "news_list",
         },
     ],
     //fileExclusionRegExp: /^(?:module|vendor|(?:r|build)\.js)$/,

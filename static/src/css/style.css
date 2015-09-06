@@ -4847,6 +4847,62 @@ i {
     border-radius: 50%;
 }
 
+.switchBar {
+    background-position: bottom;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #fff;
+    background-repeat: repeat-x;
+    background-size: 100% 1px;
+    line-height: 43px;
+    /*
+    z-index: 111;
+    position: fixed;
+    height: 45px;
+     */
+}
+
+.groupBtn {
+    display: -webkit-box;
+    font-size: 1em;
+    white-space: nowrap;
+    border-color: transparent;
+    /*
+    margin: 6px auto;
+     */
+}
+
+.groupBtn li {
+    border-radius: 0;
+    border-width: 1px;
+    position: relative;
+    display: table-cell;
+    float: left;
+    min-width: 98px;
+    margin: 0;
+    padding: 15px 0;
+    font-size: 15px;
+    color: gray;
+    border-color: transparent;
+    background-color: transparent;
+
+    line-height: 15px;
+    text-align: center;
+    text-decoration: none;
+
+    -webkit-box-sizing: border-box;
+    -webkit-appearance: none;
+    -webkit-box-flex: 1;
+}
+
+.switchBar .selected {
+    color: #00a5e0;
+    border-bottom: 3px solid #00a5e0
+}
+
 /*
 .g-mask {
     position: fixed;
