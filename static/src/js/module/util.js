@@ -426,19 +426,20 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                     jQuery.UTIL.dialog({id:'loading'});
                 }
             },
-            ajax: function(url, data, opts) {
+            ajax: function(url, data, opts, type) {
                 var opts = opts || {};
                 var loadingTimer = '';
-                url = url.indexOf('?') === -1 ? url + '?' : url + '&';
-                url = url.replace(/\&resType\=[^\&]+/g, '') + 'resType=json';
-                url = url.replace(/\&isAjax\=1/g, '') + '&isAjax=1';
+                url = '/api/v1' + url;
+                //url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+                //url = url.replace(/\&resType\=[^\&]+/g, '') + 'resType=json';
+                //url = url.replace(/\&isAjax\=1/g, '') + '&isAjax=1';
                 var ajaxOpts = {
                     url: url,
                     data: data,
                     cache: opts.cache || false,  // false不缓存请求
                     processData: opts.isUpload,
                     contentType: opts.isUpload ? false : 'application/x-www-form-urlencoded',
-                    type: data ? 'POST' : 'GET',
+                    type: type || (data ? 'POST' : 'GET'),
                     dataType: opts.dataType || 'json',
                     timeout: opts.timeout || 30000,
                     jsonp: opts.dataType === 'jsonp' ? 'callback' : null,

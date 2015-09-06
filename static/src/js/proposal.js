@@ -47,7 +47,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/p/' + window.pId;
+            var url = '/proposals/' + window.pId;
 
             var opts = {
                 'beforeSend': function() {
@@ -188,7 +188,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     'noMsg' : true
                                 }
 
-                                var url = '/p/unvote';
+                                var url = '/user/unvote/proposals';
                                 var data = {'tid':tId, 'pid': pId};
 
                                 jq.UTIL.ajax(url, data, opts);
@@ -210,7 +210,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                             'noMsg' : true
                         }
 
-                        var url = '/p/vote';
+                        var url = '/user/vote/proposals';
                         var data = {'tid':tId, 'pid': pId};
 
                         jq.UTIL.ajax(url, data, opts);
@@ -241,7 +241,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     'noMsg' : true
                                 }
 
-                                var url = '/p/revote';
+                                var url = '/user/revote/proposals';
                                 var data = {'tid':tId, 'pid': pId};
 
                                 jq.UTIL.ajax(url, data, opts);

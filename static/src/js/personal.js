@@ -47,7 +47,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/u/personal';// + window.pId;
+            var url = '/user';// + window.pId;
 
             var opts = {
                 'beforeSend': function() {
@@ -174,104 +174,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             // vote
-            jq('.warp').on('click', '.vote', function(e) {
-
-                jq.UTIL.touchStateNow(jq(this));
-                e.stopPropagation();
-
-                var thisObj = jq(this),
-                    pId = thisObj.attr('pId') || null,
-                    isVoted = thisObj.hasClass('voted'),
-                    voteNum = parseInt(thisObj.data('num'));
-
-                var callback = function() {
-                    if(isVoted && exports.hasVoted) {
-                        var opts = {
-                            'id':'operationConfirm',
-                            'isMask':true,
-                            'content':'可以取消这次投票重新选择，确定要取消吗',
-                            'okValue':'确定',
-                            'cancelValue':'取消',
-                            'ok':function() {
-                                var opts = {
-                                    'success': function(result) {
-                                        if (result.code == 0) {
-                                            exports.hasVoted = false;
-                                            jq.UTIL.likeTips(thisObj, '-1');
-                                            thisObj.attr('class', 'voteCount vote');
-                                            thisObj.html(voteNum - 1);
-                                            thisObj.data('num', voteNum - 1);
-                                        }
-                                    },
-                                    'noShowLoading' : true,
-                                    'noMsg' : true
-                                }
-
-                                var url = '/p/unvote';
-                                var data = {'tid':tId, 'pid': pId};
-
-                                jq.UTIL.ajax(url, data, opts);
-                            },
-                        };
-                        jq.UTIL.dialog(opts);
-                    } else if (!isVoted && !exports.hasVoted){
-                        var opts = {
-                            'success': function(result) {
-                                if (result.code == 0) {
-                                    exports.hasVoted = true;
-                                    jq.UTIL.likeTips(thisObj, '+1');
-                                    thisObj.attr('class', 'voteCount voted vote');
-                                    thisObj.html(voteNum + 1);
-                                    thisObj.data('num', voteNum + 1)
-                                }
-                            },
-                            'noShowLoading' : true,
-                            'noMsg' : true
-                        }
-
-                        var url = '/p/vote';
-                        var data = {'tid':tId, 'pid': pId};
-
-                        jq.UTIL.ajax(url, data, opts);
-                    } else if (!isVoted && exports.hasVoted) {
-                        var opts = {
-                            'id':'operationConfirm',
-                            'isMask':true,
-                            'content':'要取消之前的投票重新选择吗?',
-                            'okValue':'确定',
-                            'cancelValue':'取消',
-                            'ok':function() {
-                                var opts = {
-                                    'success': function(result) {
-                                        if (result.code == 0) {
-                                            var votedObj = jq('.voted');
-                                            oldVoteNum = parseInt(votedObj.data('num'));
-                                            votedObj.attr('class', 'voteCount vote');
-                                            votedObj.html(oldVoteNum - 1);
-                                            votedObj.data('num', oldVoteNum - 1);
-
-                                            jq.UTIL.likeTips(thisObj, '+1');
-                                            thisObj.attr('class', 'voteCount voted vote');
-                                            thisObj.html(voteNum + 1);
-                                            thisObj.data('num', voteNum + 1)
-                                        }
-                                    },
-                                    'noShowLoading' : true,
-                                    'noMsg' : true
-                                }
-
-                                var url = '/p/revote';
-                                var data = {'tid':tId, 'pid': pId};
-
-                                jq.UTIL.ajax(url, data, opts);
-                            },
-                        };
-                        jq.UTIL.dialog(opts);
-
-                    }
-                };
-                thread.checkIsRegistered(callback);
-            });
+            //jq('.warp').on('click', '.vote', function(e) {
+            //});
 
         },
 

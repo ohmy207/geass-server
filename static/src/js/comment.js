@@ -46,7 +46,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/t/' + window.tId + '/comments'
+            var url = '/topics/' + window.tId + '/comments'
                 //+ '?parentId=' + parentId
                 + '?skip=' + start
                 //+ '&desc=' + desc;
@@ -343,7 +343,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         'noMsg' : true
                     }
 
-                    var url = '/c/like';
+                    var url = '/user/like/comments';
                     var data = {'tid':tId, 'coid': pId};
 
                     jq.UTIL.ajax(url, data, opts);

@@ -48,12 +48,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              */
             var desc = window.desc = exports.desc;
             //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/t/' + window.tId + '/proposals'
+            var url = '/topics/' + window.tId + '/proposals'
                 + '?skip=' + start
                 + '&desc=' + desc;
 
             if (exports.isLoadingFirst){
-                url = '/t/' + window.tId;
+                url = '/topics/' + window.tId;
             }
 
             var opts = {
@@ -394,6 +394,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     'noMsg' : true
                 };
 
+                var url = '/user/following/topics',
+                    data = {'tid':tId};
+
                 var callback = function() {
                     if (isFollowed) {
                         opts.success = function(result) {
@@ -402,19 +405,15 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                             }
                         };
 
-                        var url = '/t/unfollow';
-                        var data = {'tid':tId};
+                        jq.UTIL.ajax(url, data, opts, 'DELETE');
                     } else {
                         opts.success = function(result) {
                             if (result.code == 0) {
                                 thisObj.attr('class', 'item cf iconPraise');
                             }
                         };
-
-                        var url = '/t/follow';
-                        var data = {'tid':tId};
+                        jq.UTIL.ajax(url, data, opts);
                     }
-                    jq.UTIL.ajax(url, data, opts);
                 };
                 thread.checkIsRegistered(callback);
             });
@@ -453,7 +452,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     'noMsg' : true
                                 }
 
-                                var url = '/p/unvote';
+                                var url = '/user/unvote/proposals';
                                 var data = {'tid':tId, 'pid': pId};
 
                                 jq.UTIL.ajax(url, data, opts);
@@ -475,7 +474,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                             'noMsg' : true
                         }
 
-                        var url = '/p/vote';
+                        var url = '/user/vote/proposals';
                         var data = {'tid':tId, 'pid': pId};
 
                         jq.UTIL.ajax(url, data, opts);
@@ -506,7 +505,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     'noMsg' : true
                                 }
 
-                                var url = '/p/revote';
+                                var url = '/user/revote/proposals';
                                 var data = {'tid':tId, 'pid': pId};
 
                                 jq.UTIL.ajax(url, data, opts);

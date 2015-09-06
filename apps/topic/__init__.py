@@ -2,21 +2,22 @@
 
 import app
 
-prefix = ''
+prefix = '/api/v1'
 
 urls = [
-    ('/t/new', app.NewTopicHandler),
-    ('/t/([0-9a-f]{24})', app.DetailTopicHandler),
-    ('/t/(follow|unfollow)', app.FollowTopicHandler),
-    ('/u/personal', app.PersonalHandler),
-    ('/u/(news|publish|follow)/list', app.PersonalListHandler),
+    ('/topics', app.TopicsHandler),
+    ('/topics/([0-9a-f]{24})', app.DetailTopicHandler),
 
-    ('/p/new/submit', app.NewProposalHandler),
-    ('/t/([0-9a-f]{24})/proposals', app.ListProposalHandler),
-    ('/p/([0-9a-f]{24})', app.DetailProposalHandler),
-    ('/p/(vote|unvote|revote)', app.VoteProposalHandler),
+    ('/user', app.PersonalHandler),
+    ('/user/(topics)', app.PublishingHandler),
+    ('/user/following/(topics)', app.FollowingHandler),
+    ('/user/news/(topics)', app.NewsHandler),
 
-    ('/c/new/submit', app.NewCommentHandler),
-    ('/t/([0-9a-f]{24})/comments', app.ListCommentHandler),
-    ('/c/like', app.LikeCommentHandler),
+    ('/user/(vote|unvote|revote)/proposals', app.VoteProposalHandler),
+    ('/user/like/comments', app.LikeCommentHandler),
+
+    ('/topics/([0-9a-f]{24})/proposals', app.ProposalsHandler),
+    ('/proposals/([0-9a-f]{24})', app.DetailProposalHandler),
+
+    ('/topics/([0-9a-f]{24})/comments', app.CommentsHandler),
 ]

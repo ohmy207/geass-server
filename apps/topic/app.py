@@ -15,7 +15,7 @@ from helpers import user as db_user
 logger = log.getLogger(__file__)
 
 
-class NewTopicHandler(BaseHandler):
+class TopicsHandler(BaseHandler):
 
     _post_params = {
         'need': [
@@ -98,7 +98,7 @@ class PersonalHandler(BaseHandler):
         }
 
 
-class PersonalListHandler(BaseHandler):
+class PublishingHandler(BaseHandler):
 
     _get_params = {
         'need': [
@@ -119,16 +119,16 @@ class PersonalListHandler(BaseHandler):
 
         self.route(route, sort)
 
-    def do_follow(self, sort):
-        data_list = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
-        self._data['dataList'] = data_list
-
-    def do_publish(self, sort):
+    def do_topics(self, sort):
         data_list = db_topic['topic'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
         self._data['dataList'] = data_list
 
+    def do_proposals(self, sort):
+        data_list = db_topic['proposal'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
+        self._data['dataList'] = data_list
 
-class FollowTopicHandler(BaseHandler):
+
+class FollowingHandler(BaseHandler):
 
     _post_params = {
         'need': [
@@ -137,6 +137,31 @@ class FollowTopicHandler(BaseHandler):
         'option': [
         ]
     }
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    _delete_params = _post_params
+
+    @authenticated
+    def GET(self, route):
+        sort = [('ctime', -1)]
+
+        self._data = {
+            'nextStart': self._skip + self._limit,
+        }
+
+        self.route(route, sort)
+
+    def do_topics(self, sort):
+        data_list = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
+        self._data['dataList'] = data_list
 
     @authenticated
     def POST(self, route):
@@ -146,56 +171,39 @@ class FollowTopicHandler(BaseHandler):
         if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
 
-        self.route(route, tid, uid)
-
-    def do_follow(self, tid, uid):
         if db_topic['follow'].is_followed(uid, tid):
             raise ResponseError(404)
 
         db_topic['follow'].follow_topic(uid, tid)
 
-    def do_unfollow(self, tid, uid):
+    @authenticated
+    def DELETE(self, route):
+        uid = self.current_user
+        tid = self.to_objectid(self._params['tid'])
+
+        if not db_topic['topic'].find_one({'_id': tid}):
+            raise ResponseError(404)
+
         if not db_topic['follow'].is_followed(uid, tid):
             raise ResponseError(404)
 
         db_topic['follow'].unfollow_topic(uid, tid)
 
 
-class NewProposalHandler(BaseHandler):
+class NewsHandler(BaseHandler):
+    pass
+
+
+class ProposalsHandler(BaseHandler):
 
     _post_params = {
         'need': [
-            ('tid', basestring),
             ('content', basestring),
         ],
         'option': [
             ('pickeys', list, []),
         ]
     }
-
-    @authenticated
-    def POST(self):
-        data = self._params
-
-        tid = self.to_objectid(data['tid'])
-        topic = db_topic['topic'].find_one({'_id': tid})
-
-        # TODO error code
-        if not topic:
-            raise ResponseError(404)
-
-        data['tid'] = tid
-        data['auid'] = self.current_user
-        data['ctime'] = datetime.now()
-        data['istz'] = True if data['auid'] == topic['auid'] else False
-
-        pid = db_topic['proposal'].create(data)
-        data['_id'] = pid
-
-        self._data = db_topic['proposal'].format(db_topic['proposal'].to_one_str(data), data['auid'])
-
-
-class ListProposalHandler(BaseHandler):
 
     _get_params = {
         'need': [
@@ -217,6 +225,27 @@ class ListProposalHandler(BaseHandler):
             'dataList': proposals,
             'nextStart': self._skip + self._limit
         }
+
+    @authenticated
+    def POST(self, tid):
+        data = self._params
+
+        tid = self.to_objectid(tid)
+        topic = db_topic['topic'].find_one({'_id': tid})
+
+        # TODO error code
+        if not topic:
+            raise ResponseError(404)
+
+        data['tid'] = tid
+        data['auid'] = self.current_user
+        data['ctime'] = datetime.now()
+        data['istz'] = True if data['auid'] == topic['auid'] else False
+
+        pid = db_topic['proposal'].create(data)
+        data['_id'] = pid
+
+        self._data = db_topic['proposal'].format(db_topic['proposal'].to_one_str(data), data['auid'])
 
 
 class DetailProposalHandler(BaseHandler):
@@ -287,11 +316,19 @@ class VoteProposalHandler(BaseHandler):
         db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
 
-class NewCommentHandler(BaseHandler):
+class CommentsHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
 
     _post_params = {
         'need': [
-            ('tid', basestring),
             ('content', basestring),
         ],
         'option': [
@@ -299,11 +336,20 @@ class NewCommentHandler(BaseHandler):
         ]
     }
 
+    #@authenticated
+    def GET(self, tid):
+        data_list = db_topic['comment'].get_comments(self.to_objectid(tid), uid=self.current_user, skip=self._skip, limit=self._limit)
+
+        self._data = {
+            'dataList': data_list,
+            'nextStart': self._skip + self._limit
+        }
+
     @authenticated
-    def POST(self):
+    def POST(self, tid):
         data = self._params
 
-        tid = self.to_objectid(data['tid'])
+        tid = self.to_objectid(tid)
         topic = db_topic['topic'].find_one({'_id': tid})
 
         # TODO error code
@@ -323,27 +369,6 @@ class NewCommentHandler(BaseHandler):
         data['_id'] = coid
 
         self._data = db_topic['comment'].format(db_topic['comment'].to_one_str(data), data['auid'])
-
-
-class ListCommentHandler(BaseHandler):
-
-    _get_params = {
-        'need': [
-        ],
-        'option': [
-            ('skip', int, 0),
-            ('limit', int, 5),
-        ]
-    }
-
-    #@authenticated
-    def GET(self, tid):
-        data_list = db_topic['comment'].get_comments(self.to_objectid(tid), uid=self.current_user, skip=self._skip, limit=self._limit)
-
-        self._data = {
-            'dataList': data_list,
-            'nextStart': self._skip + self._limit
-        }
 
 
 class LikeCommentHandler(BaseHandler):

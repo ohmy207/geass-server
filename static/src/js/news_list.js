@@ -290,62 +290,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             // like
-            jq('.topicCon .replyShare,#hotReplyList,#allReplyList').on('click', '.like', function(e) {
-                jq.UTIL.touchStateNow(jq(this));
-                e.stopPropagation();
-
-                var thisObj = jq(this),
-                    pId = thisObj.attr('pId') || null;
-
-                var callback = function() {
-                    if(thisObj.children('i').hasClass('iconPraise')) {
-                        return;
-                    }
-
-                    // 晒图结束不能定
-                    if (parentId && thisObj.attr('isEnd') == 1 && !pId) {
-                        jq.UTIL.dialog({content: '活动已结束，请不要再赞了', autoClose: true});
-                        return false;
-                    }
-
-                    var opts = {
-                        'success': function(result) {
-                            if (result.code == 0) {
-                            //if (result.code == 0 && result.data && result.data.likeNum) {
-                                //if (parentId > 0 && !pId) {
-                                jq.UTIL.likeTips(thisObj, '+1');
-                                //}
-                                thisObj.html('<i class="iconPraise f18 cf"></i>' + (parseInt(thisObj.data('num')) + 1));
-                                // 赞的不是回复时
-                                //if (!pId) {
-                                //    //移除掉blur遮罩
-                                //    jq('.blur').each(function(obj){
-                                //        if(jq(this).attr('alt') == tId){
-                                //            jq(this).removeClass();
-                                //        }
-                                //    });
-                                //    jq('.slideText').each(function(obj){
-                                //        if(jq(this).attr('alt') == tId){
-                                //            jq(this).css('display', 'none');
-                                //        }
-                                //    });
-                                //}
-                                //if (isWX && isWeixinLink && jq.UTIL.getQuery('source')) {
-                                //    wxFollow.wxFollowTips();
-                                //}
-                            }
-                        },
-                        'noShowLoading' : true,
-                        'noMsg' : true
-                    }
-
-                    var url = '/c/like';
-                    var data = {'tid':tId, 'coid': pId};
-
-                    jq.UTIL.ajax(url, data, opts);
-                };
-                thread.checkIsRegistered(callback);
-            });
+            //jq('.topicCon .replyShare,#hotReplyList,#allReplyList').on('click', '.like', function(e) {
+            //});
             /**
              * @desc 全部回复加倒序查看
              * @param desc 为0是正序，为1时倒序

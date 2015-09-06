@@ -726,10 +726,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             //});
 
             if (obj.replyType === 'proposal') {
-                jq('#replyForm').attr('action','/p/new/submit');
+                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/proposals');
             }
             else if (obj.replyType === 'comment') {
-                jq('#replyForm').attr('action','/c/new/submit');
+                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/comments');
 
                 if (obj.toPId) {
                     jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
