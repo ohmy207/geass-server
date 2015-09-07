@@ -100,6 +100,9 @@ class PageHandler(BaseHandler, WeiXinMixin):
         state['is_authorized'] = 1 if self.current_user else 0
         state['authorize_url'] = authorize_url
 
+        if route in ['following', 'publishing']:
+            state['type'] = route
+
         self.render('%s.html'%self._PAGES[route], state=state)
 
 
