@@ -13,7 +13,7 @@ from config.global_setting import PIC_URL
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['Topic', 'Proposal', 'Comment', 'Follow']
+MODEL_SLOTS = ['Topic', 'Proposal', 'Comment', 'Follow', 'News']
 
 
 class Topic(DataProvider, topic_model.Topic):
@@ -82,9 +82,9 @@ class Proposal(DataProvider, topic_model.Proposal):
 
         return result
 
-    def get_proposals(self, tid, uid=None, skip=0, limit=5, first=0):
+    def get_proposals(self, tid, uid=None, skip=0, limit=5, first=0, sort=[('vnum', -1), ('ctime', 1)]):
         spec = {'tid': self.to_objectid(tid), 'istz': False}
-        sort = [('vnum', -1), ('ctime', 1)]
+        #sort = [('vnum', -1), ('ctime', 1)]
         proposals = self.get_all(spec, skip=skip, limit=limit, sort=sort)
 
         if first == 1:
@@ -162,3 +162,55 @@ class Follow(DataProvider):
 
     def get_follows_count(self, uid):
         return self._user2topic.find({'uid': uid}).count()
+
+
+class News(DataProvider):
+
+    _topic = Topic()
+    _proposal = Proposal()
+    _comment = Comment()
+    _vote2proposal = topic_model.Vote2Proposal()
+
+    def get_topics(self, uid, skip=0, limit=5):
+        topics = self._topic.get_all({'auid': uid}, skip=skip, limit=limit, sort=[('ptime', -1)])
+        result_list = []
+
+        for t in topics:
+            tid = self._topic.to_objectid(t['tid'])
+            proposals = self._proposal.get_proposals(tid=tid, skip=0, limit=2, sort=[('ctime', -1)])
+            if not proposals:
+                continue
+
+            t['p_count'] = self._proposal.find({'tid': tid}).count()
+            t['p_authors'] = [p['author'] for p in proposals]
+            result_list.append(t)
+
+        return result_list
+
+    def get_votes(self, uid, skip=0, limit=5):
+        proposals = self._proposal.get_all({'auid': uid, 'vnum': {'$gt': 0}}, skip=skip, limit=limit, sort=[('vtime', -1)])
+        result_list = []
+
+        for p in proposals:
+            p = self._proposal.format(p, None)
+            #if not p['vote_num']:
+            #    continue
+
+            pid = self._topic.to_objectid(p['pid'])
+            votes = self._vote2proposal.find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
+            p['vote_users'] = [self._user.get_one({'_id': v['uid']})['nickname'] for v in votes]
+            p['title'] = self._topic.get_one({'_id': self._topic.to_objectid(p['tid'])})['title']
+            result_list.append(p)
+
+        return result_list
+
+    def get_comments(self, uid, skip=0, limit=5):
+        comments = self._comment.get_all({'toauid': uid}, skip=skip, limit=limit, sort=[('ctime', -1)])
+        result_list = []
+
+        for c in comments:
+            c = self._comment.format(c, None)
+            c['target_content'] = self._comment.get_one({'_id': self._comment.to_objectid(c['coid'])})['content']
+            result_list.append(c)
+
+        return result_list

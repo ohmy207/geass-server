@@ -11,7 +11,7 @@ urls = [
     ('/user', app.PersonalHandler),
     ('/user/(topics)', app.PublishingHandler),
     ('/user/following/(topics)', app.FollowingHandler),
-    ('/user/news/(topics)', app.NewsHandler),
+    ('/user/news/(topics|votes|comments)', app.NewsHandler),
 
     ('/user/(vote|unvote|revote)/proposals', app.VoteProposalHandler),
     ('/user/like/comments', app.LikeCommentHandler),

@@ -191,7 +191,35 @@ class FollowingHandler(BaseHandler):
 
 
 class NewsHandler(BaseHandler):
-    pass
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    @authenticated
+    def GET(self, route):
+        self._data = {
+            'nextStart': self._skip + self._limit,
+        }
+
+        self.route(route)
+
+    def do_topics(self):
+        data_list = db_topic['news'].get_topics(self.current_user, skip=self._skip, limit=self._limit)
+        self._data['dataList'] = data_list
+
+    def do_votes(self):
+        data_list = db_topic['news'].get_votes(self.current_user, skip=self._skip, limit=self._limit)
+        self._data['dataList'] = data_list
+
+    def do_comments(self):
+        data_list = db_topic['news'].get_comments(self.current_user, skip=self._skip, limit=self._limit)
+        self._data['dataList'] = data_list
 
 
 class ProposalsHandler(BaseHandler):
