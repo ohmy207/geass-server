@@ -51,9 +51,28 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'option': [
             ('tid', basestring, None),
             ('pid', basestring, None),
-            ('type', basestring, ''),
         ]
     }
+
+    _PAGES = {
+        'new': 'topic_new',
+        'topic': 'topic_detail',
+        'proposal': 'proposal_detail',
+        'comment_list': 'comment_list',
+        'personal': 'personal',
+        'news_list': 'news_list',
+
+        'following': 'personal_list',
+        'publishing': 'personal_list',
+    }
+
+    _DIRECT_AUTHORIZE_PAGES = [
+        'new',
+        'personal',
+        'news_list',
+        'following',
+        'publishing',
+    ]
 
     # TODO code ugly
     def get(self, route):
@@ -73,23 +92,15 @@ class PageHandler(BaseHandler, WeiXinMixin):
             scope=self._SCOPE['scope_userinfo']
         )
 
-        if not self.current_user and route in ['new']:
+        if not self.current_user and route in self._DIRECT_AUTHORIZE_PAGES:
             self.redirect(authorize_url)
             return
 
-        pages = {
-            'new': 'topic_new',
-            'topic': 'topic_detail',
-            'proposal': 'proposal_detail',
-            'comments': 'comment_list',
-            'personal': 'personal',
-            'personal_list': 'personal_list',
-        }
         state = self._params
         state['is_authorized'] = 1 if self.current_user else 0
         state['authorize_url'] = authorize_url
 
-        self.render('%s.html'%pages[route], state=state)
+        self.render('%s.html'%self._PAGES[route], state=state)
 
 
 class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
