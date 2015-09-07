@@ -45,11 +45,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              * thread.js里调用，发表时新回复时，倒序，新发表的显示在最上面，正序在最下面
              */
             var desc = window.desc = exports.desc;
-            //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/u/' + window.listType + '/list'
-                //+ '?parentId=' + parentId
-                + '?skip=' + start
-                //+ '&desc=' + desc;
+            var url = '/user/news/topics'
+                + '?skip=' + start;
+
             var opts = {
                 'beforeSend': function() {
                     switch(action) {

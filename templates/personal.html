@@ -27,7 +27,7 @@
 
    <div id="news">
     <div class="pWrap pr">
-     <h1 class="pTitle pr" data-link="/personal_list?type=news"><span class="cf iconHonor"></span>我的消息<span class="cf iconArrowR"></span></h1>
+     <h1 class="pTitle pr" data-link="/news_list"><span class="cf iconHonor"></span>我的消息<span class="cf iconArrowR"></span></h1>
     </div>
    </div>
 
@@ -63,7 +63,7 @@
 
     <div class="pWrap pr">
 
-     <h1 class="pTitle pr" data-link="/personal_list?type=<%= type %>" ><span class="cf iconHonor"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
+     <h1 class="pTitle pr" data-link="<%= link %>" ><span class="cf iconHonor"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
      </h1>
 
      <ul class="pTopicList">
@@ -119,12 +119,6 @@
 
 
 {% block footer %}
-
-  <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
-   <a href="/comments?tid={{ state['tid'] }}" class="item cf iconReply" id="to_reply">29</a>
-   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
-  </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">
    <a href="javascript:;" class="upBtn cf db"></a>
