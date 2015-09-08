@@ -20,7 +20,7 @@ sys.path.append(BASE_PROJECT_DIR)
 APPLICATION_SETTING = ObjectDict(
     static_path=os.path.join(BASE_APP_DIR, "static"),
     template_path=os.path.join(BASE_APP_DIR, "templates"),
-    #xsrf_cookies=True,
+    xsrf_cookies=True,
     cookie_secret="xxx-xxx-xxx",
     #login_url="/wx/authorize/openid",
     login_url="/forbidden",

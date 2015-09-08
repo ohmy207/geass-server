@@ -85,45 +85,6 @@
 
   </script>
 
-  <script id="tmpl_replyForm" type="text/html">
-    <div class="popLayer pSpace brNone" style="width:100%">
-    <form method="post" id="replyForm">
-        <input type="hidden" name="CSRFToken" value="2ffef155">
-        <input type="hidden" name="tid" value="<%= data.tId %>">
-        <input type="hidden" name="tocoid" value="<%= data.toPId %>">
-        <div class="sendRCon">
-            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的评论..."></textarea>
-        </div>
-        <div class="sendNav">
-            <ul>
-                <li>&nbsp;</li>
-                <li>&nbsp;</li>
-                <li>&nbsp;</li>
-                <li>&nbsp;</li>
-                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn brSmall f13 db fr c3 close">取消</a></li>
-                <li><a id="comBtn" href="javascript:;" class="sendBtn brSmall f13 db c2">发送</a>
-                </li>
-            </ul>
-        </div>
-        <div class="operatingBox">
-            <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
-            </div>
-            <div class="operatList photoTipsBox" style="display:none;height:213px;background-color:#efefef;border-top:1px solid #e2e2e2;">
-                <div class="photoList">
-                    <ul>
-                        <li class="on" id="addPic">
-                        <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single>
-                        </li>
-                    </ul>
-                    <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
-                </div>
-            </div>
-            
-        </div>
-    </form>
-    </div>
-  </script>
-
 {% end %}
 
 
@@ -136,11 +97,6 @@
   <div id="goTop" class="floatLayer br db" style="display: none;">
    <a href="javascript:;" class="upBtn cf db"></a>
   </div>
-
-  <form id="delThreadForm" name="delThreadForm" action="http://m.wsq.qq.com/264151824/t/del" method="post"> 
-   <input type="hidden" name="CSRFToken" value="29bd4b09" /> 
-   <input type="hidden" name="tIds[]" />
-  </form>
 
   <div class="loading" id="loadNext" >
    <div class="spinner">

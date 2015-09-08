@@ -71,7 +71,7 @@
   <script id="tmpl_replyForm" type="text/html">
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
-        <input type="hidden" name="CSRFToken" value="2ffef155">
+        {% raw xsrf_form_html() %}
         <input type="hidden" name="tid" value="<%= data.tId %>">
         <input type="hidden" name="tocoid" value="<%= data.toPId %>">
         <div class="sendRCon">
@@ -125,11 +125,6 @@
   <div id="goTop" class="floatLayer br db" style="display: none;">
    <a href="javascript:;" class="upBtn cf db"></a>
   </div>
-
-  <form id="delThreadForm" name="delThreadForm" action="http://m.wsq.qq.com/264151824/t/del" method="post"> 
-   <input type="hidden" name="CSRFToken" value="29bd4b09" /> 
-   <input type="hidden" name="tIds[]" />
-  </form>
 
   <div class="loading" id="loadNext" >
    <div class="spinner">
