@@ -34,6 +34,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         isNoShowToTop: false,
         desc: 0,
         nextStart: 0,
+        listType: 'topics',
 
         // load data,all in one
         load: function(start, action) {
@@ -45,7 +46,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
              * thread.js里调用，发表时新回复时，倒序，新发表的显示在最上面，正序在最下面
              */
             var desc = window.desc = exports.desc;
-            var url = '/user/news/topics'
+            var url = '/user/news/' + exports.listType
                 + '?skip=' + start;
 
             var opts = {
@@ -102,7 +103,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 return true;
             }
             //re.data.isWX = isWX;
-            var tmplId = 'tmpl_' + (window.listType === 'news' ? 'newsList' : 'topicList');
+            var tmplId = 'tmpl_' + exports.listType;
             var listHtml = template(tmplId, re.data);
 
             jq('#list').append(listHtml);
@@ -285,6 +286,16 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp').on('click', '.topicWrap', function(e) {
                 jq.UTIL.touchStateNow(jq(this).parent('li'));
                 jq.UTIL.reload(jq(this).data('link'));
+            });
+
+            jq('.groupBtn').on('click', 'li', function(e) {
+                jq('.groupBtn').children('.selected').attr('class', '')
+                jq(this).attr('class', 'selected');
+
+                jq('#list').html('');
+                exports.nextStart = 0;
+                exports.listType = jq(this).attr('id')
+                exports.load(exports.nextStart, 'drag');
             });
 
             // like

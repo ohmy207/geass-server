@@ -4781,9 +4781,37 @@ i {
     border-bottom: 1px solid #e5e5e5;
 }
 
+.person .news li {
+    border-top: 15px solid #f3f3f3;
+}
+
+.person .news .comments {
+    padding-left: 45px;
+}
+
+.comments .info {
+    line-height: 18px;
+}
+
 .person h3.text {
     font-size: 17px;
     font-weight: 500;
+}
+
+.person .news h3.text {
+    font: inherit;
+    font-size: 17px;
+    margin-bottom: 3px;
+}
+
+.news .comments h3.text {
+    clear: both;
+    font-size: 17px;
+    line-height: 23px;
+    -webkit-line-clamp: 4;
+    word-wrap: break-word;
+    word-break: break-all;
+    margin-bottom: 5px;
 }
 
 .person .imgGallary {
@@ -4794,6 +4822,11 @@ i {
 .person .textContainer {
     height: 62px!important;
     max-height: 62px!important;
+}
+
+.person .news .textContainer {
+    height: auto!important;
+    max-height: none!important;
 }
 
 .person .pHeader {
@@ -4845,6 +4878,51 @@ i {
     height: 50px;
 
     border-radius: 50%;
+}
+
+.person .listContent {
+    -webkit-line-clamp: 2;
+}
+
+.person .votes.listContent {
+    padding-left: 35px;
+}
+
+.news .voteCount {
+    display: inline-block;
+    float: left;
+    margin-right: 6px;
+    margin-top: 3px;
+    color: #fff;
+    background: rgba(56, 139, 217, 0.67);
+}
+
+.news .sImg {
+    top: 13px;
+    left: 10px;
+    width: 25px;
+    height: 25px;
+}
+
+.person .authorList {
+    display: -webkit-box;
+    overflow: hidden;
+    margin-bottom: 6px;
+    font-size: 15px;
+    line-height: 20px;
+    word-break: break-all;
+    color: gray;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    /*
+    padding-top: 2px;
+    -webkit-line-clamp: 3;
+    */
+}
+
+.person .authorList a {
+    color: #69A6BF;
+    font-size: 15px;
 }
 
 .switchBar {

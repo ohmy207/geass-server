@@ -22,15 +22,17 @@
 
   <div class="switchBar">
    <ul class="groupBtn">
-    <li class="selected" id="replyme" >话题</li>
-    <li id="replyme" >看法</li>
-    <li id="replyme" >评论</li>
+    <li class="selected" id="topics" >话题</li>
+    <li id="votes" >看法</li>
+    <li id="comments" >评论</li>
    </ul>
   </div>
 
-  <div class="warp" onselectstart="return false;"> 
+  <div class="warp news" onselectstart="return false;"> 
 
-   <div class="listWrap pr" id="list" >
+   <div class="listWrap pr" >
+    <ul id="list" style="height: auto;">
+    </ul>
    </div>
 
    <div id="loadNextPos"></div> 
@@ -38,7 +40,7 @@
   </div> 
   <!--底部bar-->
 
-  <script id="tmpl_topicList" type="text/html">
+  <script id="tmpl_topics" type="text/html">
 
     <%
     if (typeof(topicList) == 'undefined') {
@@ -46,50 +48,115 @@
     }
     %>
 
-     <ul class="pTopicList" style="height: auto;">
+    <% for (var i in topicList) { %>
 
-      <% for (var i in topicList) { %>
+    <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
+    <li class="" id="t_<%=topicList[i].tid%>" >
 
-      <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
-      <li class="" id="t_<%=topicList[i].tid%>" >
+        <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
 
-          <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
-              <%if (topicList[i].picture_urls.length > 0) { %>
-                  <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
-                      <%if (topicList[i].picture_urls.length > 1) { %>
-                          <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
-                      <% } %>
-                  </div>
-              <% } %>
+            <div class="textContainer">
+             <div class="authorList">
+                 <a href="javascript:;"><%= topicList[i].p_authors.join('、') %></a><%if (topicList[i].p_count > 2) { %>…等 <%= topicList[i].p_count %> 人<% } %>对该话题发表了看法
+             </div>
 
-              <div class="textContainer">
-               <h3 class="text">
-                   <%= topicList[i].title %>
-               </h3>
+             <h3 class="text">
+                 <%= topicList[i].title %>
+             </h3>
+            </div>
 
-               <div class="listContent">
-                   <%== topicList[i].content %>
-               </div>
-              </div>
+        </div>
 
-              <div class="info">
-                  <div>
-                      <span>
-                          <span class="time"><%= topicList[i].f_created_time %></span>
-                      </span>
-                  </div>
-                  <div class="flRight">
-                  </div>
-              </div>
-
-          </div>
-
-      </li>
+    </li>
     <% } %>
     <% } %>
 
-     </ul>
+  </script>
+
+  <script id="tmpl_votes" type="text/html">
+
+    <%
+    if (typeof(topicList) == 'undefined') {
+        var topicList = dataList;
+    }
+    %>
+
+    <% for (var i in topicList) { %>
+
+    <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
+    <li class="" id="t_<%=topicList[i].tid%>" >
+
+        <div class="topicWrap" data-link="/proposal?pid=<%=topicList[i].pid%>" >
+
+            <div class="textContainer">
+             <div class="authorList">
+                 <a href="javascript:;"><%= topicList[i].vote_users.join('、') %></a><%if (topicList[i].vote_num > 2) { %>…等 <%= topicList[i].vote_num %> 人<% } %>支持了你的看法
+             </div>
+
+             <h3 class="text">
+                 <%= topicList[i].title %>
+             </h3>
+
+             <div>
+                <a class="voteCount" href="javascript:;" ><% if (topicList[i].vote_num) { %> <%= topicList[i].vote_num %> <%  } else { %>0<%  } %></a>
+
+                <div class="listContent">
+                    <%== topicList[i].content %>
+                </div>
+             </div>
+            </div>
+
+        </div>
+
+    </li>
+    <% } %>
+    <% } %>
+
+  </script>
+
+  <script id="tmpl_comments" type="text/html">
+
+    <%
+    if (typeof(commentList) == 'undefined') {
+        var commentList = dataList;
+    }
+    %>
+
+    <% for (var i in commentList) { %>
+
+    <% if (!isDOMExist('co_' + commentList[i].coid)) { %>
+    <li class="comments" id="co_<%=commentList[i].coid%>" >
+
+        <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=commentList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
+
+        <div class="topicWrap" data-link="/comment_list?tid=<%=commentList[i].tid%>" >
+
+            <div class="textContainer">
+             <h3 class="text">
+                 <%= commentList[i].author %>：<%== commentList[i].content %>
+             </h3>
+
+             <div class="listContent replyBg">
+                 我：<%== commentList[i].target_content %>
+             </div>
+            </div>
+
+        </div>
+
+        <div class="info">
+            <div>
+                <span>
+                    <span class="time"><%= commentList[i].f_created_time %></span>
+                </span>
+            </div>
+            <div class="flRight">
+                <a class="c9 replyFloor" href="javascript:;" id="p_<%= commentList[i].coid %>" uid="<%= commentList[i].author_uid %>" author="<%= commentList[i].author %>"> <i class="iconReply f18 cf"></i></a>
+            </div>
+        </div>
+
+    </li>
+    <% } %>
+    <% } %>
 
   </script>
 
@@ -126,7 +193,7 @@
                     <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
                 </div>
             </div>
-            
+
         </div>
     </form>
     </div>
