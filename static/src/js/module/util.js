@@ -27,6 +27,10 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 }
                 return '';
             },
+            get_xsrf: function() {
+                var c = document.cookie.match("\\b" + "_xsrf" + "=([^;]*)\\b");
+                return c ? c[1] : undefined;
+            },
             in_array: function(needle, haystack) {
                 if(typeof needle == 'string' || typeof needle == 'number') {
                     for(var i in haystack) {
@@ -554,6 +558,9 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                         }
                     }
                 };
+                if (ajaxOpts.type != 'GET') {
+                    ajaxOpts.data._xsrf = jQuery.UTIL.get_xsrf();
+                }
                 jQuery.ajax(ajaxOpts);
 
                 return false;
