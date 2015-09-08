@@ -106,6 +106,7 @@ class Comment(DataProvider, topic_model.Comment):
             'author_uid': record['auid'],
             'like_num': record['lnum'],
             'is_tz': record['istz'],
+            'tocoid': record['tocoid'],
         }
 
         result['content'] = self.xhtml_escape(record['content'])
@@ -210,7 +211,7 @@ class News(DataProvider):
 
         for c in comments:
             c = self._comment.format(c, None)
-            c['target_content'] = self._comment.get_one({'_id': self._comment.to_objectid(c['coid'])})['content']
+            c['target_content'] = self._comment.get_one({'_id': self._comment.to_objectid(c['tocoid'])})['content']
             result_list.append(c)
 
         return result_list

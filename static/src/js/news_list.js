@@ -233,28 +233,29 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             // 回复楼中楼
-            jq('#hotReplyList,#allReplyList').on('click', '.replyFloor', function(e) {
-                var thisObj = jq(this).parents('li');
-                var authorUId = thisObj.attr('uId');
+            jq('.warp').on('click', '.replyFloor', function(e) {
+                var thisObj = jq(this);
+                //var authorUId = thisObj.attr('uId');
+
                 // 获取帖子id
-                var divId = thisObj.attr('id'), pId, floorPId, author;
+                var divId = thisObj.attr('id'), author;
 
                 var callback = function() {
-                    if (/p_[0-9a-f]{24}/.test(divId)) {
-                        if (match = divId.match(/p_([0-9a-f]{24})/)) {
-                            toPId = match[1];
+                    if (/co_[0-9a-f]{24}/.test(divId)) {
+                        if (match = divId.match(/co_([0-9a-f]{24})/)) {
+                            toCoId = match[1];
                         }
-                        // console.log(floorPId);
                         // 管理员点击楼中楼，进入管理流程
                         //if ((isManager || authorUId == uId) && floorPId > 0) {
                         //    return;
                         //}
 
                         e.stopPropagation();
-                        jq.UTIL.touchStateNow(jq(this));
+                        jq.UTIL.touchStateNow(thisObj);
 
+                        tId = thisObj.attr('tid');
                         author = thisObj.attr('author');
-                        thread.reply(tId, toPId, author, 'comment');
+                        thread.reply(tId, toCoId, author, 'comment');
                     }
                 };
                 thread.checkIsRegistered(callback);
