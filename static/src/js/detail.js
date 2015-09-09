@@ -115,6 +115,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 exports.isLoadingNew = false;
                 jq('#loadNext').hide();
                 //jq('#showAll').show();
+                if (clear) {
+                    jq('#allLabelBox').show();
+                    jq('.emptyList').html('还没有看法哦^…^').show()
+                }
                 return true;
             }
             //re.data.isWX = isWX;
@@ -182,26 +186,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //    localStorage.setItem('hadShowShareMask', 1);
             //}
 
-            // 默认展开回复
-            //if (action == 'reply') {
-            //    thread.reply(sId, tId, parentId, 0, 0, '', true);
-            //}
-
-            // 头部点击
-            //jq('.detail').on('click', function() {
-            //    if (sId && parentId != 0) {
-            //        jq.UTIL.open('/' + sId + '/v/' + parentId);
-            //        return false;
-            //    }
-            //    if (sId) {
-            //        jq.UTIL.open('/' + sId);
-            //        return false;
-            //    }
-            //});
-
-            // 图片横滑
-            //exports.initShowPic(parentId);
-
             // 点击查看大图
             //require.async('module/imageviewCommon', function(imageviewCommon) {
             //    imageviewCommon.init('.slideShow li');
@@ -210,41 +194,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //    // imageviewCommon.init('.slideBox li');
             //});
 
-            //jq.UTIL.touchState('#support');
-
-            // 回复内容点击
-            jq('.warp').on('click', '.replyUser, .replyShare, .replyPop, .replyPop .replyFloor', function(e) {
-                var obj = jq(this);
-                jq.UTIL.touchStateNow(obj);
-
-                var divId = obj.parents('li').attr('id'), pId, floorPId;
-                var authorUId = obj.parents('li').attr('uId');
-                var author = obj.parents('li').attr('author');
-
-                //if (isManager || authorUId == uId) {
-                //    if (divId) {
-                //        if (match = divId.match(/p_(\d+)_(\d+)_(\d+)/)) {
-                //            pId = match[2];
-                //            floorPId = match[3];
-                //        }
-                //    }
-
-                //    if (isManager) {
-                //        thread.showManagerPanel(tId, parentId, pId, floorPId, authorUId, author, true, true);
-                //        return false;
-                //    }
-
-                //    if (authorUId == uId) {
-                //        thread._delReply(tId, pId, floorPId, true);
-                //        return false;
-                //    }
-
-                //}
-            });
-
             // 主题和底部bar 帖点击回复
-            //jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
-            //jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
@@ -255,70 +205,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 thread.checkIsRegistered(callback);
             });
 
-            //点击视频播放
-            //jq('.warp').on('click', '.videoPlay', function() {
-            //    var thisObjUrl = jq(this).attr('data-url') || '';
-            //    var thisObjVid = jq(this).attr('data-vid') || '';
-            //    var parent = jq(this).parent();
-            //    var width = parent.find('img').width();
-            //    var height = parent.find('img').height();
-            //    parent.html('<video width="'+width+'" height="'+height+'" class="video" autoplay="autoplay" src="'+thisObjUrl+'" controls="controls"></video>')
-            //});
-            //列表点击播放进入详情页
-            //if(jq.UTIL.getQuery('video')) {
-            //    jq("html,body").animate({scrollTop:jq('#videoBox').offset().top - 50},1000);
-            //    jq('.videoPlay').click();
-            //}
-
-
-            //* 回复楼中楼
-            //jq('#hotReplyList,#allReplyList').on('click', '.replyFloor', function(e) {
-            //    var thisObj = jq(this).parents('li');
-            //    var authorUId = thisObj.attr('uId');
-            //    // 获取帖子id
-            //    var divId = thisObj.attr('id'), pId, floorPId, author;
-            //    if (/p_\d+_\d+_\d+/.test(divId)) {
-            //        if (match = divId.match(/p_(\d+)_(\d+)_(\d+)/)) {
-            //            pId = match[2];
-            //            floorPId = match[3];
-            //        }
-            //        // console.log(floorPId);
-            //        // 管理员点击楼中楼，进入管理流程
-            //        if ((isManager || authorUId == uId) && floorPId > 0) {
-            //            return;
-            //        }
-
-            //        e.stopPropagation();
-            //        jq.UTIL.touchStateNow(jq(this));
-
-            //        author = thisObj.attr('author');
-            //        thread.reply(tId, parentId, pId, floorPId, author, true);
-            //    }
-            //});
-
-            // 点击查看更多楼中楼
-            //jq('#hotReplyList,#allReplyList').on('click', '.moreInReply', function(e) {
-            //});
-
-            // exports.picTId = window.picThreadTId;
             exports.nextStart = window.nextStart;
-
-            // 翻页相关
-            var query = '';
-            if (window.location.search.indexOf('?') !== -1) {
-                query = window.location.search.replace(/\?/g, '&');
-            }
-            // 消息页过来查看楼中楼 禁用上滑
-            var getFloorPId = jq.UTIL.getQuery('floorPId') || 0;
-            var getPId = jq.UTIL.getQuery('pId') || 0;
-            if (getFloorPId || getPId) {
-                exports.isLoadingNew = false;
-                jq('#showAllReply').on('click', function() {
-                    var url = window.location.href.replace(/&?pId=\d+/, '');
-                    jq.UTIL.reload(url);
-                }).show();
-                jq('#showAll').hide();
-            }
 
             var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
             // 全屏触摸
@@ -341,8 +228,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             jq('#hotReplyList,#allReplyList').on('click', '.proposalWrap', function(e) {
-                jq.UTIL.touchStateNow(jq(this).parent('li'));
-                jq.UTIL.reload(jq(this).data('link'));
+                var thisObj = jq(this), link;
+                jq.UTIL.touchStateNow(thisObj.parent('li'));
+
+                link = thisObj.attr('data-link') || '';
+                if (link) {
+                    jq.UTIL.reload(link);
+                }
+                return false;
             });
 
             // follow
@@ -483,75 +376,11 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 };
                 thread.checkIsRegistered(callback);
             });
-            /**
-             * @desc 全部回复加倒序查看
-             * @param desc 为0是正序，为1时倒序
-             */
-            var replySortBtn = jq('.evtReplySort'),
-                replySortIcon = replySortBtn.find('i'),
-                replySortSwitch = function () {
-                    if (!exports.desc) {
-                        replySortIcon.removeClass('iconSequence');
-                        replySortIcon.addClass('iconReverse');
-                        replySortBtn.html('倒序排列');
-                        replySortBtn.prepend(replySortIcon);
-                    } else {
-                        replySortIcon.removeClass('iconReverse');
-                        replySortIcon.addClass('iconSequence');
-                        replySortBtn.html('正序排列');
-                        replySortBtn.prepend(replySortIcon);
-                    }
-                };
-            replySortSwitch();
-            replySortBtn.on('click', function () {
-                var allReplyWrap = jq('#allReplyList'),
-                    allReplyHeight = allReplyWrap.height();
-                allReplyWrap.css({height: allReplyHeight});
-                allReplyWrap.html('');
-                exports.nextStart = 0;
-                exports.desc = !exports.desc ? 1 : 0;
-                replySortSwitch();
-                exports.load(exports.nextStart, 'sort');
-                //pgvSendClick({hottag: 'wsq.reply.sort.inverse'});
-            });
 
-            /**
-             * @desc 相关话题推荐
-             */
-            jq('.warp').on('click', '.evtTopicCon',function () {
-                var link = jq(this).attr('data-link') || '';
-                if (link) {
-                    jq.UTIL.open(link + '?ADTAG=wsq.xiangqing.tuijian.click');
-                    return false;
-                }
-            }).on('click', '.evtAuthorUrl',function (e) {
-                e.stopPropagation(e);
-                var link = jq(this).attr('data-link') || '';
-                if (link) {
-                    jq.UTIL.open(link);
-                }
-                return false;
-            }).on('click', '.evtMoreHot', function (e) {
-                e.stopPropagation(e);
-                var link = jq(this).attr('data-link') || '';
-                if (link) {
-                    jq.UTIL.open(link + '&ADTAG=wsq.remenbiaoqian.tuijian.click');
-                }
-                return false;
-            });
-
-            // 话题推荐
-            //exports.recommendThread();
-            // 全局活动
-            //thread.publicEvent();
-            // 管理
-            //thread.initPopBtn();
         },
 
     };
 
     exports.init();
-
-    //jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
 
 });

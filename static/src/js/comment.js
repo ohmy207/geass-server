@@ -96,6 +96,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 exports.isLoadingNew = false;
                 jq('#loadNext').hide();
                 //jq('#showAll').show();
+                if (clear) {
+                    jq('.emptyList').html('还没有看法哦^…^').show()
+                }
                 return true;
             }
             //re.data.isWX = isWX;
