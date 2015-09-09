@@ -1,8 +1,4 @@
 /**
- * @filename main
- * @description
- * 作者: xuguangzhou
- * 创建时间: 2015-03-24 20:01:03
  **/
 
 require.config({
@@ -112,56 +108,15 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var tId = window.tId;
             var parentId = window.parentId || 0;
 
-            // 分享遮罩，一次性
-            //var action = jq.UTIL.getQuery('action');
-            //var reapp = /qqdownloader\/([^\s]+)/i;
-
             exports.load('drag');
-            //var jsonData = parseJSON(window.jsonData);
-            //exports.renderList({data: jsonData}, true);
-            //g_ts.first_render_end = new Date();
 
             initLazyload('.warp img');
 
-            // appbar no share mask
-            //if (action == 'share' && !reapp.test(navigator.userAgent)) {
-            //    var hadShowShareMask = localStorage.getItem('hadShowShareMask'),
-            //        isMask = false;
-            //    if (!hadShowShareMask) {
-            //        isMask = true;
-            //    }
-            //    var tmpl = template.render('tmpl_pageTip', {'msg':'喜欢这个话题，请点击右上角图标分享'});
-            //    jq.UTIL.dialog({
-            //        id: 'shareMask',
-            //        top:0,
-            //        content: tmpl,
-            //        isHtml: true,
-            //        isMask: isMask,
-            //        callback: function() {
-            //            jq('.g-mask').on('click', function() {
-            //                jq.UTIL.dialog({id:'shareMask'});
-            //            });
-            //            jq('#showShare').on('click', function() {
-            //                jq(this).hide();
-            //            });
-            //        }
-            //    });
-            //    localStorage.setItem('hadShowShareMask', 1);
-            //}
-
-            // 主题和底部bar 帖点击回复
-            //jq.UTIL.touchState('.threadReply', 'commBg', '.warp');
-            //jq.UTIL.touchState('.threadReply', 'commBg', '#bottomBar');
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this);
                 //thread.reply(tId, parentId, '', 'proposal');
                 thread.reply(tId, null, '', 'proposal');
             });
-
-            //jq('.warp').on('click', '.detail', function(e) {
-            //    jq.UTIL.touchStateNow(jq(this), 'tapBg1');
-            //    jq.UTIL.reload(jq(this).data('link'));
-            //});
 
             jq('.warp').on('click', '.pTitle', function(e) {
                 jq.UTIL.touchStateNow(jq(this));
@@ -172,10 +127,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq.UTIL.touchStateNow(jq(this).parent('li'));
                 jq.UTIL.reload(jq(this).data('link'));
             });
-
-            // vote
-            //jq('.warp').on('click', '.vote', function(e) {
-            //});
 
         },
 

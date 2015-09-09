@@ -1,8 +1,4 @@
 /**
- * @filename main
- * @description
- * 作者: xuguangzhou
- * 创建时间: 2015-03-24 20:01:03
  **/
 
 require.config({
@@ -153,13 +149,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var parentId = window.parentId || 0;
 
             // 分享遮罩，一次性
-            var action = jq.UTIL.getQuery('action');
-            var reapp = /qqdownloader\/([^\s]+)/i;
+            //var action = jq.UTIL.getQuery('action');
+            //var reapp = /qqdownloader\/([^\s]+)/i;
 
             exports.load(exports.nextStart, 'drag');
-            //var jsonData = parseJSON(window.jsonData);
-            //exports.renderList({data: jsonData}, true);
-            //g_ts.first_render_end = new Date();
 
             initLazyload('.warp img');
 
@@ -305,33 +298,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             // 点击查看更多楼中楼
             //jq('#hotReplyList,#allReplyList').on('click', '.moreInReply', function(e) {
-            //    e.stopPropagation();
-            //    var thisObj = jq(this);
-            //    var pId = thisObj.attr('pid');
-            //    var start = thisObj.attr('start') || 0;
-            //    var url = '/' + sId + '/f/list?tId=' + tId + '&pId=' + pId + '&start=' + start + '&parentId=' + parentId;
-            //    var opts = {
-            //        'beforeSend': function() {
-            //            jq.UTIL.showLoading();
-            //        },
-            //        'complete': function() {
-            //        },
-            //        'success': function(re) {
-            //            jq.UTIL.showLoading('none');
-            //            var status = parseInt(re.code);
-            //            if (status == 0) {
-            //                thisObj.attr('start', re.data.nextStart);
-            //                var tmpl = template('tmpl_reply_floor', re.data);
-            //                jq('#fl_' + pId + ' ul').append(tmpl);
-            //                if (re.data.restCount < 1) {
-            //                    thisObj.hide();
-            //                }
-            //            } else {
-            //                jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
-            //            }
-            //        }
-            //    };
-            //    jq.UTIL.ajax(url, '', opts);
             //});
 
             // exports.picTId = window.picThreadTId;

@@ -27,7 +27,7 @@ require.config({
 
 require(['uploadImg', 'util'],function (uploadImg, util){
 
-    jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
+    //jq.UTIL.dialog({content:navigator.userAgent.toLowerCase(),autoClose:true});
 
     var exports = {
 
@@ -294,151 +294,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             });
 
             exports.initUpload();
+            exports.initModal();
 
-            // 表情开关
-            //jq(".tagBox a").on("click", function() {
-            //    jq(".tagBox").find('a').attr('class', '');
-            //    jq('.tagTopic').hide();
-            //    var labelId = jq(this).attr('labelId');
-            //    if(jq('input[name="fId"]').val() != labelId) {
-            //        jq(this).attr('class', 'on');
-            //        //添加当前标签到输入框上，并设置输入框的css缩进
-            //        jq('.tagTopic').text($(this).text()).show();
-            //        jq('.sendCon').addClass('tagCon');
-            //        jq('input[name="fId"]').val(labelId);
-            //    } else {
-            //        jq('input[name="fId"]').val(0);
-            //        jq('.sendCon').removeClass('tagCon');
-            //    }
-            //});
-            //选中当前标签
-            //var selTagId = jq.UTIL.getQuery('filterType');
-            //if(selTagId){
-            //    var tagArr = jq('.tagBox').find('a');
-            //    jq.each(tagArr, function(key, value){
-            //        jq(value).removeClass('on');
-            //        if(jq(value).attr('labelid') == selTagId){
-            //            jq(value).addClass('on');
-            //            jq(value).click();
-            //            jq('input[name="fId"]').val(selTagId);
-            //        }
-            //    })
-            //}
-            //if (parseInt(jq('.locationCon').attr('closeStatus')) != 1) {
-            //    exports.checkLBS();
-            //} else {
-            //    jq('.locationCon').removeClass('c1').addClass('c9').html('<i class="iconloc f16 c9 cf"></i>' + '点击开启定位');
-            //    exports.getgps = 0;
-            //}
-
-            //表情 图片 标签点击切换
-            //var aOperatIcon = jq('.operatIcon');
-            //aOperatIcon.on('click', function(){
-            //    var thisObj = jq(this);
-            //    var thisNum = thisObj.attr('data-id');
-            //    var aOperatList = jq('.operatList');
-            //    aOperatList.hide();
-            //    jq(aOperatList[thisNum]).show();
-            //    if(thisNum == 0){
-            //        jq('.expreList').show();
-            //        jq('.expreBox').show();
-            //    }
-            //    aOperatIcon.removeClass('on');
-            //    thisObj.addClass('on');
-            //    if(!thisObj.hasClass('iconSendImg')){
-            //        var photoList = jq('.photoList');
-            //        if(photoList.find('li').length < 2){
-            //            photoList.hide();
-            //            jq('.sendCon').css('height', exports.contentHeight);
-            //        }
-            //    }
-            //});
-            //表情总个数大于手机宽度时显示更多按钮
-            //var expressionMenu = jq('.expressionMenu').find('a');
-            //var haveMenuWidth = expressionMenu.length*76;
-            //var operatingBoxWidth = jq('.operatingBox').width();
-            //if(haveMenuWidth > operatingBoxWidth){
-            //    jq('.iconArrowR').show();
-            //};
-
-            //添加微视
-            //if(jq.UTIL.getQuery('syncUnionid')){
-            //    //如果是在授权之后，弹出微视弹窗
-            //    setTimeout(function(){
-            //       jq('.iconVideo').click(); 
-            //    }, 300)
-            //}
-            //jq('.sendNav').on('click', '.iconVideo', function(){
-            //    var thisObj = jq(this);
-            //    var photoList = jq('.photoList');
-            //    if(photoList.find('li').length > 1 && thisObj.hasClass('iconVideoOn')){
-            //        jq.UTIL.dialog({id: 'addWsTips', content: '图片和微视只能发一种哦~', autoClose: 2000});
-            //        return false;
-            //    };
-            //    if(thisObj.hasClass('iconVideoOn')){
-            //        exports.addWeishiPop(); 
-            //    }
-            //    return false;
-            //});
-            //微视弹窗事件
-            //jq(document).on('click', '.microTab, .weishiList, .close', function(){
-            //    var thisObj = jq(this);
-            //    //关闭窗口
-            //    if(thisObj.hasClass('close')){
-            //        jq('#content').show();
-            //    }
-            //    //标签切换
-            //    if(thisObj.hasClass('microTab')){
-            //        var tabId = thisObj.attr('data-id'),
-            //            microVideoList = jq('.microVideoList'),
-            //            microTab = jq('.microTab');
-            //        FastClick.attach(this);
-            //        microVideoList.hide();
-            //        microTab.removeClass('on');
-            //        thisObj.addClass('on');
-            //        jq(microVideoList[tabId]).show();
-            //    }
-            //    //列表点击
-            //    if(thisObj.hasClass('weishiList')){
-
-            //        var weishiList = jq('.weishiList'),
-            //            weishiSelect = jq('.weishiSelect'),
-            //            wsId = thisObj.attr('data-id') || '',
-            //            wsVid = thisObj.attr('data-vid'),
-            //            wsPlayer = thisObj.attr('data-player'),
-            //            wsInsertTime = thisObj.attr('data-inserttime'),
-            //            wsTimeStamp = thisObj.attr('data-timestamp'),
-            //            wsText = thisObj.find('.mvText').html(),
-            //            wsPicUrl = thisObj.find('.mvImg').attr('src');
-            //        jq('#content').show();
-            //        weishiList.removeClass('on');
-            //        thisObj.addClass('on');
-            //        weishiSelect.removeClass('iconSelect');
-            //        thisObj.find('.weishiSelect').addClass('iconSelect');
-            //        setTimeout(function(){
-            //            var photoList = jq('.photoList');
-            //            var hasWeishi = photoList.find('#livideo').length > 0;
-            //            //过滤多次点击
-            //            if(!hasWeishi){
-            //                var html = '<li id="livideo"><div class="photoCut"><img src="'+wsPicUrl+'" class="attchImg" alt="photo"></div>' +
-            //                    '<input type="hidden" name="showPicUseableType" value="2">'+
-            //                    '<input type="hidden" name="weishiInfo[id]" value="'+wsId+'">'+
-            //                    '<input type="hidden" name="weishiInfo[vid]" value="'+wsVid+'">'+
-            //                    '<input type="hidden" name="weishiInfo[picUrl]" value="'+wsPicUrl+'">'+
-            //                    '<input type="hidden" name="weishiInfo[player]" value="'+wsPlayer+'">'+
-            //                        '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="video">关闭</a><i class="iconMicroVideo cf imv pa db"></i></li>';
-            //                jq('#addPic').before(html).hide();
-            //                jq('.textTip').hide();
-            //                jq('.sendCon').css('height', '60');
-            //                photoList.show();
-            //                jq('.iconVideo').removeClass('iconVideoOn');
-            //                jq.UTIL.dialog({id: 'weishiPop'});
-            //            }
-            //        }, 300);
-            //    }
-            //    return false;
-            //});
-            
         },
 
         // 按钮模态相关
