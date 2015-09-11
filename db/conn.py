@@ -16,5 +16,5 @@ else:
 # topic
 topic = mc['excalibur_topic']
 user = mc['excalibur_user']
-proposal = mc['excalibur_proposal']
+opinion = mc['excalibur_opinion']
 comment = mc['excalibur_comment']

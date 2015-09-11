@@ -57,12 +57,12 @@ class DetailTopicHandler(BaseHandler):
         uid = self.current_user
 
         topic = db_topic['topic'].get_one({'_id': tid})
-        proposals = db_topic['proposal'].get_proposals(tid, uid=uid, skip=self._skip, limit=self._limit, first=1)
-        has_voted = db_topic['proposal'].is_voted({'tid': tid, 'uid': uid})
+        opinions = db_topic['opinion'].get_opinions(tid, uid=uid, skip=self._skip, limit=self._limit, first=1)
+        has_voted = db_topic['opinion'].is_voted({'tid': tid, 'uid': uid})
 
         self._data = {
             'topic': topic,
-            'dataList': proposals,
+            'dataList': opinions,
             'nextStart': self._skip + self._limit,
             'has_voted': has_voted,
         }
@@ -123,8 +123,8 @@ class PublishingHandler(BaseHandler):
         data_list = db_topic['topic'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
         self._data['dataList'] = data_list
 
-    def do_proposals(self, sort):
-        data_list = db_topic['proposal'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
+    def do_opinions(self, sort):
+        data_list = db_topic['opinion'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
         self._data['dataList'] = data_list
 
 
@@ -222,7 +222,7 @@ class NewsHandler(BaseHandler):
         self._data['dataList'] = data_list
 
 
-class ProposalsHandler(BaseHandler):
+class OpinionsHandler(BaseHandler):
 
     _post_params = {
         'need': [
@@ -247,10 +247,10 @@ class ProposalsHandler(BaseHandler):
     #@authenticated
     def GET(self, tid):
         # TODO tz default
-        proposals = db_topic['proposal'].get_proposals(tid, uid=self.current_user, skip=self._skip, limit=self._limit)
+        opinions = db_topic['opinion'].get_opinions(tid, uid=self.current_user, skip=self._skip, limit=self._limit)
 
         self._data = {
-            'dataList': proposals,
+            'dataList': opinions,
             'nextStart': self._skip + self._limit
         }
 
@@ -270,29 +270,29 @@ class ProposalsHandler(BaseHandler):
         data['ctime'] = datetime.now()
         data['istz'] = True if data['auid'] == topic['auid'] else False
 
-        pid = db_topic['proposal'].create(data)
+        pid = db_topic['opinion'].create(data)
         data['_id'] = pid
 
-        self._data = db_topic['proposal'].format(db_topic['proposal'].to_one_str(data), data['auid'])
+        self._data = db_topic['opinion'].format(db_topic['opinion'].to_one_str(data), data['auid'])
 
 
-class DetailProposalHandler(BaseHandler):
+class DetailOpinionHandler(BaseHandler):
 
     #@authenticated
     def GET(self, pid):
-        data = db_topic['proposal'].get_one(self.to_objectid(pid))
-        data = db_topic['proposal'].format(data, self.current_user)
+        data = db_topic['opinion'].get_one(self.to_objectid(pid))
+        data = db_topic['opinion'].format(data, self.current_user)
 
         data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
-        has_voted = db_topic['proposal'].is_voted({'tid': data['tid'], 'uid': self.current_user})
+        has_voted = db_topic['opinion'].is_voted({'tid': data['tid'], 'uid': self.current_user})
 
         self._data = {
-            'proposal': data,
+            'opinion': data,
             'has_voted': has_voted,
         }
 
 
-class VoteProposalHandler(BaseHandler):
+class VoteOpinionHandler(BaseHandler):
 
     _post_params = {
         'need': [
@@ -309,39 +309,39 @@ class VoteProposalHandler(BaseHandler):
         pid = self.to_objectid(self._params['pid'])
         tid = self.to_objectid(self._params['tid'])
 
-        if not db_topic['proposal'].find_one({'_id': pid, 'tid': tid}):
+        if not db_topic['opinion'].find_one({'_id': pid, 'tid': tid}):
             raise ResponseError(404)
 
         self.route(route, tid, pid, uid)
 
     def do_vote(self, tid, pid, uid):
-        if db_topic['proposal'].is_voted({'uid': uid, 'tid': tid}):
+        if db_topic['opinion'].is_voted({'uid': uid, 'tid': tid}):
             raise ResponseError(404)
 
-        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
-        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+        db_topic['opinion']._vote2opinion.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
+        db_topic['opinion'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
     def do_unvote(self, tid, pid, uid):
-        if not db_topic['proposal'].is_voted({'uid': uid, 'tid': tid}):
+        if not db_topic['opinion'].is_voted({'uid': uid, 'tid': tid}):
             raise ResponseError(404)
 
-        db_topic['proposal']._vote2proposal.remove({'tid': tid, 'pid': pid, 'uid': uid})
-        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
+        db_topic['opinion']._vote2opinion.remove({'tid': tid, 'pid': pid, 'uid': uid})
+        db_topic['opinion'].update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
 
     def do_revote(self, tid, pid, uid):
-        if db_topic['proposal'].is_voted({'uid': uid, 'tid': tid, 'pid': pid}):
+        if db_topic['opinion'].is_voted({'uid': uid, 'tid': tid, 'pid': pid}):
             raise ResponseError(404)
 
-        old_proposal = db_topic['proposal']._vote2proposal.find_one({'tid': tid, 'uid': uid})
-        if not old_proposal:
+        old_opinion = db_topic['opinion']._vote2opinion.find_one({'tid': tid, 'uid': uid})
+        if not old_opinion:
             raise ResponseError(404)
-        old_pid = old_proposal['pid']
+        old_pid = old_opinion['pid']
 
-        db_topic['proposal']._vote2proposal.remove({'tid': tid, 'uid': uid})
-        db_topic['proposal'].update({'_id': old_pid}, {'$inc': {'vnum': -1}}, w=1)
+        db_topic['opinion']._vote2opinion.remove({'tid': tid, 'uid': uid})
+        db_topic['opinion'].update({'_id': old_pid}, {'$inc': {'vnum': -1}}, w=1)
 
-        db_topic['proposal']._vote2proposal.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
-        db_topic['proposal'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+        db_topic['opinion']._vote2opinion.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
+        db_topic['opinion'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
 
 class CommentsHandler(BaseHandler):

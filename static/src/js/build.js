@@ -17,7 +17,7 @@
 
         "new": "new",
         "detail": "detail",
-        "proposal": "proposal",
+        "opinion": "opinion",
         "comment": "comment",
         "personal": "personal",
         "personal_list": "personal_list",
@@ -34,7 +34,7 @@
             name: "detail",
         },
         {
-            name: "proposal",
+            name: "opinion",
         },
         {
             name: "comment",

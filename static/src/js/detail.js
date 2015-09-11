@@ -36,7 +36,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             thread.load({
                 isList: !isLoadingFirst,
                 isEmptyShow: true,
-                url: isLoadingFirst ? url : url + '/proposals',
+                url: isLoadingFirst ? url : url + '/opinions',
                 emptyCon: '还没有看法哦！',
                 callback: isLoadingFirst ? exports.render : exports.renderList,
             }, action);
@@ -120,7 +120,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                    thread.reply(tId, null, '', 'proposal');
+                    thread.reply(tId, null, '', 'opinion');
                 };
                 jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
                 thread.checkIsRegistered(callback);
@@ -128,7 +128,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             thread.initTouchRefresh(exports.load);
 
-            jq('#hotReplyList,#allReplyList').on('click', '.proposalWrap', function(e) {
+            jq('#hotReplyList,#allReplyList').on('click', '.opinionWrap', function(e) {
                 var thisObj = jq(this), link;
                 jq.UTIL.touchStateNow(thisObj.parent('li'));
 
@@ -212,7 +212,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     'noMsg' : true
                                 }
 
-                                var url = '/user/unvote/proposals';
+                                var url = '/user/unvote/opinions';
                                 var data = {'tid':tId, 'pid': pId};
 
                                 jq.UTIL.ajax(url, data, opts);
@@ -234,7 +234,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                             'noMsg' : true
                         }
 
-                        var url = '/user/vote/proposals';
+                        var url = '/user/vote/opinions';
                         var data = {'tid':tId, 'pid': pId};
 
                         jq.UTIL.ajax(url, data, opts);
@@ -265,7 +265,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     'noMsg' : true
                                 }
 
-                                var url = '/user/revote/proposals';
+                                var url = '/user/revote/opinions';
                                 var data = {'tid':tId, 'pid': pId};
 
                                 jq.UTIL.ajax(url, data, opts);

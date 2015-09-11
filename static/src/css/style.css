@@ -1114,7 +1114,7 @@ a {
     border-radius: 0 0 4px 4px
 }
 
-.topicList.proposal {
+.topicList.opinion {
     padding: 0 0 0!important;
     /*
     padding: 10px 0 0!important;
@@ -1130,7 +1130,7 @@ a {
     font-size: 13px;
 }
 
-.topicList .proposalList {
+.topicList .opinionList {
     /*
     z-index: 1;
     background-color: #fafafa;
@@ -1140,16 +1140,16 @@ a {
     padding: 14px 10px 0 52px;
 }
 
-.detailBox .topicList .proposalList {
+.detailBox .topicList .opinionList {
     padding-bottom: 0!important;
 }
 
-.topicList .proposalWrap {
+.topicList .opinionWrap {
     padding-top: 1px;
     padding-bottom: 15px;
 }
 
-.topicList.proposal .sImg {
+.topicList.opinion .sImg {
     left: 13px;
     width: 30px;
     height: 30px;
@@ -1225,7 +1225,7 @@ a {
     height: 80px;
 }
 
-.tzDefList .proposalWrap .imgGallary {
+.tzDefList .opinionWrap .imgGallary {
     width: 60px;
     height: 60px;
 }

@@ -18,7 +18,7 @@
 
    <div class="detailBox">
 
-    <div class="topicList proposal tzDefList">
+    <div class="topicList opinion tzDefList">
      <ul id="hotReplyList">
      </ul> 
     </div> 
@@ -30,7 +30,7 @@
      -->
     </div>
 
-    <div class="topicList proposal"> 
+    <div class="topicList opinion"> 
      <ul id="allReplyList" style="height: auto;"> 
      </ul>
     </div>
@@ -117,7 +117,7 @@
       <% for (var i in replyList) { %>
 
       <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid) && ((tmplType==='default' && replyList[i].is_tz) || (tmplType!='default' && !replyList[i].is_tz))) { %>
-      <li class="proposalList" id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+      <li class="opinionList" id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
           <%if (!replyList[i].is_tz) { %>
               <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
@@ -125,7 +125,7 @@
 
           <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= replyList[i].pid %>" data-num="<%= replyList[i].vote_num %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
 
-          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
+          <div class="opinionWrap" data-link="/opinion?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
               <%if (replyList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >

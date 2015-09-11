@@ -257,8 +257,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             //});
 
-            if (obj.replyType === 'proposal') {
-                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/proposals');
+            if (obj.replyType === 'opinion') {
+                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/opinions');
             }
             else if (obj.replyType === 'comment') {
                 jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/comments');
@@ -312,7 +312,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     //replyList = jq('#replyList'),
                                     replyData = {replyList:{0:re.data}};
 
-                                if (obj.replyType === 'proposal') {
+                                if (obj.replyType === 'opinion') {
                                     replyData.tmplType = 'all';
                                     var allReplyHtml = template('tmpl_reply', replyData);
                                     if(jq.trim(allReplyHtml)!==''){

@@ -33,9 +33,9 @@ class User2Topic(Model):
     }
 
 
-class Proposal(Model):
+class Opinion(Model):
 
-    name = 'proposal'
+    name = 'opinion'
 
     field = {
         'tid':              (ObjectId, None),
@@ -53,9 +53,9 @@ class Proposal(Model):
     }
 
 
-class Vote2Proposal(Model):
+class Vote2Opinion(Model):
 
-    name = 'vote2proposal'
+    name = 'vote2opinion'
 
     field = {
         'tid':             (ObjectId, None),

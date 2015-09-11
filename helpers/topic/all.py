@@ -13,7 +13,7 @@ from config.global_setting import PIC_URL
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['Topic', 'Proposal', 'Comment', 'Follow', 'News']
+MODEL_SLOTS = ['Topic', 'Opinion', 'Comment', 'Follow', 'News']
 
 
 class Topic(DataProvider, topic_model.Topic):
@@ -41,21 +41,21 @@ class Topic(DataProvider, topic_model.Topic):
         return result
 
 
-class Proposal(DataProvider, topic_model.Proposal):
+class Opinion(DataProvider, topic_model.Opinion):
 
     _user = user_model.User()
     _topic = topic_model.Topic()
-    _vote2proposal = topic_model.Vote2Proposal()
+    _vote2opinion = topic_model.Vote2Opinion()
 
     def is_voted(self, spec):
         spec = {k: self.to_objectid(v) for k, v in spec.items()}
-        return True if self._vote2proposal.find_one(spec) else False
+        return True if self._vote2opinion.find_one(spec) else False
 
-    #def vote_proposal(self, tid, pid, uid, method):
+    #def vote_opinion(self, tid, pid, uid, method):
     #    tid, pid, uid = self.to_objectids(tid, pid, uid)
     #    collection_method = {
-    #        'create': self._vote2proposal.create,
-    #        'remove': self._vote2proposal.remove,
+    #        'create': self._vote2opinion.create,
+    #        'remove': self._vote2opinion.remove,
     #    }
 
     #    collection_method[method]({'tid': tid, 'pid': pid, 'uid': uid})
@@ -82,16 +82,16 @@ class Proposal(DataProvider, topic_model.Proposal):
 
         return result
 
-    def get_proposals(self, tid, uid=None, skip=0, limit=5, first=0, sort=[('vnum', -1), ('ctime', 1)]):
+    def get_opinions(self, tid, uid=None, skip=0, limit=5, first=0, sort=[('vnum', -1), ('ctime', 1)]):
         spec = {'tid': self.to_objectid(tid), 'istz': False}
         #sort = [('vnum', -1), ('ctime', 1)]
-        proposals = self.get_all(spec, skip=skip, limit=limit, sort=sort)
+        opinions = self.get_all(spec, skip=skip, limit=limit, sort=sort)
 
         if first == 1:
             spec['istz'] = True
-            proposals.extend(self.get_all(spec, skip=skip, limit=limit, sort=sort))
+            opinions.extend(self.get_all(spec, skip=skip, limit=limit, sort=sort))
 
-        return [self.format(p, uid) for p in proposals if p]
+        return [self.format(p, uid) for p in opinions if p]
 
 
 class Comment(DataProvider, topic_model.Comment):
@@ -168,9 +168,9 @@ class Follow(DataProvider):
 class News(DataProvider):
 
     _topic = Topic()
-    _proposal = Proposal()
+    _opinion = Opinion()
     _comment = Comment()
-    _vote2proposal = topic_model.Vote2Proposal()
+    _vote2opinion = topic_model.Vote2Opinion()
 
     def get_topics(self, uid, skip=0, limit=5):
         topics = self._topic.get_all({'auid': uid}, skip=skip, limit=limit, sort=[('ptime', -1)])
@@ -178,27 +178,27 @@ class News(DataProvider):
 
         for t in topics:
             tid = self._topic.to_objectid(t['tid'])
-            proposals = self._proposal.get_proposals(tid=tid, skip=0, limit=2, sort=[('ctime', -1)])
-            if not proposals:
+            opinions = self._opinion.get_opinions(tid=tid, skip=0, limit=2, sort=[('ctime', -1)])
+            if not opinions:
                 continue
 
-            t['p_count'] = self._proposal.find({'tid': tid}).count()
-            t['p_authors'] = [p['author'] for p in proposals]
+            t['p_count'] = self._opinion.find({'tid': tid}).count()
+            t['p_authors'] = [p['author'] for p in opinions]
             result_list.append(t)
 
         return result_list
 
     def get_votes(self, uid, skip=0, limit=5):
-        proposals = self._proposal.get_all({'auid': uid, 'vnum': {'$gt': 0}}, skip=skip, limit=limit, sort=[('vtime', -1)])
+        opinions = self._opinion.get_all({'auid': uid, 'vnum': {'$gt': 0}}, skip=skip, limit=limit, sort=[('vtime', -1)])
         result_list = []
 
-        for p in proposals:
-            p = self._proposal.format(p, None)
+        for p in opinions:
+            p = self._opinion.format(p, None)
             #if not p['vote_num']:
             #    continue
 
             pid = self._topic.to_objectid(p['pid'])
-            votes = self._vote2proposal.find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
+            votes = self._vote2opinion.find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
             p['vote_users'] = [self._user.get_one({'_id': v['uid']})['nickname'] for v in votes]
             p['title'] = self._topic.get_one({'_id': self._topic.to_objectid(p['tid'])})['title']
             result_list.append(p)

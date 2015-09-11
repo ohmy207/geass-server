@@ -3,7 +3,7 @@
 # change name
 from db.conn import (
     topic as _topic,
-    proposal as _proposal,
+    opinion as _opinion,
     comment as _comment,
     user as _user,
 )
@@ -11,7 +11,7 @@ from db.conn import (
 MONGO_DB_MAPPING = {
     'db': {
         'topic': _topic,
-        'proposal': _proposal,
+        'opinion': _opinion,
         'comment': _comment,
         'user': _user,
     },

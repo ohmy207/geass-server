@@ -57,7 +57,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
     _PAGES = {
         'new': 'topic_new',
         'topic': 'topic_detail',
-        'proposal': 'proposal_detail',
+        'opinion': 'opinion_detail',
         'comment_list': 'comment_list',
         'personal': 'personal',
         'news_list': 'news_list',
