@@ -25,70 +25,14 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        isLoadingNew: true,
-        isLoadingFirst: true,
-        isLoading: false,
         isNoShowToTop: false,
         hasVoted: false,
-        desc: 0,
-        nextStart: 0,
-
-        // load data,all in one
-        load: function(action) {
-            action = action || '';
-
-            exports.isLoading = true;
-            /**
-             * thread.js里调用，发表时新回复时，倒序，新发表的显示在最上面，正序在最下面
-             */
-            var desc = window.desc = exports.desc;
-            //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/proposals/' + window.pId;
-
-            var opts = {
-                'beforeSend': function() {
-                    switch(action) {
-                        case 'pull':
-                            jq('#refreshWait').show();
-                            jq('#showAll').hide();
-                            exports.isLoadingNew = true;
-                            break;
-                        case 'drag':
-                            jq('#loadNext').show();
-                            exports.isLoadingNew = true;
-                            break;
-                        case 'sort':
-                            jq('#showAll').hide();
-                            exports.isLoadingNew = true;
-                            jQuery.UTIL.showLoading();
-                            break;
-                        default:
-                            jq.UTIL.showLoading();
-                    }
-                },
-                'complete': function() {
-                },
-                'success': function(re) {
-                    jq('#refreshWait').hide();
-                    jq('#loadNext').hide();
-                    jq.UTIL.showLoading('none');
-                    if (re.code == 0) {
-                        exports.render(re);
-                    } else {
-                        jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
-                    }
-                    exports.isLoading = false;
-                }
-            };
-            jq.UTIL.ajax(url, '', opts);
-        },
 
         // render data
         render: function(re) {
             var proposalHtml = template('tmpl_proposal', re.data);
             jq('.warp').prepend(proposalHtml);
 
-            exports.isLoadingFirst = false;
             jq('.warp, #bottomBar').show()
             //jq('.warp, #bottomBar, .recommendTitle').show()
 
@@ -97,8 +41,15 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         init: function() {
             var tId = window.tId;
+                loadOpts = {
+                    isList: false,
+                    isEmptyShow: false,
+                    url: '/proposals/' + window.pId,
+                    emptyCon: '',
+                    callback: exports.render,
+                };
 
-            exports.load('drag');
+            thread.load(loadOpts, 'drag');
 
             initLazyload('.warp img');
 

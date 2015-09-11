@@ -24,6 +24,123 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
     exports = {
         //popTId: 0,
         uploadTimer: null,
+        isLoadingNew: true,
+        isLoading: false,
+        desc: 0,
+        nextStart: 0,
+
+        // load data,all in one
+        load: function(loadOpts, action) {
+
+            action = loadOpts.action || '';
+            exports.isLoading = true;
+
+            var isList = loadOpts.isList || false,
+                url = loadOpts.url,
+                start = exports.nextStart,
+                desc = exports.desc;
+
+            if (isList) {
+                url = loadOpts.url + '?skip=' + start,
+                    + '&desc=' + desc;
+            }
+
+            var opts = {
+                'beforeSend': function() {
+                    switch(action) {
+                        //case 'pull':
+                        //    jq('#refreshWait').show();
+                        //    jq('#showAll').hide();
+                        //    exports.isLoadingNew = true;
+                        //    break;
+                        case 'drag':
+                            jq('#loadNext').show();
+                            exports.isLoadingNew = true;
+                            break;
+                        case 'sort':
+                            jq('#showAll').hide();
+                            exports.isLoadingNew = true;
+                            jQuery.UTIL.showLoading();
+                            break;
+                        default:
+                            jq.UTIL.showLoading();
+                    }
+                },
+                'complete': function() {
+                },
+                'success': function(re) {
+                    jq('#refreshWait').hide();
+                    jq('#loadNext').hide();
+                    jq.UTIL.showLoading('none');
+                    if (re.code == 0) {
+                        //var zero = new Date;
+                        exports.render(re, loadOpts, !start);
+                        //stat.reportPoint('listRender', 10, new Date, zero);
+                    } else {
+                        jq.UTIL.dialog({content: '获取数据失败，请重试', autoClose: true});
+                    }
+                    exports.isLoading = false;
+                }
+            };
+            jq.UTIL.ajax(url, '', opts);
+        },
+
+        // render data
+        render: function(re, opts, clear) {
+            //if (clear) {
+            //    jq('#allReplyList').html('');
+            //}
+
+            var isList = opts.isList || false,
+                isEmptyShow = opts.isEmptyShow || false,
+                emptyCon = opts.emptyCon || '';
+
+            // 最后无数据不再加载
+            if (jq.UTIL.isObjectEmpty(re.data.dataList)) {
+                exports.isLoadingNew = false;
+                jq('#loadNext').hide();
+                //jq('#showAll').show();
+                if (clear && isEmptyShow) {
+                    jq('#allLabelBox').show();
+                    jq('.emptyList').html(emptyCon).show()
+                }
+                if (isList) {
+                    return true;
+                }
+            }
+
+            if (typeof opts.callback == 'function') {
+                opts.callback(re);
+            }
+
+            jq('#loadNext').hide();
+            exports.nextStart = re.data.nextStart;
+        },
+
+        initTouchRefresh: function (load) {
+
+            var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
+            // 全屏触摸
+            jq.UTIL.initTouch({
+                obj: jq('.warp')[0],
+                end: function(e, offset) {
+                    document.ontouchmove = function(e){ return true;}
+                    var loadingObj = jq('#loadNext');
+                    var loadingPos = jq('#loadNextPos');
+                    // var loadingObjTop = loadingObj.offset().top + loadingObj.height() - jq(window).scrollTop();
+                    var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
+                    // 向上滑
+                    if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
+                        load('drag');
+                        //exports.load(opts, 'drag');
+                    }
+                    // 向下拉刷新
+                    if (offset.y < level && document.body.scrollTop <= 0) {
+                    }
+                }
+            });
+
+        },
 
         reply: function (tId, toPId, author, replyType) {
             //var isViewthread = isViewthread || false;

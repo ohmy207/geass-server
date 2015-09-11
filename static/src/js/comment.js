@@ -25,107 +25,32 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        isLoadingNew: true,
-        isLoading: false,
         isNoShowToTop: false,
-        desc: 0,
-        nextStart: 0,
 
-        // load data,all in one
-        load: function(start, action) {
-            start = start || 0;
-            action = action || '';
-
-            exports.isLoading = true;
-            /**
-             * thread.js里调用，发表时新回复时，倒序，新发表的显示在最上面，正序在最下面
-             */
-            var desc = window.desc = exports.desc;
-            //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/topics/' + window.tId + '/comments'
-                + '?skip=' + start
-                //+ '&desc=' + desc;
-            var opts = {
-                'beforeSend': function() {
-                    switch(action) {
-                        case 'pull':
-                            jq('#refreshWait').show();
-                            jq('#showAll').hide();
-                            exports.isLoadingNew = true;
-                            break;
-                        case 'drag':
-                            jq('#loadNext').show();
-                            exports.isLoadingNew = true;
-                            break;
-                        case 'sort':
-                            jq('#showAll').hide();
-                            exports.isLoadingNew = true;
-                            jQuery.UTIL.showLoading();
-                            break;
-                        default:
-                            jq.UTIL.showLoading();
-                    }
-                },
-                'complete': function() {
-                },
-                'success': function(re) {
-                    jq('#refreshWait').hide();
-                    jq('#loadNext').hide();
-                    jq.UTIL.showLoading('none');
-                    if (re.code == 0) {
-                        var zero = new Date;
-                        exports.renderList(re, !start);
-                        //stat.reportPoint('listRender', 10, new Date, zero);
-                    } else {
-                        jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
-                    }
-                    exports.isLoading = false;
-                }
-            };
-            jq.UTIL.ajax(url, '', opts);
+        load: function(action) {
+            thread.load({
+                isList: true,
+                isEmptyShow: true,
+                url: '/topics/' + window.tId + '/comments',
+                emptyCon: '还没有评论，快来抢沙发！',
+                callback: exports.renderList,
+            }, action);
         },
 
         // render data
-        renderList: function(re, clear) {
-            if (clear) {
-                jq('#allReplyList').html('');
-            }
-
-            // 最后无数据不再加载
-            if (jq.UTIL.isObjectEmpty(re.data.dataList)) {
-                exports.isLoadingNew = false;
-                jq('#loadNext').hide();
-                //jq('#showAll').show();
-                if (clear) {
-                    jq('.emptyList').html('还没有看法哦^…^').show()
-                }
-                return true;
-            }
-            //re.data.isWX = isWX;
-            re.data.tmplType = 'hot';
-            var hotReplyHtml = template('tmpl_reply', re.data);
-            if(jq.trim(hotReplyHtml)!==''){
-                jq('#hotLabelBox').show();
-                jq('#hotReplyList').append(hotReplyHtml);
-            }
-
-            re.data.tmplType = 'all';
+        renderList: function(re) {
             var allReplyHtml = template('tmpl_reply', re.data);
             if(jq.trim(allReplyHtml)!==''){
-                jq('#allLabelBox').show();
+                //jq('#allLabelBox').show();
                 jq('#allReplyList').css({height:'auto'})
                 jq('#allReplyList').append(allReplyHtml);
             }
-            jq('#loadNext').hide();
-            exports.nextStart = re.data.nextStart;
         },
 
         init: function() {
             var tId = window.tId;
 
-            //var action = jq.UTIL.getQuery('action');
-
-            exports.load(exports.nextStart, 'drag');
+            exports.load('drag');
 
             initLazyload('.warp img');
 
@@ -161,27 +86,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 thread.checkIsRegistered(callback);
             });
 
-            exports.nextStart = window.nextStart;
-
-            var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
-            // 全屏触摸
-            jq.UTIL.initTouch({
-                obj: jq('.warp')[0],
-                end: function(e, offset) {
-                    document.ontouchmove = function(e){ return true;}
-                    var loadingObj = jq('#loadNext');
-                    var loadingPos = jq('#loadNextPos');
-                    // var loadingObjTop = loadingObj.offset().top + loadingObj.height() - jq(window).scrollTop();
-                    var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
-                    // 向上滑
-                    if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
-                        exports.load(exports.nextStart, 'drag');
-                    }
-                    // 向下拉刷新
-                    if (offset.y < level && document.body.scrollTop <= 0) {
-                    }
-                }
-            });
+            thread.initTouchRefresh(exports.load);
 
             // like
             jq('.topicCon .replyShare,#hotReplyList,#allReplyList').on('click', '.like', function(e) {

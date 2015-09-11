@@ -9,7 +9,7 @@ urls = [
     ('/topics/([0-9a-f]{24})', app.DetailTopicHandler),
 
     ('/user', app.PersonalHandler),
-    ('/user/(topics)', app.PublishingHandler),
+    ('/user/publishing/(topics)', app.PublishingHandler),
     ('/user/following/(topics)', app.FollowingHandler),
     ('/user/news/(topics|votes|comments)', app.NewsHandler),
 

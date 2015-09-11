@@ -25,108 +25,41 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        isLoadingNew: true,
-        isLoadingFirst: true,
-        isLoading: false,
         isNoShowToTop: false,
         hasVoted: false,
-        desc: 0,
-        nextStart: 0,
+        isLoadingFirst: true,
 
-        // load data,all in one
-        load: function(start, action) {
-            start = start || 0;
-            action = action || '';
+        load: function(action) {
+            var url = '/topics/' + window.tId,
+                isLoadingFirst = exports.isLoadingFirst;
 
-            exports.isLoading = true;
-            /**
-             * thread.js里调用，发表时新回复时，倒序，新发表的显示在最上面，正序在最下面
-             */
-            var desc = window.desc = exports.desc;
-            //var url = DOMAIN + window.sId + '/t/' + window.tId
-            var url = '/topics/' + window.tId + '/proposals'
-                + '?skip=' + start
-                + '&desc=' + desc;
-
-            if (exports.isLoadingFirst){
-                url = '/topics/' + window.tId;
-            }
-
-            var opts = {
-                'beforeSend': function() {
-                    switch(action) {
-                        //case 'pull':
-                        //    jq('#refreshWait').show();
-                        //    jq('#showAll').hide();
-                        //    exports.isLoadingNew = true;
-                        //    break;
-                        case 'drag':
-                            jq('#loadNext').show();
-                            exports.isLoadingNew = true;
-                            break;
-                        case 'sort':
-                            jq('#showAll').hide();
-                            exports.isLoadingNew = true;
-                            jQuery.UTIL.showLoading();
-                            break;
-                        default:
-                            jq.UTIL.showLoading();
-                    }
-                },
-                'complete': function() {
-                },
-                'success': function(re) {
-                    jq('#refreshWait').hide();
-                    jq('#loadNext').hide();
-                    jq.UTIL.showLoading('none');
-
-                    if (re.code == 0) {
-                        if (exports.isLoadingFirst){
-                            exports.render(re);
-                        }
-                        exports.renderList(re, !start);
-                    } else {
-                        jq.UTIL.dialog({content: '拉取数据失败，请重试', autoClose: true});
-                    }
-                    exports.isLoading = false;
-                }
-            };
-            jq.UTIL.ajax(url, '', opts);
+            thread.load({
+                isList: !isLoadingFirst,
+                isEmptyShow: true,
+                url: isLoadingFirst ? url : url + '/proposals',
+                emptyCon: '还没有看法哦！',
+                callback: isLoadingFirst ? exports.render : exports.renderList,
+            }, action);
         },
 
         // render data
         render: function(re) {
             var topicHtml = template('tmpl_topic', re.data);
             jq('.detailBox').prepend(topicHtml);
-
-            exports.isLoadingFirst = false;
             jq('.warp, #bottomBar, .recommendTitle').show();
 
             exports.hasVoted = re.data.has_voted || false;
+            exports.renderList(re);
+
+            exports.isLoadingFirst = false;
         },
 
-        renderList: function(re, clear) {
-            if (clear) {
-                jq('#allReplyList').html('');
-            }
-
-            // 最后无数据不再加载
-            if (jq.UTIL.isObjectEmpty(re.data.dataList)) {
-                exports.isLoadingNew = false;
-                jq('#loadNext').hide();
-                //jq('#showAll').show();
-                if (clear) {
-                    jq('#allLabelBox').show();
-                    jq('.emptyList').html('还没有看法哦^…^').show()
-                }
-                return true;
-            }
-            //re.data.isWX = isWX;
+        renderList: function(re) {
             re.data.tmplType = 'default';
-            var hotReplyHtml = template('tmpl_reply', re.data);
-            if(jq.trim(hotReplyHtml)!==''){
+            var defaultReplyHtml = template('tmpl_reply', re.data);
+            if(jq.trim(defaultReplyHtml)!==''){
                 jq('#hotLabelBox').show();
-                jq('#hotReplyList').append(hotReplyHtml);
+                jq('#hotReplyList').append(defaultReplyHtml);
             }
 
             re.data.tmplType = 'all';
@@ -136,27 +69,16 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq('#allReplyList').css({height:'auto'})
                 jq('#allReplyList').append(allReplyHtml);
             }
-            jq('#loadNext').hide();
-            exports.nextStart = re.data.nextStart;
-
-            //if (clear) {
-            //    if (exports.order == 'hot') {
-            //        jq('.badge').show();
-            //    } else {
-            //        jq('.badge').hide();
-            //    }
-            //}
         },
 
         init: function() {
             var tId = window.tId;
-            var parentId = window.parentId || 0;
 
             // 分享遮罩，一次性
             //var action = jq.UTIL.getQuery('action');
             //var reapp = /qqdownloader\/([^\s]+)/i;
 
-            exports.load(exports.nextStart, 'drag');
+            exports.load('drag');
 
             initLazyload('.warp img');
 
@@ -198,34 +120,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                    //thread.reply(tId, parentId, '', 'proposal');
                     thread.reply(tId, null, '', 'proposal');
                 };
                 jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
                 thread.checkIsRegistered(callback);
             });
 
-            exports.nextStart = window.nextStart;
-
-            var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
-            // 全屏触摸
-            jq.UTIL.initTouch({
-                obj: jq('.warp')[0],
-                end: function(e, offset) {
-                    document.ontouchmove = function(e){ return true;}
-                    var loadingObj = jq('#loadNext');
-                    var loadingPos = jq('#loadNextPos');
-                    // var loadingObjTop = loadingObj.offset().top + loadingObj.height() - jq(window).scrollTop();
-                    var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
-                    // 向上滑
-                    if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
-                        exports.load(exports.nextStart, 'drag');
-                    }
-                    // 向下拉刷新
-                    if (offset.y < level && document.body.scrollTop <= 0) {
-                    }
-                }
-            });
+            thread.initTouchRefresh(exports.load);
 
             jq('#hotReplyList,#allReplyList').on('click', '.proposalWrap', function(e) {
                 var thisObj = jq(this), link;
