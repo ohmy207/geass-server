@@ -13,8 +13,7 @@ else:
     mc = MongoClient(host='localhost:27017')
 
 
-# topic
-topic = mc['excalibur_topic']
-user = mc['excalibur_user']
-opinion = mc['excalibur_opinion']
-comment = mc['excalibur_comment']
+# geass database
+topic = mc['geass_topic']
+opinion = mc['geass_opinion']
+user = mc['geass_user']
