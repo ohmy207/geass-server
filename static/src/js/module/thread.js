@@ -312,6 +312,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     //replyList = jq('#replyList'),
                                     replyData = {replyList:{0:re.data}};
 
+                                jq('.emptyList').hide()
+
                                 if (obj.replyType === 'opinion') {
                                     replyData.tmplType = 'all';
                                     var allReplyHtml = template('tmpl_reply', replyData);
