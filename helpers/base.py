@@ -8,9 +8,10 @@ import redis
 from tornado.escape import xhtml_escape
 #from pymongo import DESCENDING, ASCENDING
 
-from models.user import model as user_model
 from setting import COLLECTION_PREFIX as _PREFIX
 from utils import escape as _es
+from config.global_setting import PIC_URL
+from models.user import model as user_model
 
 
 class Helper(dict):
@@ -39,24 +40,26 @@ class Helper(dict):
         return ''.join(as_list)
 
 
-class DataProvider(object):
+class BaseHelper(object):
 
-    _user = user_model.User()
-
-    def to_objectids(self, *objids):
+    @staticmethod
+    def to_objectids(*objids):
         return map(_es.to_objectid, objids)
 
-    def xhtml_escape(self, value):
+    @staticmethod
+    def xhtml_escape(value):
         return xhtml_escape(value)
 
-    def _format_time(self, time):
+    @staticmethod
+    def _format_time(time):
         time = datetime.fromtimestamp(int(time))
         total_seconds = int((datetime.now() - time).total_seconds())
         #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
         return time.strftime('%Y-%m-%d')
 
     # TODO
-    def _simple_time(self, time):
+    @staticmethod
+    def _simple_time(time):
         time = datetime.fromtimestamp(int(time))
         total_seconds = int((datetime.now() - time).total_seconds())
         #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -64,8 +67,22 @@ class DataProvider(object):
 
         return ftime if total_seconds > 2*24*60*60 else str(total_seconds/24/60/60)+'天前' if total_seconds > 24*60*60 else str(total_seconds/60/60)+'小时前' if total_seconds > 60*60 else str(total_seconds/60)+'分钟前' if total_seconds > 60 else '刚刚'
 
+
+class UserHelper(BaseHelper, user_model.User):
+
+    @staticmethod
+    def callback(record):
+        result = {
+            'uid': record['_id'],
+            'nickname': record['nickname'] or record['open']['wx']['nickname'],
+            'avatar': PIC_URL['avatar'](record['avatar']) if record['avatar'] else record['open']['wx']['headimgurl'],
+            'sex': record['sex'] or record['open']['wx']['sex'],
+        }
+
+        return result
+
     def get_simple_user(self, uid):
-        user = self._user.get_one({'_id': self._user.to_objectid(uid)})
+        user = self.get_one({'_id': self.to_objectid(uid)})
         return {'nickname': user['nickname'], 'avatar': user['avatar']} if user else {'nickname': '', 'avatar': ''}
 
 
