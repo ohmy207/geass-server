@@ -2,16 +2,40 @@
 
 import log
 
+from datetime import datetime
+
 from helpers.base import BaseHelper, UserHelper
 from models.user import model as user_model
+from helpers import topic as topic_helper
+from helpers import opinion as opinion_helper
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['User']
+MODEL_SLOTS = ['User', 'Comment', 'Vote', 'Follow']
 
 
 class User(UserHelper):
-    pass
+
+    _topic = topic_helper['topic']
+    _opinion = opinion_helper['opinion']
+
+    def get_user_topics(self, uid, skip, limit, sort=[('ctime', -1)]):
+        spec = {'auid': self.to_objectid(uid)}
+        return self._topic.get_all(
+            spec,
+            skip=skip,
+            limit=limit,
+            sort=sort
+        )
+
+    def get_user_opinions(self, uid, skip, limit, sort=[('ctime', -1)]):
+        spec = {'auid': self.to_objectid(uid)}
+        return self._opinion.get_all(
+            spec,
+            skip=skip,
+            limit=limit,
+            sort=sort
+        )
 
 
 class Comment(BaseHelper, user_model.Comment):
@@ -27,11 +51,11 @@ class Comment(BaseHelper, user_model.Comment):
             'like_num': record['lnum'],
             'is_tz': record['istz'],
             'tocoid': record['tocoid'],
+            'is_liked': False,
         }
 
         result['content'] = Comment.xhtml_escape(record['content'])
         result['f_created_time'] = Comment._simple_time(record['ctime'])
-        #result['is_liked'] = True if unicode(uid) in record['like'] else False
 
         simple_user = Comment._user.get_simple_user(record['auid'])
         result['author'] = simple_user['nickname']
@@ -45,59 +69,66 @@ class Comment(BaseHelper, user_model.Comment):
     def is_comment_liked(self, uid, record):
         return True if unicode(uid) in record['like'] else False
 
-    #def get_comments(self, tid, uid=None, skip=0, limit=10, order=1):
-    #    spec = {'tid': self.to_objectid(tid)}
-    #    sort = [('ctime', order)]
-    #    comments = self.get_all(spec, skip=skip, limit=limit, sort=sort)
-
-    #    return [self.format(co, uid) for co in comments]
+    def format_comments(self, uid, records):
+        for r in records:
+            r['is_liked'] = self.is_comment_liked(uid, r)
+        return records
 
 
-class News(object):
+# TODO Vote will not inherit Vote2Opinion
+class Vote(user_model.Vote2Opinion):
 
-    _comment = Comment()
-    _vote2opinion = opinion_model.Vote2Opinion()
+    _opinion = opinion_helper['opinion']
+    #_vote2opinion = user_model.Vote2Opinion()
 
-    def get_reply_topics(self, uid, skip, limit):
-        topics = self._topic.get_all({'auid': uid}, skip=skip, limit=limit, sort=[('ptime', -1)])
-        result_list = []
+    def _is_voted(self, spec):
+        spec = {k: self.to_objectid(v) for k, v in spec.items()}
+        return True if self.find_one(spec) else False
 
-        for t in topics:
-            tid = self._topic.to_objectid(t['tid'])
-            opinions = self._opinion.get_opinions(tid=tid, skip=0, limit=2, sort=[('ctime', -1)])
-            if not opinions:
-                continue
+    def is_opinion_voted(self, uid, pid):
+        return self._is_voted({'uid': uid, 'pid': pid})
 
-            t['p_count'] = self._opinion.find({'tid': tid}).count()
-            t['p_authors'] = [p['author'] for p in opinions]
-            result_list.append(t)
+    def has_user_voted(self, uid, tid):
+        return self._is_voted({'uid': uid, 'tid': tid})
 
-        return result_list
+    def format_opinions(self, uid, records):
+        for r in records:
+            r['is_voted'] = self.is_opinion_voted(uid, r['pid'])
+        return records
 
-    def get_votes(self, uid, skip=0, limit=5):
-        opinions = self._opinion.get_all({'auid': uid, 'vnum': {'$gt': 0}}, skip=skip, limit=limit, sort=[('vtime', -1)])
-        result_list = []
+    # TODO vote_opinion unvote_opinion
+    def vote_opinion(self, tid, pid, uid):
+        tid, pid, uid = self.to_objectids(tid, pid, uid)
+        self.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
+        self._opinion.update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
-        for p in opinions:
-            p = self._opinion.format(p, None)
-            #if not p['vote_num']:
-            #    continue
+    def unvote_opinion(self, tid, pid, uid):
+        tid, pid, uid = self.to_objectids(tid, pid, uid)
+        self.remove({'tid': tid, 'pid': pid, 'uid': uid})
+        self._opinion.update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
 
-            pid = self._topic.to_objectid(p['pid'])
-            votes = self._vote2opinion.find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
-            p['vote_users'] = [self._user.get_one({'_id': v['uid']})['nickname'] for v in votes]
-            p['title'] = self._topic.get_one({'_id': self._topic.to_objectid(p['tid'])})['title']
-            result_list.append(p)
 
-        return result_list
+class Follow(BaseHelper):
 
-    def get_comments(self, uid, skip=0, limit=5):
-        comments = self._comment.get_all({'toauid': uid}, skip=skip, limit=limit, sort=[('ctime', -1)])
-        result_list = []
+    _topic = topic_helper['topic']
+    _follow2topic = user_model.Follow2Topic()
 
-        for c in comments:
-            c = self._comment.format(c, None)
-            c['target_content'] = self._comment.get_one({'_id': self._comment.to_objectid(c['tocoid'])})['content']
-            result_list.append(c)
+    def is_topic_followed(self, uid, tid):
+        uid, tid = self.to_objectids(uid, tid)
+        return True if self._follow2topic.find_one({'uid': uid, 'tid': tid}) else False
 
-        return result_list
+    def get_follow_topics(uid, skip, limit, sort=[('ctime', -1)]):
+        follow_topics = self._follow2topic.find({'uid': uid}, skip=skip, limit=limit, sort=sort)
+        return [self._topic.get_one({'_id': f['tid']}) for f in follow_topics if follow_topics and f['tid']]
+
+    def follow_topic(self, uid, tid):
+        uid, tid = self.to_objectids(uid, tid)
+        self._follow2topic.create({'tid': tid, 'uid': uid, 'ctime': datetime.now()})
+
+    def unfollow_topic(self, uid, tid):
+        uid, tid = self.to_objectids(uid, tid)
+        self._follow2topic.remove({'tid': tid, 'uid': uid})
+
+    def get_follows_count(self, uid):
+        return self._follow2topic.find({'uid': uid}).count()
+
