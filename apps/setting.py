@@ -3,7 +3,9 @@
 # installed app list
 INSTALLED_APPS = (
     'topic',
-    'weixin',
+    'opinion',
     'user',
+    'user_server',
+    'weixin',
 )
 

@@ -2,15 +2,18 @@
 
 import app
 
-prefix = ''
+prefix = '/api/v1'
 
 urls = [
 
-    ('/img/uptoken', app.UploadTokenHandler),
-    ('/(new|topic|opinion|comment_list|personal|news_list|following|publishing)', app.PageHandler),
+    ('/user', app.PersonalHandler),
+    ('/user/publishing/(topics)', app.PublishingHandler),
+    ('/user/following/topics', app.FollowingTopicHandler),
+    ('/user/news/(topics|votes|comments)', app.NewsHandler),
 
-    ('/forbidden', app.ForbiddenHandler),
-    ('/wx/authorize/base', app.BaseAuthorizeHandler),
-    ('/wx/authorize/userinfo', app.UserinfoAuthorizeHandler),
+    ('/user/(vote|unvote|revote)/opinions', app.VoteOpinionHandler),
+    ('/user/like/comments', app.LikeCommentHandler),
+
+    ('/topics/([0-9a-f]{24})/comments', app.CommentsHandler),
 
 ]

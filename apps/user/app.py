@@ -1,196 +1,365 @@
 #-*- coding:utf-8 -*-
 
-import thread
-from urllib import quote
-from urllib import urlencode
+from tornado.web import authenticated
 
 import log
-import tornado.web
 
-#from datetime import datetime
-from tornado import gen
-from tornado.web import authenticated
-from qiniu import Auth, BucketManager
+from datetime import datetime
 
-from .base import BaseHandler
-from .base import WeiXinMixin
+from apps.base import BaseHandler
 from apps.base import ResponseError
 
+from helpers import topic as db_topic
+from helpers import opinion as db_opinion
 from helpers import user as db_user
-from config.global_setting import WEIXIN, APP_HOST, QINIU
 
 logger = log.getLogger(__file__)
 
 
-class ForbiddenHandler(BaseHandler):
+class PersonalHandler(BaseHandler):
 
-    def GET(self):
-        raise ResponseError(403)
-
-
-class UploadTokenHandler(BaseHandler):
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 3),
+        ]
+    }
 
     @authenticated
-    def get(self):
-        q = Auth(QINIU['access_key'], QINIU['secret_key'])
+    def GET(self):
+        uid = self.current_user
 
-        token = q.upload_token(
-            bucket=QINIU['bucket_name']['image'],
-            expires=QINIU['expires'],
-            policy=QINIU['policy'],
+        self._data = {
+            'user': db_user['user'].get_one({'_id': uid}),
+            'follow_topics': {},
+            'publish_topics': {},
+            'publish_opinions': {},
+        }
+        self._data['follow_topics']['count'] = db_user['follow'].get_follows_count(uid)
+        self._data['publish_topics']['count'] = db_topic['topic'].find({'auid': uid}).count()
+        self._data['publish_opinions']['count'] = db_opinion['opinion'].find({'auid': uid}).count()
+
+        self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit
         )
 
-        self.wo_json({'token': token})
+        self._data['publish_topics']['data_list'] = db_user['user'].get_user_topics(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit
+        )
+
+        self._data['publish_opinions']['data_list'] = db_user['user'].get_user_opinions(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit
+        )
 
 
-class PageHandler(BaseHandler, WeiXinMixin):
+class PublishingHandler(BaseHandler):
 
     _get_params = {
         'need': [
         ],
         'option': [
-            ('tid', basestring, None),
-            ('pid', basestring, None),
+            ('skip', int, 0),
+            ('limit', int, 5),
         ]
     }
 
-    _PAGES = {
-        'new': 'topic_new',
-        'topic': 'topic_detail',
-        'opinion': 'opinion_detail',
-        'comment_list': 'comment_list',
-        'personal': 'personal',
-        'news_list': 'news_list',
+    @authenticated
+    def GET(self, route):
+        uid = self.current_user
+        self._data = {
+            'nextStart': self._skip + self._limit,
+        }
 
-        'following': 'personal_list',
-        'publishing': 'personal_list',
-    }
+        self.route(route, uid)
 
-    _DIRECT_AUTHORIZE_PAGES = [
-        'new',
-        'personal',
-        'news_list',
-        'following',
-        'publishing',
-    ]
-
-    # TODO code ugly
-    def get(self, route):
-        if not self.session['openid']:
-            self.redirect('%s?%s' % (
-                self._AUTH_BASE_URL,
-                urlencode(dict(next=self.request.uri)),
-            ))
-            return
-
-        authorize_url = self.get_authorize_redirect(
-            redirect_uri='%s%s?%s' % (
-                APP_HOST,
-                self._AUTH_USERINFO_URL,
-                urlencode(dict(next=self.request.uri)),
-            ),
-            scope=self._SCOPE['scope_userinfo']
+    def do_topics(self, uid):
+        self._data['dataList'] = db_user['user'].get_user_topics(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit,
         )
 
-        if not self.current_user and route in self._DIRECT_AUTHORIZE_PAGES:
-            self.redirect(authorize_url)
-            return
-
-        state = self._params
-        state['is_authorized'] = 1 if self.current_user else 0
-        state['authorize_url'] = authorize_url
-
-        if route in ['following', 'publishing']:
-            state['type'] = route
-
-        self.render('%s.html'%self._PAGES[route], state=state)
+    def do_opinions(self, uid):
+        self._data['dataList'] = db_user['user'].get_user_opinions(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit,
+        )
 
 
-class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
+class FollowingTopicHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('tid', basestring),
+        ],
+        'option': [
+        ]
+    }
 
     _get_params = {
         'need': [
         ],
         'option': [
-            ('next', basestring, '/'),
-            ('code', basestring, None),
+            ('skip', int, 0),
+            ('limit', int, 5),
         ]
     }
 
-    @tornado.web.asynchronous
-    @gen.coroutine
-    def get(self):
-        if not self._params['code']:
-            authorize_url = self.get_authorize_redirect(
-                redirect_uri=APP_HOST + self.request.uri,
-                scope=self._SCOPE['scope_base']
-            )
-            self.render('spinner.html', authorize_url=authorize_url)
-            return
+    _delete_params = _post_params
 
-        res = yield self.get_access_token(code=self._params['code'])
-        if 'errcode' in res:
-            raise ResponseError(5, res['errmsg'])
+    @authenticated
+    def GET(self):
 
-        user = db_user['user'].get_one({'open.wx.openid': res['openid']}) or {}
-        user['openid'] = res['openid']
+        self._data = {
+            'nextStart': self._skip + self._limit,
+        }
 
-        self.update_session(user)
-        self.redirect(self._params['next'])
+        self._data['dataList'] = db_user['follow'].get_follow_topics(
+            uid=self.current_user,
+            skip=self._skip,
+            limit=self._limit
+        )
+
+    @authenticated
+    def POST(self):
+        uid = self.current_user
+        tid = self.to_objectid(self._params['tid'])
+
+        if not db_topic['topic'].find_one({'_id': tid}):
+            raise ResponseError(404)
+
+        if db_user['follow'].is_topic_followed(uid, tid):
+            raise ResponseError(404)
+
+        db_user['follow'].follow_topic(uid, tid)
+
+    @authenticated
+    def DELETE(self):
+        uid = self.current_user
+        tid = self.to_objectid(self._params['tid'])
+
+        if not db_topic['topic'].find_one({'_id': tid}):
+            raise ResponseError(404)
+
+        if not db_user['follow'].is_topic_followed(uid, tid):
+            raise ResponseError(404)
+
+        db_user['follow'].unfollow_topic(uid, tid)
 
 
-class UserinfoAuthorizeHandler(BaseHandler, WeiXinMixin):
+class NewsHandler(BaseHandler):
 
     _get_params = {
         'need': [
         ],
         'option': [
-            ('next', basestring, '/'),
-            ('code', basestring, None),
+            ('skip', int, 0),
+            ('limit', int, 5),
         ]
     }
 
-    @tornado.web.asynchronous
-    @gen.coroutine
-    def get(self):
-        if not self._params['code']:
-            self.authorize_redirect(
-                redirect_uri=APP_HOST+self._AUTH_USERINFO_URL,
-                scope=self._SCOPE['scope_userinfo']
-            )
-            return
+    @authenticated
+    def GET(self, route):
+        self._data = {
+            'nextStart': self._skip + self._limit,
+        }
 
-        res = yield self.get_access_token(code=self._params['code'])
-        if 'errcode' in res:
-            raise ResponseError(5, res['errmsg'])
+        self.route(route)
 
-        user = yield self.get_authenticated_user(
-            access_token=res['access_token'],
-            openid=res['openid'],
+    def do_topics(self):
+        uid = self.current_user
+        topics = db_topic['topic'].get_all({'auid': uid}, skip=self._skip, limit=self._limit, sort=[('rtime', -1)])
+
+        data_list = []
+        for t in topics:
+            tid = self.to_objectid(t['tid'])
+            opinions = db_opinion['opinion'].get_all({'tid': tid}, skip=0, limit=2, sort=[('ctime', -1)])
+            if not opinions:
+                continue
+            t['op_count'] = db_opinion['opinion'].find({'tid': tid}).count()
+            t['op_authors'] = [op['author'] for op in opinions]
+            data_list.append(t)
+
+        self._data['dataList'] = data_list
+
+    def do_votes(self):
+        opinions = db_opinion['opinion'].get_all(
+            {'auid': self.current_user, 'vnum': {'$gt': 0}},
+            skip=self._skip,
+            limit=self._limit,
+            sort=[('vtime', -1)]
         )
 
-        if 'errcode' in user:
-            raise ResponseError(5, user['errmsg'])
+        data_list = []
+        for op in opinions:
+            pid = self.to_objectid(op['pid'])
+            # TODO Vote will not inherit Vote2Opinion
+            votes = db_user['vote'].find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
+            op['vote_users'] = [db_user['user'].get_simple_user(v['uid'])['nickname'] for v in votes]
+            op['title'] = db_topic['topic'].get_one({'_id': self.to_objectid(op['tid'])})['title']
+            data_list.append(op)
 
-        uid = db_user['user'].create({'open': {'wx': user}})
-        thread.start_new_thread(self.backup_avatar, (uid, user['headimgurl']))
-        # TODO format user
-        user = {'uid': unicode(uid), 'openid': res['openid']}
-        self.update_session(user)
-        self.redirect(self._params['next'])
+        self._data['dataList'] = data_list
 
-    def backup_avatar(self, uid, avatar):
-        if not avatar.startswith('http'):
-            logger.error('avatar url is error, url: %s' % avatar)
-            return
+    def do_comments(self):
+        comments = db_user['comment'].get_all(
+            {'toauid': self.current_user},
+            skip=self._skip,
+            limit=self._limit,
+            sort=[('ctime', -1)]
+        )
 
-        # TODO storge q
-        q = Auth(QINIU['access_key'], QINIU['secret_key'])
-        bucket = BucketManager(q)
+        data_list = []
+        for c in comments:
+            c['target_content'] = db_user['comment'].get_one({'_id': self.to_objectid(c['tocoid'])})['content']
+            data_list.append(c)
 
-        ret, info = bucket.fetch(avatar, QINIU['bucket_name']['avatar'])
-        if not ret or 'error' in ret:
-            logger.error('upload avatar failed, info: %s avatar url: %s' % (info, avatar))
-            return
+        self._data['dataList'] = data_list
 
-        db_user['user'].update({'_id': self.to_objectid(uid)}, {'$set': {'avatar': ret['key']}}, w=1)
+
+# TODO restful standard
+class VoteOpinionHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('tid', basestring),
+            ('pid', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    @authenticated
+    def POST(self, route):
+        uid = self.current_user
+        pid = self.to_objectid(self._params['pid'])
+        tid = self.to_objectid(self._params['tid'])
+
+        if not db_opinion['opinion'].find_one({'_id': pid, 'tid': tid}):
+            raise ResponseError(404)
+
+        has_user_voted = db_user['vote'].has_user_voted(uid, tid)
+        self.route(route, tid, pid, uid, has_user_voted)
+
+    def do_vote(self, tid, pid, uid, has_user_voted):
+        if has_user_voted:
+            raise ResponseError(404)
+
+        db_user['vote'].vote_opinion(tid, pid, uid)
+
+    def do_unvote(self, tid, pid, uid, has_user_voted):
+        if not db_user['vote'].is_opinion_voted(uid, pid):
+            raise ResponseError(404)
+
+        db_user['vote'].unvote_opinion(tid, pid, uid)
+
+    def do_revote(self, tid, pid, uid, has_user_voted):
+        if not has_user_voted or db_user['vote'].is_opinion_voted(uid, pid):
+            raise ResponseError(404)
+
+        voted_opinion = db_user['vote'].find_one({'tid': tid, 'uid': uid})
+        if not voted_opinion:
+            raise ResponseError(404)
+        voted_pid = voted_opinion['pid']
+
+        db_user['vote'].unvote_opinion(tid, voted_pid, uid)
+        db_user['vote'].vote_opinion(tid, pid, uid)
+
+
+class LikeCommentHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('tid', basestring),
+            ('coid', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    @authenticated
+    def POST(self):
+        data = self._params
+        uid = self.current_user
+
+        coid = self.to_objectid(data['coid'])
+        comment = db_user['comment'].find_one({'_id': coid})
+
+        if not comment:
+            raise ResponseError(404)
+
+        if uid in comment['like']:
+            raise ResponseError(404)
+
+        db_user['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
+
+
+class CommentsHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    _post_params = {
+        'need': [
+            ('content', basestring),
+        ],
+        'option': [
+            ('tocoid', basestring, None),
+        ]
+    }
+
+    #@authenticated
+    def GET(self, tid):
+        data_list = db_user['comment'].get_comments(
+            tid=tid,
+            uid=self.current_user,
+            skip=self._skip,
+            limit=self._limit,
+            sort = [('ctime', 1)],
+        )
+
+        self._data = {
+            'dataList': data_list,
+            'nextStart': self._skip + self._limit
+        }
+
+    @authenticated
+    def POST(self, tid):
+        data = self._params
+
+        tid = self.to_objectid(tid)
+        topic = db_topic['topic'].find_one({'_id': tid})
+
+        # TODO error code
+        if not topic:
+            raise ResponseError(404)
+
+        data['tid'] = tid
+        data['tocoid'] = self.to_objectid(data['tocoid'])
+        data['auid'] = self.current_user
+        data['ctime'] = datetime.now()
+        data['istz'] = True if data['auid'] == topic['auid'] else False
+
+        to_comment = db_user['comment'].find_one({'_id': data['tocoid']}) if data['tocoid'] else None
+        data['toauid'] = to_comment['auid'] if to_comment else None
+
+        coid = db_user['comment'].create(data)
+        data['_id'] = coid
+
+        self._data = db_user['comment'].callback(db_user['comment'].to_one_str(data))
+
