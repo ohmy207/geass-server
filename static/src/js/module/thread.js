@@ -197,11 +197,23 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             return true;
         },
 
-        checkReplyForm: function() {
+        checkReplyForm: function(replyType) {
+
+            if (uploadImg.isBusy) {
+                jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
+                return false;
+            }
+
             var content = jq('textarea[name="content"]').val();
             var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
             if (contentLen <= 0) {
-                jq.UTIL.dialog({content:'回复内容不能为空', autoClose:true});
+                var replyType = replyType || 'default';
+                var dialogCon = {
+                    'opinion': '看法不能为空',
+                    'comment': '评论不能为空',
+                    'default': '回复内容不能为空',
+                };
+                jq.UTIL.dialog({content:dialogCon[replyType], autoClose:true});
                 return false;
             }
 
@@ -365,7 +377,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         isSendBtnClicked = false;
                     }
                 };
-                if (!exports.checkReplyForm()) {
+                if (!exports.checkReplyForm(obj.replyType)) {
                     return false;
                 }
                 isSendBtnClicked = true;
@@ -424,24 +436,24 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 callback();
             }
         },
-        checkForm: function() {
+        //checkForm: function() {
 
-            jq.each(uploadImg.uploadInfo, function(i,n) {
-                if (n && !n.isDone) {
-                    jq.UTIL.dialog({content:'图片上传中，请等待', autoClose:true});
-                    return false;
-                }
-            });
+        //    jq.each(uploadImg.uploadInfo, function(i,n) {
+        //        if (n && !n.isDone) {
+        //            jq.UTIL.dialog({content:'图片上传中，请等待', autoClose:true});
+        //            return false;
+        //        }
+        //    });
 
-            var content = jq('#content').val();
-            var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-            if (contentLen < 15) {
-                jq.UTIL.dialog({content:'内容过短', autoClose:true});
-                return false;
-            }
+        //    var content = jq('#content').val();
+        //    var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
+        //    if (contentLen < 15) {
+        //        jq.UTIL.dialog({content:'内容过短', autoClose:true});
+        //        return false;
+        //    }
 
-            return true;
-        },
+        //    return true;
+        //},
         initUpload: function() {
             // 上传图片的绑定
             jq('#addPic, .uploadPicBox').on('click', function() {

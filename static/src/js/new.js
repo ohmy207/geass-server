@@ -232,7 +232,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
             var isSubmitButtonClicked = false;
             jq('#submitButton').bind('click', function() {
                 if (uploadImg.isBusy) {
-                    jq.UTIL.dialog({content:'上传中，请稍后发帖', autoClose:true});
+                    jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
                     return false;
                 }
                 if (isSubmitButtonClicked || !exports.checkForm()) {
@@ -324,16 +324,21 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
             var title = jq('#title').val();
             var titleLen = jq.UTIL.mb_strlen(jq.UTIL.trim(title));
-            if (titleLen < 3) {
+            if (titleLen < 7) {
                 jq.UTIL.dialog({content:'话题字数有点少', autoClose:true});
                 return false;
             }
-            //var content = jq('#content').val();
-            //var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-            //if (contentLen < 15) {
-            //    jq.UTIL.dialog({content:'内容过短', autoClose:true});
-            //    return false;
-            //}
+            if (titleLen > 97) {
+                jq.UTIL.dialog({content:'话题最好不要超过32字哦，复杂话题可以在描述中说明', autoClose:true});
+                return false;
+            }
+
+            var content = jq('#content').val();
+            var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
+            if (contentLen > 3072) {
+                jq.UTIL.dialog({content:'描述最好不要超过1024字哦', autoClose:true});
+                return false;
+            }
 
             return true;
         }
