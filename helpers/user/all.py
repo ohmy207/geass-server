@@ -51,7 +51,7 @@ class Comment(BaseHelper, user_model.Comment):
             'like_num': record['lnum'],
             'is_tz': record['istz'],
             'tocoid': record['tocoid'],
-            'is_liked': False,
+            #'is_liked': False,
         }
 
         result['content'] = Comment.xhtml_escape(record['content'])
@@ -66,17 +66,26 @@ class Comment(BaseHelper, user_model.Comment):
 
         return result
 
-    def is_comment_liked(self, uid, record):
-        return True if unicode(uid) in record['like'] else False
+    def get_comments(self, tid, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
+        records = self.find(
+            {'tid': self.to_objectid(tid)},
+            skip=skip,
+            limit=limit,
+            sort=sort,
+        )
 
-    def format_comments(self, uid, records):
-        for r in records:
-            r['is_liked'] = self.is_comment_liked(uid, r)
-        return records
+        result_list = []
+        for record in records:
+            is_liked = True if self.to_objectid(uid) in record['like'] else False
+            result = self.callback(self.to_one_str(record))
+            result['is_liked'] = is_liked
+            result_list.append(result)
+
+        return result_list
 
 
 # TODO Vote will not inherit Vote2Opinion
-class Vote(user_model.Vote2Opinion):
+class Vote(BaseHelper, user_model.Vote2Opinion):
 
     _opinion = opinion_helper['opinion']
     #_vote2opinion = user_model.Vote2Opinion()
@@ -117,7 +126,7 @@ class Follow(BaseHelper):
         uid, tid = self.to_objectids(uid, tid)
         return True if self._follow2topic.find_one({'uid': uid, 'tid': tid}) else False
 
-    def get_follow_topics(uid, skip, limit, sort=[('ctime', -1)]):
+    def get_follow_topics(self, uid, skip, limit, sort=[('ctime', -1)]):
         follow_topics = self._follow2topic.find({'uid': uid}, skip=skip, limit=limit, sort=sort)
         return [self._topic.get_one({'_id': f['tid']}) for f in follow_topics if follow_topics and f['tid']]
 

@@ -10,6 +10,7 @@ from apps.base import BaseHandler
 from apps.base import ResponseError
 
 from helpers import topic as db_topic
+from helpers import opinion as db_opinion
 from helpers import user as db_user
 
 logger = log.getLogger(__file__)
@@ -55,16 +56,25 @@ class DetailTopicHandler(BaseHandler):
     def GET(self, tid):
         tid = self.to_objectid(tid)
         uid = self.current_user
+        spec = {'tid': tid, 'istz': True}
+        sort=[('vnum', -1), ('ctime', 1)]
 
         topic = db_topic['topic'].get_one({'_id': tid})
-        opinions = db_topic['opinion'].get_opinions(tid, uid=uid, skip=self._skip, limit=self._limit, first=1)
-        has_voted = db_topic['opinion'].is_voted({'tid': tid, 'uid': uid})
+        opinions = db_opinion['opinion'].get_all(spec, skip=0, limit=5, sort=sort)
+        spec['istz'] = False
+        opinions.extend(db_opinion['opinion'].get_all(
+            spec,
+            skip=self._skip,
+            limit=self._limit,
+            sort=sort
+        ))
 
         self._data = {
             'topic': topic,
-            'dataList': opinions,
+            'dataList': db_user['vote'].format_opinions(uid, opinions),
+            'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
+            'is_topic_followed': db_user['follow'].is_topic_followed(uid, tid),
             'nextStart': self._skip + self._limit,
-            'has_voted': has_voted,
         }
 
 
@@ -81,21 +91,35 @@ class PersonalHandler(BaseHandler):
 
     @authenticated
     def GET(self):
-        sort = [('ctime', -1)]
-
-        user = db_user['user'].get_one({'_id': self.current_user})
-        follow_topics = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
-        publish_topics = db_topic['topic'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
-        follow_topics_count = db_topic['follow'].get_follows_count(self.current_user)
-        publish_topics_count = db_topic['topic'].find({'auid': self.current_user}).count()
+        uid = self.current_user
 
         self._data = {
-            'user': user,
-            'news': {},
-            'follow': {'data_list': follow_topics, 'count': follow_topics_count},
-            'publish': {'data_list': publish_topics, 'count': publish_topics_count},
-            #'nextStart': self._skip + self._limit,
+            'user': db_user['user'].get_one({'_id': uid}),
+            'follow_topics': {},
+            'publish_topics': {},
+            'publish_opinions': {},
         }
+        self._data['follow_topics']['count'] = db_user['follow'].get_follows_count(uid)
+        self._data['publish_topics']['count'] = db_topic['topic'].find({'auid': uid}).count()
+        self._data['publish_opinions']['count'] = db_opinion['opinion'].find({'auid': uid}).count()
+
+        self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit
+        )
+
+        self._data['publish_topics']['data_list'] = db_user['user'].get_user_topics(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit
+        )
+
+        self._data['publish_opinions']['data_list'] = db_user['user'].get_user_opinions(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit
+        )
 
 
 class PublishingHandler(BaseHandler):
@@ -111,24 +135,29 @@ class PublishingHandler(BaseHandler):
 
     @authenticated
     def GET(self, route):
-        sort = [('ctime', -1)]
-
+        uid = self.current_user
         self._data = {
             'nextStart': self._skip + self._limit,
         }
 
-        self.route(route, sort)
+        self.route(route, uid)
 
-    def do_topics(self, sort):
-        data_list = db_topic['topic'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
-        self._data['dataList'] = data_list
+    def do_topics(self, uid):
+        self._data['dataList'] = db_user['user'].get_user_topics(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit,
+        )
 
-    def do_opinions(self, sort):
-        data_list = db_topic['opinion'].get_all({'auid': self.current_user}, skip=self._skip, limit=self._limit, sort=sort)
-        self._data['dataList'] = data_list
+    def do_opinions(self, uid):
+        self._data['dataList'] = db_user['user'].get_user_opinions(
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit,
+        )
 
 
-class FollowingHandler(BaseHandler):
+class FollowingTopicHandler(BaseHandler):
 
     _post_params = {
         'need': [
@@ -150,44 +179,43 @@ class FollowingHandler(BaseHandler):
     _delete_params = _post_params
 
     @authenticated
-    def GET(self, route):
-        sort = [('ctime', -1)]
+    def GET(self):
 
         self._data = {
             'nextStart': self._skip + self._limit,
         }
 
-        self.route(route, sort)
-
-    def do_topics(self, sort):
-        data_list = db_topic['follow'].get_follows(self.current_user, skip=self._skip, limit=self._limit)
-        self._data['dataList'] = data_list
+        self._data['dataList'] = db_user['follow'].get_follow_topics(
+            uid=self.current_user,
+            skip=self._skip,
+            limit=self._limit
+        )
 
     @authenticated
-    def POST(self, route):
+    def POST(self):
         uid = self.current_user
         tid = self.to_objectid(self._params['tid'])
 
         if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
 
-        if db_topic['follow'].is_followed(uid, tid):
+        if db_user['follow'].is_topic_followed(uid, tid):
             raise ResponseError(404)
 
-        db_topic['follow'].follow_topic(uid, tid)
+        db_user['follow'].follow_topic(uid, tid)
 
     @authenticated
-    def DELETE(self, route):
+    def DELETE(self):
         uid = self.current_user
         tid = self.to_objectid(self._params['tid'])
 
         if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
 
-        if not db_topic['follow'].is_followed(uid, tid):
+        if not db_user['follow'].is_topic_followed(uid, tid):
             raise ResponseError(404)
 
-        db_topic['follow'].unfollow_topic(uid, tid)
+        db_user['follow'].unfollow_topic(uid, tid)
 
 
 class NewsHandler(BaseHandler):
@@ -210,15 +238,53 @@ class NewsHandler(BaseHandler):
         self.route(route)
 
     def do_topics(self):
-        data_list = db_topic['news'].get_topics(self.current_user, skip=self._skip, limit=self._limit)
+        uid = self.current_user
+        topics = db_topic['topic'].get_all({'auid': uid}, skip=self._skip, limit=self._limit, sort=[('rtime', -1)])
+
+        data_list = []
+        for t in topics:
+            tid = self.to_objectid(t['tid'])
+            opinions = db_opinion['opinion'].get_all({'tid': tid}, skip=0, limit=2, sort=[('ctime', -1)])
+            if not opinions:
+                continue
+            t['op_count'] = db_opinion['opinion'].find({'tid': tid}).count()
+            t['op_authors'] = [op['author'] for op in opinions]
+            data_list.append(t)
+
         self._data['dataList'] = data_list
 
     def do_votes(self):
-        data_list = db_topic['news'].get_votes(self.current_user, skip=self._skip, limit=self._limit)
+        opinions = db_opinion['opinion'].get_all(
+            {'auid': self.current_user, 'vnum': {'$gt': 0}},
+            skip=self._skip,
+            limit=self._limit,
+            sort=[('vtime', -1)]
+        )
+
+        data_list = []
+        for op in opinions:
+            pid = self.to_objectid(op['pid'])
+            # TODO Vote will not inherit Vote2Opinion
+            votes = db_user['vote'].find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
+            op['vote_users'] = [db_user['user'].get_simple_user(v['uid'])['nickname'] for v in votes]
+            op['title'] = db_topic['topic'].get_one({'_id': self.to_objectid(op['tid'])})['title']
+            data_list.append(op)
+
         self._data['dataList'] = data_list
 
     def do_comments(self):
-        data_list = db_topic['news'].get_comments(self.current_user, skip=self._skip, limit=self._limit)
+        comments = db_user['comment'].get_all(
+            {'toauid': self.current_user},
+            skip=self._skip,
+            limit=self._limit,
+            sort=[('ctime', -1)]
+        )
+
+        data_list = []
+        for c in comments:
+            c['target_content'] = db_user['comment'].get_one({'_id': self.to_objectid(c['tocoid'])})['content']
+            data_list.append(c)
+
         self._data['dataList'] = data_list
 
 
@@ -246,11 +312,14 @@ class OpinionsHandler(BaseHandler):
 
     #@authenticated
     def GET(self, tid):
-        # TODO tz default
-        opinions = db_topic['opinion'].get_opinions(tid, uid=self.current_user, skip=self._skip, limit=self._limit)
+        opinions = db_opinion['opinion'].get_all(
+            {'tid': self.to_objectid(tid)},
+            skip=self._skip,
+            limit=self._limit
+        )
 
         self._data = {
-            'dataList': opinions,
+            'dataList': db_user['vote'].format_opinions(self.current_user, opinions),
             'nextStart': self._skip + self._limit
         }
 
@@ -270,28 +339,29 @@ class OpinionsHandler(BaseHandler):
         data['ctime'] = datetime.now()
         data['istz'] = True if data['auid'] == topic['auid'] else False
 
-        pid = db_topic['opinion'].create(data)
+        pid = db_opinion['opinion'].create(data)
         data['_id'] = pid
 
-        self._data = db_topic['opinion'].format(db_topic['opinion'].to_one_str(data), data['auid'])
+        self._data = db_opinion['opinion'].callback(db_opinion['opinion'].to_one_str(data))
 
 
 class DetailOpinionHandler(BaseHandler):
 
     #@authenticated
     def GET(self, pid):
-        data = db_topic['opinion'].get_one(self.to_objectid(pid))
-        data = db_topic['opinion'].format(data, self.current_user)
+        uid = self.current_user
 
+        data = db_opinion['opinion'].get_one(self.to_objectid(pid))
+        data['is_voted'] = db_user['vote'].is_opinion_voted(uid, pid)
         data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
-        has_voted = db_topic['opinion'].is_voted({'tid': data['tid'], 'uid': self.current_user})
 
         self._data = {
             'opinion': data,
-            'has_voted': has_voted,
+            'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }
 
 
+# TODO restful standard
 class VoteOpinionHandler(BaseHandler):
 
     _post_params = {
@@ -309,39 +379,35 @@ class VoteOpinionHandler(BaseHandler):
         pid = self.to_objectid(self._params['pid'])
         tid = self.to_objectid(self._params['tid'])
 
-        if not db_topic['opinion'].find_one({'_id': pid, 'tid': tid}):
+        if not db_opinion['opinion'].find_one({'_id': pid, 'tid': tid}):
             raise ResponseError(404)
 
-        self.route(route, tid, pid, uid)
+        has_user_voted = db_user['vote'].has_user_voted(uid, tid)
+        self.route(route, tid, pid, uid, has_user_voted)
 
-    def do_vote(self, tid, pid, uid):
-        if db_topic['opinion'].is_voted({'uid': uid, 'tid': tid}):
+    def do_vote(self, tid, pid, uid, has_user_voted):
+        if has_user_voted:
             raise ResponseError(404)
 
-        db_topic['opinion']._vote2opinion.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
-        db_topic['opinion'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+        db_user['vote'].vote_opinion(tid, pid, uid)
 
-    def do_unvote(self, tid, pid, uid):
-        if not db_topic['opinion'].is_voted({'uid': uid, 'tid': tid}):
+    def do_unvote(self, tid, pid, uid, has_user_voted):
+        if not db_user['vote'].is_opinion_voted(uid, pid):
             raise ResponseError(404)
 
-        db_topic['opinion']._vote2opinion.remove({'tid': tid, 'pid': pid, 'uid': uid})
-        db_topic['opinion'].update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
+        db_user['vote'].unvote_opinion(tid, pid, uid)
 
-    def do_revote(self, tid, pid, uid):
-        if db_topic['opinion'].is_voted({'uid': uid, 'tid': tid, 'pid': pid}):
+    def do_revote(self, tid, pid, uid, has_user_voted):
+        if not has_user_voted or db_user['vote'].is_opinion_voted(uid, pid):
             raise ResponseError(404)
 
-        old_opinion = db_topic['opinion']._vote2opinion.find_one({'tid': tid, 'uid': uid})
-        if not old_opinion:
+        voted_opinion = db_user['vote'].find_one({'tid': tid, 'uid': uid})
+        if not voted_opinion:
             raise ResponseError(404)
-        old_pid = old_opinion['pid']
+        voted_pid = voted_opinion['pid']
 
-        db_topic['opinion']._vote2opinion.remove({'tid': tid, 'uid': uid})
-        db_topic['opinion'].update({'_id': old_pid}, {'$inc': {'vnum': -1}}, w=1)
-
-        db_topic['opinion']._vote2opinion.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
-        db_topic['opinion'].update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+        db_user['vote'].unvote_opinion(tid, voted_pid, uid)
+        db_user['vote'].vote_opinion(tid, pid, uid)
 
 
 class CommentsHandler(BaseHandler):
@@ -366,7 +432,13 @@ class CommentsHandler(BaseHandler):
 
     #@authenticated
     def GET(self, tid):
-        data_list = db_topic['comment'].get_comments(self.to_objectid(tid), uid=self.current_user, skip=self._skip, limit=self._limit)
+        data_list = db_user['comment'].get_comments(
+            tid=tid,
+            uid=self.current_user,
+            skip=self._skip,
+            limit=self._limit,
+            sort = [('ctime', 1)],
+        )
 
         self._data = {
             'dataList': data_list,
@@ -390,13 +462,13 @@ class CommentsHandler(BaseHandler):
         data['ctime'] = datetime.now()
         data['istz'] = True if data['auid'] == topic['auid'] else False
 
-        to_comment = db_topic['comment'].find_one({'_id': data['tocoid']}, {'auid': 1}) if data['tocoid'] else None
+        to_comment = db_user['comment'].find_one({'_id': data['tocoid']}) if data['tocoid'] else None
         data['toauid'] = to_comment['auid'] if to_comment else None
 
-        coid = db_topic['comment'].create(data)
+        coid = db_user['comment'].create(data)
         data['_id'] = coid
 
-        self._data = db_topic['comment'].format(db_topic['comment'].to_one_str(data), data['auid'])
+        self._data = db_user['comment'].callback(db_user['comment'].to_one_str(data))
 
 
 class LikeCommentHandler(BaseHandler):
@@ -416,7 +488,7 @@ class LikeCommentHandler(BaseHandler):
         uid = self.current_user
 
         coid = self.to_objectid(data['coid'])
-        comment = db_topic['comment'].find_one({'_id': coid})
+        comment = db_user['comment'].find_one({'_id': coid})
 
         if not comment:
             raise ResponseError(404)
@@ -424,5 +496,5 @@ class LikeCommentHandler(BaseHandler):
         if uid in comment['like']:
             raise ResponseError(404)
 
-        db_topic['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
+        db_user['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
 

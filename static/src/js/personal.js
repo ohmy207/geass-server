@@ -32,9 +32,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //jq('html, body, #loadNext').css('background-color', '#ebebeb')
             //jq('html, body').css('background-color', '#f3f3f3')
 
-            var followHtml = template('tmpl_topicList', {'dataList': re.data.follow.data_list, 'count': re.data.follow.count, 'title': '我的关注', 'link': '/following'}),
+            var followHtml = template('tmpl_topicList', {'dataList': re.data.follow_topics.data_list, 'count': re.data.follow_topics.count, 'title': '我的关注', 'link': '/following'}),
                 headerHtml = template('tmpl_header', re.data),
-                publishHtml = template('tmpl_topicList', {'dataList': re.data.publish.data_list, 'count': re.data.publish.count, 'title': '发表的话题', 'link': '/publishing'});
+                publishHtml = template('tmpl_topicList', {'dataList': re.data.publish_topics.data_list, 'count': re.data.publish_topics.count, 'title': '发表的话题', 'link': '/publishing'});
 
             jq('#header').append(headerHtml);
             jq('#follow').append(followHtml);
