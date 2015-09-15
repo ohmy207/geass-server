@@ -40,15 +40,19 @@ class OpinionsHandler(BaseHandler):
 
     #@authenticated
     def GET(self, tid):
+        spec = {'tid': self.to_objectid(tid), 'istz': False}
+        sort=[('vnum', -1), ('ctime', 1)]
+
         opinions = db_opinion['opinion'].get_all(
-            {'tid': self.to_objectid(tid)},
+            spec=spec,
             skip=self._skip,
-            limit=self._limit
+            limit=self._limit,
+            sort=sort,
         )
 
         self._data = {
-            'dataList': db_user['vote'].format_opinions(self.current_user, opinions),
-            'nextStart': self._skip + self._limit
+            'data_list': db_user['vote'].format_opinions(self.current_user, opinions),
+            'next_start': self._skip + self._limit
         }
 
     @authenticated

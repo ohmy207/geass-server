@@ -63,7 +63,7 @@ class DetailTopicHandler(BaseHandler):
         opinions = db_opinion['opinion'].get_all(spec, skip=0, limit=5, sort=sort)
         spec['istz'] = False
         opinions.extend(db_opinion['opinion'].get_all(
-            spec,
+            spec=spec,
             skip=self._skip,
             limit=self._limit,
             sort=sort
@@ -71,9 +71,9 @@ class DetailTopicHandler(BaseHandler):
 
         self._data = {
             'topic': topic,
-            'dataList': db_user['vote'].format_opinions(uid, opinions),
+            'data_list': db_user['vote'].format_opinions(uid, opinions),
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'is_topic_followed': db_user['follow'].is_topic_followed(uid, tid),
-            'nextStart': self._skip + self._limit,
+            'next_start': self._skip + self._limit,
         }
 

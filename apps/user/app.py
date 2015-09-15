@@ -75,20 +75,20 @@ class PublishingHandler(BaseHandler):
     def GET(self, route):
         uid = self.current_user
         self._data = {
-            'nextStart': self._skip + self._limit,
+            'next_start': self._skip + self._limit,
         }
 
         self.route(route, uid)
 
     def do_topics(self, uid):
-        self._data['dataList'] = db_user['user'].get_user_topics(
+        self._data['data_list'] = db_user['user'].get_user_topics(
             uid=uid,
             skip=self._skip,
             limit=self._limit,
         )
 
     def do_opinions(self, uid):
-        self._data['dataList'] = db_user['user'].get_user_opinions(
+        self._data['data_list'] = db_user['user'].get_user_opinions(
             uid=uid,
             skip=self._skip,
             limit=self._limit,
@@ -120,10 +120,10 @@ class FollowingTopicHandler(BaseHandler):
     def GET(self):
 
         self._data = {
-            'nextStart': self._skip + self._limit,
+            'next_start': self._skip + self._limit,
         }
 
-        self._data['dataList'] = db_user['follow'].get_follow_topics(
+        self._data['data_list'] = db_user['follow'].get_follow_topics(
             uid=self.current_user,
             skip=self._skip,
             limit=self._limit
@@ -170,7 +170,7 @@ class NewsHandler(BaseHandler):
     @authenticated
     def GET(self, route):
         self._data = {
-            'nextStart': self._skip + self._limit,
+            'next_start': self._skip + self._limit,
         }
 
         self.route(route)
@@ -189,7 +189,7 @@ class NewsHandler(BaseHandler):
             t['op_authors'] = [op['author'] for op in opinions]
             data_list.append(t)
 
-        self._data['dataList'] = data_list
+        self._data['data_list'] = data_list
 
     def do_votes(self):
         opinions = db_opinion['opinion'].get_all(
@@ -208,7 +208,7 @@ class NewsHandler(BaseHandler):
             op['title'] = db_topic['topic'].get_one({'_id': self.to_objectid(op['tid'])})['title']
             data_list.append(op)
 
-        self._data['dataList'] = data_list
+        self._data['data_list'] = data_list
 
     def do_comments(self):
         comments = db_user['comment'].get_all(
@@ -223,7 +223,7 @@ class NewsHandler(BaseHandler):
             c['target_content'] = db_user['comment'].get_one({'_id': self.to_objectid(c['tocoid'])})['content']
             data_list.append(c)
 
-        self._data['dataList'] = data_list
+        self._data['data_list'] = data_list
 
 
 # TODO restful standard
@@ -334,8 +334,8 @@ class CommentsHandler(BaseHandler):
         )
 
         self._data = {
-            'dataList': data_list,
-            'nextStart': self._skip + self._limit
+            'data_list': data_list,
+            'next_start': self._skip + self._limit
         }
 
     @authenticated

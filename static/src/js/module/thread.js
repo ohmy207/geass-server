@@ -96,7 +96,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 emptyCon = opts.emptyCon || '';
 
             // 最后无数据不再加载
-            if (jq.UTIL.isObjectEmpty(re.data.dataList)) {
+            if (jq.UTIL.isObjectEmpty(re.data.data_list)) {
                 exports.isLoadingNew = false;
                 jq('#loadNext').hide();
                 //jq('#showAll').show();
@@ -114,7 +114,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             }
 
             jq('#loadNext').hide();
-            exports.nextStart = re.data.nextStart;
+            exports.nextStart = re.data.next_start;
         },
 
         initTouchRefresh: function (load) {
