@@ -49,8 +49,8 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'need': [
         ],
         'option': [
-            ('tid', basestring, None),
-            ('pid', basestring, None),
+            ('tid', basestring, ''),
+            ('pid', basestring, ''),
         ]
     }
 
