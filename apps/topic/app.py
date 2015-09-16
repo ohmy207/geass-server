@@ -33,6 +33,10 @@ class TopicsHandler(BaseHandler):
     @authenticated
     def POST(self):
         data = self._params
+
+        if len(data['title']) <= 0 or len(data['title']) > 97:
+            raise ResponseError(51)
+
         data['auid'] = self.current_user
         data['ctime'] = datetime.now()
 

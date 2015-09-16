@@ -104,6 +104,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.GET(*args, **kwargs)
         except ResponseError as e:
             e.msg = MESSAGE.get(e.code)
+            logger.error('ResponseError: %s, %s' % (e.code, e.msg))
             resp = self.init_resp(e.code)
         except Exception as e:
             logger.exception(e)
@@ -118,6 +119,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.POST(*args, **kwargs)
         except ResponseError as e:
             e.msg = MESSAGE.get(e.code)
+            logger.error('ResponseError: %s, %s' % (e.code, e.msg))
             resp = self.init_resp(e.code)
         except Exception as e:
             logger.exception(e)
@@ -132,6 +134,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.DELETE(*args, **kwargs)
         except ResponseError as e:
             e.msg = MESSAGE.get(e.code)
+            logger.error('ResponseError: %s, %s' % (e.code, e.msg))
             resp = self.init_resp(e.code)
         except Exception as e:
             logger.exception(e)

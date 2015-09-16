@@ -59,12 +59,18 @@ class OpinionsHandler(BaseHandler):
     def POST(self, tid):
         data = self._params
 
+        if len(data['content']) <= 0 or len(data['content']) > 30000:
+            raise ResponseError(61)
+
+        if len(data['pickeys']) > 8:
+            raise ResponseError(62)
+
         tid = self.to_objectid(tid)
         topic = db_topic['topic'].find_one({'_id': tid})
 
         # TODO error code
         if not topic:
-            raise ResponseError(404)
+            raise ResponseError(50)
 
         data['tid'] = tid
         data['auid'] = self.current_user

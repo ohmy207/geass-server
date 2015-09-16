@@ -135,10 +135,10 @@ class FollowingTopicHandler(BaseHandler):
         tid = self.to_objectid(self._params['tid'])
 
         if not db_topic['topic'].find_one({'_id': tid}):
-            raise ResponseError(404)
+            raise ResponseError(50)
 
         if db_user['follow'].is_topic_followed(uid, tid):
-            raise ResponseError(404)
+            raise ResponseError(80)
 
         db_user['follow'].follow_topic(uid, tid)
 
@@ -148,10 +148,10 @@ class FollowingTopicHandler(BaseHandler):
         tid = self.to_objectid(self._params['tid'])
 
         if not db_topic['topic'].find_one({'_id': tid}):
-            raise ResponseError(404)
+            raise ResponseError(50)
 
         if not db_user['follow'].is_topic_followed(uid, tid):
-            raise ResponseError(404)
+            raise ResponseError(80)
 
         db_user['follow'].unfollow_topic(uid, tid)
 
@@ -245,30 +245,30 @@ class VoteOpinionHandler(BaseHandler):
         tid = self.to_objectid(self._params['tid'])
 
         if not db_opinion['opinion'].find_one({'_id': pid, 'tid': tid}):
-            raise ResponseError(404)
+            raise ResponseError(60)
 
         has_user_voted = db_user['vote'].has_user_voted(uid, tid)
         self.route(route, tid, pid, uid, has_user_voted)
 
     def do_vote(self, tid, pid, uid, has_user_voted):
         if has_user_voted:
-            raise ResponseError(404)
+            raise ResponseError(90)
 
         db_user['vote'].vote_opinion(tid, pid, uid)
 
     def do_unvote(self, tid, pid, uid, has_user_voted):
         if not db_user['vote'].is_opinion_voted(uid, pid):
-            raise ResponseError(404)
+            raise ResponseError(91)
 
         db_user['vote'].unvote_opinion(tid, pid, uid)
 
     def do_revote(self, tid, pid, uid, has_user_voted):
         if not has_user_voted or db_user['vote'].is_opinion_voted(uid, pid):
-            raise ResponseError(404)
+            raise ResponseError(92)
 
         voted_opinion = db_user['vote'].find_one({'tid': tid, 'uid': uid})
         if not voted_opinion:
-            raise ResponseError(404)
+            raise ResponseError(93)
         voted_pid = voted_opinion['pid']
 
         db_user['vote'].unvote_opinion(tid, voted_pid, uid)
@@ -295,10 +295,10 @@ class LikeCommentHandler(BaseHandler):
         comment = db_user['comment'].find_one({'_id': coid})
 
         if not comment:
-            raise ResponseError(404)
+            raise ResponseError(70)
 
         if uid in comment['like']:
-            raise ResponseError(404)
+            raise ResponseError(75)
 
         db_user['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
 
@@ -345,16 +345,19 @@ class CommentsHandler(BaseHandler):
     def POST(self, tid):
         data = self._params
 
+        if len(data['content']) <= 0 or len(data['content']) > 2100:
+            raise ResponseError(71)
+
         tid = self.to_objectid(tid)
         pid = self.to_objectid(data['pid'])
         topic = db_topic['topic'].find_one({'_id': tid})
 
         # TODO error code
         if not topic:
-            raise ResponseError(404)
+            raise ResponseError(50)
 
         if pid and not db_opinion['opinion'].find_one({'_id': pid}):
-            raise ResponseError(404)
+            raise ResponseError(60)
 
         data['tid'] = tid
         data['pid'] = pid
