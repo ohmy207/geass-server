@@ -345,7 +345,7 @@ class CommentsHandler(BaseHandler):
     def POST(self, tid):
         data = self._params
 
-        if len(data['content']) <= 0 or len(data['content']) > 2100:
+        if len(data['content']) <= 0:
             raise ResponseError(71)
 
         tid = self.to_objectid(tid)

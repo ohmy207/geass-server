@@ -59,7 +59,7 @@ class OpinionsHandler(BaseHandler):
     def POST(self, tid):
         data = self._params
 
-        if len(data['content']) <= 0 or len(data['content']) > 30000:
+        if len(data['content']) <= 0:
             raise ResponseError(61)
 
         if len(data['pickeys']) > 8:
