@@ -120,7 +120,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                    thread.reply(tId, null, '', 'opinion');
+                    thread.reply(tId, null, null, '', 'opinion');
                 };
                 jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
                 thread.checkIsRegistered(callback);

@@ -41,7 +41,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 desc = exports.desc;
 
             if (isList) {
-                url = loadOpts.url + '?skip=' + start,
+                url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+                url = url + 'skip=' + start
                     + '&desc=' + desc;
             }
 
@@ -142,7 +143,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         },
 
-        reply: function (tId, toPId, author, replyType) {
+        reply: function (tId, pId, toCoId, author, replyType) {
             //var isViewthread = isViewthread || false;
             var author = author || '';
             //var floorPId = floorPId || 0;
@@ -156,7 +157,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null;
-                var replyForm = template('tmpl_replyForm', {data:{'tId':tId, 'toPId':toPId}});
+                var replyForm = template('tmpl_replyForm', {data:{'tId':tId, 'pId':pId, 'toCoId':toCoId}});
 
                 // 弹出回复框
                 jq.UTIL.dialog({
@@ -171,7 +172,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         //非回复主帖，隐藏发图
                         //if(!hasTid){jq('.uploadPicBox').css('visibility', 'hidden')};
 
-                        var obj = {replyTimer: replyTimer, toPId: toPId, author: author, tId: tId, replyType: replyType};
+                        var obj = {replyTimer: replyTimer, toCoId: toCoId, author: author, tId: tId, replyType: replyType};
                         //初始化回复窗口事件
                         exports.initReplyEvents(obj);
 
@@ -275,7 +276,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             else if (obj.replyType === 'comment') {
                 jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/comments');
 
-                if (obj.toPId) {
+                if (obj.toCoId) {
                     jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
                 }
             }

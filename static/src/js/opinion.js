@@ -55,7 +55,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this);
-                thread.reply(tId, null, '', 'opinion');
+                thread.reply(tId, null, null, '', 'opinion');
             });
 
             jq('.warp').on('click', '.detail', function(e) {

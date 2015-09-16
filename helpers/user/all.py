@@ -46,6 +46,7 @@ class Comment(BaseHelper, user_model.Comment):
     def callback(record):
         result = {
             'tid': record['tid'],
+            'pid': record['pid'],
             'coid': record['_id'],
             'author_uid': record['auid'],
             'like_num': record['lnum'],
@@ -66,9 +67,13 @@ class Comment(BaseHelper, user_model.Comment):
 
         return result
 
-    def get_comments(self, tid, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
+    def get_comments(self, tid, pid=None, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
+        spec = {
+            'tid': self.to_objectid(tid),
+            'pid': self.to_objectid(pid),
+        }
         records = self.find(
-            {'tid': self.to_objectid(tid)},
+            spec=spec,
             skip=skip,
             limit=limit,
             sort=sort,

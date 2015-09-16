@@ -311,6 +311,7 @@ class CommentsHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 5),
+            ('pid', basestring, None),
         ]
     }
 
@@ -319,6 +320,7 @@ class CommentsHandler(BaseHandler):
             ('content', basestring),
         ],
         'option': [
+            ('pid', basestring, None),
             ('tocoid', basestring, None),
         ]
     }
@@ -327,6 +329,7 @@ class CommentsHandler(BaseHandler):
     def GET(self, tid):
         data_list = db_user['comment'].get_comments(
             tid=tid,
+            pid=self._params['pid'],
             uid=self.current_user,
             skip=self._skip,
             limit=self._limit,
@@ -343,13 +346,18 @@ class CommentsHandler(BaseHandler):
         data = self._params
 
         tid = self.to_objectid(tid)
+        pid = self.to_objectid(data['pid'])
         topic = db_topic['topic'].find_one({'_id': tid})
 
         # TODO error code
         if not topic:
             raise ResponseError(404)
 
+        if pid and not db_opinion['opinion'].find_one({'_id': pid}):
+            raise ResponseError(404)
+
         data['tid'] = tid
+        data['pid'] = pid
         data['tocoid'] = self.to_objectid(data['tocoid'])
         data['auid'] = self.current_user
         data['ctime'] = datetime.now()

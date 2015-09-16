@@ -76,8 +76,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         jq.UTIL.touchStateNow(thisObj);
 
                         tId = thisObj.attr('tid');
+                        pId = thisObj.attr('pid');
                         author = thisObj.attr('author');
-                        thread.reply(tId, toCoId, author, 'comment');
+                        thread.reply(tId, pId, toCoId, author, 'comment');
                     }
                 };
                 thread.checkIsRegistered(callback);

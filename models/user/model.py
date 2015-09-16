@@ -21,6 +21,7 @@ class Comment(Model):
 
     field = {
         'tid':              (ObjectId, None),
+        'pid':              (ObjectId, None),
         'auid':             (ObjectId, None),
         'toauid':           (ObjectId, None),
         'tocoid':           (ObjectId, None),

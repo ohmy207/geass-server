@@ -150,7 +150,7 @@
                 </span>
             </div>
             <div class="flRight">
-                <a class="c9 replyFloor" href="javascript:;" id="co_<%= commentList[i].coid %>" tid="<%= commentList[i].tid %>" author="<%= commentList[i].author %>"> <i class="iconReply f18 cf"></i></a>
+                <a class="c9 replyFloor" href="javascript:;" id="co_<%= commentList[i].coid %>" tid="<%= commentList[i].tid %>" pid="<%= commentList[i].pid %>" author="<%= commentList[i].author %>"> <i class="iconReply f18 cf"></i></a>
             </div>
         </div>
 
@@ -165,7 +165,8 @@
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
         <input type="hidden" name="tid" value="<%= data.tId %>">
-        <input type="hidden" name="tocoid" value="<%= data.toPId %>">
+        <input type="hidden" name="pid" value="<%= data.pId %>">
+        <input type="hidden" name="tocoid" value="<%= data.toCoId %>">
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的评论..."></textarea>
         </div>

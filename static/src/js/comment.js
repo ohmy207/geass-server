@@ -28,10 +28,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         isNoShowToTop: false,
 
         load: function(action) {
+            var pId = window.pId || null;
+            var url_suffix = pId ? '?pid=' + pId : '';
+
             thread.load({
                 isList: true,
                 isEmptyShow: true,
-                url: '/topics/' + window.tId + '/comments',
+                url: '/topics/' + window.tId + '/comments' + url_suffix,
                 emptyCon: '还没有评论，快来抢沙发！',
                 callback: exports.renderList,
             }, action);
@@ -49,6 +52,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         init: function() {
             var tId = window.tId;
+            var pId = window.pId || null;
 
             exports.load('drag');
 
@@ -58,29 +62,29 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                        thread.reply(tId, null, '', 'comment');
+                        thread.reply(tId, pId,  null, '', 'comment');
                     };
                 thread.checkIsRegistered(callback);
             });
 
-            // 回复楼中楼
+            // 回复
             jq('#hotReplyList,#allReplyList').on('click', '.replyFloor', function(e) {
                 var thisObj = jq(this).parents('li');
-                var authorUId = thisObj.attr('uId');
+                //var authorUId = thisObj.attr('uid');
                 // 获取帖子id
-                var divId = thisObj.attr('id'), pId, floorPId, author;
+                var divId = thisObj.attr('id'), author;
 
                 var callback = function() {
-                    if (/p_[0-9a-f]{24}/.test(divId)) {
-                        if (match = divId.match(/p_([0-9a-f]{24})/)) {
-                            toPId = match[1];
+                    if (/co_[0-9a-f]{24}/.test(divId)) {
+                        if (match = divId.match(/co_([0-9a-f]{24})/)) {
+                            toCoId = match[1];
                         }
 
                         e.stopPropagation();
                         jq.UTIL.touchStateNow(jq(this));
 
                         author = thisObj.attr('author');
-                        thread.reply(tId, toPId, author, 'comment');
+                        thread.reply(tId, pId, toCoId, author, 'comment');
                     }
                 };
                 thread.checkIsRegistered(callback);
@@ -94,7 +98,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 e.stopPropagation();
 
                 var thisObj = jq(this),
-                    pId = thisObj.attr('pId') || null;
+                    coId = thisObj.attr('coid') || null;
 
                 var callback = function() {
                     if(thisObj.children('i').hasClass('iconPraise')) {
@@ -114,7 +118,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     }
 
                     var url = '/user/like/comments';
-                    var data = {'tid':tId, 'coid': pId};
+                    var data = {'tid':tId, 'coid': coId};
 
                     jq.UTIL.ajax(url, data, opts);
                 };
