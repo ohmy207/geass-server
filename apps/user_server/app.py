@@ -164,8 +164,11 @@ class UserInfoAuthorizeHandler(BaseHandler, WeiXinMixin):
         if 'errcode' in res:
             raise ResponseError(5, res['errmsg'])
 
-        if db_user['user'].get_one({'open.wx.openid': res['openid']}):
-            raise ResponseError(6)
+        user = db_user['user'].get_one({'open.wx.openid': res['openid']}) or None
+        if user:
+            self.update_session(user)
+            self.redirect(self._params['next'])
+            return
 
         user = yield self.get_authenticated_user(
             access_token=res['access_token'],
