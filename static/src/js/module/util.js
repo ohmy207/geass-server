@@ -569,9 +569,9 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 var opt = opt || {};
                 var loadingTimer = '';
                 var url = opt.url || jQuery('#' + formId).prop('action');
-                url = url.indexOf('?') === -1 ? url + '?' : url + '&';
-                url = url.replace(/\&resType\=[^\&]+/g, '') + 'resType=json';
-                url = url.replace(/\&isAjax\=1/g, '') + '&isAjax=1';
+                //url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+                //url = url.replace(/\&resType\=[^\&]+/g, '') + 'resType=json';
+                //url = url.replace(/\&isAjax\=1/g, '') + '&isAjax=1';
                 var formOpt = {
                     beforeSubmit: function(formData, jqForm, options) {
                         if (jQuery.ajax._requestCache[formId] == 1) {
