@@ -199,23 +199,34 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         },
 
         checkReplyForm: function(replyType) {
-
-            if (uploadImg.isBusy) {
-                jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
-                return false;
-            }
-
             var content = jq('textarea[name="content"]').val();
             var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-            if (contentLen <= 0) {
-                var replyType = replyType || 'default';
-                var dialogCon = {
-                    'opinion': '看法不能为空',
-                    'comment': '评论不能为空',
-                    'default': '回复内容不能为空',
-                };
-                jq.UTIL.dialog({content:dialogCon[replyType], autoClose:true});
-                return false;
+
+            if (replyType === 'opinion') {
+                if (uploadImg.isBusy) {
+                    jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
+                    return false;
+                }
+
+                if (contentLen <= 0) {
+                    jq.UTIL.dialog({content:'看法不能为空', autoClose:true});
+                    return false;
+                }
+
+                if (contentLen > 60000) {
+                    jq.UTIL.dialog({content:'看法最好不要超过20000字哦', autoClose:true});
+                    return false;
+                }
+            } else if (replyType === 'comment') {
+                if (contentLen <= 0) {
+                    jq.UTIL.dialog({content:'评论不能为空', autoClose:true});
+                    return false;
+                }
+
+                if (contentLen > 2100) {
+                    jq.UTIL.dialog({content:'评论不要超过700字哦', autoClose:true});
+                    return false;
+                }
             }
 
             return true;
