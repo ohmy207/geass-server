@@ -176,7 +176,7 @@ if __name__ == '__main__':
 
     # TODO session_store
     application = tornado.web.Application([(r"/(\w+)", MainHandler)], session_store=RedisSessionStore(
-        [('127.0.0.1', 6379, 0)]), cookie_secret='aVD321fQAGaYdkLlsd334K#/adf22iNvdfdflle3fl$=')
+        [('127.0.0.1', 6379, 0)]), cookie_secret='jTlCsBtcTHCVkLIFJoSGidX5RToMfkr6uf34SU23S00=')
 
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
