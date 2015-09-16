@@ -11,6 +11,6 @@ urls = [
 
     ('/forbidden', app.ForbiddenHandler),
     ('/wx/authorize/base', app.BaseAuthorizeHandler),
-    ('/wx/authorize/userinfo', app.UserinfoAuthorizeHandler),
+    ('/wx/authorize/userinfo', app.UserInfoAuthorizeHandler),
 
 ]

@@ -139,7 +139,7 @@ class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
         self.redirect(self._params['next'])
 
 
-class UserinfoAuthorizeHandler(BaseHandler, WeiXinMixin):
+class UserInfoAuthorizeHandler(BaseHandler, WeiXinMixin):
 
     _get_params = {
         'need': [
@@ -163,6 +163,9 @@ class UserinfoAuthorizeHandler(BaseHandler, WeiXinMixin):
         res = yield self.get_access_token(code=self._params['code'])
         if 'errcode' in res:
             raise ResponseError(5, res['errmsg'])
+
+        if db_user['user'].get_one({'open.wx.openid': res['openid']}):
+            raise ResponseError(6)
 
         user = yield self.get_authenticated_user(
             access_token=res['access_token'],
