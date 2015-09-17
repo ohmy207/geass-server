@@ -229,6 +229,12 @@ class BaseHandler(tornado.web.RequestHandler):
 
         return rpd
 
+    def http_401_error(self):
+        raise tornado.web.HTTPError(401)
+
+    def http_404_error(self):
+        raise tornado.web.HTTPError(404)
+
     @property
     def session(self):
         if not self._session:
