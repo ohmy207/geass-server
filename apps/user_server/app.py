@@ -131,7 +131,7 @@ class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
         res = yield self.get_access_token(code=self._params['code'])
         if 'errcode' in res:
             logger.error('AuthorizeError: %s, %s' % (5, res['errmsg']))
-            self.http_401_error()
+            self.http_error(401)
 
         user = db_user['user'].get_one({'open.wx.openid': res['openid']}) or {}
         user['openid'] = res['openid']
@@ -164,7 +164,7 @@ class UserInfoAuthorizeHandler(BaseHandler, WeiXinMixin):
         res = yield self.get_access_token(code=self._params['code'])
         if 'errcode' in res:
             logger.error('AuthorizeError: %s, %s' % (5, res['errmsg']))
-            self.http_401_error()
+            self.http_error(401)
 
         user = db_user['user'].get_one({'open.wx.openid': res['openid']}) or None
         if user:
@@ -179,7 +179,7 @@ class UserInfoAuthorizeHandler(BaseHandler, WeiXinMixin):
 
         if 'errcode' in user:
             logger.error('AuthorizeError: %s, %s' % (5, user['errmsg']))
-            self.http_401_error()
+            self.http_error(401)
 
         uid = db_user['user'].create({'open': {'wx': user}})
         thread.start_new_thread(self.backup_avatar, (uid, user['headimgurl']))
