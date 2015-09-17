@@ -64,6 +64,9 @@ class DetailTopicHandler(BaseHandler):
         sort=[('vnum', -1), ('ctime', 1)]
 
         topic = db_topic['topic'].get_one({'_id': tid})
+        if not topic:
+            raise ResponseError(404)
+
         opinions = db_opinion['opinion'].get_all(spec, skip=0, limit=5, sort=sort)
         spec['istz'] = False
         opinions.extend(db_opinion['opinion'].get_all(

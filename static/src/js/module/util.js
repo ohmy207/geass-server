@@ -505,7 +505,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
 
                         if (result.code == 0) {
                             if (!opts.noMsg) {
-                                jQuery.UTIL.dialog({content:result.message, icon:'success', autoClose:true});
+                                jQuery.UTIL.dialog({content:result.msg, icon:'success', autoClose:true});
                             }
 
                             if (!opts.noJump && result.jumpURL) {
@@ -514,7 +514,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                             }
                         } else if (result.code) {
                             if (!opts.noMsg) {
-                                var msg = result.message + '<span style="display:none;">' + result.code + '</span>';
+                                var msg = result.msg + '<span style="display:none;">' + result.code + '</span>';
                                 jQuery.UTIL.dialog({content:msg, autoClose:true});
                             }
                         } else {

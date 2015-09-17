@@ -90,6 +90,9 @@ class DetailOpinionHandler(BaseHandler):
         uid = self.current_user
 
         data = db_opinion['opinion'].get_one(self.to_objectid(pid))
+        if not data:
+            raise ResponseError(404)
+
         data['is_voted'] = db_user['vote'].is_opinion_voted(uid, pid)
         data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
 
