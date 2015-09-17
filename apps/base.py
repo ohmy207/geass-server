@@ -7,7 +7,7 @@ import tornado.web
 
 import log
 
-from config.global_setting import MESSAGE, CDN
+from config.global_setting import ERROR_PAGE_MESSAGE, MESSAGE, CDN
 from utils import (
     escape as _es,
     httputil as _ht,
@@ -230,13 +230,10 @@ class BaseHandler(tornado.web.RequestHandler):
         return rpd
 
     def write_error(self, status_code, **kwargs):
-        msg = '啊~好像出错了。。'
+        msg = ERROR_PAGE_MESSAGE[500]
 
-        if status_code == 404:
-            msg ='哦~好像没有找到要找的页面。。'
-
-        if status_code == 401:
-            msg ='呜~获取用户信息没有成功。。'
+        if status_code in [401, 403, 404]:
+            msg = ERROR_PAGE_MESSAGE[status_code]
 
         self.render("error.html", error_code=status_code, msg=msg)
 

@@ -71,6 +71,13 @@ MESSAGE = {
     404: u'not found',
 }
 
+ERROR_PAGE_MESSAGE = {
+    401: u'呜~获取用户信息没有成功。。',
+    403: u'要先获取权限才能访问哦！',
+    404: u'哦~好像没有找到要找的页面。。',
+    500: u'啊~好像出错了。。',
+}
+
 # Third-party
 
 # qiniu config

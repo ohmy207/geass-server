@@ -21,7 +21,12 @@
   <meta name="keywords" content="" /> 
 
   <link rel="shortcut icon" href="http://dzqun.gtimg.cn/quan/images/favicon.ico" /> 
-  <link rel="stylesheet" href="{{ static_url('css/style.min.css', v=1) }}"/>
+
+  {% block style %}
+
+    <link rel="stylesheet" href="{{ static_url('css/style.min.css', v=1) }}"/>
+
+  {% end %}
 
   {% block header %}
 

@@ -5002,6 +5002,22 @@ i {
     border-bottom: 3px solid #00a5e0
 }
 
+.error {
+    margin-top: 100px;
+    padding: 20px 0;
+    text-align: center;
+    vertical-align: top;
+    background-color: #fafafa;
+}
+
+.errorMsg {
+    font-size: 17px;
+    line-height: 23px;
+    color: #a6a6a6;
+    /*
+    color: #666;
+    */
+}
 /*
 .g-mask {
     position: fixed;
