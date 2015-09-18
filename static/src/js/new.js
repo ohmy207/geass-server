@@ -287,11 +287,11 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 return false;
             });
 
-            jq('#content').on('focus', function() {
-                jq('.bNav').hide();
-            }).on('blur', function() {
-                jq('.bNav').show();
-            });
+            //jq('#content').on('focus', function() {
+            //    jq('.bNav').hide();
+            //}).on('blur', function() {
+            //    jq('.bNav').show();
+            //});
 
             exports.initUpload();
             exports.initModal();

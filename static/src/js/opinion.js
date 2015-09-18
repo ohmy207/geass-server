@@ -25,7 +25,6 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        isNoShowToTop: false,
         hasVoted: false,
 
         // render data

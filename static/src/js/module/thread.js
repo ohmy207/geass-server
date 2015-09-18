@@ -181,9 +181,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     close: function() {
                        // 内容非空确认
                        clearInterval(replyTimer);
-                       exports.isNoShowToTop = false;
-                       jq('.bNav').show();
-                       jq('.floatLayer').show();
+                       //exports.isNoShowToTop = false;
+                       //jq('.bNav').show();
+                       //jq('.floatLayer').show();
                        return true;
 
                        // 文本框焦点
@@ -378,10 +378,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                             clearInterval(obj.replyTimer);
 
                             // 关闭弹窗
-                            exports.isNoShowToTop = false;
+                            //exports.isNoShowToTop = false;
                             jq.UTIL.dialog({id:'replyForm'});
-                            jq('.bNav').show();
-                            jq('.floatLayer').show();
+                            //jq('.bNav').show();
+                            //jq('.floatLayer').show();
                         }
                         isSendBtnClicked = false;
                     },
@@ -406,10 +406,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 }
             }, 1000);
 
-            exports.isNoShowToTop = true;
+            //exports.isNoShowToTop = true;
             // 隐藏底部导航和向上
-            jq('.bNav').hide();
-            jq('.floatLayer').hide();
+            //jq('.bNav').hide();
+            //jq('.floatLayer').hide();
 
             jq('#fwin_dialog_replyForm').css('top', '0');
 

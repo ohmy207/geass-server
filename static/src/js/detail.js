@@ -25,7 +25,6 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        isNoShowToTop: false,
         hasVoted: false,
         isLoadingFirst: true,
 
@@ -114,6 +113,20 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //    imageviewCommon.init('.threadPic span');
             //    imageviewCommon.init('.replyImg dd');
             //    // imageviewCommon.init('.slideBox li');
+            //});
+
+            //setInterval(function() {
+            //    if (window.pageYOffset > 1000 && !thread.isNoShowToTop) {
+            //        jq('#goTop').show();
+            //    } else {
+            //        jq('#goTop').hide();
+            //    }
+
+            //}, 200);
+
+            //jq('.upBtn').on('click', function() {
+            //    jq('#goTop').hide();
+            //    scroll(0,0);
             //});
 
             // 主题和底部bar 帖点击回复

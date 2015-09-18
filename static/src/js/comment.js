@@ -25,7 +25,6 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        isNoShowToTop: false,
 
         load: function(action) {
             var pId = window.pId || null;
@@ -57,6 +56,20 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             exports.load('drag');
 
             initLazyload('.warp img');
+
+            //setInterval(function() {
+            //    if (window.pageYOffset > 1000 && !thread.isNoShowToTop) {
+            //        jq('#goTop').show();
+            //    } else {
+            //        jq('#goTop').hide();
+            //    }
+
+            //}, 200);
+
+            //jq('.upBtn').on('click', function() {
+            //    jq('#goTop').hide();
+            //    scroll(0,0);
+            //});
 
             // 主题和底部bar 帖点击回复
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
