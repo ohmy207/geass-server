@@ -78,6 +78,11 @@ ERROR_PAGE_MESSAGE = {
     500: u'啊~好像出错了。。',
 }
 
+ANONYMOUS_USER = {
+    'nickname': '匿名用户',
+    'avatar': '',
+}
+
 # Third-party
 
 # qiniu config

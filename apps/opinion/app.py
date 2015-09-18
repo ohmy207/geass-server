@@ -24,6 +24,7 @@ class OpinionsHandler(BaseHandler):
         ],
         'option': [
             ('pickeys', list, []),
+            ('isanon', bool, False),
         ]
     }
 

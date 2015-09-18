@@ -351,12 +351,13 @@ class CommentsHandler(BaseHandler):
         tid = self.to_objectid(tid)
         pid = self.to_objectid(data['pid'])
         topic = db_topic['topic'].find_one({'_id': tid})
+        opinion = db_opinion['opinion'].find_one({'_id': pid}) if pid else None
 
         # TODO error code
         if not topic:
             raise ResponseError(50)
 
-        if pid and not db_opinion['opinion'].find_one({'_id': pid}):
+        if pid and not opinion:
             raise ResponseError(60)
 
         data['tid'] = tid
@@ -364,7 +365,9 @@ class CommentsHandler(BaseHandler):
         data['tocoid'] = self.to_objectid(data['tocoid'])
         data['auid'] = self.current_user
         data['ctime'] = datetime.now()
-        data['istz'] = True if data['auid'] == topic['auid'] else False
+
+        parent = opinion if pid else topic
+        data['istz'] = True if data['auid'] == parent['auid'] else False
 
         to_comment = db_user['comment'].find_one({'_id': data['tocoid']}) if data['tocoid'] else None
         data['toauid'] = to_comment['auid'] if to_comment else None

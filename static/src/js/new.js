@@ -328,8 +328,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 jq.UTIL.dialog({content:'话题字数有点少', autoClose:true});
                 return false;
             }
-            if (titleLen > 97) {
-                jq.UTIL.dialog({content:'话题最好不要超过32字哦，复杂话题可以在描述中说明', autoClose:true});
+            if (titleLen > 180) {
+                jq.UTIL.dialog({content:'话题最好不要超过60字哦，复杂话题可以在描述中说明', autoClose:true});
                 return false;
             }
 

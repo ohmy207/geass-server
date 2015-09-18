@@ -8,6 +8,7 @@ from helpers.base import BaseHelper, UserHelper
 from models.user import model as user_model
 from helpers import topic as topic_helper
 from helpers import opinion as opinion_helper
+from config.global_setting import ANONYMOUS_USER
 
 logger = log.getLogger(__file__)
 
@@ -41,6 +42,8 @@ class User(UserHelper):
 class Comment(BaseHelper, user_model.Comment):
 
     _user = User()
+    _topic = topic_helper['topic']
+    _opinion = opinion_helper['opinion']
 
     @staticmethod
     def callback(record):
@@ -58,12 +61,31 @@ class Comment(BaseHelper, user_model.Comment):
         result['content'] = Comment.xhtml_escape(record['content'])
         result['f_created_time'] = Comment._simple_time(record['ctime'])
 
-        simple_user = Comment._user.get_simple_user(record['auid'])
-        result['author'] = simple_user['nickname']
-        result['avatar'] = simple_user['avatar']
+        is_anonymous = False
+        if record['istz']:
+            parent_collection, parent_id = Comment._topic, record['tid']
+            if record['pid']:
+                parent_collection, parent_id = Comment._opinion, record['pid']
 
-        to_user = Comment._user.get_simple_user(record['toauid'])
-        result['to_author'] = to_user['nickname']
+            parent_record = parent_collection.find_one(
+                {'_id': Comment.to_objectid(parent_id)},
+                {'isanon': 1}
+            )
+            is_anonymous = parent_record['isanon']
+
+        if is_anonymous:
+            result['author'] = ANONYMOUS_USER['nickname']
+            result['avatar'] = ANONYMOUS_USER['avatar']
+        else:
+            simple_user = Comment._user.get_simple_user(record['auid'])
+            result['author'] = simple_user['nickname']
+            result['avatar'] = simple_user['avatar']
+
+        if record['auid'] == record['toauid'] and is_anonymous:
+            result['to_author'] = ANONYMOUS_USER['nickname']
+        else:
+            to_user = Comment._user.get_simple_user(record['toauid'])
+            result['to_author'] = to_user['nickname']
 
         return result
 

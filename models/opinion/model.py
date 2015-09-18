@@ -11,6 +11,8 @@ class Opinion(Model):
         'tid':              (ObjectId, None),
         'auid':             (ObjectId, None),
 
+        'isanon':           (bool, False)   ,
+
         'content':          (basestring, ''),
 
         'pickeys':          (list, [])      ,
