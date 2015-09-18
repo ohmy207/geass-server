@@ -37,7 +37,7 @@ class TopicsHandler(BaseHandler):
         if len(data['title']) <= 0:
             raise ResponseError(51)
 
-        data['auid'] = self.current_user
+        data['uid'] = self.current_user
         data['ctime'] = datetime.now()
 
         tid = db_topic['topic'].create(data)

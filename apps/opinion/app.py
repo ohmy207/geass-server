@@ -74,9 +74,9 @@ class OpinionsHandler(BaseHandler):
             raise ResponseError(50)
 
         data['tid'] = tid
-        data['auid'] = self.current_user
+        data['uid'] = self.current_user
         data['ctime'] = datetime.now()
-        data['istz'] = True if data['auid'] == topic['auid'] else False
+        data['istz'] = True if data['uid'] == topic['uid'] else False
 
         pid = db_opinion['opinion'].create(data)
         data['_id'] = pid

@@ -20,7 +20,7 @@ class Opinion(BaseHelper, opinion_model.Opinion):
         result = {
             'tid': record['tid'],
             'pid': record['_id'],
-            'author_uid': record['auid'],
+            'author_uid': record['uid'],
             'vote_num': record['vnum'],
             'is_tz': record['istz'],
             'is_voted': False,
@@ -34,7 +34,7 @@ class Opinion(BaseHelper, opinion_model.Opinion):
             result['author'] = ANONYMOUS_USER['nickname']
             result['avatar'] = ANONYMOUS_USER['avatar']
         else:
-            simple_user = Opinion._user.get_simple_user(record['auid'])
+            simple_user = Opinion._user.get_simple_user(record['uid'])
             result['author'] = simple_user['nickname']
             result['avatar'] = simple_user['avatar']
 

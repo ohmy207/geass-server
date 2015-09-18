@@ -21,7 +21,7 @@ class User(UserHelper):
     _opinion = opinion_helper['opinion']
 
     def get_user_topics(self, uid, skip, limit, sort=[('ctime', -1)]):
-        spec = {'auid': self.to_objectid(uid)}
+        spec = {'uid': self.to_objectid(uid)}
         return self._topic.get_all(
             spec,
             skip=skip,
@@ -30,7 +30,7 @@ class User(UserHelper):
         )
 
     def get_user_opinions(self, uid, skip, limit, sort=[('ctime', -1)]):
-        spec = {'auid': self.to_objectid(uid)}
+        spec = {'uid': self.to_objectid(uid)}
         return self._opinion.get_all(
             spec,
             skip=skip,
@@ -51,7 +51,7 @@ class Comment(BaseHelper, user_model.Comment):
             'tid': record['tid'],
             'pid': record['pid'],
             'coid': record['_id'],
-            'author_uid': record['auid'],
+            'author_uid': record['uid'],
             'like_num': record['lnum'],
             'is_tz': record['istz'],
             'tocoid': record['tocoid'],
@@ -77,14 +77,14 @@ class Comment(BaseHelper, user_model.Comment):
             result['author'] = ANONYMOUS_USER['nickname']
             result['avatar'] = ANONYMOUS_USER['avatar']
         else:
-            simple_user = Comment._user.get_simple_user(record['auid'])
+            simple_user = Comment._user.get_simple_user(record['uid'])
             result['author'] = simple_user['nickname']
             result['avatar'] = simple_user['avatar']
 
-        if record['auid'] == record['toauid'] and is_anonymous:
+        if record['uid'] == record['touid'] and is_anonymous:
             result['to_author'] = ANONYMOUS_USER['nickname']
         else:
-            to_user = Comment._user.get_simple_user(record['toauid'])
+            to_user = Comment._user.get_simple_user(record['touid'])
             result['to_author'] = to_user['nickname']
 
         return result

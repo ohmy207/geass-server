@@ -11,7 +11,7 @@ class Topic(Model):
         'title':            (basestring, ''),
         'content':          (basestring, ''),
 
-        'auid':             (basestring, ''),
+        'uid':              (basestring, ''),
 
         'ispriv':           (bool, False)   ,
         'isanon':           (bool, False)   ,

@@ -38,8 +38,8 @@ class PersonalHandler(BaseHandler):
             'publish_opinions': {},
         }
         self._data['follow_topics']['count'] = db_user['follow'].get_follows_count(uid)
-        self._data['publish_topics']['count'] = db_topic['topic'].find({'auid': uid}).count()
-        self._data['publish_opinions']['count'] = db_opinion['opinion'].find({'auid': uid}).count()
+        self._data['publish_topics']['count'] = db_topic['topic'].find({'uid': uid}).count()
+        self._data['publish_opinions']['count'] = db_opinion['opinion'].find({'uid': uid}).count()
 
         self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(
             uid=uid,
@@ -177,7 +177,7 @@ class NewsHandler(BaseHandler):
 
     def do_topics(self):
         uid = self.current_user
-        topics = db_topic['topic'].get_all({'auid': uid}, skip=self._skip, limit=self._limit, sort=[('rtime', -1)])
+        topics = db_topic['topic'].get_all({'uid': uid}, skip=self._skip, limit=self._limit, sort=[('rtime', -1)])
 
         data_list = []
         for t in topics:
@@ -193,7 +193,7 @@ class NewsHandler(BaseHandler):
 
     def do_votes(self):
         opinions = db_opinion['opinion'].get_all(
-            {'auid': self.current_user, 'vnum': {'$gt': 0}},
+            {'uid': self.current_user, 'vnum': {'$gt': 0}},
             skip=self._skip,
             limit=self._limit,
             sort=[('vtime', -1)]
@@ -212,7 +212,7 @@ class NewsHandler(BaseHandler):
 
     def do_comments(self):
         comments = db_user['comment'].get_all(
-            {'toauid': self.current_user},
+            {'touid': self.current_user},
             skip=self._skip,
             limit=self._limit,
             sort=[('ctime', -1)]
@@ -363,14 +363,14 @@ class CommentsHandler(BaseHandler):
         data['tid'] = tid
         data['pid'] = pid
         data['tocoid'] = self.to_objectid(data['tocoid'])
-        data['auid'] = self.current_user
+        data['uid'] = self.current_user
         data['ctime'] = datetime.now()
 
         parent = opinion if pid else topic
-        data['istz'] = True if data['auid'] == parent['auid'] else False
+        data['istz'] = True if data['uid'] == parent['uid'] else False
 
         to_comment = db_user['comment'].find_one({'_id': data['tocoid']}) if data['tocoid'] else None
-        data['toauid'] = to_comment['auid'] if to_comment else None
+        data['touid'] = to_comment['uid'] if to_comment else None
 
         coid = db_user['comment'].create(data)
         data['_id'] = coid

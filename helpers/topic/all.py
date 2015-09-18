@@ -20,7 +20,7 @@ class Topic(BaseHelper, topic_model.Topic):
         result = {
             'tid':  record['_id'],
             'title': record['title'],
-            'author_uid': record['auid'],
+            'author_uid': record['uid'],
             'is_private': record['ispriv'],
             #'is_anonymous': record['isanon'],
         }
@@ -33,7 +33,7 @@ class Topic(BaseHelper, topic_model.Topic):
             result['author'] = ANONYMOUS_USER['nickname']
             result['avatar'] = ANONYMOUS_USER['avatar']
         else:
-            simple_user = Topic._user.get_simple_user(record['auid'])
+            simple_user = Topic._user.get_simple_user(record['uid'])
             result['author'] = simple_user['nickname']
             result['avatar'] = simple_user['avatar']
 

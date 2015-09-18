@@ -9,7 +9,7 @@ class Opinion(Model):
 
     field = {
         'tid':              (ObjectId, None),
-        'auid':             (ObjectId, None),
+        'uid':              (ObjectId, None),
 
         'isanon':           (bool, False)   ,
 
