@@ -34,8 +34,6 @@ class OpinionsHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 5),
-            # TODO
-            ('type', basestring, 'all'),
         ]
     }
 
@@ -60,23 +58,31 @@ class OpinionsHandler(BaseHandler):
     def POST(self, tid):
         data = self._params
 
+        tid = self.to_objectid(tid)
+        uid = self.current_user
+        topic = db_topic['topic'].find_one({'_id': tid})
+        opinion_count = db_opinion['opinion'].find({'tid': tid, 'uid': uid}).count()
+        is_lz = True if uid == topic['uid'] else False
+
+        if not topic:
+            raise ResponseError(50)
+
+        if not is_lz and opinion_count > 0:
+            raise ResponseError(63)
+
+        if is_lz and opinion_count > 2:
+            raise ResponseError(64)
+
         if len(data['content']) <= 0:
             raise ResponseError(61)
 
         if len(data['pickeys']) > 8:
             raise ResponseError(62)
 
-        tid = self.to_objectid(tid)
-        topic = db_topic['topic'].find_one({'_id': tid})
-
-        # TODO error code
-        if not topic:
-            raise ResponseError(50)
-
         data['tid'] = tid
-        data['uid'] = self.current_user
+        data['uid'] = uid
         data['ctime'] = datetime.now()
-        data['islz'] = True if data['uid'] == topic['uid'] else False
+        data['islz'] = is_lz
 
         pid = db_opinion['opinion'].create(data)
         data['_id'] = pid
