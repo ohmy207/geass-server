@@ -53,7 +53,7 @@ class Comment(BaseHelper, user_model.Comment):
             'coid': record['_id'],
             'author_uid': record['uid'],
             'like_num': record['lnum'],
-            'is_tz': record['istz'],
+            'is_lz': record['islz'],
             'tocoid': record['tocoid'],
             #'is_liked': False,
         }
@@ -62,7 +62,7 @@ class Comment(BaseHelper, user_model.Comment):
         result['f_created_time'] = Comment._simple_time(record['ctime'])
 
         is_anonymous = False
-        if record['istz']:
+        if record['islz']:
             parent_collection, parent_id = Comment._topic, record['tid']
             if record['pid']:
                 parent_collection, parent_id = Comment._opinion, record['pid']

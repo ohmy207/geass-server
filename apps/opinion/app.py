@@ -41,7 +41,7 @@ class OpinionsHandler(BaseHandler):
 
     #@authenticated
     def GET(self, tid):
-        spec = {'tid': self.to_objectid(tid), 'istz': False}
+        spec = {'tid': self.to_objectid(tid), 'islz': False}
         sort=[('vnum', -1), ('ctime', 1)]
 
         opinions = db_opinion['opinion'].get_all(
@@ -76,7 +76,7 @@ class OpinionsHandler(BaseHandler):
         data['tid'] = tid
         data['uid'] = self.current_user
         data['ctime'] = datetime.now()
-        data['istz'] = True if data['uid'] == topic['uid'] else False
+        data['islz'] = True if data['uid'] == topic['uid'] else False
 
         pid = db_opinion['opinion'].create(data)
         data['_id'] = pid

@@ -22,7 +22,7 @@ class Opinion(BaseHelper, opinion_model.Opinion):
             'pid': record['_id'],
             'author_uid': record['uid'],
             'vote_num': record['vnum'],
-            'is_tz': record['istz'],
+            'is_lz': record['islz'],
             'is_voted': False,
         }
 

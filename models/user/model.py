@@ -32,7 +32,7 @@ class Comment(Model):
 
         'lnum':             (int, 0)        ,
 
-        'istz':             (bool, False)   ,
+        'islz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }

@@ -116,10 +116,10 @@
 
       <% for (var i in replyList) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid) && ((tmplType==='default' && replyList[i].is_tz) || (tmplType!='default' && !replyList[i].is_tz))) { %>
+      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid) && ((tmplType==='default' && replyList[i].is_lz) || (tmplType!='default' && !replyList[i].is_lz))) { %>
       <li class="opinionList" id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
-          <%if (!replyList[i].is_tz) { %>
+          <%if (!replyList[i].is_lz) { %>
               <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
           <% } %>
 
@@ -136,7 +136,7 @@
               <% } %>
 
               <div class="textContainer">
-              <%if (!replyList[i].is_tz) { %>
+              <%if (!replyList[i].is_lz) { %>
                   <h3 class="text">
                       <%= replyList[i].author %>
                   </h3>
@@ -147,7 +147,7 @@
                   </div>
               </div>
 
-              <%if (false && !replyList[i].is_tz) { %>
+              <%if (false && !replyList[i].is_lz) { %>
                   <div class="info">
                       <div>
                           <span>

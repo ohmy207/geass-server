@@ -60,7 +60,7 @@ class DetailTopicHandler(BaseHandler):
     def GET(self, tid):
         tid = self.to_objectid(tid)
         uid = self.current_user
-        spec = {'tid': tid, 'istz': True}
+        spec = {'tid': tid, 'islz': True}
         sort=[('vnum', -1), ('ctime', 1)]
 
         topic = db_topic['topic'].get_one({'_id': tid})
@@ -68,7 +68,7 @@ class DetailTopicHandler(BaseHandler):
             raise ResponseError(404)
 
         opinions = db_opinion['opinion'].get_all(spec, skip=0, limit=5, sort=sort)
-        spec['istz'] = False
+        spec['islz'] = False
         opinions.extend(db_opinion['opinion'].get_all(
             spec=spec,
             skip=self._skip,

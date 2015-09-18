@@ -367,7 +367,7 @@ class CommentsHandler(BaseHandler):
         data['ctime'] = datetime.now()
 
         parent = opinion if pid else topic
-        data['istz'] = True if data['uid'] == parent['uid'] else False
+        data['islz'] = True if data['uid'] == parent['uid'] else False
 
         to_comment = db_user['comment'].find_one({'_id': data['tocoid']}) if data['tocoid'] else None
         data['touid'] = to_comment['uid'] if to_comment else None
