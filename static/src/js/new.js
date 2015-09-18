@@ -335,8 +335,8 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
             var content = jq('#content').val();
             var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-            if (contentLen > 3072) {
-                jq.UTIL.dialog({content:'描述最好不要超过1024字哦', autoClose:true});
+            if (contentLen > 30000) {
+                jq.UTIL.dialog({content:'描述最好不要超过10000字哦', autoClose:true});
                 return false;
             }
 

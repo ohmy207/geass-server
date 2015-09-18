@@ -2,6 +2,7 @@
 
 import log
 
+from models.topic import model as topic_model
 from models.opinion import model as opinion_model
 from helpers.base import BaseHelper, UserHelper
 from config.global_setting import PIC_URL, ANONYMOUS_USER
@@ -14,6 +15,7 @@ MODEL_SLOTS = ['Opinion']
 class Opinion(BaseHelper, opinion_model.Opinion):
 
     _user = UserHelper()
+    _topic = topic_model.Topic()
 
     @staticmethod
     def callback(record):
@@ -30,7 +32,15 @@ class Opinion(BaseHelper, opinion_model.Opinion):
         result['f_created_time'] = Opinion._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
 
-        if record['isanon']:
+        is_anonymous = record['isanon']
+        if record['islz']:
+            topic = Opinion._topic.find_one(
+                {'_id': Opinion.to_objectid(record['tid'])},
+                {'isanon': 1}
+            )
+            is_anonymous = topic['isanon']
+
+        if is_anonymous:
             result['author'] = ANONYMOUS_USER['nickname']
             result['avatar'] = ANONYMOUS_USER['avatar']
         else:
