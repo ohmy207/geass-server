@@ -157,7 +157,13 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null;
-                var replyForm = template('tmpl_replyForm', {data:{'tId':tId, 'pId':pId, 'toCoId':toCoId}});
+                    isLZ = window.isLZ || false;
+                var replyForm = template('tmpl_replyForm', {data:{
+                    'tId':tId,
+                    'pId':pId,
+                    'toCoId':toCoId,
+                    'isLZ':isLZ,
+                }});
 
                 // 弹出回复框
                 jq.UTIL.dialog({

@@ -79,6 +79,7 @@ class DetailTopicHandler(BaseHandler):
         self._data = {
             'topic': topic,
             'data_list': db_user['vote'].format_opinions(uid, opinions),
+            'is_lz': topic['author_uid'] == unicode(uid),
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'is_topic_followed': db_user['follow'].is_topic_followed(uid, tid),
             'next_start': self._skip + self._limit,

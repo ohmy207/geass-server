@@ -74,6 +74,13 @@ none;
     display: block
 }
 
+input[type="checkbox"] {
+    position: relative;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+}
+
 img {
     border: 0 none;
     vertical-align: bottom;
@@ -3130,9 +3137,8 @@ li {
     background-color: #fafafa
 }
 
-.sendInfo label {
+.sendInfo label, .sendNav label {
     color: #666;
-    margin: 5px 0;
 }
 
 .sendBorder {
@@ -4248,6 +4254,10 @@ h4 {
     top: 10px
 }
 
+.sendInfo .sendOperBtn {
+    top: 8px;
+}
+
 .sendBtn,.cancelNewBtn {
     padding: 0
 8px;
@@ -5018,6 +5028,7 @@ i {
     color: #666;
     */
 }
+
 /*
 .g-mask {
     position: fixed;

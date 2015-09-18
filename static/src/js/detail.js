@@ -47,6 +47,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.detailBox').prepend(topicHtml);
             jq('.warp, #bottomBar, .recommendTitle').show();
 
+            window.isLZ = re.data.is_lz || false;
             exports.hasVoted = re.data.has_user_voted || false;
             exports.renderList(re);
 
