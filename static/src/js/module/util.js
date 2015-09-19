@@ -224,7 +224,8 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 var dialogZIndex = maskZIndex + 1;
 
                 // mask style
-                var maskStyle = 'position:absolute;top:-0px;left:-0px;width:' + jQuery(document).width() + 'px;height:' + jQuery(document).height() + 'px;background:#000;filter:alpha(opacity=60);opacity:0.5; z-index:' + maskZIndex + ';';
+                //var maskStyle = 'position:absolute;top:-0px;left:-0px;width:' + jQuery(document).width() + 'px;height:' + jQuery(document).height() + 'px;background:#000;filter:alpha(opacity=60);opacity:0.5; z-index:' + maskZIndex + ';';
+                var maskStyle = 'height:' + jQuery(document).height() + 'px;z-index:' + maskZIndex + ';';
 
                 var isHtml = opts.isHtml || false;
 
@@ -249,10 +250,10 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 var dialogHtmlArr = [];
                 if (isShowMask) {
                     var dialogMaskHtmlArr = [];
-                    dialogMaskHtmlArr.push('<div id=' + maskId + ' class="g-mask" style="' + maskStyle + '"></div>');
+                    dialogMaskHtmlArr.push('<div id=' + maskId + ' class="gMask" style="' + maskStyle + '"></div>');
                     var dialogMaskHtml = dialogMaskHtmlArr.join('');
                     jQuery(dialogMaskHtml).appendTo('body');
-                    document.ontouchmove = function(e){ e.preventDefault();}
+                    //document.ontouchmove = function(e){ e.preventDefault();}
                 }
 
                 // 自定义弹窗
@@ -327,9 +328,9 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 });
                 // callback
                 if (typeof opts.callback == 'function') {
-                    if (isShowMask) {
-                        document.ontouchmove = function(e){ e.preventDefault();}
-                    }
+                    //if (isShowMask) {
+                    //    document.ontouchmove = function(e){ e.preventDefault();}
+                    //}
                     opts.callback();
                 }
 

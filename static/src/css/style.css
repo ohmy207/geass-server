@@ -5031,12 +5031,10 @@ i {
     */
 }
 
-/*
-.g-mask {
+.gMask {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1002;
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,.6);
@@ -5044,8 +5042,12 @@ i {
     -webkit-highlight: none;
     -webkit-tap-highlight-color: transparent;
     font-size: 0;
+    /*
+    z-index: 1002;
+     */
 }
 
+/*
 .pubCon {
     position: relative;
     top: 0;

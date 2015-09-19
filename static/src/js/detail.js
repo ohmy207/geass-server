@@ -97,7 +97,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //        isHtml: true,
             //        isMask: isMask,
             //        callback: function() {
-            //            jq('.g-mask').on('click', function() {
+            //            jq('.gMask').on('click', function() {
             //                jq.UTIL.dialog({id:'shareMask'});
             //            });
             //            jq('#showShare').on('click', function() {
