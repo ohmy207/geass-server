@@ -273,7 +273,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if is_debug or is_debug ^ CDN['is_disabled']:
             return super(BaseHandler, self).static_url(path, include_host, **kwargs)
 
-        v = kwargs.get('v', '')
+        v = 1
 
         if v:
             return '%s/%s?v=%s' % (CDN['host'], path, v)
