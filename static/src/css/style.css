@@ -265,7 +265,7 @@ img {
     background-color: #97BCDF!important;
 }
 
-.honorBg,.honorBg1,.master,.iconWoman,.iconMan,.gBg1,.gBg2,.gBg3 {
+.honorBg,.honorBg1,.master,.gBg1,.gBg2,.gBg3 {
     display: inline-block
 }
 
@@ -292,24 +292,6 @@ img {
     background-color: #7cc2db;
     line-height: 14px;
     font-size: 9px
-}
-
-.iconWoman:before {
-    content: "\e001";
-    color: #dc5f40
-}
-
-.iconMan:before {
-    content: "\e002";
-    color: #00A2DF
-}
-
-.honorBg .iconRank:before {
-    font-size: 10px
-}
-
-.iconHonor:before {
-    content: "\e60b"
 }
 
 .title
@@ -379,22 +361,6 @@ span {
     text-align: center
 }
 
-.iconDeveloper:before {
-    content: "\e60a"
-}
-
-.iconStationmaster:before {
-    content: "\e909"
-}
-
-.iconActiveUser:before {
-    content: "\e60d"
-}
-
-.iconVUser:before {
-    content: "\e60c"
-}
-
 .topicList .statusBg,.topicList .statusBg1,.topicList .statusBg2,.topicList
 .statusBg3 {
     top: 20px;
@@ -424,37 +390,8 @@ span {
     background-color: #ffa200
 }
 
-.iconClose:before {
-    content: "\e906"
-}
-
-.iconPosts:before {
-    content: "\e635"
-}
-
-.iconCommunity:before {
-    content: "\e636"
-}
-
-.iconCost:before {
-    content: "\e61b"
-}
-
-.iconCategory:before {
-    content: "\e61a"
-}
-
-.iconPhone:before {
-    content: "\e61e"
-}
-
-.iconList:before {
-    content: "\e605"
-}
-
 .header {
-    padding: 8px
-65px 8px 12px;
+    padding: 8px 65px 8px 12px;
     background-color: #FFF;
     border-bottom: 1px solid #ececec
 }
@@ -608,35 +545,6 @@ a {
 auto;
     padding: 28px
 20px 0
-}
-
-.caCon .iconRank,.caCon .iconNotice,.caCon .iconSelection,.iconBbsApp {
-    margin-right: 5px
-}
-
-.iconRank:before,.iconNotice:before,.iconSelection:before,.iconBbsApp:before {
-    font-size: 15px
-}
-
-.iconRank:before {
-    content: "\e016"
-}
-
-.iconPage:before {
-    content: "\e013";
-    font-size: 29px
-}
-
-.iconNotice:before {
-    content: "\e014"
-}
-
-.iconSelection:before {
-    content: "\e015"
-}
-
-.iconBbsApp:before {
-    content: "\e61d"
 }
 
 .customImg,.topicSelection,.communityImg {
@@ -893,20 +801,6 @@ p {
     color: #324d82;
 }
 
-.iconloc:before {
-    content: "\e901"
-}
-
-.iconAd:before {
-    content: "\e614"
-}
-
-.iconAd {
-    padding: 10px;
-    right: 4px;
-    top: -2px
-}
-
 .detailCon {
     padding: 0 13px 0
 }
@@ -962,17 +856,6 @@ auto 5px
 5px;
     overflow: hidden;
     line-height: 17px
-}
-
-.goLinkBtn
-.incoGoLink {
-    border-right: 1px solid #d6d6d6;
-    padding-right: 5px;
-    margin-right: 5px
-}
-
-.incoGoLink:before {
-    content: "\e61c"
 }
 
 .goLinkImg {
@@ -1080,37 +963,15 @@ img {
     color: #bbb;
 }
 
-.iconPraise:before,.iconNoPraise:before,.iconReply:before {
-    margin-right: 5px
-}
-
-.iconReply:before {
-    content: "\e604";
-    vertical-align: 1%
-}
-
-.iconShare:before {
-    content: "\e606"
-}
-
-.iconPraise:before {
-    content: "\e617"
-}
-
-.iconNoPraise:before {
-    content: "\e616"
-}
-
 .replyShare
 .iconShare {
     font-size: 23px;
     vertical-align: -10%
 }
 
-.replyShare
-a {
+.replyShare a {
     display: inline-block;
-    padding: 8px;
+    padding: 5px;
     line-height: 18px;
     color: #999
 }
@@ -1453,11 +1314,6 @@ h3 {
     padding-bottom: 8px
 }
 
-.iconTime:before {
-    content: "\e602";
-    vertical-align: -4%
-}
-
 .dNum {
     height: 25px;
     padding-top: 10px;
@@ -1597,15 +1453,6 @@ li {
     margin: 0 -5px;
     font-weight: 600;
     */
-}
-
-.iconArrowR:before {
-    content: "\e615"
-}
-
-.iconArrowR {
-    right: 20px;
-    top: 0
 }
 
 .detailBox .operation {
@@ -1932,12 +1779,6 @@ a {
     line-height: 21px
 }
 
-.incoClose:before {
-    content: "\e906";
-    font-size: 21px;
-    color: #9b9b9b
-}
-
 .popCon {
     padding: 15px
 30px 20px;
@@ -1995,12 +1836,6 @@ auto;
     text-align: center
 }
 
-.popClose .incoClose:before {
-    font-size: 15px;
-    vertical-align: 5%;
-    color: #FFF
-}
-
 .pSpace {
     padding: 0;
     overflow: hidden
@@ -2040,12 +1875,6 @@ auto;
     right: 15px
 }
 
-.editLayer .tit
-.iconClose {
-    font-size: 14px;
-    color: #fff
-}
-
 .editLayer
 .btnWrap {
     background: #fff;
@@ -2064,56 +1893,6 @@ auto;
     text-align: center
 }
 
-.friendsCon {
-    margin: 10px
-0 15px;
-    overflow: hidden
-}
-
-.friendsCon
-li {
-    width: 50%;
-    float: left;
-    text-align: center
-}
-
-.friendsCon
-a {
-    line-height: 30px;
-    color: #afafaf
-}
-
-.friendsCon .iconMan,.friendsCon
-.iconWoman {
-    width: 79px;
-    height: 54px;
-    display: block;
-    padding-top: 25px;
-    margin: 0
-auto;
-    background-color: #f8f8f8;
-    text-align: center
-}
-
-.friendsCon .on
-i {
-    background-color: #f76249
-}
-
-.friendsCon .on
-a {
-    color: #f76249
-}
-
-.friendsCon .iconMan:before,.friendsCon .iconWoman:before {
-    font-size: 45px;
-    color: #00a5e0
-}
-
-.friendsCon .on .iconMan:before,.friendsCon .on .iconWoman:before {
-    color: #fff
-}
-
 .infobox {
     overflow: hidden;
     clear: both;
@@ -2126,37 +1905,11 @@ a {
     font-size: 80px
 }
 
-.iconSuccess:before {
-    content: "\e007"
-}
-
-.iconFail:before {
-    content: "\e004"
-}
-
-.iconWait:before {
-    content: "\e006"
-}
-
-.iconPrompt:before {
-    content: "\e003"
-}
-
-.iconEmpty:before {
-    content: "\e005"
-}
-
-.iconWarning:before {
-    content: "\e61f"
-}
-
 .tipsPop {
     position: relative;
-    padding: 5px
-8px;
+    padding: 5px 8px;
     background-color: #000;
-    margin: 0
-auto;
+    margin: 0 auto;
     filter: alpha(opacity=60);
     opacity: 0.6;
     font-size: 14px;
@@ -3163,15 +2916,6 @@ li {
     padding-left: 10px
 }
 
-.expreSelect {
-    display: inline-block;
-    padding: 15px
-15px 0 0;
-    font-size: 23px;
-    color: #b4b4b4;
-    vertical-align: -55%
-}
-
 .epOn {
     color: #769cdc
 }
@@ -3218,13 +2962,8 @@ solid #538d00;
     background: -moz-linear-gradient(0% 0% 270deg,#ddd,#f0f0f0)
 }
 
-.expreSelect:before {
-    content: "\e609"
-}
-
 .operBtn {
-    padding: 10px
-0 0
+    padding: 10px 0 0
 }
 
 .tipLayer {
@@ -3255,13 +2994,6 @@ solid #538d00;
     z-index: 9999
 }
 
-.upBtn:before {
-    content: "\e603";
-    color: #FFF;
-    line-height: 28px;
-    font-size: 40px
-}
-
 .labelBox {
     margin-bottom: 5px;
     line-height: 25px;
@@ -3278,17 +3010,6 @@ span {
 em {
     font-style: normal;
     margin-left: 5px
-}
-
-.iconLabel {
-    margin-right: 2px;
-    font-size: 27px;
-    color: #b8b8b8;
-    vertical-align: -10%
-}
-
-.iconLabel:before {
-    content: "\e703"
 }
 
 .hotLabel {
@@ -3352,7 +3073,7 @@ h3.allTitle {
     margin-left: 15px
 }
 
-.iconDetailReply,.iconReverse,.iconSequence,.sortCon
+.iconReverse,.iconSequence,.sortCon
 a {
     display: inline-block;
     vertical-align: middle
@@ -3360,18 +3081,6 @@ a {
 
 .iconReverse,.iconSequence {
     color: #999
-}
-
-.iconDetailReply:before {
-    content: "\e60f"
-}
-
-.iconReverse:before {
-    content: "\e618"
-}
-
-.iconSequence:before {
-    content: "\e610"
 }
 
 .answerCon {
@@ -3508,8 +3217,7 @@ auto;
 }
 
 .moreC .iconPrfile:before {
-    margin: 2px
-0 0 10px;
+    margin: 2px 0 0 10px;
     color: #769cdc
 }
 
@@ -3589,26 +3297,6 @@ li {
     border-top: 1px solid #e5e5e5
 }
 
-.iconPrfile,.iconExit {
-    padding-right: 10px
-}
-
-.iconExit:before {
-    content: "\e908"
-}
-
-.iconSucc:before {
-    content: "\e611";
-    color: #69aa0b
-}
-
-.sideBarCon .iconSucc:before {
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #6ba716
-}
-
 .sidePerMan
 .numP {
     left: 10px;
@@ -3650,7 +3338,7 @@ solid #8ec46c;
     color: #fff
 }
 
-.sidePerMan .iconPrfile:before,.sidePerMan .iconExit:before {
+.sidePerMan {
     margin-right: 5px;
     color: #df5a53
 }
@@ -3663,38 +3351,6 @@ solid #8ec46c;
 .sidePerMan
 .f16 {
     font-size: 15px
-}
-
-.iconMore {
-    display: inline-block
-}
-
-.iconMore:before {
-    content: "\e012";
-    margin-right: 5px;
-    vertical-align: 0%
-}
-
-.iconPost:before {
-    content: "\e613";
-    vertical-align: 4%
-}
-
-.iconAdd:before {
-    content: "\e612";
-    vertical-align: 7%
-}
-
-.iconAttention:before {
-    content: "\e913"
-}
-
-.iconPrfile:before {
-    content: "\e909"
-}
-
-.iconJoin:before {
-    content: "\e802"
 }
 
 .numP,.redP {
@@ -3751,26 +3407,15 @@ solid #8ec46c;
     -webkit-box-flex: 1;
     position: relative;
     width: 0;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     vertical-align: middle;
     color: #777;
     box-flex: 1;
-}
-
-.iconAtticon:before {
-    content: "\e913"
-}
-
-.iconAnswer:before {
-    content: "\e615"
-}
-
-.iconAnswer {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    color: #769CDC
+    /*
+    color: #999;
+    font-size: 16px;
+     */
 }
 
 .bottomBarCon,.manageLayer
@@ -3784,8 +3429,7 @@ solid #8ec46c;
 
 .publish,.attention,.replyBtn,.joinBtn {
     width: 95px;
-    margin: 0
-auto;
+    margin: 0 auto;
     display: inline-block;
     line-height: 40px;
     font-size: 18px;
@@ -3888,18 +3532,6 @@ auto;
     background-color: #FFF;
     min-height: 60px;
     overflow: hidden
-}
-
-.iconRadio,.iconCheckbox {
-    display: inline-block
-}
-
-.iconRadio:before {
-    content: "\e637"
-}
-
-.iconCheckbox:before {
-    content: "\e638"
 }
 
 .rknums {
@@ -4101,10 +3733,6 @@ dl {
 }
 */
 
-.iconMessage:before {
-    content: "\e619"
-}
-
 .topicTab {
     height: 40px;
     background-color: #FFF;
@@ -4146,54 +3774,6 @@ a {
     width: 33.33%
 }
 
-.appList {
-    background-color: #FFF
-}
-
-.appList dt,.appList
-dd {
-    padding: 10px
-12px;
-    border-bottom: 1px solid #e5e5e5;
-    overflow: hidden
-}
-
-.appList
-dt {
-    height: 25px;
-    line-height: 25px
-}
-
-.appList .appBg,.appList
-.cuAppImg {
-    margin-right: 10px
-}
-
-.appList
-.appBg {
-    background-color: #ff9200;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    line-height: 16px;
-    text-align: center
-}
-
-.appList .appBg
-.iconBbsApp {
-    margin: 0
-}
-
-.appList .appBg .iconBbsApp:before {
-    font-size: 12px;
-    margin: 0
-}
-
-.appList
-h4 {
-    line-height: 28px
-}
-
 .header
 .iconArrowR {
     top: 24px;
@@ -4222,19 +3802,6 @@ h4 {
 
 .sInput2:focus {
     color: #333
-}
-
-.searchInco {
-    left: 13px;
-    top: 13px;
-    line-height: 21px;
-    font-size: 24px;
-    color: #a6a6a6;
-    vertical-align: -10%
-}
-
-.searchInco:before {
-    content: "\e702"
 }
 
 .sendInfo,.sendNav {
@@ -4268,10 +3835,13 @@ h4 {
 
 .sendBtn {
     height: 24px;
+    background-color: #2791dc;
+    border: 1px solid #2791dc;
+    line-height: 24px;
+    /*
     background-color: #8ec46c;
-    border: 1px
-solid #8ec46c;
-    line-height: 24px
+    border: 1px solid #8ec46c;
+     */
 }
 
 .cancelNewBtn {
@@ -4385,34 +3955,6 @@ li {
     border: none
 }
 
-.iconExpression:before {
-    content: "\e609"
-}
-
-.iconSendTag:before {
-    content: "\e632"
-}
-
-.iconSendImg:before {
-    content: "\e633"
-}
-
-.iconAdd:before {
-    content: "\e012"
-}
-
-.iconVideo {
-    width: 24px;
-    height: 24px;
-    margin: 0 auto;
-    background: url(/static/img/videoIcon.png) no-repeat;
-    background-size: 24px auto
-}
-
-.iconVideoOn {
-    background-position: 0 -24px
-}
-
 .sendNav
 .on {
     color: #178eee
@@ -4523,28 +4065,10 @@ img {
     cursor: pointer
 }
 
-.curImg .iconJoin:before,.iconMicroVideo:before {
-    font-size: 25px
-}
-
-.curImg .iconJoin,.iconMicroVideo {
-    margin: 15px
-0 0 17px;
-    color: #FFF
-}
-
 .photoList
 .imv {
     bottom: 2px;
     left: -14px
-}
-
-.iconMicroVideo:before {
-    content: "\e020"
-}
-
-.iconJoin:before {
-    content: "\e802"
 }
 
 .textTip {
@@ -4559,44 +4083,6 @@ img {
     color: #8d8d8d
 }
 
-.microVideoBox,.microVideoCon,.microVideoList
-li {
-    overflow: hidden
-}
-
-.microVideoTab {
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #e5e5e5
-}
-
-.microVideoCon {
-    width: 170px;
-    height: 24px;
-    background-color: #fff;
-    border: 1px
-solid #178eee;
-    margin: 0
-auto
-}
-
-.microVideoCon
-a {
-    display: block;
-    width: 85px;
-    ;height: 24px;
-    float: left;
-    line-height: 24px;
-    text-align: center;
-    color: #178eee
-}
-
-.microVideoCon
-.on {
-    background-color: #178eee;
-    color: #fff
-}
-
 .mvClose {
     width: 24px;
     height: 24px;
@@ -4605,32 +4091,6 @@ a {
     background-color: #b6b6b6;
     line-height: 24px;
     text-align: center
-}
-
-.microVideoList {
-    height: 260px;
-    overflow-x: hidden;
-    overflow-y: auto
-}
-
-.microVideoList
-li {
-    height: 45px;
-    padding: 10px
-65px 10px 10px;
-    border-bottom: 1px solid #e5e5e5;
-    background-color: #fff;
-    position: relative
-}
-
-.microVideoList
-.on {
-    background-color: #f5f5f5
-}
-
-.microVideoList .on .mvDate,.microVideoList .on .mvText,.microVideoList .on
-.iconSelect {
-    color: #3b6cb3
 }
 
 .mvImg {
@@ -4652,26 +4112,6 @@ i {
     font-weight: normal;
     font-size: 16px;
     line-height: 22px
-}
-
-.iconDefault,.iconSelect {
-    position: absolute;
-    right: 15px;
-    top: 21px
-}
-
-.iconSelect {
-    font-size: 25px;
-    right: 13px;
-    top: 18px
-}
-
-.iconDefault:before {
-    content: "\e634"
-}
-
-.iconSelect:before {
-    content: "\e011"
 }
 
 .form-split {
@@ -5047,6 +4487,103 @@ i {
      */
 }
 
+.iconSendImg:before {
+    content: "\e633"
+}
+
+.iconReply:before {
+    content: "\e606";
+}
+
+.iconShare:before {
+    content: "\e606"
+}
+
+.iconPraise:before {
+    content: "\e617"
+}
+
+.iconNoPraise:before {
+    content: "\e616"
+}
+
+.iconArrowR:before {
+    content: "\e615"
+}
+
+.iconArrowR {
+    right: 20px;
+    top: 0
+}
+
+.upBtn:before {
+    content: "\e603";
+    color: #FFF;
+    line-height: 28px;
+    font-size: 40px
+}
+
+.iconReverse:before {
+    content: "\e618"
+}
+
+.iconSequence:before {
+    content: "\e610"
+}
+
+.iconUser:before {
+    content: "\e909";
+}
+
+.iconNoFollow:before {
+    content: "\f097";
+}
+
+.iconFollow:before {
+    content: "\f02e";
+    color: #2791dc;
+    color: #277EDC;
+}
+
+.iconNews:before {
+    content: "\e60b";
+    color: #7AC743;
+}
+
+.iconTopic:before {
+    content: "\e60c";
+    color: #39BFFC;
+}
+
+.iconMark:before {
+    content: "\e61c";
+    color: #FF8345;
+}
+
+.iconOpinion:before {
+    content: "\e611";
+    color: #7AC743;
+}
+
+.item.iconFollow:before, .item.iconNoFollow:before, .item.iconReply:before, .item.iconUser:before {
+    font-size: 16px;
+    margin-right: 5px;
+    vertical-align: -4%;
+}
+
+.pTitle .iconNews:before, .pTitle .iconMark:before, .pTitle .iconOpinion:before, .pTitle .iconTopic:before {
+    margin-right: 7px;
+    font-size: 20px;
+    vertical-align: -3%;
+}
+
+.iconPraise:before,.iconNoPraise:before {
+    margin-right: 3px;
+}
+
+.operation .iconReply:before {
+    vertical-align: -10%;
+}
 /*
 .pubCon {
     position: relative;

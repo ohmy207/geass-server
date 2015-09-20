@@ -221,10 +221,10 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
-   <a href="/comment_list?tid={{ state['tid'] }}" class="item cf iconReply" id="to_reply">29</a>
-   <a href="javascript:;" class="item cf iconNoPraise" id="follow">2</a>
-   <a href="/personal" class="item cf iconReply" id="to_reply">29</a>
+   <!--<a href="/new" class="item cf iconCreate">创建</a>-->
+   <a href="javascript:;" class="item cf iconNoFollow" id="follow">关注</a>
+   <a href="/comment_list?tid={{ state['tid'] }}" class="item cf iconReply">29</a>
+   <a href="/personal" class="item cf iconUser">我的</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">

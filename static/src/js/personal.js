@@ -31,13 +31,32 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //jq('html, body, #loadNext').css('background-color', '#ebebeb')
             //jq('html, body').css('background-color', '#f3f3f3')
 
-            var followHtml = template('tmpl_topicList', {'data_list': re.data.follow_topics.data_list, 'count': re.data.follow_topics.count, 'title': '我的关注', 'link': '/following'}),
-                headerHtml = template('tmpl_header', re.data),
-                publishHtml = template('tmpl_topicList', {'data_list': re.data.publish_topics.data_list, 'count': re.data.publish_topics.count, 'title': '发表的话题', 'link': '/publishing'});
+            var headerHtml = template('tmpl_header', re.data),
+                followHtml = template('tmpl_topicList', {
+                    'data_list': re.data.follow_topics.data_list,
+                    'count': re.data.follow_topics.count, 'title': '我的关注',
+                    'link': '/following',
+                    'icon': 'iconMark',
+                }),
+                topicHtml = template('tmpl_topicList', {
+                    'data_list': re.data.publish_topics.data_list,
+                    'count': re.data.publish_topics.count,
+                    'title': '发表的话题',
+                    'link': '/publishing',
+                    'icon': 'iconTopic',
+                });
+                opinionHtml = template('tmpl_topicList', {
+                    'data_list': re.data.publish_topics.data_list,
+                    'count': re.data.publish_topics.count,
+                    'title': '我的看法',
+                    'link': '/publishing',
+                    'icon': 'iconOpinion',
+                });
 
             jq('#header').append(headerHtml);
             jq('#follow').append(followHtml);
-            jq('#publish').append(publishHtml);
+            jq('#topic').append(topicHtml);
+            jq('#opinion').append(opinionHtml);
 
             jq('.warp').show()
             //jq('.warp, #bottomBar').show()

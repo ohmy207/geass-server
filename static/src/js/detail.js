@@ -44,7 +44,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         // render data
         render: function(re) {
             var topicHtml = template('tmpl_topic', re.data);
+                is_topic_followed = re.data.is_topic_followed || false;
             jq('.detailBox').prepend(topicHtml);
+
+            var follow_class = is_topic_followed ? 'item cf iconFollow' : 'item cf iconNoFollow';
+                follow_html = is_topic_followed ? '已关注' : '关注'
+            jq('#bottomBar #follow').attr('class', follow_class).html(follow_html)
+
             jq('.warp, #bottomBar, .recommendTitle').show();
 
             window.isLZ = re.data.is_lz || false;
@@ -161,7 +167,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
                 var thisObj = jq(this),
                     tId = window.tId || null,
-                    isFollowed = thisObj.hasClass('iconPraise');
+                    isFollowed = thisObj.hasClass('iconFollow');
 
                 var opts = {
                     'noShowLoading' : true,
@@ -175,7 +181,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     if (isFollowed) {
                         opts.success = function(result) {
                             if (result.code == 0) {
-                                thisObj.attr('class', 'item cf iconNoPraise');
+                                thisObj.attr('class', 'item cf iconNoFollow');
+                                thisObj.html('关注')
                             }
                         };
 
@@ -183,7 +190,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     } else {
                         opts.success = function(result) {
                             if (result.code == 0) {
-                                thisObj.attr('class', 'item cf iconPraise');
+                                thisObj.attr('class', 'item cf iconFollow');
+                                thisObj.html('已关注')
                             }
                         };
                         jq.UTIL.ajax(url, data, opts);
