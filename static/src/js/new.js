@@ -99,11 +99,11 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 jq('.operatIcon').removeClass('on');
                 jq('.iconSendImg').addClass('on');
                 //jq('.sendCon').css('height', 'auto');
-                if(jq('.sendCon').height() != 60){
-                    //jq('.sendCon').animate({height: '60'}, 300);
-                    jq('.sendCon').css('height', '60');
+                //if(jq('.sendCon').height() != 60){
+                //    //jq('.sendCon').animate({height: '60'}, 300);
+                //    jq('.sendCon').css('height', '60');
 
-                }
+                //}
                 //传图时输入框定位到底部
                 content.scrollTop = content.scrollHeight
             });
@@ -160,7 +160,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                         isDone: false,
                     };
 
-                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="http://dzqun.gtimg.cn/quan/images/defaultImg.png" class="attchImg" alt="photo"></div>' +
+                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="https://dn-geass-static.qbox.me/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
                             '<div class="maskLay"></div>' +
                             '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="'+id+'">关闭</a></li>';
                     jq('#addPic').before(html);

@@ -174,17 +174,19 @@
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的看法..."></textarea>
         </div>
+
+        <div class="sendInfo wot pr">
+            <%if (!data.isLZ) { %>
+                <label class="f13 fl">
+                 <input type="checkbox" name="isanon" value="1">
+                 匿名
+                </label>
+            <% } %>
+        </div>
+
         <div class="sendNav">
             <ul>
-                <li style="padding-left:10px;">
-                    <%if (!data.isLZ) { %>
-                        <label class="f13 fl">
-                         <input type="checkbox" name="isanon" value="1">
-                         匿名
-                        </label>
-                    <% } %>
-                </li>
-                <li class="pr uploadPicBox" style="display:none;">
+                <li class="pr uploadPicBox">
                     <a data-id='1' href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
                     <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
                 </li>
@@ -199,7 +201,7 @@
         <div class="operatingBox">
             <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
             </div>
-            <div class="operatList photoTipsBox" style="height:auto;background-color:#efefef;border-top:1px solid #e2e2e2;">
+            <div class="operatList photoTipsBox" style="display:none;height:auto;background-color:#efefef;border-top:1px solid #e2e2e2;">
                 <div class="photoList">
                     <ul>
                         <li class="on" id="addPic">

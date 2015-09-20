@@ -577,7 +577,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         isDone: false,
                     };
 
-                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="http://dzqun.gtimg.cn/quan/images/defaultImg.png" class="attchImg" alt="photo"></div>' +
+                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="https://dn-geass-static.qbox.me/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
                             '<div class="maskLay"></div>' +
                             '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="'+id+'">关闭</a></li>';
                     jq('#addPic').before(html);

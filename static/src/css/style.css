@@ -434,35 +434,10 @@ em {
     background-color: #ccc
 }
 
-.rankBtn {
-    width: 18px;
-    height: 13px;
-    display: inline-block;
-    background: url(/quan/images/sprNewBg.png) no-repeat -121px 0;
-    background-size: 260px auto;
-    vertical-align: -24%
-}
-
-.rankBtn1 {
-    width: 24px;
-    height: 16px;
-    padding-left: 16px;
-    display: inline-block;
-    background: url(/quan/images/sprNewBg.png) no-repeat -63px 0;
-    background-size: 320px auto;
-    vertical-align: middle;
-    line-height: 16px;
-    font-size: 9px;
-    color: #f2a600;
-    -webkit-transform: scale(0.8)
-}
-
 .topicM {
     height: 40px;
-    margin: 0
-auto;
-    padding: 0
-10px;
+    margin: 0 auto;
+    padding: 0 10px;
     overflow: hidden;
     color: #e45a5e;
     position: relative;
@@ -1622,22 +1597,10 @@ a {
     background-color: #769cdc
 }
 
-.incoMV {
-    width: 62px;
-    height: 23px;
-    position: absolute;
-    left: 5px;
-    bottom: 5px;
-    background: url(/static/img/sprBg.png) no-repeat -316px -26px;
-    background-size: 400px auto;
-    -webkit-background-size: 400px auto
-}
-
 .videoCon,.videoConL,.videoConD {
     width: 100%;
     height: 150px;
-    margin: 10px
-auto 0;
+    margin: 10px auto 0;
     text-align: center;
     overflow: hidden;
     background-color: #000
@@ -2889,7 +2852,7 @@ li {
 
 .sendInfo {
     padding: 10px;
-    background-color: #fafafa
+    background-color: #fff
 }
 
 .sendInfo label, .sendNav label {
@@ -3118,17 +3081,6 @@ auto;
     line-height: 35px;
     text-align: center;
     color: #fffefe
-}
-
-.arrLeft {
-    width: 15px;
-    height: 16px;
-    display: inline-block;
-    margin-left: 10px;
-    background: url(/static/img/sprBg.png) no-repeat -153px -2px;
-    -webkit-background-size: 320px auto;
-    background-size: 320px auto;
-    vertical-align: middle
 }
 
 .pb {
@@ -3804,14 +3756,10 @@ a {
     color: #333
 }
 
-.sendInfo,.sendNav {
+.sendNav {
     background-color: #fafafa;
     overflow: hidden;
     border-bottom: 1px solid #e9e9e9
-}
-
-.sendInfo {
-    padding: 10px 105px 10px 15px;
 }
 
 .address,.sendBtn,.cancelNewBtn {
@@ -3989,7 +3937,8 @@ li {
 
 .photoList .on,.maskLay {
     width: 60px;
-    height: 60px
+    height: 60px;
+    border-radius: 10%;
 }
 
 .pSpace .photoList,.pSpace
@@ -4000,27 +3949,33 @@ li {
 .photoCut {
     width: 60px;
     height: 60px;
-    overflow: hidden
+    overflow: hidden;
+    border-radius: 10%;
 }
 
-.photoCut
-img {
+.photoCut img {
     height: 60px
 }
 
-.photoList
-.on {
-    background: #d9d9d9 url(/static/img/sprBg.png) no-repeat -244px -4px;
-    cursor: pointer
+.photoList .on {
+    background: #d9d9d9 url(/static/img/addPic.png) no-repeat;
+    cursor: pointer;
+    /*
+    background: #d9d9d9 url(/static/img/addPic.png) no-repeat -244px -4px;
+     */
 }
 
 .cBtn {
     width: 22px;
     height: 22px;
-    background: url(/static/img/sprNewBg.png) no-repeat;
+    background: url(/static/img/cBtn.png) no-repeat;
+    background-size: 44px auto;
+    -webkit-background-size: 44px auto;
+    font-size: 0;
+    /*
     background-size: 316px auto;
     -webkit-background-size: 316px auto;
-    font-size: 0
+     */
 }
 
 .cBtn {
@@ -4029,8 +3984,10 @@ img {
 }
 
 .cBtnOn {
-    background-image: url(/static/img/sprNewBg.png);
-    background-position: -22px 0
+    /*
+    background-image: url(/static/img/cBtn.png);
+    background-position: -22px 0;
+    */
 }
 
 .maskLay {
@@ -4488,7 +4445,7 @@ i {
 }
 
 .iconSendImg:before {
-    content: "\e633"
+    content: "\e600"
 }
 
 .iconReply:before {

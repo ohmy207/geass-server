@@ -97,6 +97,11 @@ class PageHandler(BaseHandler, WeiXinMixin):
             return
 
         state = self._params
+        for k,v in state.iteritems():
+            if k not in ['tid', 'pid']:
+                continue
+            state[k] = v if self.to_objectid(v) else ''
+
         state['is_authorized'] = 1 if self.current_user else 0
         state['authorize_url'] = authorize_url
 

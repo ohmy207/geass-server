@@ -23,14 +23,6 @@
      <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的话题"></textarea> 
     </div> 
 
-    <div class="sendInfo wot pr" style="display:none;">
-     <span class="locationCon address f13 c1" closestatus="2">详细说明：</span> 
-      <div class="pa sendOperBtn">
-        <a data-id="1" href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
-        <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
-      </div>
-    </div>
-
     <div class="sendCon pr"> 
      <span class="tagTopic db pa" style="width:50px;display:none;"></span> 
      <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="添加话题说明（可选）"></textarea> 
@@ -41,20 +33,31 @@
       <input type="checkbox" name="isprivate" value="1">
        私有
      </label>
-
      <span class="form-split">&nbsp;</span>
-
      <label class="f13" >
       <input type="checkbox" name="isanon" value="1">
       匿名
      </label>
-
-     <div class="sendOperBtn pa">
-      <a href="javascript:;" class="sendBtn brSmall f13 db c2" id="submitButton">发送</a> 
-     </div>
     </div>
 
-    <div class="photoList" style="background-color:#fafafa;"> 
+    <div class="sendNav">
+     <ul>
+      <li class="pr">
+        <a data-id="1" href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
+        <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
+      </li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>
+       <a href="javascript:;" class="sendBtn brSmall f13 db c2" id="submitButton">发送</a> 
+      </li>
+     </ul>
+    </div>
+
+    <div class="photoList" style="display:none;background-color:#fafafa;"> 
      <ul> 
       <li class="on" id="addPic"> <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single="" /> </li> 
      </ul> 

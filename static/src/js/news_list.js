@@ -94,6 +94,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq('.groupBtn').children('.selected').attr('class', '')
                 jq(this).attr('class', 'selected');
 
+                jq('.emptyList').hide()
                 jq('#list').html('');
                 thread.nextStart = 0;
                 exports.listType = jq(this).attr('id')
