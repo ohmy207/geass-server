@@ -212,18 +212,13 @@ class NewsHandler(BaseHandler):
 
     def do_comments(self):
         comments = db_user['comment'].get_all(
-            {'touid': self.current_user},
+            {'target.uid': self.current_user},
             skip=self._skip,
             limit=self._limit,
             sort=[('ctime', -1)]
         )
 
-        data_list = []
-        for c in comments:
-            c['target_content'] = db_user['comment'].get_one({'_id': self.to_objectid(c['tocoid'])})['content']
-            data_list.append(c)
-
-        self._data['data_list'] = data_list
+        self._data['data_list'] = comments
 
 
 # TODO restful standard
@@ -362,15 +357,19 @@ class CommentsHandler(BaseHandler):
 
         data['tid'] = tid
         data['pid'] = pid
-        data['tocoid'] = self.to_objectid(data['tocoid'])
         data['uid'] = self.current_user
         data['ctime'] = datetime.now()
+        data['target'] = {}
 
         parent = opinion if pid else topic
         data['islz'] = True if data['uid'] == parent['uid'] else False
 
-        to_comment = db_user['comment'].find_one({'_id': data['tocoid']}) if data['tocoid'] else None
-        data['touid'] = to_comment['uid'] if to_comment else None
+        tocoid = self.to_objectid(data.pop('tocoid'))
+        to_comment = db_user['comment'].find_one({'_id': tocoid}) if tocoid else None
+        if to_comment:
+            data['target']['coid'] = tocoid
+            data['target']['content'] = to_comment['content']
+            data['target']['uid'] = to_comment['uid']
 
         coid = db_user['comment'].create(data)
         data['_id'] = coid

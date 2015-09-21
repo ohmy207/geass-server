@@ -46,6 +46,15 @@ class Comment(BaseHelper, user_model.Comment):
     _opinion = opinion_helper['opinion']
 
     @staticmethod
+    def get_parent(tid, pid=None):
+        tid, pid = Comment.to_objectids(tid, pid)
+        parent_collection, parent_id = Comment._topic, tid
+        if pid:
+            parent_collection, parent_id = Comment._opinion, pid
+
+        return parent_collection.find_one({'_id': parent_id})
+
+    @staticmethod
     def callback(record):
         result = {
             'tid': record['tid'],
@@ -54,26 +63,16 @@ class Comment(BaseHelper, user_model.Comment):
             'author_uid': record['uid'],
             'like_num': record['lnum'],
             'is_lz': record['islz'],
-            'tocoid': record['tocoid'],
-            #'is_liked': False,
+            'target': record['target'],
         }
 
         result['content'] = Comment.xhtml_escape(record['content'])
         result['f_created_time'] = Comment._simple_time(record['ctime'])
 
-        is_anonymous = False
-        if record['islz']:
-            parent_collection, parent_id = Comment._topic, record['tid']
-            if record['pid']:
-                parent_collection, parent_id = Comment._opinion, record['pid']
+        if record['islz'] or record['target']:
+            parent_record = Comment.get_parent(record['tid'], record['pid'])
 
-            parent_record = parent_collection.find_one(
-                {'_id': Comment.to_objectid(parent_id)},
-                {'isanon': 1}
-            )
-            is_anonymous = parent_record['isanon']
-
-        if is_anonymous:
+        if record['islz'] and parent_record['isanon']:
             result['author'] = ANONYMOUS_USER['nickname']
             result['avatar'] = ANONYMOUS_USER['avatar']
         else:
@@ -81,11 +80,14 @@ class Comment(BaseHelper, user_model.Comment):
             result['author'] = simple_user['nickname']
             result['avatar'] = simple_user['avatar']
 
-        if record['uid'] == record['touid'] and is_anonymous:
-            result['to_author'] = ANONYMOUS_USER['nickname']
-        else:
-            to_user = Comment._user.get_simple_user(record['touid'])
-            result['to_author'] = to_user['nickname']
+        if record['target']:
+            result['target']['is_lz'] = record['target']['uid'] == unicode(parent_record['uid'])
+
+            if result['target']['is_lz'] and parent_record['isanon']:
+                result['target']['author'] = ANONYMOUS_USER['nickname']
+            else:
+                to_user = Comment._user.get_simple_user(record['target']['uid'])
+                result['target']['author'] = to_user['nickname']
 
         return result
 

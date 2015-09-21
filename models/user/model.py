@@ -23,8 +23,7 @@ class Comment(Model):
         'tid':              (ObjectId, None),
         'pid':              (ObjectId, None),
         'uid':              (ObjectId, None),
-        'touid':            (ObjectId, None),
-        'tocoid':           (ObjectId, None),
+        'target':           (dict, {})      ,
 
         'content':          (basestring, ''),
 
