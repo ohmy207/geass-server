@@ -1,4 +1,4 @@
 *.pyc
 *.log
 __test__
-static/js/build.txt
+rest-server/static/js/build.txt
