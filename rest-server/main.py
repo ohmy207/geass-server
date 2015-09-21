@@ -9,11 +9,10 @@ import tornado.options
 
 from tornado.options import define, options
 
-import log
-
-from setting import APPLICATION_SETTING, LOG_SETTING
 from apps import urlpatterns
+from setting import APPLICATION_SETTING, LOG_SETTING
 #from utils import session
+import log
 
 define("port", default=8888, type=int)
 
