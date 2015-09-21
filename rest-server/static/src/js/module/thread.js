@@ -32,7 +32,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         // load data,all in one
         load: function(loadOpts, action) {
 
-            action = loadOpts.action || '';
+            action = action || '';
             exports.isLoading = true;
 
             var isList = loadOpts.isList || false,
@@ -83,6 +83,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     exports.isLoading = false;
                 }
             };
+            opts.noMsg = true;
             jq.UTIL.ajax(url, '', opts);
         },
 
@@ -100,6 +101,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             if (jq.UTIL.isObjectEmpty(re.data.data_list)) {
                 exports.isLoadingNew = false;
                 jq('#loadNext').hide();
+                jq('.loading').hide();
                 //jq('#showAll').show();
                 if (clear && isEmptyShow) {
                     jq('#allLabelBox').show();

@@ -4,7 +4,7 @@ import logging
 
 from tornado.util import ObjectDict
 from utils import session
-from config.global_setting import REDIS
+from config.global_setting import TEST_MODE, REDIS
 
 # app name
 APP_NAME = 'geass-server'
@@ -37,7 +37,8 @@ LOG_SETTING = ObjectDict(
 )
 
 # check if app start in debug
-if os.path.exists(os.path.join(BASE_APP_DIR, '__test__')):
+if TEST_MODE:
+#if os.path.exists(os.path.join(BASE_APP_DIR, '__test__')):
     APPLICATION_SETTING['debug'] = True
     LOG_SETTING.log_path = os.path.join("", APP_NAME+'.log')
     LOG_SETTING.log_level = logging.DEBUG

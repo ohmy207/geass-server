@@ -534,6 +534,8 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                                 var msg = '您的网络有些问题，请稍后再试[code:4]';
                                 jQuery.UTIL.dialog({content: msg, autoClose:true});
                             }
+                        } else if (XHR.status === 404) {
+                            jQuery.UTIL.dialog({content: '没有找到这个资源', autoClose:true});
                         } else if (info != 'abort' && !opts.noMsg) {
                             if (!opts.noMsg) {
                                 var msg = '';
