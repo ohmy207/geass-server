@@ -48,8 +48,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.detailBox').prepend(topicHtml);
 
             var follow_class = is_topic_followed ? 'item cf iconFollow' : 'item cf iconNoFollow';
-                follow_html = is_topic_followed ? '已关注' : '关注'
-            jq('#bottomBar #follow').attr('class', follow_class).html(follow_html)
+                follow_html = is_topic_followed ? '已关注' : '关注';
+            jq('#bottomBar #follow').attr('class', follow_class).html(follow_html);
+            jq('#bottomBar .iconReply').html(re.data.comments_count);
 
             jq('.warp, #bottomBar, .recommendTitle').show();
 

@@ -78,6 +78,7 @@ class DetailTopicHandler(BaseHandler):
 
         self._data = {
             'topic': topic,
+            'comments_count': db_user['comment'].find({'tid': tid, 'pid': None}).count(),
             'data_list': db_user['vote'].format_opinions(uid, opinions),
             'is_lz': topic['author_uid'] == unicode(uid),
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),

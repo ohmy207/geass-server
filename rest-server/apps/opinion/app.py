@@ -95,8 +95,9 @@ class DetailOpinionHandler(BaseHandler):
     #@authenticated
     def GET(self, pid):
         uid = self.current_user
+        pid = self.to_objectid(pid)
 
-        data = db_opinion['opinion'].get_one(self.to_objectid(pid))
+        data = db_opinion['opinion'].get_one({'_id': pid})
         if not data:
             raise ResponseError(404)
 
@@ -105,6 +106,7 @@ class DetailOpinionHandler(BaseHandler):
 
         self._data = {
             'opinion': data,
+            'comments_count': db_user['comment'].find({'pid': pid}).count(),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }
 

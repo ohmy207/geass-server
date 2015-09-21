@@ -32,6 +32,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var opinionHtml = template('tmpl_opinion', re.data);
             jq('.warp').prepend(opinionHtml);
 
+            jq('#bottomBar .iconReply').html(re.data.comments_count);
             jq('.warp, #bottomBar').show()
             //jq('.warp, #bottomBar, .recommendTitle').show()
 
