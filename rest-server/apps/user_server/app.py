@@ -63,7 +63,8 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'news_list': 'news_list',
 
         'following': 'personal_list',
-        'publishing': 'personal_list',
+        'publish_topics': 'personal_list',
+        'publish_opinions': 'personal_list',
     }
 
     _DIRECT_AUTHORIZE_PAGES = [
@@ -71,7 +72,8 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'personal',
         'news_list',
         'following',
-        'publishing',
+        'publish_topics',
+        'publish_opinions',
     ]
 
     # TODO code ugly
@@ -105,7 +107,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
         state['is_authorized'] = 1 if self.current_user else 0
         state['authorize_url'] = authorize_url
 
-        if route in ['following', 'publishing']:
+        if route in ['following', 'publish_topics', 'publish_opinions']:
             state['type'] = route
 
         self.render('%s.html'%self._PAGES[route], state=state)

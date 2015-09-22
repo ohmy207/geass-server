@@ -42,14 +42,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     'data_list': re.data.publish_topics.data_list,
                     'count': re.data.publish_topics.count,
                     'title': '发表的话题',
-                    'link': '/publishing',
+                    'link': '/publish_topics',
                     'icon': 'iconTopic',
                 });
-                opinionHtml = template('tmpl_topicList', {
-                    'data_list': re.data.publish_topics.data_list,
-                    'count': re.data.publish_topics.count,
+                opinionHtml = template('tmpl_opinionList', {
+                    'data_list': re.data.publish_opinions.data_list,
+                    'count': re.data.publish_opinions.count,
                     'title': '我的看法',
-                    'link': '/publishing',
+                    'link': '/publish_opinions',
                     'icon': 'iconOpinion',
                 });
 

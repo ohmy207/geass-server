@@ -31,12 +31,21 @@ class User(UserHelper):
 
     def get_user_opinions(self, uid, skip, limit, sort=[('ctime', -1)]):
         spec = {'uid': self.to_objectid(uid)}
-        return self._opinion.get_all(
+        opinions = self._opinion.get_all(
             spec,
             skip=skip,
             limit=limit,
             sort=sort
         )
+
+        for op in opinions:
+            topic = self._topic.find_one(
+                {'_id': self.to_objectid(op['tid'])},
+                {'title': 1}
+            )
+            op['title'] = topic['title']
+
+        return opinions
 
 
 class Comment(BaseHelper, user_model.Comment):

@@ -28,14 +28,21 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         load: function(action) {
             var emptyCons = {
-                'publishing': '还没有发表话题！',
+                'publish_opinions': '还没有发表话题！',
+                'publish_topics': '还没有发表话题！',
                 'following': '还没有关注话题！',
+            };
+
+            var urlMap = {
+                'publish_opinions': 'publishing/opinions',
+                'publish_topics': 'publishing/topics',
+                'following': 'following/topics',
             };
 
             thread.load({
                 isList: true,
                 isEmptyShow: true,
-                url: '/user/' + window.listType + '/topics',
+                url: '/user/' + urlMap[window.listType],
                 emptyCon: emptyCons[window.listType],
                 callback: exports.renderList,
             }, action);
@@ -43,7 +50,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         // render data
         renderList: function(re) {
-            var listHtml = template('tmpl_topicList', re.data);
+            var tmplId = window.listType === 'publish_opinions' ? 'tmpl_opinionList' : 'tmpl_topicList';
+            var listHtml = template(tmplId, re.data);
             jq('#list').append(listHtml);
         },
 

@@ -22,7 +22,9 @@
 
   <div class="warp" onselectstart="return false;"> 
 
-   <div class="listWrap pr" id="list" >
+   <div class="listWrap pr" >
+     <ul class="pTopicList" id="list" style="height: auto;">
+     </ul>
    </div>
 
    <div id="loadNextPos"></div> 
@@ -37,8 +39,6 @@
         var topicList = data_list;
     }
     %>
-
-     <ul class="pTopicList" style="height: auto;">
 
       <% for (var i in topicList) { %>
 
@@ -81,7 +81,60 @@
     <% } %>
     <% } %>
 
-     </ul>
+
+  </script>
+
+  <script id="tmpl_opinionList" type="text/html">
+
+    <%
+    if (typeof(opinionList) == 'undefined') {
+        var opinionList = data_list;
+    }
+    %>
+
+      <% for (var i in opinionList) { %>
+
+      <% if (!isDOMExist('t_' + opinionList[i].tid)) { %>
+      <li class="" id="t_<%=opinionList[i].tid%>" >
+
+          <div class="topicWrap" data-link="/opinion?tid=<%= opinionList[i].tid %>&pid=<%= opinionList[i].pid %>" >
+              <%if (opinionList[i].picture_urls.length > 0) { %>
+                  <div class="imgGallary">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= opinionList[i].picture_urls[0]['thumb'] %>" >
+                      <%if (opinionList[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= opinionList[i].picture_urls.length %>图</div>
+                      <% } %>
+                  </div>
+              <% } %>
+
+              <div class="textContainer">
+               <h3 class="text">
+                   <%= opinionList[i].title %>
+               </h3>
+
+               <div>
+                    <a class="voteCount" href="javascript:;" ><% if (opinionList[i].vote_num) { %> <%= opinionList[i].vote_num %> <%  } else { %>0<%  } %></a>
+                   <div class="listContent">
+                       <%== opinionList[i].content %>
+                   </div>
+               </div>
+              </div>
+
+              <div class="info">
+                  <div>
+                      <span>
+                          <span class="time"><%= opinionList[i].f_created_time %></span>
+                      </span>
+                  </div>
+                  <div class="flRight">
+                  </div>
+              </div>
+
+          </div>
+
+      </li>
+    <% } %>
+    <% } %>
 
   </script>
 

@@ -127,20 +127,26 @@
     <% if (!isDOMExist('co_' + commentList[i].coid)) { %>
     <li class="comments" id="co_<%=commentList[i].coid%>" >
 
-        <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=commentList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
+        <div class="f15 c3">
+            <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=commentList[i].avatar%>" class="sImg brBig pa db" width="30" height="30" style="height:30px;width:30px;">
+            <span class="commNick"><%= commentList[i].author %><% if (commentList[i].is_lz) { %>（题主）<%}%>：
+            </span>
+        </div>
 
-        <div class="topicWrap" data-link="/comment_list?tid=<%=commentList[i].tid%><% if (commentList[i].pid) { %>&pid=<%=commentList[i].pid%><%}%>" >
-
-            <div class="textContainer">
-             <h3 class="text">
-                 <%= commentList[i].author %>：<%== commentList[i].content %>
-             </h3>
-
-             <div class="listContent replyBg">
-                 我：<%== commentList[i].target.content %>
-             </div>
+        <div class="commWrap topicWrap" data-link="/comment_list?tid=<%=commentList[i].tid%><% if (commentList[i].pid) { %>&pid=<%=commentList[i].pid%><%}%>" >
+            <div class="commContent allowCopy">
+                <%== commentList[i].content %>
             </div>
-
+            <% if (commentList[i].target.content) { %>
+                <div class="commReply">
+                    <span>
+                        我：
+                    </span>
+                    <span>
+                        <%== commentList[i].target.content %>
+                    </span>
+                </div>
+            <%}%>
         </div>
 
         <div class="info">

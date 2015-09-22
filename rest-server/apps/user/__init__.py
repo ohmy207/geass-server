@@ -7,7 +7,7 @@ prefix = '/api/v1'
 urls = [
 
     ('/user', app.PersonalHandler),
-    ('/user/publishing/(topics)', app.PublishingHandler),
+    ('/user/publishing/(topics|opinions)', app.PublishingHandler),
     ('/user/following/topics', app.FollowingTopicHandler),
     ('/user/news/(topics|votes|comments)', app.NewsHandler),
 
