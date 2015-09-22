@@ -34,7 +34,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 isList: true,
                 isEmptyShow: true,
                 url: '/topics/' + window.tId + '/comments' + url_suffix,
-                emptyCon: '还没有评论，快来抢沙发！',
+                emptyCon: '还没有任何评论',
                 callback: exports.renderList,
             }, action);
         },

@@ -28,9 +28,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         load: function(action) {
             var emptyCons = {
-                'publish_opinions': '还没有发表话题！',
-                'publish_topics': '还没有发表话题！',
-                'following': '还没有关注话题！',
+                'publish_opinions': '你还没有发表过看法 (*^・_・)',
+                'publish_topics': '你还没有发表过话题 (＞﹏＜)',
+                'following': '尚未有任何关注 (￣.￣)+',
             };
 
             var urlMap = {
