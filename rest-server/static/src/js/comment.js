@@ -80,8 +80,17 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 thread.checkIsRegistered(callback);
             });
 
+            jq('#allReplyList').on('click', '.commReply', function(e) {
+                var thisObj = jq(this);
+                if (thisObj.hasClass('unfold')) {
+                    thisObj.attr('class', 'commReply');
+                } else {
+                    thisObj.attr('class', 'commReply unfold');
+                }
+            });
+
             // 回复
-            jq('#hotReplyList,#allReplyList').on('click', '.replyFloor', function(e) {
+            jq('#allReplyList').on('click', '.replyFloor', function(e) {
                 var thisObj = jq(this).parents('li');
                 //var authorUId = thisObj.attr('uid');
                 // 获取帖子id

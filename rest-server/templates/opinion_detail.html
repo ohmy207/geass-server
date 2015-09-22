@@ -78,9 +78,8 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconShare" id="to_forward">转发</a>
-   <a href="/comment_list?tid={{ state['tid'] }}&pid={{ state['pid'] }}" class="item cf iconReply" id="to_reply"></a>
-   <a href="javascript:;" class="item cf iconNoPraise" id="to_like">2</a>
+   <a href="/comment_list?tid={{ state['tid'] }}&pid={{ state['pid'] }}" class="item cf iconReply"></a>
+   <a href="/personal" class="item cf iconUser">我的</a>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">

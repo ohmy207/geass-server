@@ -294,22 +294,13 @@ img {
     font-size: 9px
 }
 
-.title
-.cardBtn {
-    margin: 0;
-    vertical-align: 20%
-}
-
-.personImgDate .title
-span {
-    margin: 0
-1px
+.personImgDate .title span {
+    margin: 0 1px;
 }
 
 .gBg1,.gBg2,.gBg3 {
     width: 22px;
-    margin: 0
-2px;
+    margin: 0 2px;
     line-height: 14px
 }
 
@@ -968,7 +959,7 @@ img {
 }
 
 .topicList li {
-    padding: 0 0 5px 25px;
+    padding: 0 0 5px 37px;
     position: relative;
     line-height: 20px;
     word-break: break-all;
@@ -1222,19 +1213,6 @@ h3.text {
 
 .moreInReply {
     text-align: left
-}
-
-.cardBtn {
-    background-color: #7aa1dc;
-    padding: 0
-5px;
-    margin: 0
-3px;
-    height: 14px;
-    display: inline-block;
-    font-size: 9px;
-    line-height: 14px;
-    vertical-align: 8%
 }
 
 .replyImg {
@@ -4113,7 +4091,7 @@ i {
 .commNick {
     display: inline-block;
     overflow: hidden;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
     line-height: 19px;
     vertical-align: middle;
@@ -4125,16 +4103,42 @@ i {
     */
 }
 
-.commContent {
+.commWrap {
     margin-top: 5px;
+}
+
+.commContent {
     color: #454545;
 
     clear: both;
     margin-bottom: 0;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 27px;
     word-wrap: break-word;
     word-break: break-all;
+}
+
+.commReply {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    position: relative;
+    margin: 3px 0 5px;
+    font-size: 14px;
+    line-height: 20px;
+    text-overflow: ellipsis;
+    color: #777;
+    background-color: #f6f6f6;
+    max-height: 60px;
+    -webkit-line-clamp: 3;
+    /*
+    padding-left: 10px;
+     */
+}
+
+.commReply.unfold {
+    max-height: none;
+    -webkit-line-clamp: 30;
 }
 
 .emptyList {
@@ -4209,6 +4213,11 @@ i {
     word-break: break-all;
     font-size: 13px;
     border-bottom: 1px solid #e5e5e5;
+}
+
+.person .sendNav li {
+    border: none;
+    padding: 0;
 }
 
 .person .news li {
@@ -4542,6 +4551,23 @@ i {
     vertical-align: -10%;
 }
 /*
+.cardBtn {
+    background-color: #7aa1dc;
+    padding: 0 5px;
+    margin: 0 3px;
+    height: 14px;
+    display: inline-block;
+    font-size: 9px;
+    line-height: 14px;
+    vertical-align: 8%
+}
+
+.title
+.cardBtn {
+    margin: 0;
+    vertical-align: 20%
+}
+
 .pubCon {
     position: relative;
     top: 0;

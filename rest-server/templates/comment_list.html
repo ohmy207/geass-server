@@ -46,13 +46,25 @@
       <li id="co_<%=replyList[i].coid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>" >
 
           <div class="f15 c3">
-              <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
-              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].is_lz) { %> <i class="cardBtn br fn db c2">楼主</i><%}%><% if (replyList[i].target.author) { %> 回复 <%=replyList[i].target.author%><% } %><% if (replyList[i].target.is_lz) { %> <i class="cardBtn br fn db c2">楼主</i><%}%>：
+              <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="30" height="30" style="height:30px;width:30px;">
+              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].is_lz) { %>（题主）<%}%>：
               </span>
           </div>
 
-          <div class="commContent allowCopy">
-              <%== replyList[i].content %>
+          <div class="commWrap">
+              <div class="commContent allowCopy">
+                  <%== replyList[i].content %>
+              </div>
+              <% if (replyList[i].target.content) { %>
+                  <div class="commReply">
+                      <span>
+                          <%== replyList[i].target.author %><% if (replyList[i].target.is_lz) { %>（题主）<%}%>：
+                      </span>
+                      <span>
+                          <%== replyList[i].target.content %>
+                      </span>
+                  </div>
+              <%}%>
           </div>
 
           <div class="operation pr">

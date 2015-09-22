@@ -129,7 +129,7 @@
 
         <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=commentList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
 
-        <div class="topicWrap" data-link="/comment_list?tid=<%=commentList[i].tid%>" >
+        <div class="topicWrap" data-link="/comment_list?tid=<%=commentList[i].tid%><% if (commentList[i].pid) { %>&pid=<%=commentList[i].pid%><%}%>" >
 
             <div class="textContainer">
              <h3 class="text">
