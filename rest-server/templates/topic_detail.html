@@ -18,17 +18,10 @@
 
    <div class="detailBox">
 
-    <div class="topicList opinion tzDefList">
+    <div class="topicList opinion tzDefList" style="display:none;">
      <ul id="hotReplyList">
      </ul> 
     </div> 
-
-    <div id="allLabelBox" class="hotLabel" style=""> 
-     <div class="leftSideIcon all"></div><span class="fl">全部看法</span>
-     <!--
-     <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
-     -->
-    </div>
 
     <div class="topicList opinion"> 
      <ul id="allReplyList" style="height: auto;"> 
@@ -88,18 +81,12 @@
       </div> 
      </div> 
 
-     <div class="topicBar"> 
+     <div class="topicBar" style="display:none;"> 
       <div class="topicTit"> 
        <a href="javascript:;" class="threadReply">添加看法<i class="iconReply f18 cf"></i></a> 
       </div> 
      </div>
 
-    </div> 
-
-    <div id="hotLabelBox" class="hotLabel tzDefLabel" style="display: none">
-     <div class="leftSideIcon"></div>
-     <img data-src="<%= topic['avatar'] %>" class="brBig pr db"/>
-     <span class="fl">题主预置</span>
     </div> 
 
   </script>
@@ -109,17 +96,14 @@
       if (typeof(replyList) == 'undefined') {
           var replyList = data_list;
       }
-      if (typeof(tmplType) == 'undefined') {
-          var tmplType = 'all';
-      }
       %>
 
       <% for (var i in replyList) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid) && ((tmplType==='default' && replyList[i].is_lz) || (tmplType!='default' && !replyList[i].is_lz))) { %>
+      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid)) { %>
       <li class="opinionList" id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
-          <%if (!replyList[i].is_lz) { %>
+          <%if (false) { %>
               <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
           <% } %>
 
@@ -136,7 +120,7 @@
               <% } %>
 
               <div class="textContainer">
-              <%if (!replyList[i].is_lz) { %>
+              <%if (false && !replyList[i].is_lz) { %>
                   <h3 class="text">
                       <%= replyList[i].author %>
                   </h3>
@@ -147,12 +131,13 @@
                   </div>
               </div>
 
-              <%if (false && !replyList[i].is_lz) { %>
+              <%if (true) { %>
                   <div class="info">
                       <div>
-                          <span>
-                              <span class="time"><%= replyList[i].f_created_time %></span>
-                          </span>
+                          <%if (false) { %>
+                              <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
+                          <% } %>
+                          <span class="nick"><%= replyList[i].author %></span>
                       </div>
                       <div class="flRight">
                       </div>
@@ -223,7 +208,7 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="/new" class="item cf iconCreate">创建</a>
+   <a href="javascript:;" class="item cf iconCreate threadReply">提议</a>
    <a href="javascript:;" class="item cf iconNoFollow" id="follow">关注</a>
    <a href="/comment_list?tid={{ state['tid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
