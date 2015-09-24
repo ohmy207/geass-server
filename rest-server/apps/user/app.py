@@ -274,28 +274,41 @@ class LikeCommentHandler(BaseHandler):
 
     _post_params = {
         'need': [
-            ('tid', basestring),
             ('coid', basestring),
         ],
         'option': [
         ]
     }
 
+    _delete_params = _post_params
+
     @authenticated
     def POST(self):
-        data = self._params
         uid = self.current_user
-
-        coid = self.to_objectid(data['coid'])
+        coid = self.to_objectid(self._params['coid'])
         comment = db_user['comment'].find_one({'_id': coid})
 
         if not comment:
             raise ResponseError(70)
 
-        if uid in comment['like']:
+        if db_user['like'].find_one({'coid': coid, 'uid': uid}):
             raise ResponseError(75)
 
-        db_user['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
+        db_user['like'].like_comment(uid, coid)
+
+    @authenticated
+    def DELETE(self):
+        uid = self.current_user
+        coid = self.to_objectid(self._params['coid'])
+        comment = db_user['comment'].find_one({'_id': coid})
+
+        if not comment:
+            raise ResponseError(70)
+
+        if not db_user['like'].find_one({'coid': coid, 'uid': uid}):
+            raise ResponseError(75)
+
+        db_user['like'].unlike_comment(uid, coid)
 
 
 class CommentsHandler(BaseHandler):

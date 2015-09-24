@@ -120,19 +120,28 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 e.stopPropagation();
 
                 var thisObj = jq(this),
-                    coId = thisObj.attr('coid') || null;
+                    coId = thisObj.attr('coid') || null,
+                    likeNum = parseInt(thisObj.data('num')),
+                    isLiked = false;
 
                 var callback = function() {
                     if(thisObj.children('i').hasClass('iconPraise')) {
-                        return;
+                        isLiked = true;
                     }
 
                     var opts = {
                         'success': function(result) {
                             if (result.code == 0) {
                             //if (result.code == 0 && result.data && result.data.likeNum) {
-                                jq.UTIL.likeTips(thisObj, '+1');
-                                thisObj.html('<i class="iconPraise f18 cf"></i>' + (parseInt(thisObj.data('num')) + 1));
+                                if (isLiked) {
+                                    jq.UTIL.likeTips(thisObj, '-1');
+                                    thisObj.html('<i class="iconNoPraise f18 cf"></i>' + (likeNum - 1));
+                                    thisObj.data('num', likeNum - 1)
+                                } else {
+                                    jq.UTIL.likeTips(thisObj, '+1');
+                                    thisObj.html('<i class="iconPraise f18 cf"></i>' + (likeNum + 1));
+                                    thisObj.data('num', likeNum + 1)
+                                }
                             }
                         },
                         'noShowLoading' : true,
@@ -140,9 +149,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     }
 
                     var url = '/user/like/comments';
-                    var data = {'tid':tId, 'coid': coId};
+                    var data = {'coid': coId};
 
-                    jq.UTIL.ajax(url, data, opts);
+                    if (isLiked) {
+                        jq.UTIL.ajax(url, data, opts, 'DELETE');
+                    } else {
+                        jq.UTIL.ajax(url, data, opts);
+                    }
                 };
                 thread.checkIsRegistered(callback);
             });

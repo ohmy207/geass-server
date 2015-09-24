@@ -27,7 +27,7 @@ class Comment(Model):
 
         'content':          (basestring, ''),
 
-        'like':             (list, [])      ,
+        #'like':             (list, [])      ,
 
         'lnum':             (int, 0)        ,
 
@@ -55,6 +55,17 @@ class Vote2Opinion(Model):
     field = {
         'tid':             (ObjectId, None),
         'pid':             (ObjectId, None),
+        'uid':             (ObjectId, None),
+        'ctime':           (datetime, None),
+    }
+
+
+class Like2Comment(Model):
+
+    name = 'like2comment'
+
+    field = {
+        'coid':            (ObjectId, None),
         'uid':             (ObjectId, None),
         'ctime':           (datetime, None),
     }
