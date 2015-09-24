@@ -92,6 +92,15 @@ class OpinionsHandler(BaseHandler):
 
 class DetailOpinionHandler(BaseHandler):
 
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
     #@authenticated
     def GET(self, pid):
         uid = self.current_user
@@ -104,8 +113,18 @@ class DetailOpinionHandler(BaseHandler):
         data['is_voted'] = db_user['vote'].is_opinion_voted(uid, pid)
         data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
 
+        data_list = db_user['comment'].get_comments(
+            tid=data['tid'],
+            pid=pid,
+            uid=uid,
+            skip=self._skip,
+            limit=self._limit,
+            sort = [('lnum', -1), ('ctime', 1)],
+        )
+
         self._data = {
             'opinion': data,
+            'data_list': data_list,
             'comments_count': db_user['comment'].find({'pid': pid}).count(),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }
