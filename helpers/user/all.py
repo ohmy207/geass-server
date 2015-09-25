@@ -12,7 +12,7 @@ from config.global_setting import ANONYMOUS_USER
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['User', 'Comment', 'Vote', 'Like', 'Follow']
+MODEL_SLOTS = ['User', 'Comment', 'Vote', 'Follow']
 
 
 class User(UserHelper):
@@ -53,7 +53,6 @@ class Comment(BaseHelper, user_model.Comment):
     _user = User()
     _topic = topic_helper['topic']
     _opinion = opinion_helper['opinion']
-    _like2comment = user_model.Like2Comment()
 
     @staticmethod
     def get_parent(tid, pid=None):
@@ -115,7 +114,7 @@ class Comment(BaseHelper, user_model.Comment):
 
         result_list = []
         for record in records:
-            is_liked = True if self._like2comment.find_one({'uid': uid, 'coid': record['_id']}) else False
+            is_liked = True if self.to_objectid(uid) in record['like'] else False
             result = self.callback(self.to_one_str(record))
             result['is_liked'] = is_liked
             result_list.append(result)
@@ -154,21 +153,6 @@ class Vote(BaseHelper, user_model.Vote2Opinion):
         tid, pid, uid = self.to_objectids(tid, pid, uid)
         self.remove({'tid': tid, 'pid': pid, 'uid': uid})
         self._opinion.update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
-
-
-class Like(BaseHelper, user_model.Like2Comment):
-
-    _comment = Comment()
-
-    def like_comment(self, uid, coid):
-        uid, coid = self.to_objectids(uid, coid)
-        self.create({'coid': coid, 'uid': uid, 'ctime': datetime.now()})
-        self._comment.update({'_id': coid}, {'$inc': {'lnum': 1}}, w=1)
-
-    def unlike_comment(self, uid, coid):
-        uid, coid = self.to_objectids(uid, coid)
-        self.remove({'coid': coid, 'uid': uid})
-        self._comment.update({'_id': coid}, {'$inc': {'lnum': -1}}, w=1)
 
 
 class Follow(BaseHelper):
