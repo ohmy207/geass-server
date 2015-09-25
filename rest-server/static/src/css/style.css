@@ -2984,7 +2984,7 @@ em {
 }
 
 .leftSideIcon.all {
-    background: #2791dc;
+    background: #C2D4E6;
 }
 
 .tzDefLabel .leftSideIcon {
@@ -3000,20 +3000,14 @@ em {
 }
 
 .hotLabel span {
+    float: left;
     margin-left: 15px;
     font-size: 14px;
-    /*
-    float: left;
-     */
 }
 
 .hotLabel
 h3.allTitle {
     border-bottom-color: #3668b2
-}
-
-.sortCon {
-    margin-right: 10px;
 }
 
 .sortCon a:nth-child(2) {
