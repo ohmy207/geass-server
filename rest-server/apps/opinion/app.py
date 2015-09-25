@@ -67,11 +67,11 @@ class OpinionsHandler(BaseHandler):
         if not topic:
             raise ResponseError(50)
 
-        #if not is_lz and opinion_count > 0:
-        #    raise ResponseError(63)
+        if not is_lz and opinion_count > 0:
+            raise ResponseError(63)
 
-        #if is_lz and opinion_count > 2:
-        #    raise ResponseError(64)
+        if is_lz and opinion_count > 2:
+            raise ResponseError(64)
 
         if len(data['content']) <= 0:
             raise ResponseError(61)

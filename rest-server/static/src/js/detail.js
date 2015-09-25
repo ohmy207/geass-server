@@ -62,17 +62,17 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         renderList: function(re) {
-            //re.data.tmplType = 'default';
-            //var defaultReplyHtml = template('tmpl_reply', re.data);
-            //if(jq.trim(defaultReplyHtml)!==''){
-            //    jq('#hotLabelBox').show();
-            //    jq('#hotReplyList').append(defaultReplyHtml);
-            //}
+            re.data.tmplType = 'default';
+            var defaultReplyHtml = template('tmpl_reply', re.data);
+            if(jq.trim(defaultReplyHtml)!==''){
+                jq('#hotLabelBox').show();
+                jq('#hotReplyList').append(defaultReplyHtml);
+            }
 
-            //re.data.tmplType = 'all';
+            re.data.tmplType = 'all';
             var allReplyHtml = template('tmpl_reply', re.data);
             if(jq.trim(allReplyHtml)!==''){
-                //jq('#allLabelBox').show();
+                jq('#allLabelBox').show();
                 jq('#allReplyList').css({height:'auto'})
                 jq('#allReplyList').append(allReplyHtml);
             }

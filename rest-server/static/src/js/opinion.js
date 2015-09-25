@@ -64,7 +64,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     isList: false,
                     isEmptyShow: true,
                     url: '/opinions/' + window.pId,
-                    emptyCon: '还没有任何评论',
+                    emptyCon: '还没有看法哦',
                     callback: exports.render,
                 };
 
