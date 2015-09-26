@@ -15,5 +15,4 @@ else:
 
 # geass database
 topic = mc['geass_topic']
-opinion = mc['geass_opinion']
 user = mc['geass_user']
