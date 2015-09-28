@@ -19,9 +19,9 @@
 
   <script id="tmpl_opinion" type="text/html">
 
-   <div class="detail" data-link="/topic?tid=<%= opinion['tid'] %>">
+   <div class="detail" data-link="/topic?tid=<%= opinion.tid %>">
     <div class="detailTitle pr">
-     <%= opinion['title'] %>
+     <%= opinion.title %>
     </div>
    </div>
 
@@ -31,15 +31,21 @@
      <div class="titleWrap c11">
 
       <div class="personImgDate row pr"> 
-       <div class="perImg pr"><img src="<%= opinion['avatar'] %>" class="bImg brBig" width="25" height="25" /></div>
+       <div class="perImg pr"><img src="<%= opinion.avatar %>" class="bImg brBig" width="25" height="25" /></div>
 
        <div class="col titleBottomWrap pr">
         <div class="nameWrap">
-         <span class="userNick f14"><%= opinion['author'] %> </span>
-         <span class="time f12" style="display:none;"><%= opinion['f_created_time'] %></span>
+         <span class="userNick f14"><%= opinion.author %> </span>
+         <span class="time f12" style="display:none;"><%= opinion.f_created_time %></span>
         </div>
 
-        <a class="voteCount <% if (opinion['is_voted']) { %>voted<%  } %> vote" href="javascript:;" pId="<%= opinion['pid'] %>" data-num="<%= opinion['vote_num'] %>"><% if (opinion['vote_num']) { %> <%= opinion['vote_num'] %> <%  } else { %>0<%  } %></a>
+        <span class="approveWrap f16">
+         <span class="form-split">&nbsp;</span>
+         <a href="javascript:;" class="approve <% if (opinion.is_approved) { %>c13<%  } else { %>c12<%  } %> f16" oid="<%= opinion.oid %>" data-num="<%= opinion.approve_num %>" >
+          <i class="iconPraise cf"></i>
+          <span><% if (opinion.approve_num) { %><%= opinion.approve_num %> <%  } else { %>0<%  } %></span>
+         </a>
+        </span>
        </div>
       </div>
 
@@ -48,23 +54,18 @@
      <div class="detailCon c11 allowCopy"> 
 
       <div class="dCon f17">
-        <%== opinion['content'].replace(/\n/g, '<br>') %>
+        <%== opinion.content.replace(/\n/g, '<br>') %>
       </div>
       <div class="threadPic pr"> 
 
-      <% for (var i in opinion['picture_urls']) { %>
-        <span> <img class="dImg" data-src="<%= opinion['picture_urls'][i]['origin'] %>"/> </span>
+      <% for (var i in opinion.picture_urls) { %>
+        <span> <img class="dImg" data-src="<%= opinion.picture_urls[i]['origin'] %>"/> </span>
       <% } %>
 
       </div>
 
       <div class="detailTime"> 
-       <span class="time fr f15">编辑于 <%= opinion['f_created_time'] %></span>
-       <span class="replyShare db c9 fr f13" style="display:none;">
-        <a href="javascript:;" class="like c9" tid="3569"><i class="iconNoPraise f18 cf"></i>2</a>
-        <a href="javascript:;" id="support" class="shareBtn c9" _qzone=""><i class="iconShare f18 cf"></i></a>
-        <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
-       </span> 
+       <span class="time fr f15">编辑于 <%= opinion.f_created_time %></span>
       </div>
      </div>
     </div>
@@ -104,7 +105,7 @@
 
   <script type="text/javascript">
       var tId = "{{ state['tid'] }}";
-      var pId = "{{state['pid']}}";
+      var oId = "{{state['oid']}}";
   </script>
 
   <script type="text/javascript">

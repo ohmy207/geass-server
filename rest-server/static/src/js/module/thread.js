@@ -105,7 +105,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 //jq('#showAll').show();
                 if (clear && isEmptyShow) {
                     jq('#allLabelBox').show();
-                    jq('.emptyList').html(emptyCon).show()
+                    jq('#emptyList').html(emptyCon).show()
                 }
                 if (isList) {
                     return true;
@@ -289,15 +289,21 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             //});
 
-            if (obj.replyType === 'opinion') {
-                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/opinions');
-            }
-            else if (obj.replyType === 'comment') {
-                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/comments');
+            if (obj.replyType === 'proposal') {
 
+                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/proposals');
+
+            } else if (obj.replyType === 'opinion') {
+
+                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/opinions');
+
+            } else if (obj.replyType === 'comment') {
+
+                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/comments');
                 if (obj.toCoId) {
                     jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
                 }
+
             }
 
             //if (obj.pId > 0) {
@@ -344,21 +350,22 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     //replyList = jq('#replyList'),
                                     replyData = {replyList:{0:re.data}};
 
-                                jq('.emptyList').hide()
+                                jq('#emptyList').hide()
 
                                 if (obj.replyType === 'opinion') {
-                                    replyData.tmplType = 'all';
-                                    var allReplyHtml = template('tmpl_reply', replyData);
-                                    if(jq.trim(allReplyHtml)!==''){
-                                        allLabelBox.show();
-                                        jq('#allReplyList').append(allReplyHtml);
+                                    var opinionsHtml = template('tmpl_opinions', replyData);
+                                    if(jq.trim(opinionsHtml)!==''){
+                                        //allLabelBox.show();
+                                        jq('#allReplyList').append(opinionsHtml);
                                     }
 
-                                    replyData.tmplType = 'default';
-                                    var defaultReplyHtml = template('tmpl_reply', replyData);
-                                    if(jq.trim(defaultReplyHtml)!==''){
-                                        jq('#hotLabelBox').show();
-                                        jq('#hotReplyList').append(defaultReplyHtml);
+                                } else if (obj.replyType === 'proposal') {
+
+                                    replyData.color_list = window.color_list;
+                                    var proposalsHtml = template('tmpl_proposals', replyData);
+                                    if(jq.trim(proposalsHtml)!==''){
+                                        //jq('#hotLabelBox').show();
+                                        jq('#hotReplyList').append(proposalsHtml);
                                     }
 
                                 } else if (obj.replyType === 'comment') {

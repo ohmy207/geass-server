@@ -22,6 +22,7 @@ class Comment(Model):
     field = {
         'tid':              (ObjectId, None),
         'pid':              (ObjectId, None),
+        'oid':              (ObjectId, None),
         'uid':              (ObjectId, None),
         'target':           (dict, {})      ,
 
@@ -48,13 +49,24 @@ class Follow2Topic(Model):
     }
 
 
-class Vote2Opinion(Model):
+class Vote2Proposal(Model):
 
-    name = 'vote2opinion'
+    name = 'vote2proposal'
 
     field = {
         'tid':             (ObjectId, None),
         'pid':             (ObjectId, None),
+        'uid':             (ObjectId, None),
+        'ctime':           (datetime, None),
+    }
+
+
+class Approve2Opinion(Model):
+
+    name = 'approve2opinion'
+
+    field = {
+        'oid':             (ObjectId, None),
         'uid':             (ObjectId, None),
         'ctime':           (datetime, None),
     }

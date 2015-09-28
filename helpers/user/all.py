@@ -7,18 +7,17 @@ from datetime import datetime
 from helpers.base import BaseHelper, UserHelper
 from models.user import model as user_model
 from helpers import topic as topic_helper
-from helpers import opinion as opinion_helper
 from config.global_setting import ANONYMOUS_USER
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['User', 'Comment', 'Vote', 'Follow']
+MODEL_SLOTS = ['User', 'Comment', 'Vote', 'Approve', 'Follow']
 
 
 class User(UserHelper):
 
     _topic = topic_helper['topic']
-    _opinion = opinion_helper['opinion']
+    _opinion = topic_helper['opinion']
 
     def get_user_topics(self, uid, skip, limit, sort=[('ctime', -1)]):
         spec = {'uid': self.to_objectid(uid)}
@@ -51,23 +50,13 @@ class User(UserHelper):
 class Comment(BaseHelper, user_model.Comment):
 
     _user = User()
-    _topic = topic_helper['topic']
-    _opinion = opinion_helper['opinion']
-
-    @staticmethod
-    def get_parent(tid, pid=None):
-        tid, pid = Comment.to_objectids(tid, pid)
-        parent_collection, parent_id = Comment._topic, tid
-        if pid:
-            parent_collection, parent_id = Comment._opinion, pid
-
-        return parent_collection.find_one({'_id': parent_id})
 
     @staticmethod
     def callback(record):
         result = {
             'tid': record['tid'],
             'pid': record['pid'],
+            'oid': record['oid'],
             'coid': record['_id'],
             'author_uid': record['uid'],
             'like_num': record['lnum'],
@@ -78,10 +67,7 @@ class Comment(BaseHelper, user_model.Comment):
         result['content'] = Comment.xhtml_escape(record['content'])
         result['f_created_time'] = Comment._simple_time(record['ctime'])
 
-        if record['islz'] or record['target']:
-            parent_record = Comment.get_parent(record['tid'], record['pid'])
-
-        if record['islz'] and parent_record['isanon']:
+        if record['isanon']:
             result['author'] = ANONYMOUS_USER['nickname']
             result['avatar'] = ANONYMOUS_USER['avatar']
         else:
@@ -89,22 +75,17 @@ class Comment(BaseHelper, user_model.Comment):
             result['author'] = simple_user['nickname']
             result['avatar'] = simple_user['avatar']
 
-        if record['target']:
-            result['target']['is_lz'] = record['target']['uid'] == unicode(parent_record['uid'])
-
-            if result['target']['is_lz'] and parent_record['isanon']:
-                result['target']['author'] = ANONYMOUS_USER['nickname']
-            else:
-                to_user = Comment._user.get_simple_user(record['target']['uid'])
-                result['target']['author'] = to_user['nickname']
+        if record['target']['isanon']:
+            result['target']['author'] = ANONYMOUS_USER['nickname']
+        else:
+            to_user = Comment._user.get_simple_user(record['target']['uid'])
+            result['target']['author'] = to_user['nickname']
 
         return result
 
-    def get_comments(self, tid, pid=None, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
-        spec = {
-            'tid': self.to_objectid(tid),
-            'pid': self.to_objectid(pid),
-        }
+    def get_comments(self, tid=None, pid=None, oid=None, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
+        tid, pid, oid = self.to_objectid(tid, pid, oid)
+        spec = {'tid': tid, 'pid': pid, 'oid': oid}
         records = self.find(
             spec=spec,
             skip=skip,
@@ -122,37 +103,58 @@ class Comment(BaseHelper, user_model.Comment):
         return result_list
 
 
-# TODO Vote will not inherit Vote2Opinion
-class Vote(BaseHelper, user_model.Vote2Opinion):
+class Vote(BaseHelper, user_model.Vote2Proposal):
 
-    _opinion = opinion_helper['opinion']
-    #_vote2opinion = user_model.Vote2Opinion()
+    _proposal = topic_helper['proposal']
 
-    def _is_voted(self, spec):
+    def _is_existed(self, spec):
         spec = {k: self.to_objectid(v) for k, v in spec.items()}
         return True if self.find_one(spec) else False
 
-    def is_opinion_voted(self, uid, pid):
-        return self._is_voted({'uid': uid, 'pid': pid})
+    def is_proposal_voted(self, uid, pid):
+        return self._is_existed({'uid': uid, 'pid': pid})
 
     def has_user_voted(self, uid, tid):
-        return self._is_voted({'uid': uid, 'tid': tid})
+        return self._is_existed({'uid': uid, 'tid': tid})
+
+    def format_proposals(self, uid, records):
+        for r in records:
+            r['is_voted'] = self.is_proposal_voted(uid, r['pid'])
+        return records
+
+    def vote_proposal(self, tid, pid, uid):
+        tid, pid, uid = self.to_objectids(tid, pid, uid)
+        self.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
+        self._proposal.update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+
+    def unvote_proposal(self, tid, pid, uid):
+        tid, pid, uid = self.to_objectids(tid, pid, uid)
+        self.remove({'tid': tid, 'pid': pid, 'uid': uid})
+        self._proposal.update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
+
+
+class Approve(BaseHelper, user_model.Approve2Opinion):
+
+    _opinion = topic_helper['opinion']
+
+    def is_opinion_approved(self, uid, oid):
+        uid, oid = self.to_objectids(uid, oid)
+        return True if self.find_one({'uid': uid, 'oid': oid}) else False
 
     def format_opinions(self, uid, records):
         for r in records:
-            r['is_voted'] = self.is_opinion_voted(uid, r['pid'])
+            r['is_approved'] = self.is_opinion_approved(uid, r['oid'])
         return records
 
-    # TODO vote_opinion unvote_opinion
-    def vote_opinion(self, tid, pid, uid):
-        tid, pid, uid = self.to_objectids(tid, pid, uid)
-        self.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
-        self._opinion.update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
+    def approve_opinion(self, uid, oid):
+        uid, oid = self.to_objectids(uid, oid)
+        self.create({'oid': oid, 'uid': uid, 'ctime': datetime.now()})
+        self._opinion.update({'_id': oid}, {'$inc': {'anum': 1}}, w=1)
 
-    def unvote_opinion(self, tid, pid, uid):
-        tid, pid, uid = self.to_objectids(tid, pid, uid)
-        self.remove({'tid': tid, 'pid': pid, 'uid': uid})
-        self._opinion.update({'_id': pid}, {'$inc': {'vnum': -1}}, w=1)
+    def unapprove_opinion(self, uid, oid):
+        uid, oid = self.to_objectids(uid, oid)
+        self.remove({'oid': oid, 'uid': uid})
+        self._opinion.update({'_id': oid}, {'$inc': {'anum': -1}}, w=1)
 
 
 class Follow(BaseHelper):

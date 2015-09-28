@@ -10,7 +10,6 @@ from apps.base import BaseHandler
 from apps.base import ResponseError
 
 from helpers import topic as db_topic
-from helpers import opinion as db_opinion
 from helpers import user as db_user
 
 logger = log.getLogger(__file__)
@@ -39,7 +38,7 @@ class PersonalHandler(BaseHandler):
         }
         self._data['follow_topics']['count'] = db_user['follow'].get_follows_count(uid)
         self._data['publish_topics']['count'] = db_topic['topic'].find({'uid': uid}).count()
-        self._data['publish_opinions']['count'] = db_opinion['opinion'].find({'uid': uid}).count()
+        self._data['publish_opinions']['count'] = db_topic['opinion'].find({'uid': uid}).count()
 
         self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(
             uid=uid,
@@ -182,17 +181,17 @@ class NewsHandler(BaseHandler):
         data_list = []
         for t in topics:
             tid = self.to_objectid(t['tid'])
-            opinions = db_opinion['opinion'].get_all({'tid': tid}, skip=0, limit=2, sort=[('ctime', -1)])
+            opinions = db_topic['opinion'].get_all({'tid': tid}, skip=0, limit=2, sort=[('ctime', -1)])
             if not opinions:
                 continue
-            t['op_count'] = db_opinion['opinion'].find({'tid': tid}).count()
+            t['op_count'] = db_topic['opinion'].find({'tid': tid}).count()
             t['op_authors'] = [op['author'] for op in opinions]
             data_list.append(t)
 
         self._data['data_list'] = data_list
 
     def do_votes(self):
-        opinions = db_opinion['opinion'].get_all(
+        opinions = db_topic['opinion'].get_all(
             {'uid': self.current_user, 'vnum': {'$gt': 0}},
             skip=self._skip,
             limit=self._limit,
@@ -222,7 +221,7 @@ class NewsHandler(BaseHandler):
 
 
 # TODO restful standard
-class VoteOpinionHandler(BaseHandler):
+class VoteProposalHandler(BaseHandler):
 
     _post_params = {
         'need': [
@@ -239,7 +238,7 @@ class VoteOpinionHandler(BaseHandler):
         pid = self.to_objectid(self._params['pid'])
         tid = self.to_objectid(self._params['tid'])
 
-        if not db_opinion['opinion'].find_one({'_id': pid, 'tid': tid}):
+        if not db_topic['proposal'].find_one({'_id': pid, 'tid': tid}):
             raise ResponseError(60)
 
         has_user_voted = db_user['vote'].has_user_voted(uid, tid)
@@ -249,32 +248,70 @@ class VoteOpinionHandler(BaseHandler):
         if has_user_voted:
             raise ResponseError(90)
 
-        db_user['vote'].vote_opinion(tid, pid, uid)
+        db_user['vote'].vote_proposal(tid, pid, uid)
 
     def do_unvote(self, tid, pid, uid, has_user_voted):
-        if not db_user['vote'].is_opinion_voted(uid, pid):
+        if not db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(91)
 
-        db_user['vote'].unvote_opinion(tid, pid, uid)
+        db_user['vote'].unvote_proposal(tid, pid, uid)
 
     def do_revote(self, tid, pid, uid, has_user_voted):
-        if not has_user_voted or db_user['vote'].is_opinion_voted(uid, pid):
+        if not has_user_voted or db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(92)
 
-        voted_opinion = db_user['vote'].find_one({'tid': tid, 'uid': uid})
-        if not voted_opinion:
+        voted_proposal = db_user['vote'].find_one({'tid': tid, 'uid': uid})
+        if not voted_proposal:
             raise ResponseError(93)
-        voted_pid = voted_opinion['pid']
+        voted_pid = voted_proposal['pid']
 
-        db_user['vote'].unvote_opinion(tid, voted_pid, uid)
-        db_user['vote'].vote_opinion(tid, pid, uid)
+        db_user['vote'].unvote_proposal(tid, voted_pid, uid)
+        db_user['vote'].vote_proposal(tid, pid, uid)
+
+
+class ApproveOpinionHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('oid', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    _delete_params = _post_params
+
+    @authenticated
+    def POST(self):
+        uid = self.current_user
+        oid = self.to_objectid(self._params['oid'])
+
+        if not db_topic['opinion'].find_one({'_id': oid}):
+            raise ResponseError(60)
+
+        if db_user['approve'].is_opinion_approved(uid, oid):
+            raise ResponseError(60)
+
+        db_user['approve'].approve_opinion(uid, oid)
+
+    @authenticated
+    def DELETE(self):
+        uid = self.current_user
+        oid = self.to_objectid(self._params['oid'])
+
+        if not db_topic['opinion'].find_one({'_id': oid}):
+            raise ResponseError(60)
+
+        if not db_user['approve'].is_opinion_approved(uid, oid):
+            raise ResponseError(60)
+
+        db_user['approve'].unapprove_opinion(uid, oid)
 
 
 class LikeCommentHandler(BaseHandler):
 
     _post_params = {
         'need': [
-            ('tid', basestring),
             ('coid', basestring),
         ],
         'option': [
@@ -321,7 +358,7 @@ class CommentsHandler(BaseHandler):
     }
 
     #@authenticated
-    def GET(self, tid):
+    def GET(self, route, route_id):
         data_list = db_user['comment'].get_comments(
             tid=tid,
             pid=self._params['pid'],
@@ -346,7 +383,7 @@ class CommentsHandler(BaseHandler):
         tid = self.to_objectid(tid)
         pid = self.to_objectid(data['pid'])
         topic = db_topic['topic'].find_one({'_id': tid})
-        opinion = db_opinion['opinion'].find_one({'_id': pid}) if pid else None
+        opinion = db_topic['opinion'].find_one({'_id': pid}) if pid else None
 
         # TODO error code
         if not topic:

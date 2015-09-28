@@ -199,6 +199,17 @@ img {
     color: #454545
 }
 
+.c12 {
+    color: rgba(153, 153, 153, 0.5);
+}
+
+.c13 {
+    color: #3668b2;
+    /*
+    color: #277EDC;
+     */
+}
+
 .pr {
     position: relative
 }
@@ -691,12 +702,37 @@ img {
 
 .topicCon {
     /*
+    border-bottom: 1px solid #e5e5e5;
     padding: 5px
     */
 }
 
+.conBottomWrap {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 15px;
+    line-height: 24px;
+    height: 24px;
+}
+
+.followBtn {
+    background-color: #2791dc;
+    border-bottom: 1px solid #2791dc;
+    display: inline-block;
+    padding: 0 30px;
+    /*
+    line-height: 24px;
+    height: 24px;
+    background-color: #8ec46c;
+    border: 1px solid #8ec46c;
+     */
+}
+
 .titleWrap {
     padding: 10px 15px 20px;
+}
+
+.topic .titleWrap {
+    padding: 10px 15px 5px;
 }
 
 .titleWrap .titleDetail {
@@ -771,12 +807,21 @@ p {
     padding: 0 13px 0
 }
 
+.topic .detailCon {
+    padding: 0 15px 15px;
+}
+
 .dCon {
     clear: both;
     margin-bottom: 5px;
     line-height: 27px;
     word-wrap: break-word;
     word-break: break-all;
+}
+
+.topic .dCon {
+    color: gray;
+    line-height: 20px;
 }
 
 .dImg {
@@ -958,6 +1003,13 @@ img {
     */
 }
 
+.topicList.proposal {
+    padding: 0 0 0!important;
+    /*
+    background-color: #ebebeb!important;
+    */
+}
+
 .topicList li {
     padding: 0 0 5px 37px;
     position: relative;
@@ -966,17 +1018,14 @@ img {
     font-size: 13px;
 }
 
-.topicList .opinionList {
+.topicList.opinion li, .topicList.proposal li {
     /*
     z-index: 1;
     background-color: #fafafa;
     */
     position: relative;
     border-radius: 2px;
-    padding: 14px 10px 0 52px;
-}
-
-.detailBox .topicList .opinionList {
+    padding: 14px 15px 0 52px;
     padding-bottom: 0!important;
 }
 
@@ -985,13 +1034,19 @@ img {
     padding-bottom: 15px;
 }
 
+.topicList .proposalWrap {
+    padding-top: 1px;
+    padding-bottom: 15px;
+}
+
 .topicList.opinion .sImg {
+    top: 15px;
     left: 13px;
     width: 30px;
     height: 30px;
 }
 
-.voteCount {
+.voteCount, .approveCount {
     display: block;
     color: #698ebf;
     height: 19px;
@@ -1010,6 +1065,19 @@ img {
     /*
     background: #eff6fa;
     */
+}
+
+.approveCount {
+    position: absolute;
+    left: 13px;
+    top: 47px;
+
+    font-size: 12px;
+    line-height: 15px;
+    height: 15px;
+    color: #fff;
+    background: rgba(56, 139, 217, 0.67);
+    border-radius: 2px;
 }
 
 .voteCount.voted {
@@ -1033,17 +1101,23 @@ img {
     top: 47px;
 }
 
-.tzDefList .voteCount {
-    top: 14px;
-    height: 25px;
+.proposaList .voteCount {
+    top: 13px;
     width: 30px;
-    line-height: 23px;
+    height: 25px;
+    line-height: 25px;
 }
 
 .titleBottomWrap .voteCount {
     display: inline-block;
     position: absolute;
     right: 0;
+}
+
+.titleBottomWrap .approveWrap {
+    display: inline-block;
+    position: absolute;
+    right: 10px;
 }
 
 .imgGallary {
@@ -1061,9 +1135,9 @@ img {
     height: 80px;
 }
 
-.tzDefList .opinionWrap .imgGallary {
-    width: 60px;
-    height: 60px;
+.proposaList .proposalWrap .imgGallary {
+    width: 48px;
+    height: 48px;
 }
 
 .imgGallary img {
@@ -1095,9 +1169,18 @@ img {
     max-height: 80px;
 }
 
-.tzDefList .textContainer {
-    height: 62px!important;
-    max-height: 62px!important;
+.proposaList .imgContainer {
+    height: 48px!important;
+    max-height: 48px!important;
+}
+
+.proposaList .textContainer {
+    height: auto!important;
+    min-height: 32px;
+    max-height: 48px!important;
+    /*
+    height: 48px!important;
+     */
 }
 
 .listContent {
@@ -1342,10 +1425,8 @@ p {
 
 .tagBox a,.tagTopic {
     height: 22px;
-    padding: 0
-10px;
-    border: 1px
-solid #8ec46c;
+    padding: 0 10px;
+    border: 1px solid #8ec46c;
     text-align: center;
     font-size: 12px;
     line-height: 22px;
@@ -2954,7 +3035,6 @@ em {
 }
 
 .hotLabel {
-    display: none;
     position: relative;
     border-top: 10px solid #f3f3f3;
     border-bottom: 1px solid #e5e5e5;
@@ -2965,6 +3045,7 @@ em {
     background: #fafafa;
 
     /*
+    display: none;
     border-top: 10px solid #ebebeb;
     border-top: 15px solid #eef1f1;
     */
@@ -2981,14 +3062,11 @@ em {
     left: 0;
     width: 5px;
     content: "";
+    background: #2791dc;
 }
 
 .leftSideIcon.all {
-    background: #C2D4E6;
-}
-
-.tzDefLabel .leftSideIcon {
-    background: #C2D4E6;
+    background: #2791dc;
 }
 
 .tzDefLabel img {
@@ -4319,7 +4397,7 @@ i {
     border-radius: 50%;
 }
 
-.person .listContent {
+.proposaList .listContent, .person .listContent {
     -webkit-line-clamp: 2;
 }
 
@@ -4550,6 +4628,32 @@ i {
 .operation .iconReply:before {
     vertical-align: -10%;
 }
+
+.opWrap {
+    height: 20px;
+    margin-top: 5px;
+}
+
+.opoutbar {
+    overflow: hidden;
+    position: relative;
+
+    width: 82%;
+    background-color: #F7F7F7;
+}
+
+.opbar {
+    float: left;
+    height: 20px;
+}
+
+.oppi {
+    float: right;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 10px;
+}
+
 /*
 .cardBtn {
     background-color: #7aa1dc;

@@ -52,29 +52,38 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('#bottomBar #follow').attr('class', follow_class).html(follow_html);
             jq('#bottomBar .iconReply').html(re.data.comments_count);
 
-            jq('.warp, #bottomBar, .recommendTitle').show();
-
             window.isLZ = re.data.is_lz || false;
+            window.vote_total_num = re.data.vote_total_num || 0;
+            window.color_list = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#bcbd22', '#17becf', '#aec7e8'];
             exports.hasVoted = re.data.has_user_voted || false;
-            exports.renderList(re);
+
+            var ReplyHtml = template('tmpl_proposals', {
+                'data_list': re.data.proposal_list,
+                'vote_total_num': vote_total_num,
+                'color_list': window.color_list,
+            });
+
+            if(jq.trim(ReplyHtml)!==''){
+                //jq('#allLabelBox').show();
+                jq('#hotReplyList').append(ReplyHtml);
+                jq('#hotReplyList').css({height:'auto'})
+            } else {
+                jq('#emptyProposals').show();
+            }
+
+            exports.renderList(re)
+
+            jq('.warp, #bottomBar, .recommendTitle').show();
 
             exports.isLoadingFirst = false;
         },
 
         renderList: function(re) {
-            re.data.tmplType = 'default';
-            var defaultReplyHtml = template('tmpl_reply', re.data);
-            if(jq.trim(defaultReplyHtml)!==''){
-                jq('#hotLabelBox').show();
-                jq('#hotReplyList').append(defaultReplyHtml);
-            }
-
-            re.data.tmplType = 'all';
-            var allReplyHtml = template('tmpl_reply', re.data);
-            if(jq.trim(allReplyHtml)!==''){
-                jq('#allLabelBox').show();
+            var ReplyHtml = template('tmpl_opinions', re.data);
+            if(jq.trim(ReplyHtml)!==''){
+                //jq('#hotLabelBox').show();
                 jq('#allReplyList').css({height:'auto'})
-                jq('#allReplyList').append(allReplyHtml);
+                jq('#allReplyList').append(ReplyHtml);
             }
         },
 
@@ -88,6 +97,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             exports.load('drag');
 
             initLazyload('.warp img');
+            initLazyload('#opinionList img');
 
             // appbar no share mask
             //if (action == 'share' && !reapp.test(navigator.userAgent)) {
@@ -141,15 +151,16 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                    thread.reply(tId, null, null, '', 'opinion');
-                };
-                jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
+                        var replyType = thisObj.data('type');
+                        thread.reply(tId, null, null, '', replyType);
+                    };
+                //jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
                 thread.checkIsRegistered(callback);
             });
 
             thread.initTouchRefresh(exports.load);
 
-            jq('#hotReplyList,#allReplyList').on('click', '.opinionWrap', function(e) {
+            jq('#hotReplyList,#allReplyList').on('click', '.proposalWrap, .opinionWrap', function(e) {
                 var thisObj = jq(this), link;
                 jq.UTIL.touchStateNow(thisObj.parent('li'));
 
@@ -202,7 +213,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             // vote
-            jq('#hotReplyList,#allReplyList').on('click', '.vote', function(e) {
+            jq('#hotReplyList').on('click', '.vote', function(e) {
 
                 jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
@@ -210,92 +221,67 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 var thisObj = jq(this),
                     pId = thisObj.attr('pId') || null,
                     isVoted = thisObj.hasClass('voted'),
-                    voteNum = parseInt(thisObj.data('num'));
+                    resultNum = parseInt(thisObj.data('num')) + 1,
+                    resultClass = "voteCount voted vote",
+                    likeTips = "+1",
+                    hasVoted = true,
+                    url = '/user/vote/proposals',
+                    data = {'tid':tId, 'pid': pId};
 
                 var callback = function() {
                     if(isVoted && exports.hasVoted) {
-                        var opts = {
-                            'id':'operationConfirm',
-                            'isMask':true,
-                            'content':'可以取消这次投票重新选择，确定要取消吗',
-                            'okValue':'确定',
-                            'cancelValue':'取消',
-                            'ok':function() {
-                                var opts = {
-                                    'success': function(result) {
-                                        if (result.code == 0) {
-                                            exports.hasVoted = false;
-                                            jq.UTIL.likeTips(thisObj, '-1');
-                                            thisObj.attr('class', 'voteCount vote');
-                                            thisObj.html(voteNum - 1);
-                                            thisObj.data('num', voteNum - 1);
-                                        }
-                                    },
-                                    'noShowLoading' : true,
-                                    'noMsg' : true
-                                }
+                        resultNum = parseInt(thisObj.data('num')) - 1;
+                        resultClass = "voteCount vote";
+                        likeTips = "-1";
+                        hasVoted = false;
+                        url = '/user/unvote/proposals';
+                    }
 
-                                var url = '/user/unvote/opinions';
-                                var data = {'tid':tId, 'pid': pId};
+                    var opts = {
+                        'success': function(result) {
+                            if (result.code == 0) {
+                                exports.hasVoted = hasVoted;
+                                jq.UTIL.likeTips(thisObj, likeTips);
+                                thisObj.attr('class', resultClass);
+                                thisObj.html(resultNum);
+                                thisObj.data('num', resultNum);
+                            }
+                        },
+                        'noShowLoading' : true,
+                        'noMsg' : true
+                    }
 
-                                jq.UTIL.ajax(url, data, opts);
-                            },
-                        };
-                        jq.UTIL.dialog(opts);
-                    } else if (!isVoted && !exports.hasVoted){
-                        var opts = {
-                            'success': function(result) {
-                                if (result.code == 0) {
-                                    exports.hasVoted = true;
-                                    jq.UTIL.likeTips(thisObj, '+1');
-                                    thisObj.attr('class', 'voteCount voted vote');
-                                    thisObj.html(voteNum + 1);
-                                    thisObj.data('num', voteNum + 1)
-                                }
-                            },
-                            'noShowLoading' : true,
-                            'noMsg' : true
-                        }
-
-                        var url = '/user/vote/opinions';
-                        var data = {'tid':tId, 'pid': pId};
-
-                        jq.UTIL.ajax(url, data, opts);
-                    } else if (!isVoted && exports.hasVoted) {
-                        var opts = {
+                    if (!isVoted && exports.hasVoted) {
+                        var dialogOpts = {
                             'id':'operationConfirm',
                             'isMask':true,
                             'content':'要取消之前的投票重新选择吗?',
                             'okValue':'确定',
                             'cancelValue':'取消',
                             'ok':function() {
-                                var opts = {
-                                    'success': function(result) {
-                                        if (result.code == 0) {
-                                            var votedObj = jq('.voted');
-                                            oldVoteNum = parseInt(votedObj.data('num'));
-                                            votedObj.attr('class', 'voteCount vote');
-                                            votedObj.html(oldVoteNum - 1);
-                                            votedObj.data('num', oldVoteNum - 1);
+                                opts.success = function(result) {
+                                    if (result.code == 0) {
+                                        var votedObj = jq('.voted');
+                                        oldVoteNum = parseInt(votedObj.data('num'));
+                                        votedObj.attr('class', 'voteCount vote');
+                                        votedObj.html(oldVoteNum - 1);
+                                        votedObj.data('num', oldVoteNum - 1);
 
-                                            jq.UTIL.likeTips(thisObj, '+1');
-                                            thisObj.attr('class', 'voteCount voted vote');
-                                            thisObj.html(voteNum + 1);
-                                            thisObj.data('num', voteNum + 1)
-                                        }
-                                    },
-                                    'noShowLoading' : true,
-                                    'noMsg' : true
-                                }
+                                        jq.UTIL.likeTips(thisObj, likeTips);
+                                        thisObj.attr('class', resultClass);
+                                        thisObj.html(resultNum);
+                                        thisObj.data('num', resultNum);
+                                    }
+                                },
 
-                                var url = '/user/revote/opinions';
-                                var data = {'tid':tId, 'pid': pId};
-
+                                url = '/user/revote/proposals';
                                 jq.UTIL.ajax(url, data, opts);
                             },
                         };
-                        jq.UTIL.dialog(opts);
+                        jq.UTIL.dialog(dialogOpts);
 
+                    } else {
+                        jq.UTIL.ajax(url, data, opts);
                     }
                 };
                 thread.checkIsRegistered(callback);

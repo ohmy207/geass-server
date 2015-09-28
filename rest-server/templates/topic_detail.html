@@ -18,19 +18,34 @@
 
    <div class="detailBox">
 
-    <div class="topicList opinion tzDefList">
+    <div class="conBottomWrap">
+     <span class="replyShare db c9 fl f13">
+      <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
+     </span>
+
+     <a id="" href="javascript:;" class="followBtn f14 c2 fr">关注</a>
+    </div>
+
+    <div id="hotLabelBox" class="hotLabel">
+     <div class="leftSideIcon"></div><span>选项</span>
+    </div>
+
+    <div class="topicList proposal proposaList">
      <ul id="hotReplyList">
-     </ul> 
-    </div> 
+     </ul>
+
+     <div class="topicTit">
+      <a href="javascript:;" data-link="">更多选项<i class="iconReply f18 cf"></i></a>
+     </div>
+    </div>
+
+    <div id="emptyProposals" class="emptyList">还没有选项哦！</div>
 
     <div id="allLabelBox" class="hotLabel" style=""> 
      <div class="leftSideIcon all"></div><span>全部看法</span>
-     <!--
-     <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
-     -->
     </div>
 
-    <div class="topicList opinion"> 
+    <div id="opinionList" class="topicList opinion">
      <ul id="allReplyList" style="height: auto;"> 
      </ul>
     </div>
@@ -50,27 +65,15 @@
 
   <script id="tmpl_topic" type="text/html">
 
-    <div class="topicCon">
+    <div class="topicCon topic">
      <div class="titleWrap c11">
 
       <div class="titleDetail allowCopy"><%= topic['title'] %></div>
-      <div class="personImgDate row pr"> 
-       <div class="perImg pr"><img src="<%= topic['avatar'] %>" class="bImg brBig" width="25" height="25" /></div>
-
-       <div class="col titleBottomWrap pr">
-        <div class="nameWrap">
-         <span class="userNick f14"><%= topic['author'] %> </span>
-         <span class="time f12" style="display:none;"><%= topic['f_created_time'] %></span>
-        </div>
-
-        <div class="private">私有</div>
-       </div>
-      </div>
 
      </div>
 
      <div class="detailCon c11 allowCopy">
-      <div class="dCon f17">
+      <div class="dCon f15">
         <%== topic['content'].replace(/\n/g, '<br>') %>
       </div>
       <div class="threadPic pr">
@@ -81,51 +84,84 @@
 
       </div>
 
-      <div class="operation oh"> 
+      <div class="operation oh" style="display:none;">
        <span class="replyShare db c9 fr f13">
         <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
        </span> 
       </div> 
      </div> 
 
-     <div class="topicBar"> 
-      <div class="topicTit"> 
-       <a href="javascript:;" class="threadReply">添加看法<i class="iconReply f18 cf"></i></a> 
-      </div> 
-     </div>
-
-    </div> 
-
-    <div id="hotLabelBox" class="hotLabel tzDefLabel" style="display: none">
-     <div class="leftSideIcon"></div>
-     <img data-src="<%= topic['avatar'] %>" class="brBig pr db"/>
-     <span>题主预置</span>
     </div> 
 
   </script>
 
-  <script id="tmpl_reply" type="text/html">
+  <script id="tmpl_proposals" type="text/html">
       <%
       if (typeof(replyList) == 'undefined') {
           var replyList = data_list;
-      }
-      if (typeof(tmplType) == 'undefined') {
-          var tmplType = 'all';
       }
       %>
 
       <% for (var i in replyList) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid) && ((tmplType==='default' && replyList[i].is_lz) || (tmplType!='default' && !replyList[i].is_lz))) { %>
-      <li class="opinionList" id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
-
-          <%if (!replyList[i].is_lz) { %>
-              <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
-          <% } %>
+      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid)) { %>
+      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
           <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= replyList[i].pid %>" data-num="<%= replyList[i].vote_num %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
 
-          <div class="opinionWrap" data-link="/opinion?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
+          <div class="proposalWrap" data-link="/opinion?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
+              <%if (replyList[i].picture_urls.length > 0) { %>
+                  <div class="imgGallary">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
+                      <%if (replyList[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= replyList[i].picture_urls.length %>图</div>
+                      <% } %>
+                  </div>
+              <% } %>
+
+              <div class="<%if (replyList[i].picture_urls.length > 0) { %>imgContainer<% } else{ %>textContainer<% } %>">
+                  <div class="listContent ">
+                      <%== replyList[i].content %>
+                  </div>
+              </div>
+
+              <%
+                   var vote_percent = vote_total_num ==0 ? 0 : replyList[i].vote_num / vote_total_num * 100;
+                   vote_percent = vote_percent.toFixed(2);
+              %>
+              <div class="opWrap">
+                  <div class="opoutbar fl">
+                      <div class="opbar" style="background-color: <%= color_list[i] %>;width: <%= vote_percent %>%;"></div>
+                  </div>
+                  <div class="oppi f14" style="color: <%= color_list[i] %>;"><%= vote_percent %>%</div>
+              </div>
+
+          </div>
+
+      </li>
+
+    <% } %>
+    <% } %>
+
+  </script>
+
+  <script id="tmpl_opinions" type="text/html">
+      <%
+      if (typeof(replyList) == 'undefined') {
+          var replyList = data_list;
+      }
+      %>
+
+      <% for (var i in replyList) { %>
+
+      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].oid)) { %>
+      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].oid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+
+          <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
+
+          <a class="approveCount" href="javascript:;" oId="<%= replyList[i].oid %>"><% if (replyList[i].approve_num) { %> <%= replyList[i].approve_num %> <%  } else { %>0<%  } %></a>
+
+          <div class="opinionWrap" data-link="/opinion?tid=<%=replyList[i].tid%>&oid=<%=replyList[i].oid%>" >
               <%if (replyList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
@@ -136,18 +172,16 @@
               <% } %>
 
               <div class="textContainer">
-              <%if (!replyList[i].is_lz) { %>
                   <h3 class="text">
                       <%= replyList[i].author %>
                   </h3>
-              <% } %>
 
                   <div class="listContent ">
                       <%== replyList[i].content %>
                   </div>
               </div>
 
-              <%if (false && !replyList[i].is_lz) { %>
+              <%if (false) { %>
                   <div class="info">
                       <div>
                           <span>
@@ -223,7 +257,8 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="/new" class="item cf iconCreate">创建</a>
+   <a href="javascript:;" class="threadReply item cf iconCreate" data-type="proposal">创建</a>
+   <a href="javascript:;" class="threadReply item cf iconCreate" data-type="opinion">创建</a>
    <a href="javascript:;" class="item cf iconNoFollow" id="follow">关注</a>
    <a href="/comment_list?tid={{ state['tid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
@@ -233,7 +268,7 @@
    <a href="javascript:;" class="upBtn cf db"></a>
   </div>
 
-  <div class="emptyList"></div>
+  <div id="emptyList" class="emptyList"></div>
 
   <div class="loading" id="loadNext">
    <div class="spinner">

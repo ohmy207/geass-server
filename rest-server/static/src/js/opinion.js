@@ -44,7 +44,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 loadOpts = {
                     isList: false,
                     isEmptyShow: false,
-                    url: '/opinions/' + window.pId,
+                    url: '/opinions/' + window.oId,
                     emptyCon: '',
                     callback: exports.render,
                 };
@@ -53,115 +53,158 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             initLazyload('.warp img');
 
-            jq('.warp, #bottomBar').on('click', '.threadReply', function() {
-                var thisObj = jq(this);
-                thread.reply(tId, null, null, '', 'opinion');
-            });
+            //jq('.warp, #bottomBar').on('click', '.threadReply', function() {
+            //    var thisObj = jq(this);
+            //    thread.reply(tId, null, null, '', 'opinion');
+            //});
 
             jq('.warp').on('click', '.detail', function(e) {
                 jq.UTIL.touchStateNow(jq(this), 'tapBg1');
                 jq.UTIL.reload(jq(this).data('link'));
             });
 
-            // vote
-            jq('.warp').on('click', '.vote', function(e) {
-
+            // approve
+            jq('.warp').on('click', '.approve', function(e) {
                 jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
 
                 var thisObj = jq(this),
-                    pId = thisObj.attr('pId') || null,
-                    isVoted = thisObj.hasClass('voted'),
-                    voteNum = parseInt(thisObj.data('num'));
+                    oId = thisObj.attr('oid') || null,
+                    resultClass = "approve c13 f16",
+                    resultNum = parseInt(thisObj.data('num')) + 1,
+                    isAjaxDelete = false;
 
                 var callback = function() {
-                    if(isVoted && exports.hasVoted) {
-                        var opts = {
-                            'id':'operationConfirm',
-                            'isMask':true,
-                            'content':'可以取消这次投票重新选择，确定要取消吗',
-                            'okValue':'确定',
-                            'cancelValue':'取消',
-                            'ok':function() {
-                                var opts = {
-                                    'success': function(result) {
-                                        if (result.code == 0) {
-                                            exports.hasVoted = false;
-                                            jq.UTIL.likeTips(thisObj, '-1');
-                                            thisObj.attr('class', 'voteCount vote');
-                                            thisObj.html(voteNum - 1);
-                                            thisObj.data('num', voteNum - 1);
-                                        }
-                                    },
-                                    'noShowLoading' : true,
-                                    'noMsg' : true
-                                }
+                    if(thisObj.hasClass('c13')) {
+                        resultClass = "approve c12 f16";
+                        resultNum = parseInt(thisObj.data('num')) - 1;
+                        isAjaxDelete = true;
+                    }
 
-                                var url = '/user/unvote/opinions';
-                                var data = {'tid':tId, 'pid': pId};
+                    var opts = {
+                        'success': function(result) {
+                            if (result.code == 0) {
+                            //if (result.code == 0 && result.data && result.data.likeNum) {
+                                thisObj.children('span').html(resultNum);
+                                thisObj.attr('class', resultClass);
+                                thisObj.data('num', resultNum);
+                            }
+                        },
+                        'noShowLoading' : true,
+                        'noMsg' : true
+                    }
 
-                                jq.UTIL.ajax(url, data, opts);
-                            },
-                        };
-                        jq.UTIL.dialog(opts);
-                    } else if (!isVoted && !exports.hasVoted){
-                        var opts = {
-                            'success': function(result) {
-                                if (result.code == 0) {
-                                    exports.hasVoted = true;
-                                    jq.UTIL.likeTips(thisObj, '+1');
-                                    thisObj.attr('class', 'voteCount voted vote');
-                                    thisObj.html(voteNum + 1);
-                                    thisObj.data('num', voteNum + 1)
-                                }
-                            },
-                            'noShowLoading' : true,
-                            'noMsg' : true
-                        }
+                    var url = '/user/approve/opinions';
+                    var data = {'oid': oId};
 
-                        var url = '/user/vote/opinions';
-                        var data = {'tid':tId, 'pid': pId};
-
+                    if (isAjaxDelete) {
+                        jq.UTIL.ajax(url, data, opts, 'DELETE');
+                    } else {
                         jq.UTIL.ajax(url, data, opts);
-                    } else if (!isVoted && exports.hasVoted) {
-                        var opts = {
-                            'id':'operationConfirm',
-                            'isMask':true,
-                            'content':'要取消之前的投票重新选择吗?',
-                            'okValue':'确定',
-                            'cancelValue':'取消',
-                            'ok':function() {
-                                var opts = {
-                                    'success': function(result) {
-                                        if (result.code == 0) {
-                                            var votedObj = jq('.voted');
-                                            oldVoteNum = parseInt(votedObj.data('num'));
-                                            votedObj.attr('class', 'voteCount vote');
-                                            votedObj.html(oldVoteNum - 1);
-                                            votedObj.data('num', oldVoteNum - 1);
-
-                                            jq.UTIL.likeTips(thisObj, '+1');
-                                            thisObj.attr('class', 'voteCount voted vote');
-                                            thisObj.html(voteNum + 1);
-                                            thisObj.data('num', voteNum + 1)
-                                        }
-                                    },
-                                    'noShowLoading' : true,
-                                    'noMsg' : true
-                                }
-
-                                var url = '/user/revote/opinions';
-                                var data = {'tid':tId, 'pid': pId};
-
-                                jq.UTIL.ajax(url, data, opts);
-                            },
-                        };
-                        jq.UTIL.dialog(opts);
-
                     }
                 };
                 thread.checkIsRegistered(callback);
             });
+
+            // vote
+            //jq('.warp').on('click', '.vote', function(e) {
+
+            //    jq.UTIL.touchStateNow(jq(this));
+            //    e.stopPropagation();
+
+            //    var thisObj = jq(this),
+            //        pId = thisObj.attr('pId') || null,
+            //        isVoted = thisObj.hasClass('voted'),
+            //        voteNum = parseInt(thisObj.data('num'));
+
+            //    var callback = function() {
+            //        if(isVoted && exports.hasVoted) {
+            //            var opts = {
+            //                'id':'operationConfirm',
+            //                'isMask':true,
+            //                'content':'可以取消这次投票重新选择，确定要取消吗',
+            //                'okValue':'确定',
+            //                'cancelValue':'取消',
+            //                'ok':function() {
+            //                    var opts = {
+            //                        'success': function(result) {
+            //                            if (result.code == 0) {
+            //                                exports.hasVoted = false;
+            //                                jq.UTIL.likeTips(thisObj, '-1');
+            //                                thisObj.attr('class', 'voteCount vote');
+            //                                thisObj.html(voteNum - 1);
+            //                                thisObj.data('num', voteNum - 1);
+            //                            }
+            //                        },
+            //                        'noShowLoading' : true,
+            //                        'noMsg' : true
+            //                    }
+
+            //                    var url = '/user/unvote/opinions';
+            //                    var data = {'tid':tId, 'pid': pId};
+
+            //                    jq.UTIL.ajax(url, data, opts);
+            //                },
+            //            };
+            //            jq.UTIL.dialog(opts);
+            //        } else if (!isVoted && !exports.hasVoted){
+            //            var opts = {
+            //                'success': function(result) {
+            //                    if (result.code == 0) {
+            //                        exports.hasVoted = true;
+            //                        jq.UTIL.likeTips(thisObj, '+1');
+            //                        thisObj.attr('class', 'voteCount voted vote');
+            //                        thisObj.html(voteNum + 1);
+            //                        thisObj.data('num', voteNum + 1)
+            //                    }
+            //                },
+            //                'noShowLoading' : true,
+            //                'noMsg' : true
+            //            }
+
+            //            var url = '/user/vote/opinions';
+            //            var data = {'tid':tId, 'pid': pId};
+
+            //            jq.UTIL.ajax(url, data, opts);
+            //        } else if (!isVoted && exports.hasVoted) {
+            //            var opts = {
+            //                'id':'operationConfirm',
+            //                'isMask':true,
+            //                'content':'要取消之前的投票重新选择吗?',
+            //                'okValue':'确定',
+            //                'cancelValue':'取消',
+            //                'ok':function() {
+            //                    var opts = {
+            //                        'success': function(result) {
+            //                            if (result.code == 0) {
+            //                                var votedObj = jq('.voted');
+            //                                oldVoteNum = parseInt(votedObj.data('num'));
+            //                                votedObj.attr('class', 'voteCount vote');
+            //                                votedObj.html(oldVoteNum - 1);
+            //                                votedObj.data('num', oldVoteNum - 1);
+
+            //                                jq.UTIL.likeTips(thisObj, '+1');
+            //                                thisObj.attr('class', 'voteCount voted vote');
+            //                                thisObj.html(voteNum + 1);
+            //                                thisObj.data('num', voteNum + 1)
+            //                            }
+            //                        },
+            //                        'noShowLoading' : true,
+            //                        'noMsg' : true
+            //                    }
+
+            //                    var url = '/user/revote/opinions';
+            //                    var data = {'tid':tId, 'pid': pId};
+
+            //                    jq.UTIL.ajax(url, data, opts);
+            //                },
+            //            };
+            //            jq.UTIL.dialog(opts);
+
+            //        }
+            //    };
+            //    thread.checkIsRegistered(callback);
+            //});
 
         },
 
