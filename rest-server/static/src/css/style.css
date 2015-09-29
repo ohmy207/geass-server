@@ -3173,7 +3173,7 @@ auto;
     line-height: 44px
 }
 
-.qBackBtn,.qBackBtn .upBtn:before,.qMore,.qTitle,.qPublish {
+.upBtn:before {
     color: #f3f3f3
 }
 
@@ -4240,7 +4240,7 @@ i {
 }
 */
 
-.person {
+.listBg, .person {
     background-color: #f3f3f3;
     /*
     padding-bottom: 55px;
@@ -4256,7 +4256,7 @@ i {
     background-color: #fafafa;
 }
 
-.person .loading {
+.listBg .loading, .person .loading {
     background-color: #f3f3f3;
 }
 

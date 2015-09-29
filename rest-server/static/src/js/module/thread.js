@@ -145,6 +145,35 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         },
 
+        resetOpbar: function(proposal_list) {
+            if (proposal_list) {
+                var targetIds = proposal_list.map(function(proposal) {
+                    return '#p_' + proposal.tid + '_' + proposal.pid;
+                });
+                selectors = jq(targetIds.join(','));
+            } else {
+                selectors = jq('#hotReplyList').children('li');
+            }
+
+            var voteTotalNum = window.voteTotalNum,
+                delayTime = 50;
+
+            selectors.each(function(index){
+                var thisObj = jq(this);
+                var currNum = thisObj.children('.voteCount').data('num');
+                var currPercent = voteTotalNum == 0 ? 0 : (parseInt(currNum)/voteTotalNum*100).toFixed(2);
+
+                var opbar = thisObj.find('.opbar');
+                    oppi = thisObj.find('.oppi');
+                opbar.css("background-color", window.color_list[index]);
+                opbar.delay(delayTime).animate({width: currPercent + '%'});
+                //opbar.animate({width: currPercent + '%'});
+                oppi.css("color",  window.color_list[index]).html(currPercent + '%');
+
+                delayTime += 50;
+            });
+        },
+
         reply: function (tId, pId, toCoId, author, replyType) {
             //var isViewthread = isViewthread || false;
             var author = author || '';

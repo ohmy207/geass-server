@@ -53,20 +53,21 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('#bottomBar .iconReply').html(re.data.comments_count);
 
             window.isLZ = re.data.is_lz || false;
-            window.vote_total_num = re.data.vote_total_num || 0;
+            window.voteTotalNum = re.data.vote_total_num || 0;
             window.color_list = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#bcbd22', '#17becf', '#aec7e8'];
             exports.hasVoted = re.data.has_user_voted || false;
 
             var ReplyHtml = template('tmpl_proposals', {
                 'data_list': re.data.proposal_list,
-                'vote_total_num': vote_total_num,
                 'color_list': window.color_list,
             });
 
             if(jq.trim(ReplyHtml)!==''){
                 //jq('#allLabelBox').show();
                 jq('#hotReplyList').append(ReplyHtml);
-                jq('#hotReplyList').css({height:'auto'})
+                jq('#hotReplyList').css({height:'auto'});
+
+                thread.resetOpbar(re.data.proposal_list);
             } else {
                 jq('#emptyProposals').show();
             }
@@ -171,6 +172,11 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 return false;
             });
 
+            jq('.topicTit').on('click', 'a', function(e) {
+                jq.UTIL.touchStateNow(jq(this));
+                jq.UTIL.reload('/proposal_list' + '?tid=' + tId);
+            });
+
             // follow
             jq('#bottomBar').on('click', '#follow', function(e) {
 
@@ -223,28 +229,32 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     isVoted = thisObj.hasClass('voted'),
                     resultNum = parseInt(thisObj.data('num')) + 1,
                     resultClass = "voteCount voted vote",
-                    likeTips = "+1",
+                    //likeTips = "+1",
                     hasVoted = true,
                     url = '/user/vote/proposals',
-                    data = {'tid':tId, 'pid': pId};
+                    data = {'tid':tId, 'pid': pId},
+                    voteTotalNum = window.voteTotalNum + 1;
 
                 var callback = function() {
                     if(isVoted && exports.hasVoted) {
                         resultNum = parseInt(thisObj.data('num')) - 1;
                         resultClass = "voteCount vote";
-                        likeTips = "-1";
+                        //likeTips = "-1";
                         hasVoted = false;
                         url = '/user/unvote/proposals';
+                        voteTotalNum = window.voteTotalNum - 1;
                     }
 
                     var opts = {
                         'success': function(result) {
                             if (result.code == 0) {
                                 exports.hasVoted = hasVoted;
-                                jq.UTIL.likeTips(thisObj, likeTips);
+                                //jq.UTIL.likeTips(thisObj, likeTips);
                                 thisObj.attr('class', resultClass);
                                 thisObj.html(resultNum);
                                 thisObj.data('num', resultNum);
+                                window.voteTotalNum = voteTotalNum;
+                                thread.resetOpbar();
                             }
                         },
                         'noShowLoading' : true,
@@ -267,10 +277,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                         votedObj.html(oldVoteNum - 1);
                                         votedObj.data('num', oldVoteNum - 1);
 
-                                        jq.UTIL.likeTips(thisObj, likeTips);
+                                        //jq.UTIL.likeTips(thisObj, likeTips);
                                         thisObj.attr('class', resultClass);
                                         thisObj.html(resultNum);
                                         thisObj.data('num', resultNum);
+
+                                        thread.resetOpbar();
                                     }
                                 },
 

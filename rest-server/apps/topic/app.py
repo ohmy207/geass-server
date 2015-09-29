@@ -119,6 +119,8 @@ class ProposalsHandler(BaseHandler):
         )
 
         self._data = {
+            'has_user_voted': db_user['vote'].has_user_voted(self.current_user, tid),
+            'vote_total_num': db_user['vote'].find(spec).count(),
             'data_list': db_user['vote'].format_proposals(self.current_user, proposals),
             'next_start': self._skip + self._limit
         }

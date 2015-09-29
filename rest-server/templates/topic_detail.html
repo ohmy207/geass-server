@@ -105,11 +105,11 @@
       <% for (var i in replyList) { %>
 
       <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid)) { %>
-      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
           <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= replyList[i].pid %>" data-num="<%= replyList[i].vote_num %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
 
-          <div class="proposalWrap" data-link="/opinion?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
+          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
               <%if (replyList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
@@ -125,15 +125,11 @@
                   </div>
               </div>
 
-              <%
-                   var vote_percent = vote_total_num ==0 ? 0 : replyList[i].vote_num / vote_total_num * 100;
-                   vote_percent = vote_percent.toFixed(2);
-              %>
               <div class="opWrap">
                   <div class="opoutbar fl">
-                      <div class="opbar" style="background-color: <%= color_list[i] %>;width: <%= vote_percent %>%;"></div>
+                      <div class="opbar" ></div>
                   </div>
-                  <div class="oppi f14" style="color: <%= color_list[i] %>;"><%= vote_percent %>%</div>
+                  <div class="oppi f14"></div>
               </div>
 
           </div>
@@ -155,7 +151,7 @@
       <% for (var i in replyList) { %>
 
       <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].oid)) { %>
-      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].oid%>_0" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].oid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
 
           <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
 

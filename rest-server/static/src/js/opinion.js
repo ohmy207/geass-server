@@ -72,12 +72,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     oId = thisObj.attr('oid') || null,
                     resultClass = "approve c13 f16",
                     resultNum = parseInt(thisObj.data('num')) + 1,
+                    likeTips = "+1",
                     isAjaxDelete = false;
 
                 var callback = function() {
                     if(thisObj.hasClass('c13')) {
                         resultClass = "approve c12 f16";
                         resultNum = parseInt(thisObj.data('num')) - 1;
+                        likeTips = "-1";
                         isAjaxDelete = true;
                     }
 
@@ -88,6 +90,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                 thisObj.children('span').html(resultNum);
                                 thisObj.attr('class', resultClass);
                                 thisObj.data('num', resultNum);
+                                jq.UTIL.likeTips(thisObj, likeTips);
                             }
                         },
                         'noShowLoading' : true,

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block html_style %}
+<html style="background-color:#f3f3f3;">
+{% end %}
+
+{% block header %}
+
+  <title>列表</title>
+
+{% end %}
+
+{% block body_style %}
+ <body class="listBg" style="zoom: 1;">
+{% end %}
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
+  </style>
+
+  <div class="warp" onselectstart="return false;"> 
+
+   <div class="detailBox">
+    <div class="topicList proposal proposaList">
+      <ul id="hotReplyList" style="height:auto;">
+      </ul>
+    </div>
+   </div>
+
+   <div id="loadNextPos"></div> 
+
+  </div> 
+  <!--底部bar-->
+
+  <script id="tmpl_proposals" type="text/html">
+      <%
+      if (typeof(replyList) == 'undefined') {
+          var replyList = data_list;
+      }
+      %>
+
+      <% for (var i in replyList) { %>
+
+      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid)) { %>
+      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+
+          <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= replyList[i].pid %>" data-num="<%= replyList[i].vote_num %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
+
+          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
+              <%if (replyList[i].picture_urls.length > 0) { %>
+                  <div class="imgGallary">
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
+                      <%if (replyList[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= replyList[i].picture_urls.length %>图</div>
+                      <% } %>
+                  </div>
+              <% } %>
+
+              <div class="<%if (replyList[i].picture_urls.length > 0) { %>imgContainer<% } else{ %>textContainer<% } %>">
+                  <div class="listContent ">
+                      <%== replyList[i].content %>
+                  </div>
+              </div>
+
+              <div class="opWrap">
+                  <div class="opoutbar fl">
+                      <div class="opbar"></div>
+                  </div>
+                  <div class="oppi f14"></div>
+              </div>
+
+          </div>
+
+      </li>
+
+    <% } %>
+    <% } %>
+
+  </script>
+
+{% end %}
+
+
+{% block footer %}
+
+  <div class="bottomBar" id="bottomBar" style="display:none;">
+   <a href="javascript:;" class="item cf iconReply threadReply" id="to_reply">添加评论</a>
+  </div>
+
+  <div id="goTop" class="floatLayer br db" style="display: none;">
+   <a href="javascript:;" class="upBtn cf db"></a>
+  </div>
+
+  <div class="emptyList"></div>
+
+  <div class="loading" id="loadNext" >
+   <div class="spinner">
+    <span class="circleG" id="rotateG_01"></span>
+    <span class="circleG" id="rotateG_02"></span>
+    <span class="circleG" id="rotateG_03"></span>
+    <span class="circleG" id="rotateG_04"></span>
+    <span class="circleG" id="rotateG_05"></span>
+    <span class="circleG" id="rotateG_06"></span>
+    <span class="circleG" id="rotateG_07"></span>
+    <span class="circleG" id="rotateG_08"></span>
+   </div>正在加载...
+  </div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
+  </div>
+
+  <script type="text/javascript">
+      var tId = "{{ state['tid'] }}";
+  </script>
+
+  <script type="text/javascript">
+    var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',
+    shareTitle = '分享自#你怎么看#',
+    shareDesc = '真是难为编剧了，上一部飞机、坦克、大炮都用完了，这一部玩起了空中飞车。真期待下一部导演和编剧会...',
+    shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
+  </script>
+
+  <script data-main="{{ static_url('js/proposal_list.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+
+{% end %}
