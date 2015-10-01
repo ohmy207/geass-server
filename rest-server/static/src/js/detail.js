@@ -26,25 +26,20 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
         hasVoted: false,
-        isLoadingFirst: true,
+        moreType: 'more',
 
         load: function(action) {
-            var url = '/topics/' + window.tId,
-                isLoadingFirst = exports.isLoadingFirst;
-
             thread.load({
-                isList: !isLoadingFirst,
+                isList: true,
                 isEmptyShow: false,
-                url: isLoadingFirst ? url : url + '/opinions',
+                url: '/topics/' + window.tId + '/opinions',
                 emptyCon: '',
-                callback: isLoadingFirst ? exports.render : exports.renderList,
+                callback: exports.renderList,
             }, action);
         },
 
         // render data
         render: function(re) {
-            window.isLZ = re.data.is_lz || false;
-            window.voteTotalNum = re.data.vote_total_num || 0;
             exports.hasVoted = re.data.has_user_voted || false;
 
             var topicHtml = template('tmpl_topic', re.data);
@@ -57,23 +52,32 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.topicInfo span').html('参与 ' + window.voteTotalNum + ' 人');
             jq('#bottomBar .iconReply').html(re.data.comments_count);
 
-            var ReplyHtml = template('tmpl_proposals', {
-                'data_list': re.data.proposal_list,
-            });
-
-            if(jq.trim(ReplyHtml)!==''){
-                //jq('#allLabelBox').show();
-                jq('#hotReplyList').append(ReplyHtml);
-                jq('#hotReplyList').css({height:'auto'});
-
-                thread.resetOpbar();
-            }
-
+            exports.renderProposals(re)
             exports.renderList(re)
 
             jq('.warp, #bottomBar').show();
+        },
 
-            exports.isLoadingFirst = false;
+        renderProposals: function(re) {
+            //var ReplyHtml = template('tmpl_proposals', {
+            //    'data_list': re.data.proposal_list,
+            //});
+
+            if (re.data.has_more_proposals) {
+                jq('.loadMore').show();
+            } else {
+                jq('.loadMore').hide();
+            }
+
+            window.voteTotalNum = re.data.vote_total_num || 0;
+
+            var listHtml = template('tmpl_proposals', re.data);
+            if(jq.trim(listHtml)!==''){
+                //jq('#allLabelBox').show();
+                jq('#hotReplyList').append(listHtml);
+                jq('#hotReplyList').css({height:'auto'});
+                thread.resetOpbar();
+            }
         },
 
         renderList: function(re) {
@@ -87,15 +91,21 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         init: function() {
             var tId = window.tId;
+                loadOpts = {
+                    isList: false,
+                    isEmptyShow: false,
+                    url: '/topics/' + tId,
+                    emptyCon: '',
+                    callback: exports.render,
+                };
 
             // 分享遮罩，一次性
             //var action = jq.UTIL.getQuery('action');
             //var reapp = /qqdownloader\/([^\s]+)/i;
 
-            exports.load('drag');
+            thread.load(loadOpts, 'drag');
 
             initLazyload('.warp img');
-            initLazyload('#opinionList img');
 
             // appbar no share mask
             //if (action == 'share' && !reapp.test(navigator.userAgent)) {
@@ -169,9 +179,24 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 return false;
             });
 
-            jq('.topicTit').on('click', 'a', function(e) {
+            jq('.warp').on('click', '.loadMore', function(e) {
                 jq.UTIL.touchStateNow(jq(this));
-                jq.UTIL.reload('/proposal_list' + '?tid=' + tId);
+
+                var loadOpts = {
+                    isList: false,
+                    isEmptyShow: false,
+                    url: '/topics/' + tId + '/proposals',
+                    emptyCon: '',
+                    type: exports.moreType,
+                    callback: exports.renderProposals,
+                };
+
+                thread.load(loadOpts, 'more');
+                if (exports.moreType === 'more') {
+                    jq(this).children('span').html('显示全部选项');
+                    exports.moreType = 'all';
+                }
+                //jq.UTIL.reload('/proposal_list' + '?tid=' + tId);
             });
 
             // follow

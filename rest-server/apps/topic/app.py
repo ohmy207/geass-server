@@ -73,13 +73,17 @@ class DetailTopicHandler(BaseHandler):
 
         self._data = {
             'topic': topic,
+            'proposals': db_user['vote'].format_proposals(uid, proposals),
+            'data_list': db_user['approve'].format_opinions(uid, opinions),
+
             'comments_count': db_user['comment'].find({'tid': tid, 'pid': None}).count(),
             'vote_total_num': db_user['vote'].find(spec).count(),
-            'proposal_list': db_user['vote'].format_proposals(uid, proposals),
-            'data_list': db_user['approve'].format_opinions(uid, opinions),
+
             'is_lz': topic['author_uid'] == unicode(uid),
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'is_topic_followed': db_user['follow'].is_topic_followed(uid, tid),
+            'has_more_proposals': True if db_topic['proposal'].get_all(spec, skip=5, limit=1, sort=sort) else False,
+
             'next_start': self._skip + self._limit,
         }
 
@@ -100,8 +104,7 @@ class ProposalsHandler(BaseHandler):
         'need': [
         ],
         'option': [
-            ('skip', int, 0),
-            ('limit', int, 5),
+            ('type', basestring, None),
         ]
     }
 
@@ -111,18 +114,20 @@ class ProposalsHandler(BaseHandler):
         spec = {'tid': tid}
         sort=[('vnum', -1), ('islz', -1), ('ctime', 1)]
 
-        proposals = db_topic['proposal'].get_all(
-            spec=spec,
-            skip=self._skip,
-            limit=self._limit,
-            sort=sort,
-        )
+        proposals = []
+        has_more_proposals = False
+        if self._params['type'] == 'more':
+            proposals = db_topic['proposal'].get_all(spec, skip=5, limit=10, sort=sort)
+            has_more_proposals = True if db_topic['proposal'].get_all(spec, skip=15, limit=1, sort=sort) else False
+        if self._params['type'] == 'all':
+            proposals = db_topic['proposal'].get_all(spec, skip=15, limit=100, sort=sort)
 
         self._data = {
+            'data_list': db_user['vote'].format_proposals(self.current_user, proposals),
+            'has_more_proposals': has_more_proposals,
             'has_user_voted': db_user['vote'].has_user_voted(self.current_user, tid),
             'vote_total_num': db_user['vote'].find(spec).count(),
-            'data_list': db_user['vote'].format_proposals(self.current_user, proposals),
-            'next_start': self._skip + self._limit
+            #'next_start': self._skip + self._limit
         }
 
     @authenticated

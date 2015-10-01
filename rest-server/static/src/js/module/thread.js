@@ -33,18 +33,17 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         // load data,all in one
         load: function(loadOpts, action) {
 
-            action = action || '';
             exports.isLoading = true;
 
             var isList = loadOpts.isList || false,
                 url = loadOpts.url,
-                start = exports.nextStart,
-                desc = exports.desc;
+                action = action || '',
+                start = exports.nextStart;
 
-            if (isList) {
+            if (isList || action === 'more') {
                 url = url.indexOf('?') === -1 ? url + '?' : url + '&';
-                url = url + 'skip=' + start
-                    + '&desc=' + desc;
+                url = isList ? url + 'skip=' + start : url + 'type=' + loadOpts.type;
+                //    + '&desc=' + desc;
             }
 
             var opts = {
@@ -63,6 +62,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                             jq('#showAll').hide();
                             exports.isLoadingNew = true;
                             jQuery.UTIL.showLoading();
+                            break;
+                        case 'more':
+                            jq.UTIL.showLoading();
                             break;
                         default:
                             jq.UTIL.showLoading();
@@ -116,9 +118,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             if (typeof opts.callback == 'function') {
                 opts.callback(re);
             }
-
+            if (re.data.next_start) {
+                exports.nextStart = re.data.next_start;
+            }
             jq('#loadNext').hide();
-            exports.nextStart = re.data.next_start;
         },
 
         initTouchRefresh: function (load) {
@@ -375,7 +378,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                 // 结构变了与列表不同
                                 var allLabelBox = jq('#allLabelBox'),
                                     //replyList = jq('#replyList'),
-                                    replyData = {replyList:{0:re.data}};
+                                    replyData = {data_list:{0:re.data}};
 
                                 jq('#emptyList').hide()
 
@@ -399,7 +402,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     allLabelBox.show();
                                     //allLabelBox.next('.topicList').show();
 
-                                    if (!window.desc) {
+                                    if (true && !exports.desc) {
                                         jq('#allReplyList').append(tmpl);
                                     } else {
                                         jq('#allReplyList').prepend(tmpl);

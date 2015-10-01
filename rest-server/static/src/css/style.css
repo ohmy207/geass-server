@@ -3737,30 +3737,17 @@ li {
      */
 }
 
-.topicTit {
-    height: 35px;
-    background-color: #fafafa;
-    overflow: hidden;
-    line-height: 35px;
-    border:1px solid #e9e9e9;
-
-    /*
-    box-shadow: 0 0 2px rgba(0,0,0,.3);
-    margin: 0 -12px -9px;
-    */
-}
-
-.topicTit a {
-    font-size: 13px;
+.loadMore {
+    padding: 8px 0;
     display: block;
+    font-size: 13px;
+    height: 22px;
+    line-height: 22px;
     text-align: center;
-    color: #999
-}
-
-.topicTit
-.iconReply {
-    margin-left: 10px;
-    vertical-align: middle
+    border-bottom: 1px solid #eee;
+    color: #698ebf;
+    box-shadow: 0 0 5px rgba(180,180,180,.1) inset;
+    text-shadow: 0 1px 0 #fff;
 }
 
 /*

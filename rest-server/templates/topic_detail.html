@@ -36,9 +36,7 @@
      <ul id="hotReplyList">
      </ul>
 
-     <div class="topicTit" style="display:none;">
-      <a href="javascript:;" data-link="">更多选项<i class="iconReply f18 cf"></i></a>
-     </div>
+     <a href="javascript:;" class="loadMore" style="display:none;"><span>显示更多选项</span></a>
     </div>
 
     <div id="allLabelBox" class="hotLabel" style="display:none;">
@@ -92,31 +90,31 @@
 
   <script id="tmpl_proposals" type="text/html">
       <%
-      if (typeof(replyList) == 'undefined') {
-          var replyList = data_list;
+      if (typeof(proposals) == 'undefined') {
+          var proposals = data_list;
       }
       %>
 
-      <% for (var i in replyList) { %>
+      <% for (var i in proposals) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid)) { %>
-      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+      <% if (!isDOMExist('p_' + proposals[i].tid + '_' + proposals[i].pid)) { %>
+      <li id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" uId="<%=proposals[i].author_uid%>" author="<%= proposals[i].author %>">
 
-          <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= replyList[i].pid %>" data-num="<%= replyList[i].vote_num %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
+          <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>"><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
 
-          <div class="proposalWrap" data-link="/proposal?tid=<%=replyList[i].tid%>&pid=<%=replyList[i].pid%>" >
-              <%if (replyList[i].picture_urls.length > 0) { %>
+          <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>" >
+              <%if (proposals[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
-                      <%if (replyList[i].picture_urls.length > 1) { %>
-                          <div class="picCount"><%= replyList[i].picture_urls.length %>图</div>
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= proposals[i].picture_urls[0]['thumb'] %>" >
+                      <%if (proposals[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= proposals[i].picture_urls.length %>图</div>
                       <% } %>
                   </div>
               <% } %>
 
-              <div class="<%if (replyList[i].picture_urls.length > 0) { %>imgContainer<% } else{ %>textContainer<% } %>">
+              <div class="<%if (proposals[i].picture_urls.length > 0) { %>imgContainer<% } else{ %>textContainer<% } %>">
                   <div class="listContent ">
-                      <%== replyList[i].content %>
+                      <%== proposals[i].content %>
                   </div>
               </div>
 
@@ -138,37 +136,37 @@
 
   <script id="tmpl_opinions" type="text/html">
       <%
-      if (typeof(replyList) == 'undefined') {
-          var replyList = data_list;
+      if (typeof(opinions) == 'undefined') {
+          var opinions = data_list;
       }
       %>
 
-      <% for (var i in replyList) { %>
+      <% for (var i in opinions) { %>
 
-      <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].oid)) { %>
-      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].oid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+      <% if (!isDOMExist('p_' + opinions[i].tid + '_' + opinions[i].oid)) { %>
+      <li id="p_<%=opinions[i].tid%>_<%=opinions[i].oid%>" uId="<%=opinions[i].author_uid%>" author="<%= opinions[i].author %>">
 
-          <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
+          <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=opinions[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
 
-          <a class="approveCount" href="javascript:;" oId="<%= replyList[i].oid %>"><% if (replyList[i].approve_num) { %> <%= replyList[i].approve_num %> <%  } else { %>0<%  } %></a>
+          <a class="approveCount" href="javascript:;" oId="<%= opinions[i].oid %>"><% if (opinions[i].approve_num) { %> <%= opinions[i].approve_num %> <%  } else { %>0<%  } %></a>
 
-          <div class="opinionWrap" data-link="/opinion?tid=<%=replyList[i].tid%>&oid=<%=replyList[i].oid%>" >
-              <%if (replyList[i].picture_urls.length > 0) { %>
+          <div class="opinionWrap" data-link="/opinion?tid=<%=opinions[i].tid%>&oid=<%=opinions[i].oid%>" >
+              <%if (opinions[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= replyList[i].picture_urls[0]['thumb'] %>" >
-                      <%if (replyList[i].picture_urls.length > 1) { %>
-                          <div class="picCount"><%= replyList[i].picture_urls.length %>图</div>
+                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= opinions[i].picture_urls[0]['thumb'] %>" >
+                      <%if (opinions[i].picture_urls.length > 1) { %>
+                          <div class="picCount"><%= opinions[i].picture_urls.length %>图</div>
                       <% } %>
                   </div>
               <% } %>
 
               <div class="textContainer">
                   <h3 class="text">
-                      <%= replyList[i].author %>
+                      <%= opinions[i].author %>
                   </h3>
 
                   <div class="listContent ">
-                      <%== replyList[i].content %>
+                      <%== opinions[i].content %>
                   </div>
               </div>
 
@@ -176,7 +174,7 @@
                   <div class="info">
                       <div>
                           <span>
-                              <span class="time"><%= replyList[i].f_created_time %></span>
+                              <span class="time"><%= opinions[i].f_created_time %></span>
                           </span>
                       </div>
                       <div class="flRight">
