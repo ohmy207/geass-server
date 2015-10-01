@@ -167,13 +167,15 @@ class DetailProposalHandler(BaseHandler):
         if not data:
             raise ResponseError(404)
 
+        tid = self.to_objectid(data['tid'])
         data['is_voted'] = db_user['vote'].is_proposal_voted(uid, pid)
-        data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
+        data['title'] = db_topic['topic'].find_one({'_id': tid}, {'title': 1})['title']
 
         self._data = {
             'proposal': data,
             #'comments_count': db_user['comment'].find({'pid': pid}).count(),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
+            'vote_total_num': db_user['vote'].find({'tid': tid}).count(),
         }
 
 

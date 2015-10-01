@@ -34,32 +34,31 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             thread.load({
                 isList: !isLoadingFirst,
-                isEmptyShow: true,
+                isEmptyShow: false,
                 url: isLoadingFirst ? url : url + '/opinions',
-                emptyCon: '还没有看法哦！',
+                emptyCon: '',
                 callback: isLoadingFirst ? exports.render : exports.renderList,
             }, action);
         },
 
         // render data
         render: function(re) {
-            var topicHtml = template('tmpl_topic', re.data);
-                is_topic_followed = re.data.is_topic_followed || false;
-            jq('.detailBox').prepend(topicHtml);
-
-            var follow_class = is_topic_followed ? 'item cf iconFollow' : 'item cf iconNoFollow';
-                follow_html = is_topic_followed ? '已关注' : '关注';
-            jq('#bottomBar #follow').attr('class', follow_class).html(follow_html);
-            jq('#bottomBar .iconReply').html(re.data.comments_count);
-
             window.isLZ = re.data.is_lz || false;
             window.voteTotalNum = re.data.vote_total_num || 0;
-            window.color_list = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#bcbd22', '#17becf', '#aec7e8'];
             exports.hasVoted = re.data.has_user_voted || false;
+
+            var topicHtml = template('tmpl_topic', re.data);
+                is_topic_followed = re.data.is_topic_followed || false,
+                follow_class = is_topic_followed ? 'followBtn followed f14 c2 fr' : 'followBtn f14 c2 fr',
+                follow_html = is_topic_followed ? '已关注' : '关注';
+
+            jq('.detailBox').prepend(topicHtml);
+            jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
+            jq('.topicInfo span').html('参与 ' + window.voteTotalNum + ' 人');
+            jq('#bottomBar .iconReply').html(re.data.comments_count);
 
             var ReplyHtml = template('tmpl_proposals', {
                 'data_list': re.data.proposal_list,
-                'color_list': window.color_list,
             });
 
             if(jq.trim(ReplyHtml)!==''){
@@ -67,14 +66,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq('#hotReplyList').append(ReplyHtml);
                 jq('#hotReplyList').css({height:'auto'});
 
-                thread.resetOpbar(re.data.proposal_list);
-            } else {
-                jq('#emptyProposals').show();
+                thread.resetOpbar();
             }
 
             exports.renderList(re)
 
-            jq('.warp, #bottomBar, .recommendTitle').show();
+            jq('.warp, #bottomBar').show();
 
             exports.isLoadingFirst = false;
         },
@@ -82,7 +79,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         renderList: function(re) {
             var ReplyHtml = template('tmpl_opinions', re.data);
             if(jq.trim(ReplyHtml)!==''){
-                //jq('#hotLabelBox').show();
+                jq('#allLabelBox').show();
                 jq('#allReplyList').css({height:'auto'})
                 jq('#allReplyList').append(ReplyHtml);
             }
@@ -149,13 +146,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //});
 
             // 主题和底部bar 帖点击回复
-            jq('.warp, #bottomBar').on('click', '.threadReply', function() {
+            jq('.topicBtn').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
                         var replyType = thisObj.data('type');
                         thread.reply(tId, null, null, '', replyType);
                     };
-                //jq.UTIL.touchStateNow(thisObj.parent('.topicTit'));
+                jq.UTIL.touchStateNow(thisObj);
                 thread.checkIsRegistered(callback);
             });
 
@@ -178,14 +175,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
 
             // follow
-            jq('#bottomBar').on('click', '#follow', function(e) {
+            jq('.topicInfo').on('click', '.followBtn', function(e) {
 
                 jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
 
                 var thisObj = jq(this),
                     tId = window.tId || null,
-                    isFollowed = thisObj.hasClass('iconFollow');
+                    isFollowed = thisObj.hasClass('followed');
 
                 var opts = {
                     'noShowLoading' : true,
@@ -199,8 +196,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     if (isFollowed) {
                         opts.success = function(result) {
                             if (result.code == 0) {
-                                thisObj.attr('class', 'item cf iconNoFollow');
-                                thisObj.html('关注')
+                                thisObj.attr('class', 'followBtn f14 c2 fr');
+                                thisObj.html('关注');
                             }
                         };
 
@@ -208,7 +205,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     } else {
                         opts.success = function(result) {
                             if (result.code == 0) {
-                                thisObj.attr('class', 'item cf iconFollow');
+                                thisObj.attr('class', 'followBtn followed f14 c2 fr');
                                 thisObj.html('已关注')
                             }
                         };

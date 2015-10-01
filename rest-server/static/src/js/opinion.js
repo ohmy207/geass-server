@@ -25,7 +25,7 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        hasVoted: false,
+        //hasVoted: false,
 
         // render data
         render: function(re) {
@@ -36,7 +36,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').show()
             //jq('.warp, #bottomBar, .recommendTitle').show()
 
-            exports.hasVoted = re.data.has_user_voted || false;
+            //exports.hasVoted = re.data.has_user_voted || false;
         },
 
         init: function() {

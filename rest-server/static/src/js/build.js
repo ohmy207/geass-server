@@ -17,6 +17,7 @@
 
         "new": "new",
         "detail": "detail",
+        "proposal": "proposal",
         "opinion": "opinion",
         "comment": "comment",
         "personal": "personal",
@@ -33,6 +34,9 @@
         },
         {
             name: "detail",
+        },
+        {
+            name: "proposal",
         },
         {
             name: "opinion",

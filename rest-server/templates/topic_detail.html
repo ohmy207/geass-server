@@ -18,15 +18,17 @@
 
    <div class="detailBox">
 
-    <div class="conBottomWrap">
-     <span class="replyShare db c9 fl f13">
-      <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
-     </span>
-
+    <div class="topicInfo">
+     <span class="db c9 fl f13" style="display:none;"></span>
      <a id="" href="javascript:;" class="followBtn f14 c2 fr">关注</a>
     </div>
 
-    <div id="hotLabelBox" class="hotLabel">
+    <div class="topicBtn">
+      <a href="javascript:;" class="threadReply" data-type="proposal"><i class="iconReply f18 cf"></i>添加选项</a>
+      <a href="javascript:;" class="threadReply" data-type="opinion"><i class="iconReply f18 cf"></i>添加看法</a>
+    </div>
+
+    <div id="hotLabelBox" class="hotLabel" style="display:none;">
      <div class="leftSideIcon"></div><span>选项</span>
     </div>
 
@@ -34,15 +36,13 @@
      <ul id="hotReplyList">
      </ul>
 
-     <div class="topicTit">
+     <div class="topicTit" style="display:none;">
       <a href="javascript:;" data-link="">更多选项<i class="iconReply f18 cf"></i></a>
      </div>
     </div>
 
-    <div id="emptyProposals" class="emptyList">还没有选项哦！</div>
-
-    <div id="allLabelBox" class="hotLabel" style=""> 
-     <div class="leftSideIcon all"></div><span>全部看法</span>
+    <div id="allLabelBox" class="hotLabel" style="display:none;">
+     <div class="leftSideIcon all"></div><span>看法</span>
     </div>
 
     <div id="opinionList" class="topicList opinion">
@@ -72,7 +72,7 @@
 
      </div>
 
-     <div class="detailCon c11 allowCopy">
+     <div class="detailCon c14 allowCopy">
       <div class="dCon f15">
         <%== topic['content'].replace(/\n/g, '<br>') %>
       </div>
@@ -84,14 +84,9 @@
 
       </div>
 
-      <div class="operation oh" style="display:none;">
-       <span class="replyShare db c9 fr f13">
-        <a href="javascript:;" class="threadReply c9" tid="3569" onclick=""><i class="iconReply f18 cf"></i><span id="rCount">2</span></a>
-       </span> 
-      </div> 
-     </div> 
+     </div>
 
-    </div> 
+    </div>
 
   </script>
 
@@ -253,9 +248,6 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="threadReply item cf iconCreate" data-type="proposal">创建</a>
-   <a href="javascript:;" class="threadReply item cf iconCreate" data-type="opinion">创建</a>
-   <a href="javascript:;" class="item cf iconNoFollow" id="follow">关注</a>
    <a href="/comment_list?tid={{ state['tid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>

@@ -27,47 +27,46 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
     var exports = {
         hasVoted: false,
 
-        load: function(action) {
-            thread.load({
-                isList: true,
-                isEmptyShow: true,
-                url: '/topics/' + window.tId + '/proposals',
-                emptyCon: '还没有选项哦！',
-                callback: exports.renderList,
-            }, action);
-        },
-
         // render data
-        renderList: function(re) {
-            window.voteTotalNum = re.data.vote_total_num || 0;
-            exports.hasVoted = re.data.has_user_voted || false;
+        render: function(re) {
+            var proposalHtml = template('tmpl_proposal', re.data);
+            jq('.warp').prepend(proposalHtml);
 
-            var proposalsHtml = template('tmpl_proposals', re.data);
-            if(jq.trim(proposalsHtml)!==''){
-                jq('#hotReplyList').append(proposalsHtml);
-                thread.resetOpbar();
-            }
+            //jq('#bottomBar .iconReply').html(re.data.comments_count);
+            jq('.warp, #bottomBar').show();
+            //jq('.warp, #bottomBar, .recommendTitle').show()
+            window.voteTotalNum = re.data.vote_total_num || 0;
+            thread.resetOpbar();
+
+            exports.hasVoted = re.data.has_user_voted || false;
         },
 
         init: function() {
+            var tId = window.tId;
+                loadOpts = {
+                    isList: false,
+                    isEmptyShow: false,
+                    url: '/proposals/' + window.pId,
+                    emptyCon: '',
+                    callback: exports.render,
+                };
 
-            exports.load('drag');
+            thread.load(loadOpts, 'drag');
+
             initLazyload('.warp img');
-            thread.initTouchRefresh(exports.load);
 
-            jq('.warp').on('click', '.proposalWrap', function(e) {
-                var thisObj = jq(this), link;
-                jq.UTIL.touchStateNow(thisObj.parent('li'));
+            //jq('.warp, #bottomBar').on('click', '.threadReply', function() {
+            //    var thisObj = jq(this);
+            //    thread.reply(tId, null, null, '', 'opinion');
+            //});
 
-                link = thisObj.data('link') || '';
-                if (link) {
-                    jq.UTIL.reload(link);
-                }
-                return false;
+            jq('.warp').on('click', '.detail', function(e) {
+                jq.UTIL.touchStateNow(jq(this), 'tapBg1');
+                jq.UTIL.reload(jq(this).data('link'));
             });
 
             // vote
-            jq('#hotReplyList').on('click', '.vote', function(e) {
+            jq('.warp').on('click', '.vote', function(e) {
 
                 jq.UTIL.touchStateNow(jq(this));
                 e.stopPropagation();
@@ -113,9 +112,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         var dialogOpts = {
                             'id':'operationConfirm',
                             'isMask':true,
-                            'content':'要取消之前的投票重新选择吗?',
-                            'okValue':'确定',
-                            'cancelValue':'取消',
+                            'content':'Ҫȡ��֮ǰ��ͶƱ����ѡ����?',
+                            'okValue':'ȷ��',
+                            'cancelValue':'ȡ��',
                             'ok':function() {
                                 opts.success = function(result) {
                                     if (result.code == 0) {

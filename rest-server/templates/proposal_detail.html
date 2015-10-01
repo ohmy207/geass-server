@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+
+{% block header %}
+
+  <title>你怎么看</title>
+
+{% end %}
+
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}/*注意这里*/
+  </style>
+
+  <div class="warp" style="display:none;" onselectstart="return false;"> 
+  </div>
+
+  <script id="tmpl_proposal" type="text/html">
+
+   <div class="detail" data-link="/topic?tid=<%= proposal.tid %>">
+    <div class="detailTitle pr">
+     <%= proposal.title %>
+    </div>
+   </div>
+
+   <div class="detailBox">
+    <div class="topicCon">
+
+     <div class="titleWrap proposal">
+      <a class="voteCount <% if (proposal.is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposal.pid %>" data-num="<%= proposal.vote_num %>"><% if (proposal.vote_num) { %> <%= proposal.vote_num %> <%  } else { %>0<%  } %></a>
+
+      <div class="opWrap">
+          <div class="opoutbar fl">
+              <div class="opbar" ></div>
+          </div>
+          <div class="oppi f14"></div>
+      </div>
+
+     </div>
+
+     <div class="detailCon c11 allowCopy"> 
+
+      <div class="dCon f17">
+        <%== proposal.content.replace(/\n/g, '<br>') %>
+      </div>
+      <div class="threadPic pr"> 
+
+      <% for (var i in proposal.picture_urls) { %>
+        <span> <img class="dImg" data-src="<%= proposal.picture_urls[i]['origin'] %>"/> </span>
+      <% } %>
+
+      </div>
+
+      <div class="detailTime"> 
+       <span class="time fr f15">编辑于 <%= proposal.f_created_time %></span>
+      </div>
+     </div>
+    </div>
+   </div>
+
+  </script>
+
+{% end %}
+
+
+{% block footer %}
+
+  <div class="bottomBar pr" id="bottomBar" style="display:none;">
+   <a href="/comment_list?tid={{ state['tid'] }}&pid={{ state['pid'] }}" class="item cf iconReply"></a>
+   <a href="/personal" class="item cf iconUser">我的</a>
+  </div>
+
+  <div id="goTop" class="floatLayer br db" style="display: none;">
+   <a href="javascript:;" class="upBtn cf db"></a>
+  </div>
+
+  <div class="loading" id="loadNext" > 
+   <div class="spinner">
+    <span class="circleG" id="rotateG_01"></span>
+    <span class="circleG" id="rotateG_02"></span>
+    <span class="circleG" id="rotateG_03"></span>
+    <span class="circleG" id="rotateG_04"></span>
+    <span class="circleG" id="rotateG_05"></span>
+    <span class="circleG" id="rotateG_06"></span>
+    <span class="circleG" id="rotateG_07"></span>
+    <span class="circleG" id="rotateG_08"></span>
+   </div>正在加载...
+  </div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
+  </div>
+
+  <script type="text/javascript">
+      var tId = "{{ state['tid'] }}";
+      var pId = "{{state['pid']}}";
+  </script>
+
+  <script type="text/javascript">
+    var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',
+    shareTitle = '分享自#你怎么看#',
+    shareDesc = '真是难为编剧了，上一部飞机、坦克、大炮都用完了，这一部玩起了空中飞车。真期待下一部导演和编剧会...',
+    shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
+  </script>
+
+  <script data-main="{{ static_url('js/proposal.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+
+{% end %}
