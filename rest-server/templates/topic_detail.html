@@ -92,17 +92,16 @@
       <%
       if (typeof(proposals) == 'undefined') {
           var proposals = data_list;
+              startPos = startPos || 0;
       }
       %>
 
-      <% for (var i in proposals) { %>
+      <% for (var i=0;i<proposals.length;i++) { %>
 
       <% if (!isDOMExist('p_' + proposals[i].tid + '_' + proposals[i].pid)) { %>
       <li id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" uId="<%=proposals[i].author_uid%>" author="<%= proposals[i].author %>">
 
-          <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>"><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
-
-          <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>" >
+          <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>&pos=<%=startPos + i%>" >
               <%if (proposals[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= proposals[i].picture_urls[0]['thumb'] %>" >
@@ -119,6 +118,8 @@
               </div>
 
               <div class="opWrap">
+                  <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>"><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
+
                   <div class="opoutbar fl">
                       <div class="opbar" ></div>
                   </div>

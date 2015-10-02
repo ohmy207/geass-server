@@ -27,6 +27,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
     var exports = {
         hasVoted: false,
         moreType: 'more',
+        startPos: 0,
 
         load: function(action) {
             thread.load({
@@ -49,7 +50,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.detailBox').prepend(topicHtml);
             jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
-            jq('.topicInfo span').html('参与 ' + window.voteTotalNum + ' 人');
+            jq('.topicInfo span').html('参与 ' + thread.voteTotalNum + ' 人');
             jq('#bottomBar .iconReply').html(re.data.comments_count);
 
             exports.renderProposals(re)
@@ -64,19 +65,23 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //});
 
             if (re.data.has_more_proposals) {
+                if (exports.moreType === 'all') {
+                    jq('.loadMore span').html('显示全部选项');
+                }
                 jq('.loadMore').show();
             } else {
                 jq('.loadMore').hide();
             }
 
-            window.voteTotalNum = re.data.vote_total_num || 0;
+            thread.voteTotalNum = re.data.vote_total_num || 0;
+            re.data.startPos = exports.startPos;
 
             var listHtml = template('tmpl_proposals', re.data);
             if(jq.trim(listHtml)!==''){
                 //jq('#allLabelBox').show();
                 jq('#hotReplyList').append(listHtml);
                 jq('#hotReplyList').css({height:'auto'});
-                thread.resetOpbar();
+                thread.resetAllOpbar();
             }
         },
 
@@ -191,11 +196,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     callback: exports.renderProposals,
                 };
 
-                thread.load(loadOpts, 'more');
-                if (exports.moreType === 'more') {
-                    jq(this).children('span').html('显示全部选项');
+                if (exports.moreType === 'all') {
+                    exports.startPos = 15;
+                } else if (exports.moreType === 'more') {
+                    exports.startPos = 5;
                     exports.moreType = 'all';
                 }
+                thread.load(loadOpts, 'more');
                 //jq.UTIL.reload('/proposal_list' + '?tid=' + tId);
             });
 
@@ -255,7 +262,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     hasVoted = true,
                     url = '/user/vote/proposals',
                     data = {'tid':tId, 'pid': pId},
-                    voteTotalNum = window.voteTotalNum + 1;
+                    voteTotalNum = thread.voteTotalNum + 1;
 
                 var callback = function() {
                     if(isVoted && exports.hasVoted) {
@@ -264,7 +271,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         //likeTips = "-1";
                         hasVoted = false;
                         url = '/user/unvote/proposals';
-                        voteTotalNum = window.voteTotalNum - 1;
+                        voteTotalNum = thread.voteTotalNum - 1;
                     }
 
                     var opts = {
@@ -275,8 +282,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                 thisObj.attr('class', resultClass);
                                 thisObj.html(resultNum);
                                 thisObj.data('num', resultNum);
-                                window.voteTotalNum = voteTotalNum;
-                                thread.resetOpbar();
+                                thread.voteTotalNum = voteTotalNum;
+                                thread.resetAllOpbar();
                             }
                         },
                         'noShowLoading' : true,
@@ -304,7 +311,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                         thisObj.html(resultNum);
                                         thisObj.data('num', resultNum);
 
-                                        thread.resetOpbar();
+                                        thread.resetAllOpbar();
                                     }
                                 },
 

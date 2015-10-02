@@ -29,9 +29,9 @@
     <div class="topicCon">
 
      <div class="titleWrap proposal">
-      <a class="voteCount <% if (proposal.is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposal.pid %>" data-num="<%= proposal.vote_num %>"><% if (proposal.vote_num) { %> <%= proposal.vote_num %> <%  } else { %>0<%  } %></a>
 
       <div class="opWrap">
+          <a class="voteCount <% if (proposal.is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposal.pid %>" data-num="<%= proposal.vote_num %>"><% if (proposal.vote_num) { %> <%= proposal.vote_num %> <%  } else { %>0<%  } %></a>
           <div class="opoutbar fl">
               <div class="opbar" ></div>
           </div>
@@ -93,8 +93,9 @@
   </div>
 
   <script type="text/javascript">
-      var tId = "{{ state['tid'] }}";
-      var pId = "{{state['pid']}}";
+      var tId = "{{ state['tid'] }}",
+          pId = "{{state['pid']}}",
+          pos = {{state['pos']}};
   </script>
 
   <script type="text/javascript">

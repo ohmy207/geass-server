@@ -35,8 +35,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //jq('#bottomBar .iconReply').html(re.data.comments_count);
             jq('.warp, #bottomBar').show();
             //jq('.warp, #bottomBar, .recommendTitle').show()
-            window.voteTotalNum = re.data.vote_total_num || 0;
-            thread.resetOpbar();
+            thread.voteTotalNum = re.data.vote_total_num || 0;
+            thread.resetOpbar(jq('.opWrap'), thread.voteTotalNum, window.pos);
 
             exports.hasVoted = re.data.has_user_voted || false;
         },
@@ -80,7 +80,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     hasVoted = true,
                     url = '/user/vote/proposals',
                     data = {'tid':tId, 'pid': pId},
-                    voteTotalNum = window.voteTotalNum + 1;
+                    voteTotalNum = thread.voteTotalNum + 1;
 
                 var callback = function() {
                     if(isVoted && exports.hasVoted) {
@@ -89,7 +89,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         //likeTips = "-1";
                         hasVoted = false;
                         url = '/user/unvote/proposals';
-                        voteTotalNum = window.voteTotalNum - 1;
+                        voteTotalNum = thread.voteTotalNum - 1;
                     }
 
                     var opts = {
@@ -100,8 +100,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                 thisObj.attr('class', resultClass);
                                 thisObj.html(resultNum);
                                 thisObj.data('num', resultNum);
-                                window.voteTotalNum = voteTotalNum;
-                                thread.resetOpbar();
+                                thread.voteTotalNum = voteTotalNum;
+                                thread.resetOpbar(jq('.opWrap'), thread.voteTotalNum, window.pos);
                             }
                         },
                         'noShowLoading' : true,
@@ -112,9 +112,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         var dialogOpts = {
                             'id':'operationConfirm',
                             'isMask':true,
-                            'content':'“™»°œ˚÷Æ«∞µƒÕ∂∆±÷ÿ–¬—°‘Ò¬?',
-                            'okValue':'»∑∂®',
-                            'cancelValue':'»°œ˚',
+                            'content':'Ë¶ÅÂèñÊ∂à‰πãÂâçÁöÑÊäïÁ•®ÈáçÊñ∞ÈÄâÊã©Âêó?',
+                            'okValue':'Á°ÆÂÆö',
+                            'cancelValue':'ÂèñÊ∂à',
                             'ok':function() {
                                 opts.success = function(result) {
                                     if (result.code == 0) {
@@ -129,7 +129,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                         thisObj.html(resultNum);
                                         thisObj.data('num', resultNum);
 
-                                        thread.resetOpbar();
+                                        thread.resetOpbar(jq('.opWrap'), thread.voteTotalNum, window.pos);
                                     }
                                 },
 

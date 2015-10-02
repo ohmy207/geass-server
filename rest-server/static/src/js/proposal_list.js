@@ -39,13 +39,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         // render data
         renderList: function(re) {
-            window.voteTotalNum = re.data.vote_total_num || 0;
+            thread.voteTotalNum = re.data.vote_total_num || 0;
             exports.hasVoted = re.data.has_user_voted || false;
 
             var proposalsHtml = template('tmpl_proposals', re.data);
             if(jq.trim(proposalsHtml)!==''){
                 jq('#hotReplyList').append(proposalsHtml);
-                thread.resetOpbar();
+                thread.resetAllOpbar();
             }
         },
 
@@ -81,7 +81,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     hasVoted = true,
                     url = '/user/vote/proposals',
                     data = {'tid':tId, 'pid': pId},
-                    voteTotalNum = window.voteTotalNum + 1;
+                    voteTotalNum = thread.voteTotalNum + 1;
 
                 var callback = function() {
                     if(isVoted && exports.hasVoted) {
@@ -90,7 +90,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         //likeTips = "-1";
                         hasVoted = false;
                         url = '/user/unvote/proposals';
-                        voteTotalNum = window.voteTotalNum - 1;
+                        voteTotalNum = thread.voteTotalNum - 1;
                     }
 
                     var opts = {
@@ -101,8 +101,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                 thisObj.attr('class', resultClass);
                                 thisObj.html(resultNum);
                                 thisObj.data('num', resultNum);
-                                window.voteTotalNum = voteTotalNum;
-                                thread.resetOpbar();
+                                thread.voteTotalNum = voteTotalNum;
+                                thread.resetAllOpbar();
                             }
                         },
                         'noShowLoading' : true,
@@ -130,7 +130,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                         thisObj.html(resultNum);
                                         thisObj.data('num', resultNum);
 
-                                        thread.resetOpbar();
+                                        thread.resetAllOpbar();
                                     }
                                 },
 

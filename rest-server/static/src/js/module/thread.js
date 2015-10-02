@@ -28,7 +28,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         isLoading: false,
         desc: 0,
         nextStart: 0,
-        color_list: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#bcbd22', '#17becf', '#aec7e8'],
+        colorList: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#bcbd22', '#17becf', '#aec7e8'],
 
         // load data,all in one
         load: function(loadOpts, action) {
@@ -149,28 +149,26 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         },
 
-        resetOpbar: function() {
-            //if (proposal_list) {
-            //    var targetIds = proposal_list.map(function(proposal) {
-            //        return '#p_' + proposal.tid + '_' + proposal.pid;
-            //    });
-            //    selectors = jq(targetIds.join(','));
-            //} else {
-            //    selectors = jq('#hotReplyList').children('li');
-            //}
+        resetOpbar: function(thisObj, voteTotalNum, position, delayTime) {
+            position = position || 0;
+            delayTime = delayTime || 1;
+            var opbar = thisObj.find('.opbar'),
+                currNum = thisObj.children('.voteCount').data('num'),
+                //currPercent = voteTotalNum == 0 ? "0.00" : (parseInt(currNum)/voteTotalNum*100).toFixed(2);
+                currPercent = (parseInt(currNum)/voteTotalNum*100 + 1.0/(position+3)*100).toFixed(2);
 
-            var voteTotalNum = window.voteTotalNum,
-                delayTime = 50;
+            thisObj.children('.oppi').css("color",  exports.colorList[position % 10]).html(currPercent + '%');
+            opbar.css("background-color", exports.colorList[position % 10]);
+            if (parseInt(opbar.width()*100/opbar.offsetParent().width()) != parseInt(currPercent)) {
+                opbar.delay(delayTime).animate({width: currPercent + '%'});
+            }
+        },
 
-            jq('.opbar').each(function(index){
-                var thisObj = jq(this);
-                var currNum = thisObj.parents('li, .titleWrap').children('.voteCount').data('num');
-                var currPercent = voteTotalNum == 0 ? "0.00" : (parseInt(currNum)/voteTotalNum*100).toFixed(2);
-
-                thisObj.css("background-color", exports.color_list[index]);
-                thisObj.delay(delayTime).animate({width: currPercent + '%'});
-                thisObj.parent('.opoutbar').next('.oppi').css("color",  exports.color_list[index]).html(currPercent + '%');
-
+        resetAllOpbar: function() {
+            var delayTime = 50,
+                voteTotalNum = exports.voteTotalNum;
+            jq('.opWrap').each(function(index){
+                exports.resetOpbar(jq(this), voteTotalNum, index, delayTime);
                 delayTime += 50;
             });
         },
