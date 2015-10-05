@@ -76,7 +76,7 @@ class DetailTopicHandler(BaseHandler):
             'proposals': db_user['vote'].format_proposals(uid, proposals),
             'data_list': db_user['approve'].format_opinions(uid, opinions),
 
-            'comments_count': db_user['comment'].find({'tid': tid, 'pid': None}).count(),
+            #'comments_count': db_user['comment'].find({'tid': tid, 'pid': None}).count(),
             'vote_total_num': db_user['vote'].find(spec).count(),
 
             'is_lz': topic['author_uid'] == unicode(uid),

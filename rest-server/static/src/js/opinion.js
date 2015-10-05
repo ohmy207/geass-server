@@ -97,8 +97,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         'noMsg' : true
                     }
 
-                    var url = '/user/approve/opinions';
-                    var data = {'oid': oId};
+                    var url = '/user/approving/opinions/' + oId;
+                    var data = {};
 
                     if (isAjaxDelete) {
                         jq.UTIL.ajax(url, data, opts, 'DELETE');
@@ -108,106 +108,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 };
                 thread.checkIsRegistered(callback);
             });
-
-            // vote
-            //jq('.warp').on('click', '.vote', function(e) {
-
-            //    jq.UTIL.touchStateNow(jq(this));
-            //    e.stopPropagation();
-
-            //    var thisObj = jq(this),
-            //        pId = thisObj.attr('pId') || null,
-            //        isVoted = thisObj.hasClass('voted'),
-            //        voteNum = parseInt(thisObj.data('num'));
-
-            //    var callback = function() {
-            //        if(isVoted && exports.hasVoted) {
-            //            var opts = {
-            //                'id':'operationConfirm',
-            //                'isMask':true,
-            //                'content':'可以取消这次投票重新选择，确定要取消吗',
-            //                'okValue':'确定',
-            //                'cancelValue':'取消',
-            //                'ok':function() {
-            //                    var opts = {
-            //                        'success': function(result) {
-            //                            if (result.code == 0) {
-            //                                exports.hasVoted = false;
-            //                                jq.UTIL.likeTips(thisObj, '-1');
-            //                                thisObj.attr('class', 'voteCount vote');
-            //                                thisObj.html(voteNum - 1);
-            //                                thisObj.data('num', voteNum - 1);
-            //                            }
-            //                        },
-            //                        'noShowLoading' : true,
-            //                        'noMsg' : true
-            //                    }
-
-            //                    var url = '/user/unvote/opinions';
-            //                    var data = {'tid':tId, 'pid': pId};
-
-            //                    jq.UTIL.ajax(url, data, opts);
-            //                },
-            //            };
-            //            jq.UTIL.dialog(opts);
-            //        } else if (!isVoted && !exports.hasVoted){
-            //            var opts = {
-            //                'success': function(result) {
-            //                    if (result.code == 0) {
-            //                        exports.hasVoted = true;
-            //                        jq.UTIL.likeTips(thisObj, '+1');
-            //                        thisObj.attr('class', 'voteCount voted vote');
-            //                        thisObj.html(voteNum + 1);
-            //                        thisObj.data('num', voteNum + 1)
-            //                    }
-            //                },
-            //                'noShowLoading' : true,
-            //                'noMsg' : true
-            //            }
-
-            //            var url = '/user/vote/opinions';
-            //            var data = {'tid':tId, 'pid': pId};
-
-            //            jq.UTIL.ajax(url, data, opts);
-            //        } else if (!isVoted && exports.hasVoted) {
-            //            var opts = {
-            //                'id':'operationConfirm',
-            //                'isMask':true,
-            //                'content':'要取消之前的投票重新选择吗?',
-            //                'okValue':'确定',
-            //                'cancelValue':'取消',
-            //                'ok':function() {
-            //                    var opts = {
-            //                        'success': function(result) {
-            //                            if (result.code == 0) {
-            //                                var votedObj = jq('.voted');
-            //                                oldVoteNum = parseInt(votedObj.data('num'));
-            //                                votedObj.attr('class', 'voteCount vote');
-            //                                votedObj.html(oldVoteNum - 1);
-            //                                votedObj.data('num', oldVoteNum - 1);
-
-            //                                jq.UTIL.likeTips(thisObj, '+1');
-            //                                thisObj.attr('class', 'voteCount voted vote');
-            //                                thisObj.html(voteNum + 1);
-            //                                thisObj.data('num', voteNum + 1)
-            //                            }
-            //                        },
-            //                        'noShowLoading' : true,
-            //                        'noMsg' : true
-            //                    }
-
-            //                    var url = '/user/revote/opinions';
-            //                    var data = {'tid':tId, 'pid': pId};
-
-            //                    jq.UTIL.ajax(url, data, opts);
-            //                },
-            //            };
-            //            jq.UTIL.dialog(opts);
-
-            //        }
-            //    };
-            //    thread.checkIsRegistered(callback);
-            //});
 
         },
 

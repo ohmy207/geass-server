@@ -78,8 +78,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     resultClass = "voteCount voted vote",
                     //likeTips = "+1",
                     hasVoted = true,
-                    url = '/user/vote/proposals',
-                    data = {'tid':tId, 'pid': pId},
+                    url = '/user/voting/proposals/' + pId,
+                    ajaxType = 'POST',
+                    data = {},
                     voteTotalNum = thread.voteTotalNum + 1;
 
                 var callback = function() {
@@ -88,7 +89,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         resultClass = "voteCount vote";
                         //likeTips = "-1";
                         hasVoted = false;
-                        url = '/user/unvote/proposals';
+                        ajaxType = 'DELETE';
                         voteTotalNum = thread.voteTotalNum - 1;
                     }
 
@@ -133,14 +134,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                     }
                                 },
 
-                                url = '/user/revote/proposals';
-                                jq.UTIL.ajax(url, data, opts);
+                                jq.UTIL.ajax(url, data, opts, 'PATCH');
                             },
                         };
                         jq.UTIL.dialog(dialogOpts);
 
                     } else {
-                        jq.UTIL.ajax(url, data, opts);
+                        jq.UTIL.ajax(url, data, opts, ajaxType);
                     }
                 };
                 thread.checkIsRegistered(callback);

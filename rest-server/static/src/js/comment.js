@@ -27,13 +27,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
     var exports = {
 
         load: function(action) {
-            var pId = window.pId || null;
-            var url_suffix = pId ? '?pid=' + pId : '';
-
             thread.load({
                 isList: true,
                 isEmptyShow: true,
-                url: '/topics/' + window.tId + '/comments' + url_suffix,
+                url: '/' + window.coParent + '/' + window.parentId + '/comments',
                 emptyCon: '还没有任何评论',
                 callback: exports.renderList,
             }, action);
@@ -50,11 +47,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         init: function() {
-            var tId = window.tId;
-            var pId = window.pId || null;
+            var coParent = window.coParent,
+                url = '/' + coParent + '/' + window.parentId + '/comments';
 
             exports.load('drag');
-
             initLazyload('.warp img');
 
             //setInterval(function() {
@@ -75,7 +71,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                        thread.reply(tId, pId,  null, '', 'comment');
+                        thread.reply(url,  null, '', 'comment');
                     };
                 thread.checkIsRegistered(callback);
             });
@@ -106,7 +102,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         jq.UTIL.touchStateNow(jq(this));
 
                         author = thisObj.attr('author');
-                        thread.reply(tId, pId, toCoId, author, 'comment');
+                        thread.reply(url, toCoId, author, 'comment');
                     }
                 };
                 thread.checkIsRegistered(callback);
@@ -139,8 +135,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         'noMsg' : true
                     }
 
-                    var url = '/user/like/comments';
-                    var data = {'tid':tId, 'coid': coId};
+                    var url = '/user/liking/' + coParent + '/comments/' + coId;
+                    var data = {};
 
                     jq.UTIL.ajax(url, data, opts);
                 };

@@ -233,30 +233,46 @@ class VoteProposalHandler(BaseHandler):
     }
 
     @authenticated
-    def POST(self, route):
+    def POST(self, pid):
         uid = self.current_user
-        pid = self.to_objectid(self._params['pid'])
-        tid = self.to_objectid(self._params['tid'])
+        pid = self.to_objectid(pid)
+        proposal = db_topic['proposal'].find_one({'_id': pid})
 
-        if not db_topic['proposal'].find_one({'_id': pid, 'tid': tid}):
+        if not proposal:
             raise ResponseError(60)
 
+        tid = proposal['tid']
         has_user_voted = db_user['vote'].has_user_voted(uid, tid)
-        self.route(route, tid, pid, uid, has_user_voted)
-
-    def do_vote(self, tid, pid, uid, has_user_voted):
         if has_user_voted:
             raise ResponseError(90)
 
         db_user['vote'].vote_proposal(tid, pid, uid)
 
-    def do_unvote(self, tid, pid, uid, has_user_voted):
+    @authenticated
+    def DELETE(self, pid):
+        uid = self.current_user
+        pid = self.to_objectid(pid)
+        proposal = db_topic['proposal'].find_one({'_id': pid})
+
+        if not proposal:
+            raise ResponseError(60)
+
+        tid = proposal['tid']
         if not db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(91)
 
         db_user['vote'].unvote_proposal(tid, pid, uid)
 
-    def do_revote(self, tid, pid, uid, has_user_voted):
+    def PATCH(self, pid):
+        uid = self.current_user
+        pid = self.to_objectid(pid)
+        proposal = db_topic['proposal'].find_one({'_id': pid})
+
+        if not proposal:
+            raise ResponseError(60)
+
+        tid = proposal['tid']
+        has_user_voted = db_user['vote'].has_user_voted(uid, tid)
         if not has_user_voted or db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(92)
 
@@ -271,20 +287,10 @@ class VoteProposalHandler(BaseHandler):
 
 class ApproveOpinionHandler(BaseHandler):
 
-    _post_params = {
-        'need': [
-            ('oid', basestring),
-        ],
-        'option': [
-        ]
-    }
-
-    _delete_params = _post_params
-
     @authenticated
-    def POST(self):
+    def POST(self, oid):
         uid = self.current_user
-        oid = self.to_objectid(self._params['oid'])
+        oid = self.to_objectid(oid)
 
         if not db_topic['opinion'].find_one({'_id': oid}):
             raise ResponseError(60)
@@ -295,9 +301,9 @@ class ApproveOpinionHandler(BaseHandler):
         db_user['approve'].approve_opinion(uid, oid)
 
     @authenticated
-    def DELETE(self):
+    def DELETE(self, oid):
         uid = self.current_user
-        oid = self.to_objectid(self._params['oid'])
+        oid = self.to_objectid(oid)
 
         if not db_topic['opinion'].find_one({'_id': oid}):
             raise ResponseError(60)
@@ -310,21 +316,11 @@ class ApproveOpinionHandler(BaseHandler):
 
 class LikeCommentHandler(BaseHandler):
 
-    _post_params = {
-        'need': [
-            ('coid', basestring),
-        ],
-        'option': [
-        ]
-    }
-
     @authenticated
-    def POST(self):
-        data = self._params
+    def POST(self, parent, coid):
         uid = self.current_user
-
-        coid = self.to_objectid(data['coid'])
-        comment = db_user['comment'].find_one({'_id': coid})
+        coid = self.to_objectid(coid)
+        comment = db_user['comment'].find_by_id(parent, coid)
 
         if not comment:
             raise ResponseError(70)
@@ -332,7 +328,7 @@ class LikeCommentHandler(BaseHandler):
         if uid in comment['like']:
             raise ResponseError(75)
 
-        db_user['comment'].update({'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
+        db_user['comment'].like_comment(parent, coid, uid)
 
 
 class CommentsHandler(BaseHandler):
@@ -343,7 +339,6 @@ class CommentsHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 5),
-            ('pid', basestring, None),
         ]
     }
 
@@ -352,20 +347,17 @@ class CommentsHandler(BaseHandler):
             ('content', basestring),
         ],
         'option': [
-            ('pid', basestring, None),
             ('tocoid', basestring, None),
         ]
     }
 
-    #@authenticated
-    def GET(self, route, route_id):
+    def GET(self, parent, parent_id):
         data_list = db_user['comment'].get_comments(
-            tid=tid,
-            pid=self._params['pid'],
+            parent=parent,
+            parent_id=parent_id,
             uid=self.current_user,
             skip=self._skip,
             limit=self._limit,
-            sort = [('ctime', 1)],
         )
 
         self._data = {
@@ -374,42 +366,25 @@ class CommentsHandler(BaseHandler):
         }
 
     @authenticated
-    def POST(self, tid):
-        data = self._params
+    def POST(self, parent, parent_id):
+        uid = self.current_user
+        parent_id = self.to_objectid(parent_id)
 
-        if len(data['content']) <= 0:
+        if len(self._params['content']) <= 0:
             raise ResponseError(71)
 
-        tid = self.to_objectid(tid)
-        pid = self.to_objectid(data['pid'])
-        topic = db_topic['topic'].find_one({'_id': tid})
-        opinion = db_topic['opinion'].find_one({'_id': pid}) if pid else None
+        spec = {'_id': parent_id}
+        parent_rd = db_topic['topic'].find_one(spec) if parent == 'topics' else db_topic['opinion'].find_one(spec)
 
-        # TODO error code
-        if not topic:
+        if not parent_rd:
             raise ResponseError(50)
 
-        if pid and not opinion:
-            raise ResponseError(60)
-
-        data['tid'] = tid
-        data['pid'] = pid
-        data['uid'] = self.current_user
-        data['ctime'] = datetime.now()
-        data['target'] = {}
-
-        parent = opinion if pid else topic
-        data['islz'] = True if data['uid'] == parent['uid'] else False
-
-        tocoid = self.to_objectid(data.pop('tocoid'))
-        to_comment = db_user['comment'].find_one({'_id': tocoid}) if tocoid else None
-        if to_comment:
-            data['target']['coid'] = tocoid
-            data['target']['content'] = to_comment['content']
-            data['target']['uid'] = to_comment['uid']
-
-        coid = db_user['comment'].create(data)
-        data['_id'] = coid
-
-        self._data = db_user['comment'].callback(db_user['comment'].to_one_str(data))
+        self._data = db_user['comment'].add_comment(
+            parent=parent,
+            parent_id=parent_id,
+            uid=uid,
+            content=self._params['content'],
+            tocoid = self._params['tocoid'],
+            islz=parent_rd['uid'] == uid
+        )
 

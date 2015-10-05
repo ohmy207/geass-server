@@ -194,7 +194,6 @@
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
-        <input type="hidden" name="tid" value="<%= data.tId %>">
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的看法..."></textarea>
         </div>
@@ -247,7 +246,7 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="/comment_list?tid={{ state['tid'] }}" class="item cf iconReply"></a>
+   <a href="/comment_list?parent=topics&parent_id={{ state['tid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>
 

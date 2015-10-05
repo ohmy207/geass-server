@@ -18,7 +18,7 @@
 
    <div class="detailBox"> 
 
-    <div id="allLabelBoxStop" class="hotLabel" style=""> 
+    <div id="allLabelBoxStop" class="hotLabel" style="display:none;">
      <div class="leftSideIcon all"></div><span>全部看法</span>
      <span class="sortCon fr db"><a href="javascript:;" class="db c6 f12 evtReplySort"><i class="iconReverse cf mr5 f16"></i>倒序排列</a></span> 
     </div> 
@@ -84,8 +84,6 @@
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
-        <input type="hidden" name="tid" value="<%= data.tId %>">
-        <input type="hidden" name="pid" value="<%= data.pId %>">
         <input type="hidden" name="tocoid" value="<%= data.toCoId %>">
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的评论..."></textarea>
@@ -160,8 +158,8 @@
   </div>
 
   <script type="text/javascript">
-      var tId = "{{ state['tid'] }}";
-      var pId = "{{ state['pid'] }}";
+      var coParent = "{{ state['parent'] }}";
+      var parentId = "{{ state['parent_id'] }}";
   </script>
 
   <script type="text/javascript">

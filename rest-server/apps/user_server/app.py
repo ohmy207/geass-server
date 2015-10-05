@@ -52,6 +52,8 @@ class PageHandler(BaseHandler, WeiXinMixin):
             ('tid', basestring, ''),
             ('pid', basestring, ''),
             ('oid', basestring, ''),
+            ('parent', basestring, ''),
+            ('parent_id', basestring, ''),
             ('pos', int, 0),
         ]
     }

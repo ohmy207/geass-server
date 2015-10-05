@@ -173,11 +173,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             });
         },
 
-        reply: function (tId, pId, toCoId, author, replyType) {
-            //var isViewthread = isViewthread || false;
+        reply: function (url, toCoId, author, replyType) {
             var author = author || '';
-            //var floorPId = floorPId || 0;
-            //var nodeId = nodeId || 't_' + tId  + '_0_0';
 
             // 未登录
             //if (authUrl) {
@@ -189,8 +186,6 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 var replyTimer = null;
                     isLZ = window.isLZ || false;
                 var replyForm = template('tmpl_replyForm', {data:{
-                    'tId':tId,
-                    'pId':pId,
                     'toCoId':toCoId,
                     'isLZ':isLZ,
                 }});
@@ -205,11 +200,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     // 弹出后执行
                     callback:function() {
 
-                        //非回复主帖，隐藏发图
-                        //if(!hasTid){jq('.uploadPicBox').css('visibility', 'hidden')};
-
-                        var obj = {replyTimer: replyTimer, toCoId: toCoId, author: author, tId: tId, replyType: replyType};
-                        //初始化回复窗口事件
+                        var obj = {replyTimer: replyTimer, url: url, toCoId: toCoId, author: author, replyType: replyType};
                         exports.initReplyEvents(obj);
 
                     },
@@ -267,86 +258,19 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             return true;
         },
-        //初始化回复窗口事件
+
         initReplyEvents: function(obj){
             //var storageKey = obj.sId + 'reply_content';
-            //require.async('module/emotion', function(emotion) {
-            //    // 表情开关
-            //    var reInit = true;
-            //    emotion.init(reInit);
 
-            //    //此种写法兼容ios7
-            //    //jq('.iconExpression').on('touchstart', emotion.toggle);
-            //    //jq('.iconExpression').on('click', emotion.toggle);
+            jq('#replyForm').attr('action', '/api/v1' + obj.url);
 
-            //    //表情 图片点击切换
-            //    var aOperatIcon = jq('.operatIcon');
-            //    aOperatIcon.on('click', function(){
-            //        var thisObj = jq(this);
-            //        var thisNum = thisObj.attr('data-id');
-            //        var aOperatList = jq('.operatList');
-            //        aOperatList.hide();
-            //        jq(aOperatList[thisNum]).show();
-            //        if(thisNum == 0){
-            //            jq('.expreList').show();
-            //            jq('.expreBox').show();
-            //        }
-            //        //如果是当前选中状态，则点击隐藏
-            //        if(thisObj.hasClass('on')){
-            //            jq(aOperatList[thisNum]).hide();
-            //            thisObj.removeClass('on');
-            //        }else{
-            //            aOperatIcon.removeClass('on');
-            //            thisObj.addClass('on');
-            //        }
-            //    });
-            //    //表情总个数大于手机宽度时显示更多按钮
-            //    var expressionMenu = jq('.expressionMenu').find('a');
-            //    var haveMenuWidth = expressionMenu.length*76;
-            //    var operatingBoxWidth = jq('.operatingBox').width();
-            //    if(haveMenuWidth > operatingBoxWidth){
-            //        jq('.iconArrowR').show();
-            //    };
-            //    //输入框选中时隐藏表情，如果当只有表情打开时
-            //    /*jq('#content').on('focus', function(){
-            //        if(jq('.photoTipsBox').is(':hidden')){
-            //            emotion.hide();
-            //            aOperatIcon.removeClass('on');
-            //        }
-            //    });*/
-
-            //});
-
-            if (obj.replyType === 'proposal') {
-
-                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/proposals');
-
-            } else if (obj.replyType === 'opinion') {
-
-                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/opinions');
-
-            } else if (obj.replyType === 'comment') {
-
-                jq('#replyForm').attr('action','/api/v1/topics/'+obj.tId+'/comments');
-                if (obj.toCoId) {
-                    jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
-                }
-
+            if (obj.toCoId && obj.replyType == 'comment') {
+                jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
+            } else {
+                // 信息恢复
+                //jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
             }
 
-            //if (obj.pId > 0) {
-            //    //jq('#replyForm').attr('action', '/' + obj.sId + '/f/new/submit');
-            //    jq('#replyForm').attr('action', '/c/new/submit');
-            //    jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
-            //    jq('input[name="floorPId"]').val(obj.floorPId);
-            //} else {
-            //    //jq('#replyForm').attr('action', '/' + obj.sId + '/r/new/submit');
-            //    jq('#replyForm').attr('action', '/r/new/submit');
-            //    // 信息恢复
-            //    //jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
-            //}
-
-            // 发送按纽绑定
             var isSendBtnClicked = false;
             jq('#comBtn').on('click', function() {
                 if (isSendBtnClicked){
@@ -358,22 +282,6 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         if (status === 0) {
                             if (re.data.author_uid) {
                                 //localStorage.removeItem(storageKey);
-                                // 回复回复
-                                //if (obj.parentId) {
-                                //    var tmpl = template('tmpl_reply_floor', {floorList:{0:re.data}});
-                                //    jq('#fl_' + obj.parentId + ' ul').append(tmpl);
-                                //    jq('#fl_' + obj.parentId).parent().parent().show();
-                                //    // 普通回复
-                                //} else {
-                                    // 直接显示回复的内容到页面
-                                    // 格式化用户等级
-                                    //if(re.data.authorExpsRank){
-                                    //    re.data.authorExps = {};
-                                    //    re.data.authorExps.rank = re.data.authorExpsRank;
-                                    //}
-                                    //re.data.restCount = 0;
-                                    //var tmpl = template('tmpl_reply', {replyList:{0:re.data}, rIsAdmin:window.isManager, rGId:window.gId, groupStar:window.groupStar, isWX:window.isWX});
-                                // 结构变了与列表不同
                                 var allLabelBox = jq('#allLabelBox'),
                                     //replyList = jq('#replyList'),
                                     replyData = {data_list:{0:re.data}};
@@ -406,14 +314,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                         jq('#allReplyList').prepend(tmpl);
                                     }
                                 }
-                                    /**
-                                     * @desc    window.desc from viewthread.js, 回复列表排序 0 或者 1, 默认 0
-                                     *          如果为1，发表的新内容插入到列表最上面，否则插入到列表最下面
-                                     */
 
-                                    //jq('#rCount').html(re.data.rCount);
-                                    //replyList.parent().show();
-                                //}
                             }
                             // initLazyload('.warp img');
 
