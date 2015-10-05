@@ -76,7 +76,7 @@ class DetailTopicHandler(BaseHandler):
             'proposals': db_user['vote'].format_proposals(uid, proposals),
             'data_list': db_user['approve'].format_opinions(uid, opinions),
 
-            #'comments_count': db_user['comment'].find({'tid': tid, 'pid': None}).count(),
+            #'comments_count': db_topic['comment'].find({'tid': tid, 'pid': None}).count(),
             'vote_total_num': db_user['vote'].find(spec).count(),
 
             'is_lz': topic['author_uid'] == unicode(uid),
@@ -178,7 +178,7 @@ class DetailProposalHandler(BaseHandler):
 
         self._data = {
             'proposal': data,
-            #'comments_count': db_user['comment'].find({'pid': pid}).count(),
+            #'comments_count': db_topic['comment'].find({'pid': pid}).count(),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
             'vote_total_num': db_user['vote'].find({'tid': tid}).count(),
         }
@@ -273,7 +273,65 @@ class DetailOpinionHandler(BaseHandler):
 
         self._data = {
             'opinion': data,
-            #'comments_count': db_user['comment'].find({'tid': tid}).count(),
+            #'comments_count': db_topic['comment'].find({'tid': tid}).count(),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }
+
+
+class CommentsHandler(BaseHandler):
+
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 5),
+        ]
+    }
+
+    _post_params = {
+        'need': [
+            ('content', basestring),
+        ],
+        'option': [
+            ('tocoid', basestring, None),
+        ]
+    }
+
+    def GET(self, parent, parent_id):
+        data_list = db_topic['comment'].get_comments(
+            parent=parent,
+            parent_id=parent_id,
+            uid=self.current_user,
+            skip=self._skip,
+            limit=self._limit,
+        )
+
+        self._data = {
+            'data_list': data_list,
+            'next_start': self._skip + self._limit
+        }
+
+    @authenticated
+    def POST(self, parent, parent_id):
+        uid = self.current_user
+        parent_id = self.to_objectid(parent_id)
+
+        if len(self._params['content']) <= 0:
+            raise ResponseError(71)
+
+        spec = {'_id': parent_id}
+        parent_rd = db_topic['topic'].find_one(spec) if parent == 'topics' else db_topic['opinion'].find_one(spec)
+
+        if not parent_rd:
+            raise ResponseError(50)
+
+        self._data = db_topic['comment'].add_comment(
+            parent=parent,
+            parent_id=parent_id,
+            uid=uid,
+            content=self._params['content'],
+            tocoid = self._params['tocoid'],
+            islz=parent_rd['uid'] == uid
+        )
 

@@ -66,3 +66,45 @@ class Opinion(Model):
         'ctime':            (datetime, None),
     }
 
+
+class TopicComment(Model):
+
+    name = 'topic_comment'
+
+    field = {
+        'tid':              (ObjectId, None),
+        'uid':              (ObjectId, None),
+        'target':           (dict, {})      ,
+
+        'content':          (basestring, ''),
+
+        'like':             (list, [])      ,
+
+        'lnum':             (int, 0)        ,
+
+        'islz':             (bool, False)   ,
+
+        'ctime':            (datetime, None),
+    }
+
+
+class OpinionComment(Model):
+
+    name = 'opinion_comment'
+
+    field = {
+        'oid':              (ObjectId, None),
+        'uid':              (ObjectId, None),
+        'target':           (dict, {})      ,
+
+        'content':          (basestring, ''),
+
+        'like':             (list, [])      ,
+
+        'lnum':             (int, 0)        ,
+
+        'islz':             (bool, False)   ,
+
+        'ctime':            (datetime, None),
+    }
+

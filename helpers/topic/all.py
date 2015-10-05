@@ -2,13 +2,15 @@
 
 import log
 
+from datetime import datetime
+
 from models.topic import model as topic_model
 from helpers.base import BaseHelper, UserHelper
 from config.global_setting import PIC_URL, ANONYMOUS_USER
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['Topic', 'Proposal', 'Opinion']
+MODEL_SLOTS = ['Topic', 'Proposal', 'Opinion', 'Comment']
 
 
 class Topic(BaseHelper, topic_model.Topic):
@@ -93,4 +95,93 @@ class Opinion(BaseHelper, topic_model.Opinion):
             result['avatar'] = simple_user['avatar']
 
         return result
+
+
+class Comment(BaseHelper):
+
+    _user = UserHelper()
+
+    _field_map = {
+        'topics': 'tid',
+        'opinions': 'oid',
+    }
+
+    _coll_map = {
+        'topics': topic_model.TopicComment(),
+        'opinions': topic_model.OpinionComment(),
+    }
+
+    def find_by_id(self, parent, coid):
+        return self._coll_map[parent].find_one({'_id': coid})
+
+    def format(self, record, uid):
+        result = {
+            'coid': record['_id'],
+            'author_uid': record['uid'],
+            'like_num': record['lnum'],
+            'is_lz': record['islz'],
+            'target': record['target'],
+        }
+
+        for k in record:
+            if k in ['tid', 'oid']:
+                result[k] = record[k]
+
+        result['content'] = self.xhtml_escape(record['content'])
+        result['f_created_time'] = self._simple_time(record['ctime'])
+        result['is_liked'] = True if unicode(uid) in record['like'] else False
+
+        if False and record['isanon']:
+            result['author'] = ANONYMOUS_USER['nickname']
+            result['avatar'] = ANONYMOUS_USER['avatar']
+        else:
+            simple_user = self._user.get_simple_user(record['uid'])
+            result['author'] = simple_user['nickname']
+            result['avatar'] = simple_user['avatar']
+
+        if record['target']:
+            if False and record['target']['isanon']:
+                result['target']['author'] = ANONYMOUS_USER['nickname']
+            else:
+                to_user = self._user.get_simple_user(record['target']['uid'])
+                result['target']['author'] = to_user['nickname']
+
+        return result
+
+    def get_comments(self, parent, parent_id, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
+        coll = self._coll_map[parent]
+        parent_id = coll.to_objectid(parent_id)
+        spec = {self._field_map[parent]: parent_id}
+        records = coll.get_all(spec, skip=skip, limit=limit, sort=sort)
+
+        return [self.format(rd, uid) for rd in records]
+
+    def add_comment(self, parent, parent_id, uid, content, tocoid=None, islz=False):
+        parent_id, uid, tocoid= self.to_objectids(parent_id, uid, tocoid)
+        key, coll = self._field_map[parent], self._coll_map[parent]
+        doc = {
+            key: parent_id,
+            'uid': uid,
+            'target': {},
+            'content': content,
+            'islz': islz,
+            'ctime': datetime.now(),
+        }
+        target = coll.find_one({'_id': tocoid}) if tocoid else None
+        if target:
+            doc['target']['coid'] = target['_id']
+            doc['target']['content'] = target['content']
+            doc['target']['uid'] = target['uid']
+
+        coid = coll.create(doc)
+        doc['_id'] = coid
+        return self.format(coll.to_one_str(doc), uid)
+
+    def like_comment(self, parent, coid, uid):
+        coid, uid = self.to_objectids(coid, uid)
+        self._coll_map[parent].update(
+            {'_id': coid},
+            {'$inc': {'lnum': 1}, '$push': {'like': uid}},
+            w=1
+        )
 

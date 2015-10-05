@@ -201,7 +201,6 @@ class NewsHandler(BaseHandler):
         data_list = []
         for op in opinions:
             pid = self.to_objectid(op['pid'])
-            # TODO Vote will not inherit Vote2Opinion
             votes = db_user['vote'].find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
             op['vote_users'] = [db_user['user'].get_simple_user(v['uid'])['nickname'] for v in votes]
             op['title'] = db_topic['topic'].get_one({'_id': self.to_objectid(op['tid'])})['title']
@@ -210,7 +209,7 @@ class NewsHandler(BaseHandler):
         self._data['data_list'] = data_list
 
     def do_comments(self):
-        comments = db_user['comment'].get_all(
+        comments = db_topic['comment'].get_all(
             {'target.uid': self.current_user},
             skip=self._skip,
             limit=self._limit,
@@ -220,17 +219,8 @@ class NewsHandler(BaseHandler):
         self._data['data_list'] = comments
 
 
-# TODO restful standard
+# TODO code repeat
 class VoteProposalHandler(BaseHandler):
-
-    _post_params = {
-        'need': [
-            ('tid', basestring),
-            ('pid', basestring),
-        ],
-        'option': [
-        ]
-    }
 
     @authenticated
     def POST(self, pid):
@@ -242,8 +232,7 @@ class VoteProposalHandler(BaseHandler):
             raise ResponseError(60)
 
         tid = proposal['tid']
-        has_user_voted = db_user['vote'].has_user_voted(uid, tid)
-        if has_user_voted:
+        if db_user['vote'].has_user_voted(uid, tid):
             raise ResponseError(90)
 
         db_user['vote'].vote_proposal(tid, pid, uid)
@@ -257,11 +246,10 @@ class VoteProposalHandler(BaseHandler):
         if not proposal:
             raise ResponseError(60)
 
-        tid = proposal['tid']
         if not db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(91)
 
-        db_user['vote'].unvote_proposal(tid, pid, uid)
+        db_user['vote'].unvote_proposal(proposal['tid'], pid, uid)
 
     def PATCH(self, pid):
         uid = self.current_user
@@ -272,16 +260,14 @@ class VoteProposalHandler(BaseHandler):
             raise ResponseError(60)
 
         tid = proposal['tid']
-        has_user_voted = db_user['vote'].has_user_voted(uid, tid)
-        if not has_user_voted or db_user['vote'].is_proposal_voted(uid, pid):
+        if not db_user['vote'].has_user_voted(uid, tid) or db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(92)
 
         voted_proposal = db_user['vote'].find_one({'tid': tid, 'uid': uid})
         if not voted_proposal:
             raise ResponseError(93)
-        voted_pid = voted_proposal['pid']
 
-        db_user['vote'].unvote_proposal(tid, voted_pid, uid)
+        db_user['vote'].unvote_proposal(tid, voted_proposal['pid'], uid)
         db_user['vote'].vote_proposal(tid, pid, uid)
 
 
@@ -320,7 +306,7 @@ class LikeCommentHandler(BaseHandler):
     def POST(self, parent, coid):
         uid = self.current_user
         coid = self.to_objectid(coid)
-        comment = db_user['comment'].find_by_id(parent, coid)
+        comment = db_topic['comment'].find_by_id(parent, coid)
 
         if not comment:
             raise ResponseError(70)
@@ -328,63 +314,5 @@ class LikeCommentHandler(BaseHandler):
         if uid in comment['like']:
             raise ResponseError(75)
 
-        db_user['comment'].like_comment(parent, coid, uid)
-
-
-class CommentsHandler(BaseHandler):
-
-    _get_params = {
-        'need': [
-        ],
-        'option': [
-            ('skip', int, 0),
-            ('limit', int, 5),
-        ]
-    }
-
-    _post_params = {
-        'need': [
-            ('content', basestring),
-        ],
-        'option': [
-            ('tocoid', basestring, None),
-        ]
-    }
-
-    def GET(self, parent, parent_id):
-        data_list = db_user['comment'].get_comments(
-            parent=parent,
-            parent_id=parent_id,
-            uid=self.current_user,
-            skip=self._skip,
-            limit=self._limit,
-        )
-
-        self._data = {
-            'data_list': data_list,
-            'next_start': self._skip + self._limit
-        }
-
-    @authenticated
-    def POST(self, parent, parent_id):
-        uid = self.current_user
-        parent_id = self.to_objectid(parent_id)
-
-        if len(self._params['content']) <= 0:
-            raise ResponseError(71)
-
-        spec = {'_id': parent_id}
-        parent_rd = db_topic['topic'].find_one(spec) if parent == 'topics' else db_topic['opinion'].find_one(spec)
-
-        if not parent_rd:
-            raise ResponseError(50)
-
-        self._data = db_user['comment'].add_comment(
-            parent=parent,
-            parent_id=parent_id,
-            uid=uid,
-            content=self._params['content'],
-            tocoid = self._params['tocoid'],
-            islz=parent_rd['uid'] == uid
-        )
+        db_topic['comment'].like_comment(parent, coid, uid)
 

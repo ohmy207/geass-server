@@ -15,6 +15,4 @@ urls = [
     ('/user/approving/opinions/([0-9a-f]{24})', app.ApproveOpinionHandler),
     ('/user/liking/(topics|opinions)/comments/([0-9a-f]{24})', app.LikeCommentHandler),
 
-    ('/(topics|opinions)/([0-9a-f]{24})/comments', app.CommentsHandler),
-
 ]

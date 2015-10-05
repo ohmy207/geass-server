@@ -15,4 +15,6 @@ urls = [
     ('/topics/([0-9a-f]{24})/opinions', app.OpinionsHandler),
     ('/opinions/([0-9a-f]{24})', app.DetailOpinionHandler),
 
+    ('/(topics|opinions)/([0-9a-f]{24})/comments', app.CommentsHandler),
+
 ]
