@@ -61,8 +61,8 @@ class DetailTopicHandler(BaseHandler):
         uid = self.current_user
         spec = {'tid': tid}
         sort=[('vnum', -1), ('islz', -1), ('ctime', 1)]
-
         topic = db_topic['topic'].get_one({'_id': tid})
+
         if not topic:
             raise ResponseError(404)
 
