@@ -9,17 +9,13 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         }
     });
 
-    template.helper('getWinParams', function (name) {
-        return window[name];
-    });
-
-    template.helper('isObjEmpty', function (obj) {
-        if (jq.isEmptyObject(obj)) {
-            return true;
-        } else {
-            return false;
-        }
-    });
+    //template.helper('isObjEmpty', function (obj) {
+    //    if (jq.isEmptyObject(obj)) {
+    //        return true;
+    //    } else {
+    //        return false;
+    //    }
+    //});
 
     exports = {
         //popTId: 0,

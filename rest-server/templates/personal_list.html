@@ -48,7 +48,7 @@
           <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
               <%if (topicList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
+                      <img data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
                       <%if (topicList[i].picture_urls.length > 1) { %>
                           <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
                       <% } %>
@@ -100,7 +100,7 @@
           <div class="topicWrap" data-link="/opinion?tid=<%= opinionList[i].tid %>&pid=<%= opinionList[i].pid %>" >
               <%if (opinionList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= opinionList[i].picture_urls[0]['thumb'] %>" >
+                      <img data-src="<%= opinionList[i].picture_urls[0]['thumb'] %>" >
                       <%if (opinionList[i].picture_urls.length > 1) { %>
                           <div class="picCount"><%= opinionList[i].picture_urls.length %>图</div>
                       <% } %>

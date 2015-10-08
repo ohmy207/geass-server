@@ -128,7 +128,7 @@
     <li class="comments" id="co_<%=commentList[i].coid%>" >
 
         <div class="f15 c3">
-            <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=commentList[i].avatar%>" class="sImg brBig pa db" width="30" height="30" style="height:30px;width:30px;">
+            <img data-src="<%=commentList[i].avatar%>" class="sImg brBig pa db" width="30" height="30" style="height:30px;width:30px;">
             <span class="commNick"><%= commentList[i].author %><% if (commentList[i].is_lz) { %>（题主）<%}%>：
             </span>
         </div>

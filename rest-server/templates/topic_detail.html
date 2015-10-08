@@ -110,7 +110,7 @@
           <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>&pos=<%=startPos + i%>" >
               <%if (proposals[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= proposals[i].picture_urls[0]['thumb'] %>" >
+                      <img data-src="<%= proposals[i].picture_urls[0]['thumb'] %>" >
                       <%if (proposals[i].picture_urls.length > 1) { %>
                           <div class="picCount"><%= proposals[i].picture_urls.length %>图</div>
                       <% } %>
@@ -153,14 +153,14 @@
       <% if (!isDOMExist('p_' + opinions[i].tid + '_' + opinions[i].oid)) { %>
       <li id="p_<%=opinions[i].tid%>_<%=opinions[i].oid%>" uId="<%=opinions[i].author_uid%>" author="<%= opinions[i].author %>">
 
-          <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%=opinions[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
+          <img data-src="<%=opinions[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
 
           <a class="approveCount" href="javascript:;" oId="<%= opinions[i].oid %>"><% if (opinions[i].approve_num) { %> <%= opinions[i].approve_num %> <%  } else { %>0<%  } %></a>
 
           <div class="opinionWrap" data-link="/opinion?tid=<%=opinions[i].tid%>&oid=<%=opinions[i].oid%>" >
               <%if (opinions[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
-                      <img src="<%=getWinParams('IMG_LOADING');%>" data-src="<%= opinions[i].picture_urls[0]['thumb'] %>" >
+                      <img data-src="<%= opinions[i].picture_urls[0]['thumb'] %>" >
                       <%if (opinions[i].picture_urls.length > 1) { %>
                           <div class="picCount"><%= opinions[i].picture_urls.length %>图</div>
                       <% } %>
