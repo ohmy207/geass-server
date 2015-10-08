@@ -108,7 +108,7 @@ class Comment(BaseHelper):
             'author_uid': record['uid'],
             'like_num': record['lnum'],
             'is_lz': record['islz'],
-            'target': record['target'],
+            'target': {},
         }
 
         for k in record:
@@ -124,6 +124,12 @@ class Comment(BaseHelper):
         result['avatar'] = simple_user['avatar']
 
         if record['target']:
+            result['target'] = {
+                'coid': record['target']['coid'],
+                'content': self.xhtml_escape(record['target']['content']),
+                'is_lz': record['target']['islz'],
+            }
+
             to_user = self._user.get_simple_user(record['target']['uid'], record['target']['isanon'])
             result['target']['author'] = to_user['nickname']
 
@@ -155,6 +161,7 @@ class Comment(BaseHelper):
             doc['target']['content'] = target['content']
             doc['target']['uid'] = target['uid']
             doc['target']['isanon'] = target['isanon']
+            doc['target']['islz'] = target['islz']
 
         coid = coll.create(doc)
         doc['_id'] = coid

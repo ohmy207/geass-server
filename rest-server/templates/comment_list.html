@@ -53,7 +53,7 @@
 
           <div class="f15 c3">
               <img data-src="<%=replyList[i].avatar%>" class="sImg brBig pa db" width="30" height="30" style="height:30px;width:30px;">
-              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].is_lz) { %>（题主）<%}%>：
+              <span class="commNick"><%= replyList[i].author %><% if (replyList[i].is_lz) { %>（作者）<%}%>：
               </span>
           </div>
 
@@ -64,7 +64,7 @@
               <% if (replyList[i].target.content) { %>
                   <div class="commReply">
                       <span>
-                          <%== replyList[i].target.author %><% if (replyList[i].target.is_lz) { %>（题主）<%}%>：
+                          <%== replyList[i].target.author %><% if (replyList[i].target.is_lz) { %>（作者）<%}%>：
                       </span>
                       <span>
                           <%== replyList[i].target.content %>

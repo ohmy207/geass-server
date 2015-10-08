@@ -98,8 +98,8 @@
       <%
       if (typeof(proposals) == 'undefined') {
           var proposals = data_list;
-              startPos = startPos || 0;
       }
+      startPos = startPos || 0;
       %>
 
       <% for (var i=0;i<proposals.length;i++) { %>
@@ -169,7 +169,7 @@
 
               <div class="textContainer">
                   <h3 class="text">
-                      <%= opinions[i].author %>
+                      <%= opinions[i].author %><% if (opinions[i].is_lz) { %><span style="color:gray">（作者）</span><%}%>
                   </h3>
 
                   <div class="listContent ">

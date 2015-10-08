@@ -818,13 +818,15 @@ p {
 .nameWrap .userNick {
     display: inline-block;
     overflow: hidden;
-    max-width: 70px;
     font-weight: 400!important;
     line-height: 19px;
     vertical-align: middle;
     white-space: nowrap;
     text-overflow: ellipsis;
     color: #777!important;
+    /*
+    max-width: 70px;
+     */
 }
 
 .nameWrap .time {
