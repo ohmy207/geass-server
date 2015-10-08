@@ -41,6 +41,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         // render data
         render: function(re) {
+            window.isLZ = re.data.is_lz || false;
             exports.hasVoted = re.data.has_user_voted || false;
 
             var topicHtml = template('tmpl_topic', re.data);

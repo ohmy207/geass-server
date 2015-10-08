@@ -10,7 +10,7 @@ from tornado.escape import xhtml_escape
 
 from setting import COLLECTION_PREFIX as _PREFIX
 from utils import escape as _es
-from config.global_setting import PIC_URL
+from config.global_setting import PIC_URL, ANONYMOUS_USER
 from models.user import model as user_model
 
 
@@ -81,8 +81,8 @@ class UserHelper(BaseHelper, user_model.User):
 
         return result
 
-    def get_simple_user(self, uid):
-        user = self.get_one({'_id': self.to_objectid(uid)})
+    def get_simple_user(self, uid, isanon=False):
+        user = ANONYMOUS_USER if isanon else self.get_one({'_id': self.to_objectid(uid)})
         return {'nickname': user['nickname'], 'avatar': user['avatar']} if user else {'nickname': '', 'avatar': ''}
 
 

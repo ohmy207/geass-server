@@ -322,6 +322,7 @@ class CommentsHandler(BaseHandler):
 
         spec = {'_id': parent_id}
         parent_rd = db_topic['topic'].find_one(spec) if parent == 'topics' else db_topic['opinion'].find_one(spec)
+        is_lz=parent_rd['uid'] == uid
 
         if not parent_rd:
             raise ResponseError(50)
@@ -332,6 +333,7 @@ class CommentsHandler(BaseHandler):
             uid=uid,
             content=self._params['content'],
             tocoid = self._params['tocoid'],
-            islz=parent_rd['uid'] == uid
+            is_lz=is_lz,
+            is_anon=is_lz and parent_rd['isanon']
         )
 

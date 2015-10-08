@@ -76,6 +76,8 @@ class TopicComment(Model):
         'uid':              (ObjectId, None),
         'target':           (dict, {})      ,
 
+        'isanon':           (bool, False)   ,
+
         'content':          (basestring, ''),
 
         'like':             (list, [])      ,
@@ -96,6 +98,8 @@ class OpinionComment(Model):
         'oid':              (ObjectId, None),
         'uid':              (ObjectId, None),
         'target':           (dict, {})      ,
+
+        'isanon':           (bool, False)   ,
 
         'content':          (basestring, ''),
 

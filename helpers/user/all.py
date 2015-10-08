@@ -7,7 +7,6 @@ from datetime import datetime
 from helpers.base import BaseHelper, UserHelper
 from models.user import model as user_model
 from helpers import topic as topic_helper
-from config.global_setting import ANONYMOUS_USER
 
 logger = log.getLogger(__file__)
 

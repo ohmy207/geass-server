@@ -170,7 +170,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         },
 
         reply: function (url, toCoId, author, replyType) {
-            var author = author || '';
+            var author = author || '',
+                isLZ = window.isLZ || false,
+                isAnonymBox = replyType == 'opinion' && !isLZ;
 
             // 未登录
             //if (authUrl) {
@@ -180,10 +182,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null;
-                    isLZ = window.isLZ || false;
-                var replyForm = template('tmpl_replyForm', {data:{
+                    replyForm = template('tmpl_replyForm', {data:{
                     'toCoId':toCoId,
-                    'isLZ':isLZ,
+                    'isAnonymBox':isAnonymBox,
                 }});
 
                 // 弹出回复框

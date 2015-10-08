@@ -6,7 +6,7 @@ from datetime import datetime
 
 from models.topic import model as topic_model
 from helpers.base import BaseHelper, UserHelper
-from config.global_setting import PIC_URL, ANONYMOUS_USER
+from config.global_setting import PIC_URL
 
 logger = log.getLogger(__file__)
 
@@ -30,14 +30,6 @@ class Topic(BaseHelper, topic_model.Topic):
         result['content'] = Topic.xhtml_escape(record['content'])
         result['f_created_time'] = Topic._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
-
-        #if record['isanon']:
-        #    result['author'] = ANONYMOUS_USER['nickname']
-        #    result['avatar'] = ANONYMOUS_USER['avatar']
-        #else:
-        #    simple_user = Topic._user.get_simple_user(record['uid'])
-        #    result['author'] = simple_user['nickname']
-        #    result['avatar'] = simple_user['avatar']
 
         return result
 
@@ -86,13 +78,9 @@ class Opinion(BaseHelper, topic_model.Opinion):
         result['f_created_time'] = Opinion._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
 
-        if record['isanon']:
-            result['author'] = ANONYMOUS_USER['nickname']
-            result['avatar'] = ANONYMOUS_USER['avatar']
-        else:
-            simple_user = Opinion._user.get_simple_user(record['uid'])
-            result['author'] = simple_user['nickname']
-            result['avatar'] = simple_user['avatar']
+        simple_user = Opinion._user.get_simple_user(record['uid'], record['isanon'])
+        result['author'] = simple_user['nickname']
+        result['avatar'] = simple_user['avatar']
 
         return result
 
@@ -131,20 +119,13 @@ class Comment(BaseHelper):
         result['f_created_time'] = self._simple_time(record['ctime'])
         result['is_liked'] = True if unicode(uid) in record['like'] else False
 
-        if False and record['isanon']:
-            result['author'] = ANONYMOUS_USER['nickname']
-            result['avatar'] = ANONYMOUS_USER['avatar']
-        else:
-            simple_user = self._user.get_simple_user(record['uid'])
-            result['author'] = simple_user['nickname']
-            result['avatar'] = simple_user['avatar']
+        simple_user = self._user.get_simple_user(record['uid'], record['isanon'])
+        result['author'] = simple_user['nickname']
+        result['avatar'] = simple_user['avatar']
 
         if record['target']:
-            if False and record['target']['isanon']:
-                result['target']['author'] = ANONYMOUS_USER['nickname']
-            else:
-                to_user = self._user.get_simple_user(record['target']['uid'])
-                result['target']['author'] = to_user['nickname']
+            to_user = self._user.get_simple_user(record['target']['uid'], record['target']['isanon'])
+            result['target']['author'] = to_user['nickname']
 
         return result
 
@@ -156,7 +137,7 @@ class Comment(BaseHelper):
 
         return [self.format(rd, uid) for rd in records]
 
-    def add_comment(self, parent, parent_id, uid, content, tocoid=None, islz=False):
+    def add_comment(self, parent, parent_id, uid, content, tocoid=None, is_lz=False, is_anon=False):
         parent_id, uid, tocoid= self.to_objectids(parent_id, uid, tocoid)
         key, coll = self._field_map[parent], self._coll_map[parent]
         doc = {
@@ -164,7 +145,8 @@ class Comment(BaseHelper):
             'uid': uid,
             'target': {},
             'content': content,
-            'islz': islz,
+            'islz': is_lz,
+            'isanon': is_anon,
             'ctime': datetime.now(),
         }
         target = coll.find_one({'_id': tocoid}) if tocoid else None
@@ -172,6 +154,7 @@ class Comment(BaseHelper):
             doc['target']['coid'] = target['_id']
             doc['target']['content'] = target['content']
             doc['target']['uid'] = target['uid']
+            doc['target']['isanon'] = target['isanon']
 
         coid = coll.create(doc)
         doc['_id'] = coid
