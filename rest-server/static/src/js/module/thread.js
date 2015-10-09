@@ -104,7 +104,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 //jq('#showAll').show();
                 if (clear && isEmptyShow) {
                     jq('#allLabelBox').show();
-                    jq('#emptyList').html(emptyCon).show()
+                    jq('.emptyList').html(emptyCon).show()
                 }
                 if (isList) {
                     return true;
@@ -281,34 +281,34 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                 //localStorage.removeItem(storageKey);
                                 var allLabelBox = jq('#allLabelBox'),
                                     //replyList = jq('#replyList'),
-                                    replyData = {data_list:{0:re.data}};
+                                    replyData = {data_list:[re.data]};
 
-                                jq('#emptyList').hide()
+                                jq('.emptyList').hide()
 
                                 if (obj.replyType === 'opinion') {
-                                    var opinionsHtml = template('tmpl_opinions', replyData);
-                                    if(jq.trim(opinionsHtml)!==''){
+                                    var listHtml = template('tmpl_opinions', replyData);
+                                    if(jq.trim(listHtml)!==''){
                                         allLabelBox.show();
-                                        jq('#allReplyList').append(opinionsHtml);
+                                        jq('#allReplyList').append(listHtml);
                                     }
 
                                 } else if (obj.replyType === 'proposal') {
 
-                                    var proposalsHtml = template('tmpl_proposals', replyData);
-                                    if(jq.trim(proposalsHtml)!==''){
+                                    var listHtml = template('tmpl_proposals', replyData);
+                                    if(jq.trim(listHtml)!==''){
                                         //jq('#hotLabelBox').show();
-                                        jq('#hotReplyList').append(proposalsHtml);
+                                        jq('#hotReplyList').append(listHtml);
                                     }
 
                                 } else if (obj.replyType === 'comment') {
-                                    var tmpl = template('tmpl_reply', replyData);
+                                    var listHtml = template('tmpl_reply', replyData);
                                     allLabelBox.show();
                                     //allLabelBox.next('.topicList').show();
 
                                     if (true && !exports.desc) {
-                                        jq('#allReplyList').append(tmpl);
+                                        jq('#allReplyList').append(listHtml);
                                     } else {
-                                        jq('#allReplyList').prepend(tmpl);
+                                        jq('#allReplyList').prepend(listHtml);
                                     }
                                 }
 
