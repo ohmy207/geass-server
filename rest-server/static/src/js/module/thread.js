@@ -70,7 +70,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 },
                 'success': function(re) {
                     jq('#refreshWait').hide();
-                    jq('#loadNext').hide();
+                    //jq('#loadNext').hide();
                     jq.UTIL.showLoading('none');
                     if (re.code == 0) {
                         //var zero = new Date;
@@ -122,24 +122,26 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         initTouchRefresh: function (load) {
 
-            var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
+            //var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
             // 全屏触摸
             jq.UTIL.initTouch({
                 obj: jq('.warp')[0],
                 end: function(e, offset) {
                     document.ontouchmove = function(e){ return true;}
-                    var loadingObj = jq('#loadNext');
                     var loadingPos = jq('#loadNextPos');
+                    //var loadingObj = jq('#loadNext');
                     // var loadingObjTop = loadingObj.offset().top + loadingObj.height() - jq(window).scrollTop();
-                    var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
+                    //var loadingObjTop = loadingPos.offset().top - document.body.scrollTop - window.screen.availHeight;
+                    var loadingObjTop = jq(document).height() - jq(window).scrollTop() - jq(window).height();
                     // 向上滑
-                    if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
+                    if (offset.y > 0 && loadingObjTop <= 63 && exports.isLoadingNew && !exports.isLoading) {
+                    //if (offset.y > 10 && loadingObjTop <= 10 && exports.isLoadingNew && !exports.isLoading) {
                         load('drag');
                         //exports.load(opts, 'drag');
                     }
                     // 向下拉刷新
-                    if (offset.y < level && document.body.scrollTop <= 0) {
-                    }
+                    //if (offset.y < level && document.body.scrollTop <= 0) {
+                    //}
                 }
             });
 
