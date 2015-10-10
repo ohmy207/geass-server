@@ -71,7 +71,7 @@ class PublishingHandler(BaseHandler):
         )
 
 
-class FollowingTopicHandler(BaseHandler):
+class FollowingHandler(BaseHandler):
 
     _post_params = {
         'need': [

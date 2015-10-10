@@ -1032,7 +1032,9 @@ img {
     display: inline-block;
     padding: 5px;
     line-height: 18px;
-    color: #999
+    /*
+    color: #999;
+     */
 }
 
 .topicList {

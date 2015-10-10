@@ -8,7 +8,7 @@ urls = [
 
     ('/user', app.PersonalHandler),
     ('/user/(topics|opinions)', app.PublishingHandler),
-    ('/user/following/topics', app.FollowingTopicHandler),
+    ('/user/following/topics', app.FollowingHandler),
     ('/user/news/(topics|votes|comments)', app.NewsHandler),
 
     ('/user/voting/proposals/([0-9a-f]{24})', app.VoteProposalHandler),

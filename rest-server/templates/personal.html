@@ -138,7 +138,7 @@
       <% if (!isDOMExist('t_' + opinionList[i].tid)) { %>
       <li class="" id="t_<%=opinionList[i].tid%>" >
 
-          <div class="topicWrap" data-link="/opinion?tid=<%= opinionList[i].tid %>&pid=<%= opinionList[i].pid %>" >
+          <div class="topicWrap" data-link="/opinion?tid=<%= opinionList[i].tid %>&oid=<%= opinionList[i].oid %>" >
               <%if (opinionList[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img data-src="<%= opinionList[i].picture_urls[0]['thumb'] %>" >
@@ -154,7 +154,7 @@
                </h3>
 
                <div>
-                    <a class="voteCount" href="javascript:;" ><% if (opinionList[i].vote_num) { %> <%= opinionList[i].vote_num %> <%  } else { %>0<%  } %></a>
+                    <a class="voteCount" href="javascript:;" ><% if (opinionList[i].approve_num) { %> <%= opinionList[i].approve_num %> <%  } else { %>0<%  } %></a>
                    <div class="listContent">
                        <%== opinionList[i].content %>
                    </div>
@@ -207,11 +207,6 @@
 
   <div class="hotLabel recommendTitle" style="display:none;">
   </div>
-
-  <script type="text/javascript">
-      var tId = "{{ state['tid'] }}";
-      var pId = "{{state['pid']}}";
-  </script>
 
   <script type="text/javascript">
     var shareUrl = 'http://m.wsq.qq.com/264151824/t/3569?_wv=1&source=custom',

@@ -74,7 +74,7 @@
           <div class="operation pr">
               <span class="source db c6 f12 fl"><%== replyList[i].f_created_time %></span>
               <span class="replyShare db c9 fr f13">
-                  <a href="javascript:;" class="like c9" coid="<%= replyList[i].coid %>" data-num="<%= replyList[i].like_num %>" > <i class="<% if (replyList[i].is_liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].like_num) { %><%= replyList[i].like_num %> <%  } else { %>赞<%  } %></a>
+                  <a href="javascript:;" class="like <% if (replyList[i].is_liked) { %>c13<%  } else { %>c9<%  } %>" coid="<%= replyList[i].coid %>" data-num="<%= replyList[i].like_num %>" > <i class="<% if (replyList[i].is_liked) { %>iconP<%  } else { %>iconNoP<%  } %>raise f18 cf"></i><% if (replyList[i].like_num) { %><%= replyList[i].like_num %> <%  } else { %>赞<%  } %></a>
                   <a class="c9 replyFloor" href="javascript:;" id="co_<%= replyList[i].coid %>" uid="<%= replyList[i].author_uid %>" author="<%= replyList[i].author %>"> <i class="iconReply f18 cf"></i></a>
               </span>
           </div>

@@ -65,23 +65,16 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         init: function() {
-            var tId = window.tId,
-                loadOpts = {
-                    isList: false,
-                    isEmptyShow: false,
-                    url: '/user',
-                    emptyCon: '',
-                    callback: exports.render,
-                };
+            var loadOpts = {
+                isList: false,
+                isEmptyShow: false,
+                url: '/user',
+                emptyCon: '',
+                callback: exports.render,
+            };
 
             thread.load(loadOpts, 'drag');
-
             initLazyload('.warp img');
-
-            jq('.warp, #bottomBar').on('click', '.threadReply', function() {
-                var thisObj = jq(this);
-                thread.reply(tId, null, null, '', 'opinion');
-            });
 
             jq('.warp').on('click', '.pTitle', function(e) {
                 jq.UTIL.touchStateNow(jq(this));

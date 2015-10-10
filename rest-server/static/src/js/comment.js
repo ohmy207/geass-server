@@ -127,7 +127,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         'success': function(result) {
                             if (result.code == 0) {
                             //if (result.code == 0 && result.data && result.data.likeNum) {
-                                jq.UTIL.likeTips(thisObj, '+1');
+                                //jq.UTIL.likeTips(thisObj, '+1');
+                                thisObj.attr('class', 'like c13');
                                 thisObj.html('<i class="iconPraise f18 cf"></i>' + (parseInt(thisObj.data('num')) + 1));
                             }
                         },
