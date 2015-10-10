@@ -30,8 +30,8 @@
     </div>
 
     <div class="topicBtn">
-      <a href="javascript:;" class="threadReply" data-type="proposal"><i class="iconReply f18 cf"></i>添加选项</a>
-      <a href="javascript:;" class="threadReply" data-type="opinion"><i class="iconReply f18 cf"></i>添加看法</a>
+      <a href="javascript:;" class="threadReply" data-type="proposal"><i class="iconWrite f18 cf"></i>添加选项</a>
+      <a href="javascript:;" class="threadReply" data-type="opinion"><i class="iconReply2 f18 cf"></i>添加看法</a>
     </div>
 
     <div id="hotLabelBox" class="hotLabel" style="display:none;">
@@ -250,6 +250,7 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
+   <a href="/new" class="item cf iconTopic2">发起</a>
    <a href="/comment_list?parent=topics&parent_id={{ state['tid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>

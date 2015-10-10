@@ -17,15 +17,6 @@ logger = log.getLogger(__file__)
 
 class PersonalHandler(BaseHandler):
 
-    _get_params = {
-        'need': [
-        ],
-        'option': [
-            ('skip', int, 0),
-            ('limit', int, 3),
-        ]
-    }
-
     @authenticated
     def GET(self):
         uid = self.current_user
@@ -40,23 +31,9 @@ class PersonalHandler(BaseHandler):
         self._data['publish_topics']['count'] = db_topic['topic'].find({'uid': uid}).count()
         self._data['publish_opinions']['count'] = db_topic['opinion'].find({'uid': uid}).count()
 
-        self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(
-            uid=uid,
-            skip=self._skip,
-            limit=self._limit
-        )
-
-        self._data['publish_topics']['data_list'] = db_user['user'].get_user_topics(
-            uid=uid,
-            skip=self._skip,
-            limit=self._limit
-        )
-
-        self._data['publish_opinions']['data_list'] = db_user['user'].get_user_opinions(
-            uid=uid,
-            skip=self._skip,
-            limit=self._limit
-        )
+        self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(uid=uid, skip=0, limit=3)
+        self._data['publish_topics']['data_list'] = db_user['user'].get_user_topics(uid=uid, skip=0, limit=3)
+        self._data['publish_opinions']['data_list'] = db_user['user'].get_user_opinions(uid=uid, skip=0, limit=3)
 
 
 class PublishingHandler(BaseHandler):
@@ -66,7 +43,7 @@ class PublishingHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 5),
+            ('limit', int, 10),
         ]
     }
 

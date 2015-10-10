@@ -82,7 +82,7 @@ ERROR_PAGE_MESSAGE = {
 
 ANONYMOUS_USER = {
     'nickname': '匿名用户',
-    'avatar': '',
+    'avatar': 'https://dn-geass-static.qbox.me/anonymous_avatar.jpg',
 }
 
 # Third-party

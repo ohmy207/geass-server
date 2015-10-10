@@ -4605,6 +4605,16 @@ i {
     content: "\e606";
 }
 
+.iconReply2:before {
+    color: #CCCCCC;
+    content: "\e803";
+}
+
+.iconWrite:before {
+    color: #CCCCCC;
+    content: "\e800";
+}
+
 .iconShare:before {
     content: "\e606"
 }
@@ -4645,16 +4655,6 @@ i {
     content: "\e909";
 }
 
-.iconNoFollow:before {
-    content: "\f097";
-}
-
-.iconFollow:before {
-    content: "\f02e";
-    color: #2791dc;
-    color: #277EDC;
-}
-
 .iconNews:before {
     content: "\e60b";
     color: #7AC743;
@@ -4663,6 +4663,10 @@ i {
 .iconTopic:before {
     content: "\e60c";
     color: #39BFFC;
+}
+
+.iconTopic2:before {
+    content: "\e802";
 }
 
 .iconMark:before {
@@ -4675,7 +4679,7 @@ i {
     color: #7AC743;
 }
 
-.item.iconFollow:before, .item.iconNoFollow:before, .item.iconReply:before, .item.iconUser:before {
+.item.iconTopic2:before, .item.iconReply:before, .item.iconUser:before {
     font-size: 16px;
     margin-right: 5px;
     vertical-align: -4%;
@@ -4745,4 +4749,5 @@ i {
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
+
 */
