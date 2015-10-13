@@ -37,7 +37,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             thread.load({
                 isList: true,
                 isEmptyShow: true,
-                url: '/user/news/' + exports.listType,
+                url: '/user/notifications',
                 emptyCon: emptyCons[exports.listType],
                 callback: exports.renderList,
             }, action);

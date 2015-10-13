@@ -10,7 +10,7 @@ from helpers import topic as topic_helper
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['User', 'Vote', 'Approve', 'Follow']
+MODEL_SLOTS = ['User', 'Vote', 'Approve', 'Follow', 'Notice']
 
 
 class User(UserHelper):
@@ -123,4 +123,31 @@ class Follow(BaseHelper):
 
     def get_follows_count(self, uid):
         return self._follow2topic.find({'uid': uid}).count()
+
+class Notice(BaseHelper, user_model.Notice):
+
+    _coll_map = {
+        1: topic_helper['topic'],
+        2: topic_helper['topic'],
+        3: topic_helper['topic'],
+        4: topic_helper['opinion'],
+        5: topic_helper['comment'],
+        6: topic_helper['proposal'],
+        7: topic_helper['opinion'],
+    }
+
+    def update_notice(self, mid, action, from_uid):
+        mid, from_uid = self.to_objectids(mid, from_uid)
+        uid = self._coll_map[action].find_one({'_id': mid})['uid']
+        spec = {'uid': uid, 'mid': mid, 'action': action}
+        notice = self.find_one(spec)
+
+        if not notice:
+            spec['sender'] = [from_uid]
+            spec['ctime'] = ctime
+            self.create(spec)
+        else:
+            sender = [from_uid, notice['sender'][0]] if notice['sender']
+            self.update({'_id': notice['_id']}, {'$set': {'sender': sender, 'ctime': ctime}})
+
 

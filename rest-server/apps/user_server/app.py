@@ -65,7 +65,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'opinion': 'opinion_detail',
         'comment_list': 'comment_list',
         'personal': 'personal',
-        'news_list': 'news_list',
+        'notice_list': 'notice_list',
 
         'proposal_list': 'proposal_list',
         'following': 'personal_list',
@@ -76,7 +76,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
     _DIRECT_AUTHORIZE_PAGES = [
         'new',
         'personal',
-        'news_list',
+        'notice_list',
         'following',
         'publish_topics',
         'publish_opinions',

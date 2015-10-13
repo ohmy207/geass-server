@@ -4366,11 +4366,11 @@ i {
     padding: 0;
 }
 
-.person .news li {
+.person .notice li {
     border-top: 15px solid #f3f3f3;
 }
 
-.person .news .comments {
+.person .notice .comments {
     padding-left: 45px;
 }
 
@@ -4383,13 +4383,13 @@ i {
     font-weight: 500;
 }
 
-.person .news h3.text {
+.person .notice h3.text {
     font: inherit;
     font-size: 17px;
     margin-bottom: 3px;
 }
 
-.news .comments h3.text {
+.notice .comments h3.text {
     clear: both;
     font-size: 17px;
     line-height: 23px;
@@ -4409,7 +4409,7 @@ i {
     max-height: 62px!important;
 }
 
-.person .news .textContainer {
+.person .notice .textContainer {
     height: auto!important;
     max-height: none!important;
 }
@@ -4482,7 +4482,7 @@ i {
     background: rgba(56, 139, 217, 0.67);
 }
 
-.news .sImg {
+.notice .sImg {
     top: 13px;
     left: 10px;
     width: 25px;
@@ -4657,7 +4657,7 @@ i {
     content: "\e909";
 }
 
-.iconNews:before {
+.iconNotice:before {
     content: "\e60b";
     color: #7AC743;
 }
@@ -4687,7 +4687,7 @@ i {
     vertical-align: -4%;
 }
 
-.pTitle .iconNews:before, .pTitle .iconMark:before, .pTitle .iconOpinion:before, .pTitle .iconTopic:before {
+.pTitle .iconNotice:before, .pTitle .iconMark:before, .pTitle .iconOpinion:before, .pTitle .iconTopic:before {
     margin-right: 7px;
     font-size: 20px;
     vertical-align: -3%;

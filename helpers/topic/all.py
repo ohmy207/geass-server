@@ -126,6 +126,7 @@ class Comment(BaseHelper):
         if record['target']:
             result['target'] = {
                 'coid': record['target']['coid'],
+                'uid': record['target']['uid'],
                 'content': self.xhtml_escape(record['target']['content']),
                 'is_lz': record['target']['islz'],
             }

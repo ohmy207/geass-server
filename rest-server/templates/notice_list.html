@@ -22,13 +22,12 @@
 
   <div class="switchBar">
    <ul class="groupBtn">
-    <li class="selected" id="topics" >话题</li>
-    <li id="votes" >看法</li>
-    <li id="comments" >评论</li>
+    <li class="selected" id="reply" >回复</li>
+    <li id="support" >支持</li>
    </ul>
   </div>
 
-  <div class="warp news" onselectstart="return false;"> 
+  <div class="warp notice" onselectstart="return false;"> 
 
    <div class="listWrap pr" >
     <ul id="list" style="height: auto;">
@@ -43,25 +42,34 @@
   <script id="tmpl_topics" type="text/html">
 
     <%
-    if (typeof(topicList) == 'undefined') {
-        var topicList = data_list;
+    if (typeof(noticeList) == 'undefined') {
+        var noticeList = data_list;
     }
     %>
 
-    <% for (var i in topicList) { %>
+    <% for (var i in noticeList) { %>
+        <% if (noticeList[i].action < 5) { %>
+            <% include('notice_topic', noticeList[i]) %>
+        <% } else if (noticeList[i].action > 4 && noticeList[i].action < 8) { %>
+            <% include('notice_opinion', noticeList[i]) %>
+        <% } %>
+    <% } %>
 
-    <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
-    <li class="" id="t_<%=topicList[i].tid%>" >
+  </script>
 
-        <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
+  <script id="notice_topic" type="text/html">
+    <% if (!isDOMExist('t_' + tid)) { %>
+    <li class="" id="t_<%=tid%>" >
+
+        <div class="topicWrap" data-link="/topic?tid=<%=tid%>" >
 
             <div class="textContainer">
              <div class="authorList">
-                 <a href="javascript:;"><%= topicList[i].op_authors.join('、') %></a><%if (topicList[i].op_count > 2) { %>…等 <%= topicList[i].op_count %> 人<% } %>对该话题发表了看法
+                 <a href="javascript:;"><%= senders.join('、') %></a><%if (count > 2) { %>…等 <%= count %> 人<% } %><% if (action == 2) { %>对该话题发表了看法<% } else if (action == 3) { %>评论了该话题<% } else if (action == 4) { %>回复了该话题下你的评论<% } %>
              </div>
 
              <h3 class="text">
-                 <%= topicList[i].title %>
+                 <%= title %>
              </h3>
             </div>
 
@@ -69,39 +77,29 @@
 
     </li>
     <% } %>
-    <% } %>
-
   </script>
 
-  <script id="tmpl_votes" type="text/html">
+  <script id="notice_opinion" type="text/html">
 
-    <%
-    if (typeof(topicList) == 'undefined') {
-        var topicList = data_list;
-    }
-    %>
+    <% if (!isDOMExist('o_' + oid)) { %>
+    <li class="" id="o_<%=oid%>" >
 
-    <% for (var i in topicList) { %>
-
-    <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
-    <li class="" id="t_<%=topicList[i].tid%>" >
-
-        <div class="topicWrap" data-link="/opinion?tid=<%= topicList[i].tid %>&pid=<%= topicList[i].pid %>" >
+        <div class="topicWrap" data-link="/opinion?tid=<%= tid %>&oid=<%= oid %>" >
 
             <div class="textContainer">
              <div class="authorList">
-                 <a href="javascript:;"><%= topicList[i].vote_users.join('、') %></a><%if (topicList[i].vote_num > 2) { %>…等 <%= topicList[i].vote_num %> 人<% } %>支持了你的看法
+                 <a href="javascript:;"><%= senders.join('、') %></a><%if (count > 2) { %>…等 <%= count %> 人<% } %><% if (action == 5) { %>评论了该看法<% } else if (action == 6) { %>回复了该看法下你的评论<% } else if (action == 7) { %>赞同了你的看法<% } %>
              </div>
 
              <h3 class="text">
-                 <%= topicList[i].title %>
+                 <%= title %>
              </h3>
 
              <div>
-                <a class="voteCount" href="javascript:;" ><% if (topicList[i].vote_num) { %> <%= topicList[i].vote_num %> <%  } else { %>0<%  } %></a>
+                <a class="voteCount" href="javascript:;" ><% if (approve_num) { %> <%= approve_num %> <%  } else { %>0<%  } %></a>
 
                 <div class="listContent">
-                    <%== topicList[i].content %>
+                    <%== content %>
                 </div>
              </div>
             </div>
@@ -109,7 +107,6 @@
         </div>
 
     </li>
-    <% } %>
     <% } %>
 
   </script>
@@ -243,6 +240,6 @@
     shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
   </script>
 
-  <script data-main="{{ static_url('js/news_list.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+  <script data-main="{{ static_url('js/notice_list.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
 
 {% end %}

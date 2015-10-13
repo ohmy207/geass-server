@@ -86,7 +86,7 @@ class FollowingHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 5),
+            ('limit', int, 10),
         ]
     }
 

@@ -252,6 +252,7 @@ class OpinionsHandler(BaseHandler):
             data['isanon'] = topic['isanon']
 
         oid = db_topic['opinion'].create(data)
+        db_user['notice'].update_notice(tid, 2)
         data['_id'] = oid
 
         self._data = db_topic['opinion'].callback(db_topic['opinion'].to_one_str(data))
@@ -327,7 +328,7 @@ class CommentsHandler(BaseHandler):
         if not parent_rd:
             raise ResponseError(50)
 
-        self._data = db_topic['comment'].add_comment(
+        data = db_topic['comment'].add_comment(
             parent=parent,
             parent_id=parent_id,
             uid=uid,
@@ -336,4 +337,12 @@ class CommentsHandler(BaseHandler):
             is_lz=is_lz,
             is_anon=is_lz and parent_rd['isanon']
         )
+
+        action = 3 if parent == 'topics' else 5
+        if data['target']:
+            action = 4 if parent == 'topics' else 6
+
+        db_user['notice'].update_notice(parent_id, action, data['target'].get('uid', None))
+
+        self._data = data
 
