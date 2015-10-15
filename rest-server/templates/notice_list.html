@@ -64,7 +64,7 @@
     <% if (!isDOMExist('t_' + tid)) { %>
     <li <%if (!isread) { %>class="unread"<% } %> id="t_<%=tid%>" >
 
-        <div class="topicWrap" data-link="/topic?tid=<%=tid%>" >
+        <div class="topicWrap" data-link="<%if (action == 3 || action == 4) { %>/comment_list?parent=topics&parent_id=<%=tid%><% } else { %>/topic?tid=<%=tid%><% } %>" >
 
             <div class="textContainer">
              <div class="authorList">
@@ -87,7 +87,7 @@
     <% if (!isDOMExist('o_' + oid)) { %>
     <li <%if (!isread) { %>class="unread"<% } %> id="o_<%=oid%>" >
 
-        <div class="topicWrap" data-link="/opinion?tid=<%= tid %>&oid=<%= oid %>" >
+        <div class="topicWrap" data-link="<%if (action == 5 || action == 6) { %>/comment_list?parent=opinions&parent_id=<%= oid %><% } else { %>/opinion?tid=<%= tid %>&oid=<%= oid %><% } %>" >
 
             <div class="textContainer">
              <div class="authorList">
