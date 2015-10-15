@@ -6,6 +6,7 @@ from datetime import datetime
 
 from helpers.base import BaseHelper, UserHelper
 from models.user import model as user_model
+from models.topic import model as topic_model
 from helpers import topic as topic_helper
 
 logger = log.getLogger(__file__)
@@ -67,7 +68,8 @@ class Vote(BaseHelper, user_model.Vote2Proposal):
 
     def vote_proposal(self, tid, pid, uid):
         tid, pid, uid = self.to_objectids(tid, pid, uid)
-        self.create({'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
+        self.create(
+            {'tid': tid, 'pid': pid, 'uid': uid, 'ctime': datetime.now()})
         self._proposal.update({'_id': pid}, {'$inc': {'vnum': 1}}, w=1)
 
     def unvote_proposal(self, tid, pid, uid):
@@ -107,15 +109,19 @@ class Follow(BaseHelper):
 
     def is_topic_followed(self, uid, tid):
         uid, tid = self.to_objectids(uid, tid)
-        return True if self._follow2topic.find_one({'uid': uid, 'tid': tid}) else False
+        return True if self._follow2topic.find_one(
+            {'uid': uid, 'tid': tid}) else False
 
     def get_follow_topics(self, uid, skip, limit, sort=[('ctime', -1)]):
-        follow_topics = self._follow2topic.find({'uid': uid}, skip=skip, limit=limit, sort=sort)
-        return [self._topic.get_one({'_id': f['tid']}) for f in follow_topics if follow_topics and f['tid']]
+        follow_topics = self._follow2topic.find(
+            {'uid': uid}, skip=skip, limit=limit, sort=sort)
+        return [self._topic.get_one({'_id': f['tid']})
+                for f in follow_topics if follow_topics and f['tid']]
 
     def follow_topic(self, uid, tid):
         uid, tid = self.to_objectids(uid, tid)
-        self._follow2topic.create({'tid': tid, 'uid': uid, 'ctime': datetime.now()})
+        self._follow2topic.create(
+            {'tid': tid, 'uid': uid, 'ctime': datetime.now()})
 
     def unfollow_topic(self, uid, tid):
         uid, tid = self.to_objectids(uid, tid)
@@ -124,30 +130,87 @@ class Follow(BaseHelper):
     def get_follows_count(self, uid):
         return self._follow2topic.find({'uid': uid}).count()
 
+
 class Notice(BaseHelper, user_model.Notice):
 
-    _coll_map = {
-        1: topic_helper['topic'],
-        2: topic_helper['topic'],
-        3: topic_helper['topic'],
-        4: topic_helper['opinion'],
-        5: topic_helper['comment'],
-        6: topic_helper['proposal'],
-        7: topic_helper['opinion'],
+    _user = User()
+    _topic = topic_helper['topic']
+    _topicomment = topic_model.TopicComment()
+    _opinioncomment = topic_model.OpinionComment()
+
+    _child_map = {
+        1: topic_helper['proposal'],
+        2: topic_helper['opinion'],
+        3: _topicomment,
+        4: _topicomment,
+        5: _opinioncomment,
+        6: _opinioncomment,
+        7: user_model.Approve2Opinion(),
+        8: user_model.Vote2Proposal(),
     }
 
-    def update_notice(self, mid, action, from_uid):
-        mid, from_uid = self.to_objectids(mid, from_uid)
-        uid = self._coll_map[action].find_one({'_id': mid})['uid']
-        spec = {'uid': uid, 'mid': mid, 'action': action}
-        notice = self.find_one(spec)
+    _parent_map = {
+        1: _topic,
+        2: _topic,
+        3: _topic,
+        4: _topic,
+        5: topic_helper['opinion'],
+        6: topic_helper['opinion'],
+        7: topic_helper['opinion'],
+        8: topic_helper['proposal'],
+    }
 
-        if not notice:
-            spec['sender'] = [from_uid]
-            spec['ctime'] = ctime
-            self.create(spec)
-        else:
-            sender = [from_uid, notice['sender'][0]] if notice['sender']
-            self.update({'_id': notice['_id']}, {'$set': {'sender': sender, 'ctime': ctime}})
+    def update_notice(self, parent_id, action, uid=None):
+        parent_id, uid = self.to_objectids(parent_id, uid)
+        uid = uid if action in [4, 6] else\
+            self._parent_map[action].find_one({'_id': parent_id})['uid']
 
+        doc = {
+            'uid': uid,
+            'paid': parent_id,
+            'action': action,
+        }
+        notice = self.find_one(doc)
+        notice_id = self.create(doc) if not notice else notice['_id']
+        self.update(
+            {'_id': notice_id}, {'$set': {'isread': False, 'ctime': datetime.now()}})
 
+    def get_notices(self, uid, filter_type, skip, limit):
+        spec = {'uid': uid,
+                'action': {'$in': [7, 8]} if filter_type == 'support' else {'$lt': 7}}
+        notices = self.find(spec, limit=limit, skip=skip, sort=[('ctime', -1)])
+
+        result_list = []
+        for notice in notices:
+            action = notice['action']
+            result = self._parent_map[action].get_one({'_id': notice['paid']})
+
+            key = 'pid' if action in [8] else 'oid' if action in [5, 6, 7] else 'tid'
+            child_uids = self._child_map[action].find(
+                {key: self.to_objectid(result[key])}, sort=[('ctime', -1)]).distinct('uid')
+
+            if not child_uids:
+                continue
+
+            if action not in [1, 2, 3, 4]:
+                result['title'] = self._topic.find_one(
+                    {'_id': self.to_objectid(result['tid'])}, {'title': 1})['title']
+
+            result['count'] = len(child_uids)
+            result['action'] = action
+            result['isread'] = notice['isread']
+            result['senders'] = [
+                self._user.get_simple_user(cuid)['nickname'] for cuid in child_uids[:2]]
+
+            result_list.append(result)
+
+        return result_list
+
+    def check_all_notices(self, uid, filter_type):
+        spec = {'uid': uid, 'isread': False,
+                'action': {'$in': [7, 8]} if filter_type == 'support' else {'$lt': 7}}
+
+        if not self.find_one(spec):
+            return
+
+        self.update(spec, {'$set': {'isread': True}}, multi=True)

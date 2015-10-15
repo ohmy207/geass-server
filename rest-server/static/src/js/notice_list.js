@@ -25,29 +25,26 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        listType: 'topics',
+        filterType: 'reply',
 
         load: function(action) {
-            var emptyCons = {
-                'topics': '还没有收到看法！',
-                'votes': '还没有投票支持哦！',
-                'comments': '还没有回复哦！',
-            };
-
             thread.load({
                 isList: true,
                 isEmptyShow: true,
                 url: '/user/notifications',
-                emptyCon: emptyCons[exports.listType],
+                emptyCon: '还没有消息！',
+                type: exports.filterType,
                 callback: exports.renderList,
             }, action);
         },
 
         // render data
         renderList: function(re, clear) {
-            var tmplId = 'tmpl_' + exports.listType;
-            var listHtml = template(tmplId, re.data);
+            if (clear && re.data.has_new_support) {
+                jq('.switchBar .notiNumber').show();
+            }
 
+            var listHtml = template('tmpl_noticeList', re.data);
             jq('#list').append(listHtml);
         },
 
@@ -93,11 +90,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.groupBtn').on('click', 'li', function(e) {
                 jq('.groupBtn').children('.selected').attr('class', '')
                 jq(this).attr('class', 'selected');
+                jq('.switchBar .notiNumber').hide();
 
                 jq('.emptyList').hide()
                 jq('#list').html('');
                 thread.nextStart = 0;
-                exports.listType = jq(this).attr('id')
+                exports.filterType = jq(this).attr('id')
                 exports.load('drag');
             });
 

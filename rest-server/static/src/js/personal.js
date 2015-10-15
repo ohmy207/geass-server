@@ -58,6 +58,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('#topic').append(topicHtml);
             jq('#opinion').append(opinionHtml);
 
+            if (re.data.has_new_notice) {
+                jq('#notice .notiNumber').show()
+            }
             jq('.warp').show()
             //jq('.warp, #bottomBar').show()
             //jq('.warp, #bottomBar, .recommendTitle').show()

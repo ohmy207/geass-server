@@ -20,20 +20,29 @@ class PersonalHandler(BaseHandler):
     @authenticated
     def GET(self):
         uid = self.current_user
+        has_new_notice = True if db_user['notice'].find_one(
+            {'uid': uid, 'isread': False}) else False
 
         self._data = {
             'user': db_user['user'].get_one({'_id': uid}),
+            'has_new_notice': has_new_notice,
             'follow_topics': {},
             'publish_topics': {},
             'publish_opinions': {},
         }
-        self._data['follow_topics']['count'] = db_user['follow'].get_follows_count(uid)
-        self._data['publish_topics']['count'] = db_topic['topic'].find({'uid': uid}).count()
-        self._data['publish_opinions']['count'] = db_topic['opinion'].find({'uid': uid}).count()
+        self._data['follow_topics']['count'] = db_user[
+            'follow'].get_follows_count(uid)
+        self._data['publish_topics']['count'] = db_topic[
+            'topic'].find({'uid': uid}).count()
+        self._data['publish_opinions']['count'] = db_topic[
+            'opinion'].find({'uid': uid}).count()
 
-        self._data['follow_topics']['data_list'] = db_user['follow'].get_follow_topics(uid=uid, skip=0, limit=3)
-        self._data['publish_topics']['data_list'] = db_user['user'].get_user_topics(uid=uid, skip=0, limit=3)
-        self._data['publish_opinions']['data_list'] = db_user['user'].get_user_opinions(uid=uid, skip=0, limit=3)
+        self._data['follow_topics']['data_list'] = db_user[
+            'follow'].get_follow_topics(uid=uid, skip=0, limit=3)
+        self._data['publish_topics']['data_list'] = db_user[
+            'user'].get_user_topics(uid=uid, skip=0, limit=3)
+        self._data['publish_opinions']['data_list'] = db_user[
+            'user'].get_user_opinions(uid=uid, skip=0, limit=3)
 
 
 class PublishingHandler(BaseHandler):
@@ -132,7 +141,7 @@ class FollowingHandler(BaseHandler):
         db_user['follow'].unfollow_topic(uid, tid)
 
 
-class NewsHandler(BaseHandler):
+class NotificationHandler(BaseHandler):
 
     _get_params = {
         'need': [
@@ -140,60 +149,27 @@ class NewsHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 5),
+            ('type', basestring, None),
         ]
     }
 
     @authenticated
-    def GET(self, route):
+    def GET(self):
+        uid = self.current_user
+        filter_type = self._params['type']
+
+        data_list = db_user['notice'].get_notices(
+            uid, filter_type, self._skip, self._limit)
+
         self._data = {
+            'data_list': data_list,
             'next_start': self._skip + self._limit,
         }
 
-        self.route(route)
-
-    def do_topics(self):
-        uid = self.current_user
-        topics = db_topic['topic'].get_all({'uid': uid}, skip=self._skip, limit=self._limit, sort=[('rtime', -1)])
-
-        data_list = []
-        for t in topics:
-            tid = self.to_objectid(t['tid'])
-            opinions = db_topic['opinion'].get_all({'tid': tid}, skip=0, limit=2, sort=[('ctime', -1)])
-            if not opinions:
-                continue
-            t['op_count'] = db_topic['opinion'].find({'tid': tid}).count()
-            t['op_authors'] = [op['author'] for op in opinions]
-            data_list.append(t)
-
-        self._data['data_list'] = data_list
-
-    def do_votes(self):
-        opinions = db_topic['opinion'].get_all(
-            {'uid': self.current_user, 'vnum': {'$gt': 0}},
-            skip=self._skip,
-            limit=self._limit,
-            sort=[('vtime', -1)]
-        )
-
-        data_list = []
-        for op in opinions:
-            pid = self.to_objectid(op['pid'])
-            votes = db_user['vote'].find({'pid': pid}, skip=0, limit=2, sort=[('ctime', -1)])
-            op['vote_users'] = [db_user['user'].get_simple_user(v['uid'])['nickname'] for v in votes]
-            op['title'] = db_topic['topic'].get_one({'_id': self.to_objectid(op['tid'])})['title']
-            data_list.append(op)
-
-        self._data['data_list'] = data_list
-
-    def do_comments(self):
-        comments = db_topic['comment'].get_all(
-            {'target.uid': self.current_user},
-            skip=self._skip,
-            limit=self._limit,
-            sort=[('ctime', -1)]
-        )
-
-        self._data['data_list'] = comments
+        if self._skip == 0:
+            db_user['notice'].check_all_notices(uid, filter_type)
+            self._data['has_new_support'] = True if db_user['notice'].find_one(
+                {'uid': uid, 'isread': False, 'action': {'$in': [7, 8]}}) else False
 
 
 # TODO code repeat
@@ -237,7 +213,8 @@ class VoteProposalHandler(BaseHandler):
             raise ResponseError(60)
 
         tid = proposal['tid']
-        if not db_user['vote'].has_user_voted(uid, tid) or db_user['vote'].is_proposal_voted(uid, pid):
+        if not db_user['vote'].has_user_voted(
+                uid, tid) or db_user['vote'].is_proposal_voted(uid, pid):
             raise ResponseError(92)
 
         voted_proposal = db_user['vote'].find_one({'tid': tid, 'uid': uid})
@@ -262,6 +239,7 @@ class ApproveOpinionHandler(BaseHandler):
             raise ResponseError(60)
 
         db_user['approve'].approve_opinion(uid, oid)
+        db_user['notice'].update_notice(oid, 7)
 
     @authenticated
     def DELETE(self, oid):
@@ -292,4 +270,3 @@ class LikeCommentHandler(BaseHandler):
             raise ResponseError(75)
 
         db_topic['comment'].like_comment(parent, coid, uid)
-

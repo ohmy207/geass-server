@@ -4367,7 +4367,17 @@ i {
 }
 
 .person .notice li {
-    border-top: 15px solid #f3f3f3;
+    border-top: 10px solid #f3f3f3;
+}
+
+/*
+.person li {
+    border-top: 10px solid #f3f3f3;
+}
+*/
+
+.person .notice .unread {
+    background-color: #FEF9D3;
 }
 
 .person .notice .comments {
@@ -4511,7 +4521,6 @@ i {
 }
 
 .switchBar {
-    background-position: bottom;
     top: 0;
     right: 0;
     left: 0;
@@ -4521,9 +4530,11 @@ i {
     background-repeat: repeat-x;
     background-size: 100% 1px;
     line-height: 43px;
-    /*
     z-index: 111;
     position: fixed;
+    background-position: bottom;
+    background-image: url(data:image/gif;base64,R0lGODlhAQACAPABAMjHzP///yH/C1hNUCBEYXRhWE1QAz94cAAh+QQFAAABACwAAAAAAQACAAACAgwKADs=);
+    /*
     height: 45px;
      */
 }
@@ -4724,6 +4735,21 @@ i {
     height: 20px;
     line-height: 20px;
     margin-left: 10px;
+}
+
+.notiNumber {
+    background: #FF3D3F;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+}
+
+.pTitle .notiNumber, .groupBtn .notiNumber {
+    z-index: 12;
+    position: absolute;
+    top: 11px;
+    margin-left: 1px;
 }
 
 /*

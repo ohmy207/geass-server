@@ -32,13 +32,18 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             exports.isLoading = true;
 
             var isList = loadOpts.isList || false,
+                filterType = loadOpts.type || null,
                 url = loadOpts.url,
                 action = action || '',
                 start = exports.nextStart;
 
-            if (isList || action === 'more') {
+            if (filterType) {
                 url = url.indexOf('?') === -1 ? url + '?' : url + '&';
-                url = isList ? url + 'skip=' + start : url + 'type=' + loadOpts.type;
+                url = url + 'type=' + filterType;
+            }
+            if (isList) {
+                url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+                url = url + 'skip=' + start;
                 //    + '&desc=' + desc;
             }
 
@@ -112,7 +117,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             }
 
             if (typeof opts.callback == 'function') {
-                opts.callback(re);
+                opts.callback(re, clear);
             }
             if (re.data.next_start) {
                 exports.nextStart = re.data.next_start;

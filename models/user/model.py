@@ -58,10 +58,11 @@ class Notice(Model):
         1: 添加选项
         2: 添加看法
         3: 评论话题
-        4: 评论看法
-        5: 回复评论
-        6: 投票
+        4: 回复话题评论
+        5: 评论看法
+        6: 回复看法评论
         7: 赞同看法
+        8: 投票
 
     paid: parent id
     """
@@ -72,12 +73,9 @@ class Notice(Model):
         'uid':             (ObjectId, None),
         'paid':            (ObjectId, None),
 
-        'parent':          (basestring, ''),
-
         'action':          (int, 0)        ,
-        'count':           (int, 0)        ,
 
-        'senders':         (list, [])      ,
+        'isread':          (bool, False)   ,
 
         'ctime':           (datetime, None),
     }
