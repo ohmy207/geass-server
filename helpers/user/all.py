@@ -186,21 +186,21 @@ class Notice(BaseHelper, user_model.Notice):
             result = self._parent_map[action].get_one({'_id': notice['paid']})
 
             key = 'pid' if action in [8] else 'oid' if action in [5, 6, 7] else 'tid'
-            child_uids = self._child_map[action].find(
+            uids = self._child_map[action].find(
                 {key: self.to_objectid(result[key])}, sort=[('ctime', -1)]).distinct('uid')
 
-            if not child_uids:
+            if not uids:
                 continue
 
             if action not in [1, 2, 3, 4]:
                 result['title'] = self._topic.find_one(
                     {'_id': self.to_objectid(result['tid'])}, {'title': 1})['title']
 
-            result['count'] = len(child_uids)
             result['action'] = action
             result['isread'] = notice['isread']
+            result['count'] = len(uids)
             result['senders'] = [
-                self._user.get_simple_user(cuid)['nickname'] for cuid in child_uids[:2]]
+                self._user.get_simple_user(u)['nickname'] for u in uids[:2]]
 
             result_list.append(result)
 

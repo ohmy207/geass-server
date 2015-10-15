@@ -156,6 +156,7 @@ class ProposalsHandler(BaseHandler):
         #    data['isanon'] = topic['isanon']
 
         pid = db_topic['proposal'].create(data)
+        db_user['notice'].update_notice(tid, 1)
         data['_id'] = pid
 
         self._data = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(data))
