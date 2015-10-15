@@ -4558,8 +4558,8 @@ i {
     min-width: 98px;
     margin: 0;
     padding: 15px 0;
-    font-size: 15px;
-    color: gray;
+    font-size: 20px;
+    color: #CCCCCC;
     border-color: transparent;
     background-color: transparent;
 
@@ -4690,6 +4690,14 @@ i {
 .iconOpinion:before {
     content: "\e611";
     color: #7AC743;
+}
+
+.iconBars:before {
+    content: "\f0c9";
+}
+
+.iconHeart:before {
+    content: "\f004";
 }
 
 .item.iconTopic2:before, .item.iconReply:before, .item.iconUser:before {
