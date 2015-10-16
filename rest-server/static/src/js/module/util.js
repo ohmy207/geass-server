@@ -435,7 +435,11 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                 var opts = opts || {};
                 var loadingTimer = '';
                 url = '/api/v1' + url;
-                //url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+
+                if (type == 'DELETE') {
+                    url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+                    url = url + '_xsrf=' + jQuery.UTIL.get_xsrf();
+                }
                 //url = url.replace(/\&resType\=[^\&]+/g, '') + 'resType=json';
                 //url = url.replace(/\&isAjax\=1/g, '') + '&isAjax=1';
                 var ajaxOpts = {
@@ -561,7 +565,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                         }
                     }
                 };
-                if (ajaxOpts.type != 'GET') {
+                if (jQuery.UTIL.in_array(ajaxOpts.type, ['POST', 'PATCH', 'PUT'])) {
                     ajaxOpts.data._xsrf = jQuery.UTIL.get_xsrf();
                 }
                 jQuery.ajax(ajaxOpts);
