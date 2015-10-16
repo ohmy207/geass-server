@@ -157,8 +157,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             delayTime = delayTime || 1;
             var opbar = thisObj.find('.opbar'),
                 currNum = thisObj.children('.voteCount').data('num'),
-                //currPercent = voteTotalNum == 0 ? "0.00" : (parseInt(currNum)/voteTotalNum*100).toFixed(2);
-                currPercent = (parseInt(currNum)/voteTotalNum*100 + 1.0/(position+3)*100).toFixed(2);
+                currPercent = voteTotalNum == 0 ? "0.00" : (parseInt(currNum)/voteTotalNum*100).toFixed(2);
+                //currPercent = (parseInt(currNum)/voteTotalNum*100 + 1.0/(position+3)*100).toFixed(2);
 
             thisObj.children('.oppi').css("color",  exports.colorList[position % 10]).html(currPercent + '%');
             opbar.css("background-color", exports.colorList[position % 10]);

@@ -4723,13 +4723,13 @@ i {
 .opWrap {
     height: 20px;
     margin-top: 5px;
+    padding-right: 60px;
 }
 
 .opoutbar {
     overflow: hidden;
     position: relative;
-
-    width: 82%;
+    width: 100%;
     background-color: #F7F7F7;
 }
 
@@ -4739,10 +4739,10 @@ i {
 }
 
 .oppi {
-    float: right;
+    position: absolute;
+    right: 15px;
     height: 20px;
     line-height: 20px;
-    margin-left: 10px;
 }
 
 .notiNumber {
