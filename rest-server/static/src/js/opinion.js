@@ -50,13 +50,22 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 };
 
             thread.load(loadOpts, 'drag');
-
             initLazyload('.warp img');
 
-            //jq('.warp, #bottomBar').on('click', '.threadReply', function() {
-            //    var thisObj = jq(this);
-            //    thread.reply(tId, null, null, '', 'opinion');
-            //});
+            jq('.warp').on('click', '.threadPic img', function() {
+                var thisObj = jq(this),
+                    current = thisObj.data('src'),
+                    urls = [];
+
+                jq('.threadPic img').each(function() {
+                    urls.push(jq(this).data('src'));
+                });
+
+                wx.previewImage({
+                    current: current,
+                    urls: urls
+                });
+            });
 
             jq('.warp').on('click', '.detail', function(e) {
                 jq.UTIL.touchStateNow(jq(this), 'tapBg1');

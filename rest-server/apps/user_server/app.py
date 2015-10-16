@@ -17,6 +17,7 @@ from .base import WeiXinMixin
 from apps.base import ResponseError
 
 from helpers import user as db_user
+from helpers import wechat as wc
 from config.global_setting import WEIXIN, APP_HOST, QINIU
 
 logger = log.getLogger(__file__)
@@ -113,6 +114,9 @@ class PageHandler(BaseHandler, WeiXinMixin):
         state['is_authorized'] = 1 if self.current_user else 0
         state['authorize_url'] = authorize_url
 
+        if route in ['topic', 'proposal', 'opinion']:
+            state['sign_package'] = wc['wechat'].get_jssign_package(
+                APP_HOST + self.request.uri)
         if route in ['following', 'publish_topics', 'publish_opinions']:
             state['type'] = route
 

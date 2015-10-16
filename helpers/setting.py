@@ -4,7 +4,7 @@
 INSTALLED_HELPERS = (
     'topic',
     'user',
-    'weixin',
+    'wechat',
 )
 
 # collection name prefix that has installed into helper

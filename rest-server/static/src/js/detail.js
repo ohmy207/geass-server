@@ -140,12 +140,20 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //}
 
             // 点击查看大图
-            //require.async('module/imageviewCommon', function(imageviewCommon) {
-            //    imageviewCommon.init('.slideShow li');
-            //    imageviewCommon.init('.threadPic span');
-            //    imageviewCommon.init('.replyImg dd');
-            //    // imageviewCommon.init('.slideBox li');
-            //});
+            jq('.warp').on('click', '.threadPic img', function() {
+                var thisObj = jq(this),
+                    current = thisObj.data('src'),
+                    urls = [];
+
+                jq('.threadPic img').each(function() {
+                    urls.push(jq(this).data('src'));
+                });
+
+                wx.previewImage({
+                    current: current,
+                    urls: urls
+                });
+            });
 
             //setInterval(function() {
             //    if (window.pageYOffset > 1000 && !thread.isNoShowToTop) {

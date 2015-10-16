@@ -282,7 +282,7 @@
   </div>
 
   <script type="text/javascript">
-      var tId = "{{ state['tid'] }}";
+    var tId = "{{ state['tid'] }}";
   </script>
 
   <script type="text/javascript">
@@ -290,6 +290,19 @@
     shareTitle = '分享自#你怎么看#',
     shareDesc = '真是难为编剧了，上一部飞机、坦克、大炮都用完了，这一部玩起了空中飞车。真期待下一部导演和编剧会...',
     shareImgUrl = 'http://shp.qlogo.cn/gqclogo/0/264151824/200?max-age=2592000&amp;t=1426579479';
+  </script>
+
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+  <script>
+    {% set sign_package = state['sign_package'] %}
+    wx.config({
+      debug: false,
+      appId: "{{ sign_package['appId'] }}",
+      timestamp: {{ sign_package['timestamp'] }},
+      nonceStr: "{{ sign_package['nonceStr'] }}",
+      signature: "{{ sign_package['signature'] }}",
+      jsApiList: ['previewImage']
+    });
   </script>
 
   <script data-main="{{ static_url('js/detail.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>

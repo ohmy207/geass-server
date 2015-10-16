@@ -6,7 +6,7 @@ import log
 
 from apps.base import BaseHandler
 
-from helpers import weixin as wx
+from helpers import wechat as wx
 
 logger = log.getLogger(__file__)
 

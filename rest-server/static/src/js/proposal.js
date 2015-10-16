@@ -52,8 +52,22 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 };
 
             thread.load(loadOpts, 'drag');
-
             initLazyload('.warp img');
+
+            jq('.warp').on('click', '.threadPic img', function() {
+                var thisObj = jq(this),
+                    current = thisObj.data('src'),
+                    urls = [];
+
+                jq('.threadPic img').each(function() {
+                    urls.push(jq(this).data('src'));
+                });
+
+                wx.previewImage({
+                    current: current,
+                    urls: urls
+                });
+            });
 
             //jq('.warp, #bottomBar').on('click', '.threadReply', function() {
             //    var thisObj = jq(this);
