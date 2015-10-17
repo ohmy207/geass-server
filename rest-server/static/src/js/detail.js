@@ -58,6 +58,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             exports.renderList(re)
 
             jq('.warp, #bottomBar').show();
+
+            thread.initShare(re.data.topic)
         },
 
         renderProposals: function(re) {
@@ -110,7 +112,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //var reapp = /qqdownloader\/([^\s]+)/i;
 
             thread.load(loadOpts, 'drag');
-
             initLazyload('.warp img');
 
             // appbar no share mask

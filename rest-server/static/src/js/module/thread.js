@@ -125,6 +125,21 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             jq('#loadNext').hide();
         },
 
+        initShare: function(data) {
+            var shareData = {
+                title: data.title,
+                desc: data.content,
+                link: window.location.href,
+                imgUrl: data.picture_urls.length > 0 ? data.picture_urls[0] : 'https://dn-geass-images.qbox.me/Fs0t-OATExfbYJO7EqWrVq1YmfbP',
+            };
+
+            wx.onMenuShareAppMessage(shareData);
+            wx.onMenuShareTimeline(shareData);
+            wx.onMenuShareQQ(shareData);
+            wx.onMenuShareQZone(shareData);
+            wx.onMenuShareWeibo(shareData);
+        },
+
         initTouchRefresh: function (load) {
 
             //var level = /Android 4.0/.test(window.navigator.userAgent) ? -10 : -100;
