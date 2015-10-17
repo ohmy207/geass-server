@@ -383,6 +383,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 var opts = {
                     'id':'operationConfirm',
                     'isMask':true,
+                    'title':'前往微信授权？',
                     'content':'本操作需要获取用户昵称及头像信息，要继续吗？',
                     'okValue':'确定',
                     'cancelValue':'取消',

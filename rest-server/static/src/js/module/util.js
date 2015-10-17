@@ -282,11 +282,12 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                         return true;
                     } else {
                         dialogHtmlArr.push('<div style="min-width:350px;position:fixed;z-index:' + dialogZIndex +';" id="' + dialogId + '"><span class="close"></span>');
-                        dialogHtmlArr.push('<div class="popLayer pSpace" style="width:80%">');
+                        dialogHtmlArr.push('<div class="popLayer pSpace" style="width:90%">');
+                        dialogHtmlArr.push('<p class="editTitle">' + title + '</p>');
                         dialogHtmlArr.push('<p class="editTCon">' + content + '</p>');
                         dialogHtmlArr.push('<div class="editArea">');
-                        dialogHtmlArr.push(btnOk ? '<a href="javascript:;" class="editBtn1 db" title="">' + btnOk + '</a>' : '');
                         dialogHtmlArr.push(btnCancel ? '<a href="javascript:;" class="editBtn2 db" title="">' + btnCancel + '</a>' : '');
+                        dialogHtmlArr.push(btnOk ? '<a href="javascript:;" class="editBtn1 db" title="">' + btnOk + '</a>' : '');
                         dialogHtmlArr.push('</div></div>');
                     }
                 }
