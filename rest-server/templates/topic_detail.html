@@ -301,7 +301,14 @@
       timestamp: {{ sign_package['timestamp'] }},
       nonceStr: "{{ sign_package['nonceStr'] }}",
       signature: "{{ sign_package['signature'] }}",
-      jsApiList: ['previewImage']
+      jsApiList: [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone',
+        'previewImage',
+      ]
     });
   </script>
 

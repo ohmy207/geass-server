@@ -876,7 +876,13 @@ p {
     display: block;
     margin: 5px auto;
     min-width: 200px;
-    max-width: 100%
+    max-width: 100%;
+
+    width: 100%;
+}
+
+.dImg, .bImg {
+    background-color: #ECEEED;
 }
 
 .dTitle {
