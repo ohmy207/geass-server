@@ -76,7 +76,7 @@ class DetailTopicHandler(BaseHandler):
             'proposals': db_user['vote'].format_proposals(uid, proposals),
             'data_list': db_user['approve'].format_opinions(uid, opinions),
 
-            #'comments_count': db_topic['comment'].find({'tid': tid, 'pid': None}).count(),
+            'comments_count': db_topic['comment'].get_comments_count('topics'),
             'vote_total_num': db_user['vote'].find(spec).count(),
 
             'is_lz': topic['author_uid'] == unicode(uid),
@@ -179,7 +179,6 @@ class DetailProposalHandler(BaseHandler):
 
         self._data = {
             'proposal': data,
-            #'comments_count': db_topic['comment'].find({'pid': pid}).count(),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
             'vote_total_num': db_user['vote'].find({'tid': tid}).count(),
         }
@@ -275,7 +274,7 @@ class DetailOpinionHandler(BaseHandler):
 
         self._data = {
             'opinion': data,
-            #'comments_count': db_topic['comment'].find({'tid': tid}).count(),
+            'comments_count': db_topic['comment'].get_comments_count('opinions'),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }
 
