@@ -102,8 +102,11 @@ class Comment(BaseHelper):
     def find_by_id(self, parent, coid):
         return self._coll_map[parent].find_one({'_id': coid})
 
-    def get_comments_count(self, parent):
-        return self._coll_map[parent].find().count()
+    def get_comments_count(self, parent, parent_id):
+        coll = self._coll_map[parent]
+        parent_id = coll.to_objectid(parent_id)
+        spec = {self._field_map[parent]: parent_id}
+        return self._coll_map[parent].find(spec).count()
 
     def format(self, record, uid):
         result = {
