@@ -29,6 +29,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         // render data
         render: function(re) {
+            re.data.colorList = thread.colorList;
             var proposalHtml = template('tmpl_proposal', re.data);
             jq('.warp').prepend(proposalHtml);
 
@@ -90,6 +91,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     isVoted = thisObj.hasClass('voted'),
                     resultNum = parseInt(thisObj.data('num')) + 1,
                     resultClass = "voteCount voted vote",
+                    resultStyle = {'background': thisObj.nextAll('.oppi').css('color')},
                     //likeTips = "+1",
                     hasVoted = true,
                     url = '/user/voting/proposals/' + pId,
@@ -101,6 +103,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     if(isVoted && exports.hasVoted) {
                         resultNum = parseInt(thisObj.data('num')) - 1;
                         resultClass = "voteCount vote";
+                        resultStyle = {'background': ''};
                         //likeTips = "-1";
                         hasVoted = false;
                         ajaxType = 'DELETE';
@@ -113,6 +116,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                 exports.hasVoted = hasVoted;
                                 //jq.UTIL.likeTips(thisObj, likeTips);
                                 thisObj.attr('class', resultClass);
+                                thisObj.css(resultStyle);
                                 thisObj.html(resultNum);
                                 thisObj.data('num', resultNum);
                                 thread.voteTotalNum = voteTotalNum;
@@ -136,11 +140,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                                         var votedObj = jq('.voted');
                                         oldVoteNum = parseInt(votedObj.data('num'));
                                         votedObj.attr('class', 'voteCount vote');
+                                        votedObj.css({'background': ''});
                                         votedObj.html(oldVoteNum - 1);
                                         votedObj.data('num', oldVoteNum - 1);
 
                                         //jq.UTIL.likeTips(thisObj, likeTips);
                                         thisObj.attr('class', resultClass);
+                                        thisObj.css(resultStyle);
                                         thisObj.html(resultNum);
                                         thisObj.data('num', resultNum);
 

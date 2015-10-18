@@ -1070,7 +1070,7 @@ img {
 }
 
 .topicList li {
-    padding: 14px 15px 0 52px;
+    padding: 14px 15px 0 58px;
     position: relative;
     line-height: 20px;
     word-break: break-all;
@@ -1108,7 +1108,25 @@ img {
     height: 30px;
 }
 
-.voteCount, .approveCount {
+.voteCount {
+    display: block;
+    overflow: hidden;
+    width: 36px;
+    height: 27px;
+    line-height: 27px;
+    font-size: 16px;
+    background: #f3f3f3;
+    color: #666;
+    text-align: center;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+
+.approveCount {
     display: block;
     color: #698ebf;
     height: 19px;
@@ -1129,7 +1147,7 @@ img {
     */
 }
 
-.approveCount {
+.topicList .approveCount {
     position: absolute;
     left: 13px;
     top: 47px;
@@ -1156,13 +1174,6 @@ img {
     */
 }
 
-.topicList .voteCount {
-    display: block;
-    position: absolute;
-    left: 13px;
-    top: 47px;
-}
-
 .titleWrap .voteCount {
     display: block;
     position: absolute;
@@ -1173,10 +1184,9 @@ img {
 }
 
 .proposaList .voteCount {
+    position: absolute;
     top: 13px;
-    width: 30px;
-    height: 25px;
-    line-height: 25px;
+    left: 13px;
 }
 
 .titleBottomWrap .voteCount {
@@ -4507,7 +4517,7 @@ i {
     padding-left: 35px;
 }
 
-.person .voteCount {
+.person .approveCount {
     display: inline-block;
     float: left;
     margin-right: 6px;
