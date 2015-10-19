@@ -25,6 +25,8 @@
    #wrap>div{-webkit-transform:translateZ(0);}
   </style>
 
+  <a id="link" href="{% raw authorize_url %}"></a>
+
   <div class="loading" id="loadNext">
    <div class="spinner">
     <span class="circleG" id="rotateG_01"></span>
@@ -45,7 +47,8 @@
 
   <script type="text/javascript">
       window.onload=function(){
-          window.location.replace('{% raw authorize_url %}')
+          //window.location.replace('{% raw authorize_url %}')
+          document.getElementById("link").click();
       }
   </script>
 
