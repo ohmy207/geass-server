@@ -34,7 +34,7 @@ class TopicsHandler(BaseHandler):
         data = self._params
 
         if len(data['title']) <= 0:
-            raise ResponseError(51)
+            raise ResponseError(30)
 
         data['uid'] = self.current_user
         data['ctime'] = datetime.now()
@@ -140,13 +140,13 @@ class ProposalsHandler(BaseHandler):
         is_lz = True if uid == topic['uid'] else False
 
         if not topic:
-            raise ResponseError(50)
+            raise ResponseError(404)
 
         if len(data['content']) <= 0:
-            raise ResponseError(61)
+            raise ResponseError(30)
 
         if len(data['pickeys']) > 8:
-            raise ResponseError(62)
+            raise ResponseError(31)
 
         data['tid'] = tid
         data['uid'] = uid
@@ -233,16 +233,16 @@ class OpinionsHandler(BaseHandler):
         is_lz = True if uid == topic['uid'] else False
 
         if not topic:
-            raise ResponseError(50)
+            raise ResponseError(404)
 
         #if opinion_count > 0:
-        #    raise ResponseError(63)
+        #    raise ResponseError(71)
 
         if len(data['content']) <= 0:
-            raise ResponseError(61)
+            raise ResponseError(30)
 
         if len(data['pickeys']) > 8:
-            raise ResponseError(62)
+            raise ResponseError(31)
 
         data['tid'] = tid
         data['uid'] = uid
@@ -319,14 +319,14 @@ class CommentsHandler(BaseHandler):
         parent_id = self.to_objectid(parent_id)
 
         if len(self._params['content']) <= 0:
-            raise ResponseError(71)
+            raise ResponseError(30)
 
         spec = {'_id': parent_id}
         parent_rd = db_topic['topic'].find_one(spec) if parent == 'topics' else db_topic['opinion'].find_one(spec)
         is_lz=parent_rd['uid'] == uid
 
         if not parent_rd:
-            raise ResponseError(50)
+            raise ResponseError(404)
 
         data = db_topic['comment'].add_comment(
             parent=parent,

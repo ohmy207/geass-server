@@ -120,10 +120,10 @@ class FollowingHandler(BaseHandler):
         tid = self.to_objectid(self._params['tid'])
 
         if not db_topic['topic'].find_one({'_id': tid}):
-            raise ResponseError(50)
+            raise ResponseError(404)
 
         if db_user['follow'].is_topic_followed(uid, tid):
-            raise ResponseError(80)
+            raise ResponseError(51)
 
         db_user['follow'].follow_topic(uid, tid)
 
@@ -133,10 +133,10 @@ class FollowingHandler(BaseHandler):
         tid = self.to_objectid(self._params['tid'])
 
         if not db_topic['topic'].find_one({'_id': tid}):
-            raise ResponseError(50)
+            raise ResponseError(404)
 
         if not db_user['follow'].is_topic_followed(uid, tid):
-            raise ResponseError(80)
+            raise ResponseError(52)
 
         db_user['follow'].unfollow_topic(uid, tid)
 
@@ -182,11 +182,11 @@ class VoteProposalHandler(BaseHandler):
         proposal = db_topic['proposal'].find_one({'_id': pid})
 
         if not proposal:
-            raise ResponseError(60)
+            raise ResponseError(404)
 
         tid = proposal['tid']
         if db_user['vote'].has_user_voted(uid, tid):
-            raise ResponseError(90)
+            raise ResponseError(91)
 
         db_user['vote'].vote_proposal(tid, pid, uid)
 
@@ -197,10 +197,10 @@ class VoteProposalHandler(BaseHandler):
         proposal = db_topic['proposal'].find_one({'_id': pid})
 
         if not proposal:
-            raise ResponseError(60)
+            raise ResponseError(404)
 
         if not db_user['vote'].is_proposal_voted(uid, pid):
-            raise ResponseError(91)
+            raise ResponseError(92)
 
         db_user['vote'].unvote_proposal(proposal['tid'], pid, uid)
 
@@ -210,16 +210,18 @@ class VoteProposalHandler(BaseHandler):
         proposal = db_topic['proposal'].find_one({'_id': pid})
 
         if not proposal:
-            raise ResponseError(60)
+            raise ResponseError(404)
 
         tid = proposal['tid']
-        if not db_user['vote'].has_user_voted(
-                uid, tid) or db_user['vote'].is_proposal_voted(uid, pid):
+        if not db_user['vote'].has_user_voted(uid, tid):
             raise ResponseError(92)
+
+        if db_user['vote'].is_proposal_voted(uid, pid):
+            raise ResponseError(91)
 
         voted_proposal = db_user['vote'].find_one({'tid': tid, 'uid': uid})
         if not voted_proposal:
-            raise ResponseError(93)
+            raise ResponseError(404)
 
         db_user['vote'].unvote_proposal(tid, voted_proposal['pid'], uid)
         db_user['vote'].vote_proposal(tid, pid, uid)
@@ -233,10 +235,10 @@ class ApproveOpinionHandler(BaseHandler):
         oid = self.to_objectid(oid)
 
         if not db_topic['opinion'].find_one({'_id': oid}):
-            raise ResponseError(60)
+            raise ResponseError(404)
 
         if db_user['approve'].is_opinion_approved(uid, oid):
-            raise ResponseError(60)
+            raise ResponseError(72)
 
         db_user['approve'].approve_opinion(uid, oid)
         db_user['notice'].update_notice(oid, 7)
@@ -247,10 +249,10 @@ class ApproveOpinionHandler(BaseHandler):
         oid = self.to_objectid(oid)
 
         if not db_topic['opinion'].find_one({'_id': oid}):
-            raise ResponseError(60)
+            raise ResponseError(404)
 
         if not db_user['approve'].is_opinion_approved(uid, oid):
-            raise ResponseError(60)
+            raise ResponseError(73)
 
         db_user['approve'].unapprove_opinion(uid, oid)
 
@@ -264,9 +266,9 @@ class LikeCommentHandler(BaseHandler):
         comment = db_topic['comment'].find_by_id(parent, coid)
 
         if not comment:
-            raise ResponseError(70)
+            raise ResponseError(404)
 
         if uid in comment['like']:
-            raise ResponseError(75)
+            raise ResponseError(81)
 
         db_topic['comment'].like_comment(parent, coid, uid)
