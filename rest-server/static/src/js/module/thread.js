@@ -203,11 +203,21 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             //}
 
             var replyDialog = function() {
-                var replyTimer = null;
+                var replyTimer = null,
+                    storageKey = replyType + '_content',
                     replyForm = template('tmpl_replyForm', {data:{
                     'toCoId':toCoId,
                     'isAnonymBox':isAnonymBox,
                 }});
+
+                if (!(toCoId && replyType == 'comment')) {
+                    replyTimer = setInterval(function() {
+                        if (jq('textarea[name="content"]').val()) {
+                            localStorage.removeItem(storageKey);
+                            localStorage.setItem(storageKey, jq('textarea[name="content"]').val());
+                        }
+                    }, 1000);
+                }
 
                 // 弹出回复框
                 jq.UTIL.dialog({
@@ -219,7 +229,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     // 弹出后执行
                     callback:function() {
 
-                        var obj = {replyTimer: replyTimer, url: url, toCoId: toCoId, author: author, replyType: replyType};
+                        var obj = {storageKey: storageKey, replyTimer: replyTimer, url: url, toCoId: toCoId, author: author, replyType: replyType};
                         exports.initReplyEvents(obj);
 
                     },
@@ -279,7 +289,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         },
 
         initReplyEvents: function(obj){
-            //var storageKey = obj.sId + 'reply_content';
+            var storageKey = obj.storageKey;
 
             jq('#replyForm').attr('action', '/api/v1' + obj.url);
 
@@ -287,7 +297,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
             } else {
                 // 信息恢复
-                //jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
+                jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
             }
 
             var isSendBtnClicked = false;
@@ -300,7 +310,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         var status = parseInt(re.code);
                         if (status === 0) {
                             if (re.data.author_uid) {
-                                //localStorage.removeItem(storageKey);
+                                if (!(obj.toCoId && obj.replyType == 'comment')) {
+                                    localStorage.removeItem(storageKey);
+                                }
                                 var allLabelBox = jq('#allLabelBox'),
                                     //replyList = jq('#replyList'),
                                     replyData = {data_list:[re.data]};
@@ -335,7 +347,6 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                 }
 
                             }
-                            // initLazyload('.warp img');
 
                             clearInterval(obj.replyTimer);
 
@@ -358,15 +369,6 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 jq.UTIL.ajaxForm('replyForm', opt, true);
                 return false;
             });
-
-            // 输入框文字计算
-            obj.replyTimer = setInterval(function() {
-                //jq.UTIL.strLenCalc(jq('textarea[name="content"]')[0], 'pText', 280);
-                if (jq('textarea[name="content"]').val()) {
-                    //localStorage.removeItem(storageKey);
-                    //localStorage.setItem(storageKey, jq('textarea[name="content"]').val());
-                }
-            }, 1000);
 
             //exports.isNoShowToTop = true;
             // 隐藏底部导航和向上

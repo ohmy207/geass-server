@@ -20,9 +20,9 @@ class TopicsHandler(BaseHandler):
     _post_params = {
         'need': [
             ('title', basestring),
-            ('content', basestring),
         ],
         'option': [
+            ('content', basestring, ''),
             ('ispriv', bool, False),
             ('isanon', bool, False),
             ('pickeys', list, []),

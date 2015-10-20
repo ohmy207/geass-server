@@ -228,6 +228,19 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
             exports.contentHeight = jq('.sendCon').height();
 
+            var storageTitleKey = "topic_title",
+                storageConKey = "topic_content";
+
+            jq('#title').val(localStorage.getItem(storageTitleKey));
+            jq('#content').val(localStorage.getItem(storageConKey));
+
+            timer = setInterval(function() {
+                localStorage.removeItem(storageTitleKey);
+                localStorage.setItem(storageTitleKey, jq('#title').val());
+                localStorage.removeItem(storageConKey);
+                localStorage.setItem(storageConKey, jq('#content').val());
+            }, 1000);
+
             // 发送
             var isSubmitButtonClicked = false;
             jq('#submitButton').bind('click', function() {
@@ -243,38 +256,15 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                     success:function(re) {
                         var status = parseInt(re.code);
                         if (status == 0) {
-                            //clearInterval(timer);
-                            //localStorage.removeItem(storageKey);
-                            //if(re.data.subscribeTip && isWX)
-                            if(false){
-                                jq.UTIL.dialog({
-                                    content: '发表成功。是否接收回复提醒？',
-                                    okValue: '确定',
-                                    cancelValue: '取消',
-                                    isMask: true,
-                                    ok: function (){
-                                        pgvSendClick({hottag:'wx.guide.follow.yes'});
-                                        jq.UTIL.reload('http://mp.weixin.qq.com/s?__biz=MzA5MTEzMDUyMw==&mid=200420371&idx=1&sn=ff6c7912111f04fa412615094128551c');
-                                    },
-                                    cancel: function(){
-                                       pgvSendClick({hottag:'wx.guide.follow.no'});
-                                       jq.UTIL.reload(re.jumpURL);
-                                    }
-                                });
-                                pgvSendClick({hottag:'wx.guide.follow.show'});
-                            }else{
-                                jq.UTIL.reload(re.jumpURL);
-                            }
-                            
+                            clearInterval(timer);
+                            localStorage.removeItem(storageTitleKey);
+                            localStorage.removeItem(storageConKey);
+
+                            jq.UTIL.reload(re.jumpURL);
                             return false;
                         } else {
-                            if (status == 34428){ //请先设置性别  re.message.indexOf('性别') != -1)
-                               exports.userGenderPopWin();
-                            }
                             isSubmitButtonClicked = false;
-                            if (status != 34428){
-                                jq.UTIL.dialog({content: re.msg, autoClose:true});
-                            }
+                            jq.UTIL.dialog({content: re.msg, autoClose:true});
                         }
                     },
                     error:function(re) {
@@ -286,12 +276,6 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 jq.UTIL.ajaxForm('newthread', opt, true);
                 return false;
             });
-
-            //jq('#content').on('focus', function() {
-            //    jq('.bNav').hide();
-            //}).on('blur', function() {
-            //    jq('.bNav').show();
-            //});
 
             exports.initUpload();
             exports.initModal();
@@ -329,14 +313,14 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                 return false;
             }
             if (titleLen > 180) {
-                jq.UTIL.dialog({content:'话题最好不要超过60字哦，复杂话题可以在描述中说明', autoClose:true});
+                jq.UTIL.dialog({content:'话题最好不要超过60字，复杂话题可以在描述中说明', autoClose:true});
                 return false;
             }
 
             var content = jq('#content').val();
             var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-            if (contentLen > 30000) {
-                jq.UTIL.dialog({content:'描述最好不要超过10000字哦', autoClose:true});
+            if (contentLen > 3072) {
+                jq.UTIL.dialog({content:'描述最好不要超过1024字', autoClose:true});
                 return false;
             }
 
