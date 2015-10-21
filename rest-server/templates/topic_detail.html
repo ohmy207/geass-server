@@ -106,6 +106,15 @@
       <li id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" uId="<%=proposals[i].author_uid%>" author="<%= proposals[i].author %>">
 
           <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>&pos=<%=startPos+i%>" >
+              <div class="opWrap">
+                  <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>" <% if (proposals[i].is_voted) { %>style="background:<%= colorList[(startPos+i)%10] %>"<%  } %> ><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
+
+                  <div class="opoutbar fl">
+                      <div class="opbar" ></div>
+                  </div>
+                  <div class="oppi"></div>
+              </div>
+
               <%if (proposals[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img data-src="<%= proposals[i].picture_urls[0]['thumb'] %>" >
@@ -119,15 +128,6 @@
                   <div class="listContent ">
                       <%== proposals[i].content %>
                   </div>
-              </div>
-
-              <div class="opWrap">
-                  <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>" <% if (proposals[i].is_voted) { %>style="background:<%= colorList[(startPos+i)%10] %>"<%  } %> ><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
-
-                  <div class="opoutbar fl">
-                      <div class="opbar" ></div>
-                  </div>
-                  <div class="oppi f14"></div>
               </div>
 
           </div>

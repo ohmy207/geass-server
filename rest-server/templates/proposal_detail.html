@@ -30,12 +30,14 @@
 
      <div class="titleWrap proposal">
 
-      <div class="opWrap">
-          <a class="voteCount <% if (proposal.is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposal.pid %>" data-num="<%= proposal.vote_num %>" <% if (proposal.is_voted) { %>style="background:<%= colorList[{{state['pos']}}%10] %>"<%  } %> ><% if (proposal.vote_num) { %> <%= proposal.vote_num %> <%  } else { %>0<%  } %></a>
-          <div class="opoutbar fl">
-              <div class="opbar" ></div>
-          </div>
-          <div class="oppi f14"></div>
+      <div class="voteWrap">
+       <div class="opWrap">
+           <a class="voteCount <% if (proposal.is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposal.pid %>" data-num="<%= proposal.vote_num %>" <% if (proposal.is_voted) { %>style="background:<%= colorList[{{state['pos']}}%10] %>"<%  } %> ><% if (proposal.vote_num) { %> <%= proposal.vote_num %> <%  } else { %>0<%  } %></a>
+           <div class="opoutbar fl">
+               <div class="opbar" ></div>
+           </div>
+           <div class="oppi f14"></div>
+       </div>
       </div>
 
      </div>

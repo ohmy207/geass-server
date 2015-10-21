@@ -258,13 +258,13 @@ img {
 
 .brBig {
     /*
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px
-    */
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px
+    */
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px
 }
 
 .tapBg {
@@ -774,7 +774,7 @@ img {
 }
 
 .proposal.titleWrap {
-    padding: 10px 15px 20px 52px;
+    padding: 13px 15px 20px;
 }
 
 .topic .titleWrap {
@@ -789,7 +789,11 @@ img {
     word-break: break-all;
 }
 
-.titleWrap .personImgDate {
+.titleWrap .voteWrap {
+    padding-left: 43px;
+}
+
+.titleWrap .personImgDate, .titleWrap .voteWrap {
     padding-bottom: 10px;
     border-bottom: 1px solid #e9e9e9
 }
@@ -1099,28 +1103,29 @@ img {
 .topicList .proposalWrap {
     padding-top: 1px;
     padding-bottom: 15px;
+    margin-top: 5px;
 }
 
 .topicList.opinion .sImg {
     top: 15px;
     left: 13px;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
 }
 
 .voteCount {
     display: block;
     overflow: hidden;
     width: 36px;
-    height: 27px;
-    line-height: 27px;
+    height: 36px;
+    line-height: 36px;
     font-size: 16px;
     background: #f3f3f3;
     color: #666;
     text-align: center;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
     -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3);
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3);
     box-shadow: 0 1px 1px rgba(0,0,0,0.3);
@@ -1149,8 +1154,8 @@ img {
 
 .topicList .approveCount {
     position: absolute;
-    left: 13px;
-    top: 47px;
+    left: 14px;
+    top: 50px;
 
     font-size: 12px;
     line-height: 15px;
@@ -1178,9 +1183,7 @@ img {
     display: block;
     position: absolute;
     left: 13px;
-    top: 53px;
-    line-height: 25px;
-    height: 25px;
+    top: 50px;
 }
 
 .proposaList .voteCount {
@@ -1217,8 +1220,9 @@ img {
 }
 
 .proposaList .proposalWrap .imgGallary {
-    width: 48px;
-    height: 48px;
+    width: 70px;
+    height: 70px;
+    margin-top: -30px;
 }
 
 .imgGallary img {
@@ -1245,9 +1249,9 @@ img {
 }
 
 .textContainer {
-    height: 80px;
+    height: 82px;
     overflow: hidden;
-    max-height: 80px;
+    max-height: 82px;
 }
 
 .proposaList .imgContainer {
@@ -1271,7 +1275,7 @@ img {
     margin-bottom: 2px;
     padding-top: 2px;
     font-size: 15px;
-    line-height: 18px;
+    line-height: 20px;
     word-break: break-all;
     color: gray;
     -webkit-line-clamp: 3;
@@ -1625,7 +1629,7 @@ li {
 
 .detailBox .topicList .sImg {
     top: 10px;
-    left: 13px;
+    left: 11px;
 }
 
 .time em,.source
@@ -4513,6 +4517,10 @@ i {
     -webkit-line-clamp: 2;
 }
 
+.proposaList .listContent {
+    padding-top: 5px;
+}
+
 .person .votes.listContent {
     padding-left: 35px;
 }
@@ -4755,28 +4763,32 @@ i {
 }
 
 .opWrap {
-    height: 20px;
-    margin-top: 5px;
-    padding-right: 60px;
+    height: 30px;
+    margin: 6px 0 0;
+    width: 30%;
 }
 
 .opoutbar {
     overflow: hidden;
     position: relative;
     width: 100%;
+    background-color: #f3f3f3;
+    /*
     background-color: #F7F7F7;
+     */
 }
 
 .opbar {
     float: left;
-    height: 20px;
+    height: 5px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
 }
 
 .oppi {
-    position: absolute;
-    right: 15px;
-    height: 20px;
-    line-height: 20px;
+    line-height: 30px;
+    font-size: 13px;
 }
 
 .notiNumber {
