@@ -36,7 +36,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var urlMap = {
                 'publish_opinions': 'opinions',
                 'publish_topics': 'topics',
-                'following': 'following/topics',
+                'following': 'following',
             };
 
             thread.load({

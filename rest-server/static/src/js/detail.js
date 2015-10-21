@@ -233,8 +233,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     'noMsg' : true
                 };
 
-                var url = '/user/following/topics',
-                    data = {'tid':tId};
+                var url = '/user/following/topics/' + tId,
+                    data = {};
 
                 var callback = function() {
                     if (isFollowed) {

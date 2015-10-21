@@ -45,7 +45,7 @@ class PersonalHandler(BaseHandler):
             'user'].get_user_opinions(uid=uid, skip=0, limit=3)
 
 
-class PublishingHandler(BaseHandler):
+class UserSourceHandler(BaseHandler):
 
     _get_params = {
         'need': [
@@ -58,66 +58,40 @@ class PublishingHandler(BaseHandler):
 
     @authenticated
     def GET(self, route):
-        uid = self.current_user
         self._data = {
             'next_start': self._skip + self._limit,
         }
 
-        self.route(route, uid)
+        self.route(route)
 
-    def do_topics(self, uid):
+    def do_topics(self):
         self._data['data_list'] = db_user['user'].get_user_topics(
-            uid=uid,
+            uid=self.current_user,
             skip=self._skip,
             limit=self._limit,
         )
 
-    def do_opinions(self, uid):
+    def do_opinions(self):
         self._data['data_list'] = db_user['user'].get_user_opinions(
-            uid=uid,
+            uid=self.current_user,
             skip=self._skip,
             limit=self._limit,
         )
 
-
-class FollowingHandler(BaseHandler):
-
-    _post_params = {
-        'need': [
-            ('tid', basestring),
-        ],
-        'option': [
-        ]
-    }
-
-    _get_params = {
-        'need': [
-        ],
-        'option': [
-            ('skip', int, 0),
-            ('limit', int, 10),
-        ]
-    }
-
-    _delete_params = _post_params
-
-    @authenticated
-    def GET(self):
-
-        self._data = {
-            'next_start': self._skip + self._limit,
-        }
-
+    def do_following(self):
         self._data['data_list'] = db_user['follow'].get_follow_topics(
             uid=self.current_user,
             skip=self._skip,
             limit=self._limit
         )
 
+
+class FollowTopicHandler(BaseHandler):
+
     @authenticated
-    def POST(self):
+    def POST(self, tid):
         uid = self.current_user
-        tid = self.to_objectid(self._params['tid'])
+        tid = self.to_objectid(tid)
 
         if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
@@ -128,9 +102,9 @@ class FollowingHandler(BaseHandler):
         db_user['follow'].follow_topic(uid, tid)
 
     @authenticated
-    def DELETE(self):
+    def DELETE(self, tid):
         uid = self.current_user
-        tid = self.to_objectid(self._params['tid'])
+        tid = self.to_objectid(tid)
 
         if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
