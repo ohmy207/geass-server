@@ -1254,18 +1254,10 @@ img {
     max-height: 82px;
 }
 
-.proposaList .imgContainer {
-    height: 48px!important;
-    max-height: 48px!important;
-}
-
 .proposaList .textContainer {
-    height: auto!important;
-    min-height: 32px;
-    max-height: 48px!important;
-    /*
-    height: 48px!important;
-     */
+    height: auto;
+    min-height: 40px;
+    max-height: 58px;
 }
 
 .listContent {

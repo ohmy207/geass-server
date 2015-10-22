@@ -244,7 +244,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
                        // 文本框焦点
                        jq('#replyForm .sInput').blur();
-                   }
+                    }
                 });
             }
 
