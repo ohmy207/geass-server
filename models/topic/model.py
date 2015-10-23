@@ -32,6 +32,7 @@ class Proposal(Model):
 
         #'isanon':           (bool, False)   ,
 
+        'title':            (basestring, ''),
         'content':          (basestring, ''),
 
         'pickeys':          (list, [])      ,

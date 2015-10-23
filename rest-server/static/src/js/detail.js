@@ -270,7 +270,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     isVoted = thisObj.hasClass('voted'),
                     resultNum = parseInt(thisObj.data('num')) + 1,
                     resultClass = "voteCount voted vote",
-                    resultStyle = {'background': thisObj.nextAll('.oppi').css('color')},
+                    resultStyle = {'background': thisObj.parent('.opWrap').find('.oppi').css('color')},
                     //likeTips = "+1",
                     hasVoted = true,
                     url = '/user/voting/proposals/' + pId,

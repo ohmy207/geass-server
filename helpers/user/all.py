@@ -42,7 +42,7 @@ class User(UserHelper):
                 {'_id': self.to_objectid(op['tid'])},
                 {'title': 1}
             )
-            op['title'] = topic['title']
+            op['topic_title'] = topic['title']
 
         return opinions
 
@@ -193,7 +193,7 @@ class Notice(BaseHelper, user_model.Notice):
                 continue
 
             if action not in [1, 2, 3, 4]:
-                result['title'] = self._topic.find_one(
+                result['topic_title'] = self._topic.find_one(
                     {'_id': self.to_objectid(result['tid'])}, {'title': 1})['title']
 
             result['action'] = action

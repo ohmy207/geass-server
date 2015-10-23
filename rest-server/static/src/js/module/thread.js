@@ -208,6 +208,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     replyForm = template('tmpl_replyForm', {data:{
                     'toCoId':toCoId,
                     'isAnonymBox':isAnonymBox,
+                    'replyType': replyType
                 }});
 
                 if (!(toCoId && replyType == 'comment')) {
@@ -255,22 +256,32 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         },
 
         checkReplyForm: function(replyType) {
-            var content = jq('textarea[name="content"]').val();
-            var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
+            var content = replyType == 'proposal' ? jq('textarea[name="title"]').val() : jq('textarea[name="content"]').val(),
+                contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
 
-            if (replyType === 'opinion') {
-                if (uploadImg.isBusy) {
-                    jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
+            if (uploadImg.isBusy && (replyType == 'proposal' || replyType == 'opinion')) {
+                jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
+                return false;
+            }
+
+            if (replyType == 'proposal') {
+                if (contentLen <= 0) {
+                    jq.UTIL.dialog({content:'选项不能为空', autoClose:true});
                     return false;
                 }
 
+                if (contentLen > 180) {
+                    jq.UTIL.dialog({content:'选项最好不要超过60字', autoClose:true});
+                    return false;
+                }
+            } else if (replyType == 'opinion') {
                 if (contentLen <= 0) {
                     jq.UTIL.dialog({content:'看法不能为空', autoClose:true});
                     return false;
                 }
 
                 if (contentLen > 60000) {
-                    jq.UTIL.dialog({content:'看法最好不要超过20000字哦', autoClose:true});
+                    jq.UTIL.dialog({content:'看法最好不要超过20000字', autoClose:true});
                     return false;
                 }
             } else if (replyType === 'comment') {
@@ -280,7 +291,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 }
 
                 if (contentLen > 2100) {
-                    jq.UTIL.dialog({content:'评论不要超过700字哦', autoClose:true});
+                    jq.UTIL.dialog({content:'评论最好不要超过700字', autoClose:true});
                     return false;
                 }
             }

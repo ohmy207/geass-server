@@ -92,9 +92,10 @@ class ProposalsHandler(BaseHandler):
 
     _post_params = {
         'need': [
-            ('content', basestring),
+            ('title', basestring),
         ],
         'option': [
+            ('content', basestring, ''),
             ('pickeys', list, []),
             #('isanon', bool, False),
         ]
@@ -142,7 +143,7 @@ class ProposalsHandler(BaseHandler):
         if not topic:
             raise ResponseError(404)
 
-        if len(data['content']) <= 0:
+        if len(data['title']) <= 0:
             raise ResponseError(30)
 
         if len(data['pickeys']) > 8:
@@ -175,7 +176,7 @@ class DetailProposalHandler(BaseHandler):
 
         tid = self.to_objectid(data['tid'])
         data['is_voted'] = db_user['vote'].is_proposal_voted(uid, pid)
-        data['title'] = db_topic['topic'].find_one({'_id': tid}, {'title': 1})['title']
+        data['topic_title'] = db_topic['topic'].find_one({'_id': tid}, {'title': 1})['title']
 
         self._data = {
             'proposal': data,
@@ -270,7 +271,7 @@ class DetailOpinionHandler(BaseHandler):
             raise ResponseError(404)
 
         data['is_approved'] = db_user['approve'].is_opinion_approved(uid, oid)
-        data['title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
+        data['topic_title'] = db_topic['topic'].find_one({'_id': self.to_objectid(data['tid'])}, {'title': 1})['title']
 
         self._data = {
             'opinion': data,

@@ -44,6 +44,7 @@ class Proposal(BaseHelper, topic_model.Proposal):
         result = {
             'tid': record['tid'],
             'pid': record['_id'],
+            'title': record['title'],
             'author_uid': record['uid'],
             'vote_num': record['vnum'],
             'is_lz': record['islz'],
