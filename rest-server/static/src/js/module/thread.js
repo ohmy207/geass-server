@@ -175,7 +175,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 currPercent = voteTotalNum == 0 ? "0.00" : (parseInt(currNum)/voteTotalNum*100).toFixed(2);
                 //currPercent = (parseInt(currNum)/voteTotalNum*100 + 1.0/(position+3)*100).toFixed(2);
 
-            thisObj.children('.oppi').css("color",  exports.colorList[position % 10]).html(currPercent + '%');
+            thisObj.find('.oppi').css("color",  exports.colorList[position % 10]).html(currPercent + '%');
             opbar.css("background-color", exports.colorList[position % 10]);
             if (parseInt(opbar.width()*100/opbar.offsetParent().width()) != parseInt(currPercent)) {
                 opbar.delay(delayTime).animate({width: currPercent + '%'});

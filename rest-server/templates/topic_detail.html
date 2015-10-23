@@ -103,18 +103,10 @@
       <% for (var i=0;i<proposals.length;i++) { %>
 
       <% if (!isDOMExist('p_' + proposals[i].tid + '_' + proposals[i].pid)) { %>
-      <li id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" uId="<%=proposals[i].author_uid%>" author="<%= proposals[i].author %>">
+      <li class="opWrap" id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" uId="<%=proposals[i].author_uid%>" author="<%= proposals[i].author %>">
+          <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>" <% if (proposals[i].is_voted) { %>style="background:<%= colorList[(startPos+i)%10] %>"<%  } %> ><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
 
           <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>&pos=<%=startPos+i%>" >
-              <div class="opWrap">
-                  <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>" <% if (proposals[i].is_voted) { %>style="background:<%= colorList[(startPos+i)%10] %>"<%  } %> ><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
-
-                  <div class="opoutbar fl">
-                      <div class="opbar" ></div>
-                  </div>
-                  <div class="oppi"></div>
-              </div>
-
               <%if (proposals[i].picture_urls.length > 0) { %>
                   <div class="imgGallary">
                       <img data-src="<%= proposals[i].picture_urls[0]['thumb'] %>" >
@@ -125,8 +117,24 @@
               <% } %>
 
               <div class="textContainer">
+                  <h3 class="text">
+                      <%= proposals[i].title %>
+                  </h3>
+
                   <div class="listContent ">
                       <%== proposals[i].content %>
+                  </div>
+              </div>
+
+              <div class="info">
+                  <div>
+                      <span class="opoutbar fl">
+                          <div class="opbar" ></div>
+                      </span>
+                      <span class="oppi"></span>
+                  </div>
+                  <div class="flRight">
+                      <span class="time"><%= proposals[i].f_created_time %></span>
                   </div>
               </div>
 
@@ -198,6 +206,10 @@
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
+        <div class="sendTit pr">
+            <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的选项"></textarea> 
+        </div>
+
         <div class="sendRCon">
             <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的看法..."></textarea>
         </div>

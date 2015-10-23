@@ -6,10 +6,11 @@ html {
     background: #f8f8f8;
     background: #ebebeb;
     background: #f3f3f3;
+    font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;
     */
     width: 100%;
     min-height: 100%;
-    font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    font-family: -apple-system-font,"Helvetica Neue",Helvetica,STHeiTi,sans-serif;
     background: #fafafa;
     -webkit-text-size-adjust: none;
     -ms-text-size-adjust: 100%
@@ -18,7 +19,7 @@ html {
 body,ul,li,dl,dt,dd,h1,h2,h3,h4,p,a,img {
     margin: 0;
     padding: 0;
-    font-family: "Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    font-family: -apple-system-font,"Helvetica Neue",Helvetica,STHeiTi,sans-serif;
     font-size: 14px
 }
 
@@ -1084,6 +1085,10 @@ img {
      */
 }
 
+.proposaList li {
+    padding: 14px 15px 0 55px;
+}
+
 .topicList.opinion li, .topicList.proposal li {
     /*
     z-index: 1;
@@ -1101,9 +1106,8 @@ img {
 }
 
 .topicList .proposalWrap {
-    padding-top: 1px;
-    padding-bottom: 15px;
-    margin-top: 5px;
+    padding-top: 4px;
+    padding-bottom: 10px;
 }
 
 .topicList.opinion .sImg {
@@ -1188,8 +1192,8 @@ img {
 
 .proposaList .voteCount {
     position: absolute;
-    top: 13px;
-    left: 13px;
+    top: 10px;
+    left: 10px;
 }
 
 .titleBottomWrap .voteCount {
@@ -1220,9 +1224,9 @@ img {
 }
 
 .proposaList .proposalWrap .imgGallary {
-    width: 70px;
-    height: 70px;
-    margin-top: -30px;
+    width: 60px;
+    height: 60px;
+    margin-left: 8px;
 }
 
 .imgGallary img {
@@ -1255,10 +1259,18 @@ img {
 }
 
 .proposaList .textContainer {
-    height: auto;
+    height: 62px;
     min-height: 40px;
-    max-height: 58px;
+    max-height: 62px;
 }
+
+/*
+.proposaList .imgContainer {
+    height: 62px;
+    min-height: 40px;
+    max-height: 62px;
+}
+*/
 
 .listContent {
     display: -webkit-box;
@@ -1284,6 +1296,10 @@ img {
     font-size: 12px;
     line-height: 16px;
     color: #a6a6a6;
+}
+
+.proposalWrap .info {
+    margin-top: 7px;
 }
 
 .info .flRight {
@@ -1315,8 +1331,8 @@ h3.text {
     -webkit-box-orient: vertical;
     position: relative;
     margin-bottom: 2px;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 500;
     line-height: 20px;
     word-break: break-all;
     color: #454545;
@@ -3952,12 +3968,15 @@ solid #e9e9e9;
 }
 
 .sendTit {
-    height: 22px
+    height: 22px;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .sendCon {
     height: 160px;
+    /*
     border-top: 1px solid #e5e5e5;
+     */
 }
 
 @media screen and (min-height: 500px) and (max-height: 640px) {
@@ -4423,6 +4442,11 @@ i {
     font-weight: 500;
 }
 
+.proposal h3.text {
+    font-size: 17px;
+    font-weight: 500;
+}
+
 .person .notice h3.text {
     font: inherit;
     font-size: 17px;
@@ -4510,7 +4534,9 @@ i {
 }
 
 .proposaList .listContent {
+    /*
     padding-top: 5px;
+    */
 }
 
 .person .votes.listContent {
@@ -4755,19 +4781,22 @@ i {
 }
 
 .opWrap {
+    /*
     height: 30px;
     margin: 6px 0 0;
     width: 30%;
+    */
 }
 
 .opoutbar {
     overflow: hidden;
     position: relative;
-    width: 100%;
+    width: 30%;
     background-color: #f3f3f3;
     /*
     background-color: #F7F7F7;
      */
+    margin-top: 6px;
 }
 
 .opbar {
@@ -4779,8 +4808,11 @@ i {
 }
 
 .oppi {
+    /*
     line-height: 30px;
     font-size: 13px;
+    */
+    margin-left: 10px;
 }
 
 .notiNumber {
