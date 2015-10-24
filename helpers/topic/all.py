@@ -55,6 +55,9 @@ class Proposal(BaseHelper, topic_model.Proposal):
         result['f_created_time'] = Opinion._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
 
+        simple_user = Proposal._user.get_simple_user(record['uid'])
+        result['author'] = simple_user['nickname']
+
         return result
 
 

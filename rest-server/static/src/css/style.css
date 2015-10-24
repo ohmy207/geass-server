@@ -1114,7 +1114,7 @@ img {
 
 .topicList .proposalWrap {
     padding-top: 4px;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 }
 
 .topicList.opinion .sImg {
@@ -1304,7 +1304,7 @@ img {
 }
 
 .proposalWrap .info {
-    margin-top: 7px;
+    margin-top: 5px;
 }
 
 .info .flRight {
