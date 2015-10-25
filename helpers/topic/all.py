@@ -45,18 +45,14 @@ class Proposal(BaseHelper, topic_model.Proposal):
             'tid': record['tid'],
             'pid': record['_id'],
             'title': record['title'],
-            'author_uid': record['uid'],
             'vote_num': record['vnum'],
-            'is_lz': record['islz'],
             'is_voted': False,
         }
 
         result['content'] = Opinion.xhtml_escape(record['content'])
         result['f_created_time'] = Opinion._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
-
-        simple_user = Proposal._user.get_simple_user(record['uid'])
-        result['author'] = simple_user['nickname']
+        result['author_count'] = len(record['uids'])
 
         return result
 

@@ -44,7 +44,7 @@
       <% for (var i in replyList) { %>
 
       <% if (!isDOMExist('p_' + replyList[i].tid + '_' + replyList[i].pid)) { %>
-      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>" uId="<%=replyList[i].author_uid%>" author="<%= replyList[i].author %>">
+      <li id="p_<%=replyList[i].tid%>_<%=replyList[i].pid%>" author="<%= replyList[i].author %>">
 
           <a class="voteCount <% if (replyList[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= replyList[i].pid %>" data-num="<%= replyList[i].vote_num %>"><% if (replyList[i].vote_num) { %> <%= replyList[i].vote_num %> <%  } else { %>0<%  } %></a>
 

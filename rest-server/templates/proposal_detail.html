@@ -58,7 +58,7 @@
       </div>
 
       <div class="detailTime"> 
-       <span class="time fr f15">编辑于 <%= proposal.f_created_time %></span>
+       <span class="authorList fr">由<a href="javascript:;"><%= proposal.authors.join('、') %></a><%if (proposal.author_count > 2) { %>…等 <%= proposal.author_count %> 人<% } %>编辑</span>
       </div>
      </div>
     </div>
@@ -72,7 +72,7 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="/comment_list?tid={{ state['tid'] }}&pid={{ state['pid'] }}" class="item cf iconReply"></a>
+   <a href="" class="item cf iconEdit2">修改</a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>
 

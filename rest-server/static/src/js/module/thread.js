@@ -320,43 +320,40 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     success:function(re) {
                         var status = parseInt(re.code);
                         if (status === 0) {
-                            if (re.data.author_uid) {
-                                if (!(obj.toCoId && obj.replyType == 'comment')) {
-                                    localStorage.removeItem(storageKey);
-                                }
-                                var allLabelBox = jq('#allLabelBox'),
-                                    //replyList = jq('#replyList'),
-                                    replyData = {data_list:[re.data]};
+                            if (!(obj.toCoId && obj.replyType == 'comment')) {
+                                localStorage.removeItem(storageKey);
+                            }
+                            var allLabelBox = jq('#allLabelBox'),
+                                //replyList = jq('#replyList'),
+                                replyData = {data_list:[re.data]};
 
-                                jq('.emptyList').hide()
+                            jq('.emptyList').hide()
 
-                                if (obj.replyType === 'opinion') {
-                                    var listHtml = template('tmpl_opinions', replyData);
-                                    if(jq.trim(listHtml)!==''){
-                                        allLabelBox.show();
-                                        jq('#allReplyList').append(listHtml);
-                                    }
-
-                                } else if (obj.replyType === 'proposal') {
-
-                                    var listHtml = template('tmpl_proposals', replyData);
-                                    if(jq.trim(listHtml)!==''){
-                                        //jq('#hotLabelBox').show();
-                                        jq('#hotReplyList').append(listHtml);
-                                    }
-
-                                } else if (obj.replyType === 'comment') {
-                                    var listHtml = template('tmpl_reply', replyData);
+                            if (obj.replyType === 'opinion') {
+                                var listHtml = template('tmpl_opinions', replyData);
+                                if(jq.trim(listHtml)!==''){
                                     allLabelBox.show();
-                                    //allLabelBox.next('.topicList').show();
-
-                                    if (true && !exports.desc) {
-                                        jq('#allReplyList').append(listHtml);
-                                    } else {
-                                        jq('#allReplyList').prepend(listHtml);
-                                    }
+                                    jq('#allReplyList').append(listHtml);
                                 }
 
+                            } else if (obj.replyType === 'proposal') {
+
+                                var listHtml = template('tmpl_proposals', replyData);
+                                if(jq.trim(listHtml)!==''){
+                                    //jq('#hotLabelBox').show();
+                                    jq('#hotReplyList').append(listHtml);
+                                }
+
+                            } else if (obj.replyType === 'comment') {
+                                var listHtml = template('tmpl_reply', replyData);
+                                allLabelBox.show();
+                                //allLabelBox.next('.topicList').show();
+
+                                if (true && !exports.desc) {
+                                    jq('#allReplyList').append(listHtml);
+                                } else {
+                                    jq('#allReplyList').prepend(listHtml);
+                                }
                             }
 
                             clearInterval(obj.replyTimer);

@@ -134,13 +134,9 @@ class ProposalsHandler(BaseHandler):
     @authenticated
     def POST(self, tid):
         data = self._params
-
         tid = self.to_objectid(tid)
-        uid = self.current_user
-        topic = db_topic['topic'].find_one({'_id': tid})
-        is_lz = True if uid == topic['uid'] else False
 
-        if not topic:
+        if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
 
         if len(data['title']) <= 0:
@@ -150,15 +146,12 @@ class ProposalsHandler(BaseHandler):
             raise ResponseError(31)
 
         data['tid'] = tid
-        data['uid'] = uid
+        data['uids'] = [self.current_user]
         data['ctime'] = datetime.now()
-        data['islz'] = is_lz
-        #if is_lz:
-        #    data['isanon'] = topic['isanon']
 
         pid = db_topic['proposal'].create(data)
-        db_user['notice'].update_notice(tid, 1)
         data['_id'] = pid
+        #db_user['notice'].update_notice(tid, 1)
 
         self._data = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(data))
 
@@ -170,17 +163,20 @@ class DetailProposalHandler(BaseHandler):
         uid = self.current_user
         pid = self.to_objectid(pid)
 
-        data = db_topic['proposal'].get_one({'_id': pid})
-        if not data:
+        record = db_topic['proposal'].find_one({'_id': pid})
+        if not record:
             raise ResponseError(404)
 
-        tid = self.to_objectid(data['tid'])
-        data['is_voted'] = db_user['vote'].is_proposal_voted(uid, pid)
-        data['topic_title'] = db_topic['topic'].find_one({'_id': tid}, {'title': 1})['title']
+        tid = record['tid']
+        proposal = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(record))
+        proposal['is_voted'] = db_user['vote'].is_proposal_voted(uid, pid)
+        proposal['topic_title'] = db_topic['topic'].find_one({'_id': tid}, {'title': 1})['title']
+        proposal['authors'] = [
+            db_user['user'].get_simple_user(u)['nickname'] for u in record['uids'][-2:]]
 
         self._data = {
-            'proposal': data,
-            'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
+            'proposal': proposal,
+            'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'vote_total_num': db_user['vote'].find({'tid': tid}).count(),
         }
 

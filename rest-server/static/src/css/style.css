@@ -215,6 +215,10 @@ img {
     color: #222
 }
 
+.cc {
+    color: #CCCCCC;
+}
+
 .pr {
     position: relative
 }
@@ -1321,6 +1325,7 @@ img {
     text-overflow: ellipsis;
 }
 
+/*
 .info span .time {
     display: block;
     float: left;
@@ -1329,6 +1334,7 @@ img {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+*/
 
 h3.text {
     display: -webkit-box;
@@ -4564,23 +4570,27 @@ i {
     height: 25px;
 }
 
-.person .authorList {
+.authorList {
     display: -webkit-box;
     overflow: hidden;
-    margin-bottom: 6px;
-    font-size: 15px;
-    line-height: 20px;
     word-break: break-all;
     color: gray;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
+
+    font-size: 15px;
+    line-height: 20px;
     /*
     padding-top: 2px;
     -webkit-line-clamp: 3;
     */
 }
 
-.person .authorList a {
+.person .authorList {
+    margin-bottom: 6px;
+}
+
+.authorList a {
     color: #69A6BF;
     font-size: 15px;
 }
@@ -4684,13 +4694,24 @@ i {
 }
 
 .iconReply2:before {
-    color: #CCCCCC;
     content: "\e803";
 }
 
 .iconWrite:before {
-    color: #CCCCCC;
     content: "\e800";
+}
+
+.iconEdit:before {
+    content: "\e901";
+}
+
+.iconEdit2:before {
+    content: "\e900";
+}
+
+.flRight .iconEdit {
+    margin-right: 5px;
+    font-size: 10px;
 }
 
 .iconShare:before {
@@ -4765,7 +4786,7 @@ i {
     content: "\f004";
 }
 
-.item.iconTopic2:before, .item.iconReply:before, .item.iconUser:before {
+.item.iconEdit2:before, .item.iconTopic2:before, .item.iconReply:before, .item.iconUser:before {
     font-size: 16px;
     margin-right: 5px;
     vertical-align: -4%;
