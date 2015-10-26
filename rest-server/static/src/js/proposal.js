@@ -55,6 +55,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
 
+            jq('.warp, #bottomBar').on('click', '.threadReply', function() {
+                var callback = function() {
+                    thread.edit('', 'proposal');
+                };
+                thread.checkIsRegistered(callback);
+            });
+
             jq('.warp').on('click', '.threadPic img', function() {
                 var thisObj = jq(this),
                     current = thisObj.data('src'),

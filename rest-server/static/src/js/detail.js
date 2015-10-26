@@ -175,9 +175,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.topicBtn').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {
-                        var replyType = thisObj.data('type');
-                            url = replyType == 'proposal' ? '/topics/'+tId+'/proposals' : '/topics/'+tId+'/opinions'
-                        thread.reply(url, null, '', replyType);
+                        var formType = thisObj.data('type');
+                            url = formType == 'proposal' ? '/topics/'+tId+'/proposals' : '/topics/'+tId+'/opinions'
+                        thread.reply(url, null, '', formType);
                     };
                 jq.UTIL.touchStateNow(thisObj);
                 thread.checkIsRegistered(callback);

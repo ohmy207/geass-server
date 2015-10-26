@@ -92,14 +92,9 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
             reload: function(href, timeout) {
                 href = href || '';
                 timeout = timeout || 1;
-                re = /^http(s)?:\/\/(([^\/\.]+\.)*)?(qq\.com|url\.cn)(\/.*)*$/;
-                re1 = /^http(s)?:\/\//;
                 setTimeout(function() {
-                    //if (re.test(href)) {
-                    if (true) {
+                    if (href) {
                         window.location.href = href;
-                    } else if (href && !re1.test(href)) {
-                        window.location.href = window.DOMAIN.substr(0, window.DOMAIN.length - 1) + href;
                     } else {
                         window.location.reload();
                     }

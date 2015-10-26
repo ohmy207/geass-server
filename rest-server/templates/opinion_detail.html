@@ -56,6 +56,8 @@
       <div class="dCon f17">
         <%== opinion.content.replace(/\n/g, '<br>') %>
       </div>
+      <textarea id="editCon" style="display:none;"><%== opinion.content %></textarea>
+
       <div class="threadPic pr"> 
 
       <% for (var i in opinion.picture_urls) { %>
@@ -73,12 +75,69 @@
 
   </script>
 
+  <script id="tmpl_replyForm" type="text/html">
+    <div class="popLayer pSpace brNone" style="width:100%">
+    <form method="post" id="replyForm">
+        {% raw xsrf_form_html() %}
+        <% if (data.formType == 'proposal') { %>
+        <div class="sendTit pr">
+            <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的选项"></textarea> 
+        </div>
+        <% } %>
+
+        <div class="sendRCon">
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType == 'proposal') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
+        </div>
+
+        <div class="sendInfo wot pr">
+            <%if (data.isAnonymBox) { %>
+                <label class="f13 fl">
+                 <input type="checkbox" name="isanon" value="1">
+                 匿名
+                </label>
+            <% } %>
+        </div>
+
+        <div class="sendNav">
+            <ul>
+                <li class="pr uploadPicBox">
+                    <a data-id='1' href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
+                    <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
+                </li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn brSmall f13 db fr c3 close">取消</a></li>
+                <li><a id="comBtn" href="javascript:;" class="sendBtn brSmall f13 db c2">发送</a>
+                </li>
+            </ul>
+        </div>
+        <div class="operatingBox">
+            <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
+            </div>
+            <div class="operatList photoTipsBox" style="display:none;height:auto;background-color:#efefef;border-top:1px solid #e2e2e2;">
+                <div class="photoList">
+                    <ul>
+                        <li class="on" id="addPic">
+                        <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single>
+                        </li>
+                    </ul>
+                    <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    </div>
+  </script>
+
 {% end %}
 
 
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
+   <a href="javascript:;" class="item cf iconEdit2 threadReply">修改</a>
    <a href="/comment_list?parent=opinions&parent_id={{ state['oid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>

@@ -40,7 +40,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         init: function() {
-            var tId = window.tId;
+            var tId = window.tId,
                 loadOpts = {
                     isList: false,
                     isEmptyShow: false,
@@ -51,6 +51,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
+
+            jq('.warp, #bottomBar').on('click', '.threadReply', function() {
+                var callback = function() {
+                    thread.edit(loadOpts.url, 'opinion');
+                };
+                thread.checkIsRegistered(callback);
+            });
 
             jq('.warp').on('click', '.threadPic img', function() {
                 var thisObj = jq(this),

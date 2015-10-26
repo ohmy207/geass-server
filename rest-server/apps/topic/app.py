@@ -255,7 +255,17 @@ class OpinionsHandler(BaseHandler):
         self._data = db_topic['opinion'].callback(db_topic['opinion'].to_one_str(data))
 
 
-class DetailOpinionHandler(BaseHandler):
+class OneOpinionHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('content', basestring),
+        ],
+        'option': [
+            ('pickeys', list, []),
+            ('isanon', bool, False),
+        ]
+    }
 
     #@authenticated
     def GET(self, oid):
@@ -274,6 +284,28 @@ class DetailOpinionHandler(BaseHandler):
             'comments_count': db_topic['comment'].get_comments_count('opinions', oid),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }
+
+    @authenticated
+    def POST(self, oid):
+        data = self._params
+        oid = self.to_objectid(oid)
+        uid = self.current_user
+
+        opinion = db_topic['opinion'].find_one({'_id': oid})
+
+        if not opinion:
+            raise ResponseError(404)
+
+        if len(data['content']) <= 0:
+            raise ResponseError(30)
+
+        if len(data['pickeys']) > 8:
+            raise ResponseError(31)
+
+        db_topic['opinion'].update({'_id': oid}, {'$set': data})
+        opinion.update(data)
+
+        self._data = db_topic['opinion'].callback(db_topic['opinion'].to_one_str(opinion))
 
 
 class CommentsHandler(BaseHandler):

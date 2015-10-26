@@ -207,14 +207,14 @@
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
-        <% if (data.replyType == 'proposal') { %>
+        <% if (data.formType == 'proposal') { %>
         <div class="sendTit pr">
             <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的选项"></textarea> 
         </div>
         <% } %>
 
         <div class="sendRCon">
-            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.replyType == 'proposal') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType == 'proposal') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
         </div>
 
         <div class="sendInfo wot pr">

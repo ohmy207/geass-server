@@ -191,10 +191,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             });
         },
 
-        reply: function (url, toCoId, author, replyType) {
+        reply: function (url, toCoId, author, formType) {
             var author = author || '',
                 isLZ = window.isLZ || false,
-                isAnonymBox = replyType == 'opinion' && !isLZ;
+                isAnonymBox = formType == 'opinion' && !isLZ;
 
             // 未登录
             //if (authUrl) {
@@ -204,14 +204,14 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
             var replyDialog = function() {
                 var replyTimer = null,
-                    storageKey = replyType + '_content',
+                    storageKey = formType + '_content',
                     replyForm = template('tmpl_replyForm', {data:{
                     'toCoId':toCoId,
                     'isAnonymBox':isAnonymBox,
-                    'replyType': replyType
+                    'formType': formType
                 }});
 
-                if (!(toCoId && replyType == 'comment')) {
+                if (!(toCoId && formType == 'comment')) {
                     replyTimer = setInterval(function() {
                         if (jq('textarea[name="content"]').val()) {
                             localStorage.removeItem(storageKey);
@@ -230,8 +230,60 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     // 弹出后执行
                     callback:function() {
 
-                        var obj = {storageKey: storageKey, replyTimer: replyTimer, url: url, toCoId: toCoId, author: author, replyType: replyType};
-                        exports.initReplyEvents(obj);
+                        if (toCoId && formType == 'comment') {
+                            jq('textarea[name="content"]').attr('placeholder', '回复 ' + author + '：');
+                        } else {
+                            // 信息恢复
+                            jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
+                        }
+
+                        var obj = {
+                            url: url,
+                            formId: 'replyForm',
+                            success: function(re) {
+                                if (!(toCoId && formType == 'comment')) {
+                                    localStorage.removeItem(storageKey);
+                                }
+                                var allLabelBox = jq('#allLabelBox'),
+                                    //replyList = jq('#replyList'),
+                                    replyData = {data_list:[re.data]};
+
+                                jq('.emptyList').hide()
+
+                                if (formType === 'opinion') {
+                                    var listHtml = template('tmpl_opinions', replyData);
+                                    if(jq.trim(listHtml)!==''){
+                                        allLabelBox.show();
+                                        jq('#allReplyList').append(listHtml);
+                                    }
+
+                                } else if (formType === 'proposal') {
+
+                                    var listHtml = template('tmpl_proposals', replyData);
+                                    if(jq.trim(listHtml)!==''){
+                                        //jq('#hotLabelBox').show();
+                                        jq('#hotReplyList').append(listHtml);
+                                    }
+
+                                } else if (formType === 'comment') {
+                                    var listHtml = template('tmpl_reply', replyData);
+                                    allLabelBox.show();
+                                    //allLabelBox.next('.topicList').show();
+
+                                    if (true && !exports.desc) {
+                                        jq('#allReplyList').append(listHtml);
+                                    } else {
+                                        jq('#allReplyList').prepend(listHtml);
+                                    }
+                                }
+
+                                clearInterval(replyTimer);
+                                // 关闭弹窗
+                                jq.UTIL.dialog({id:'replyForm'});
+                            }
+                        };
+
+                        exports.initFormEvents(obj);
 
                     },
                     // 关闭回复框
@@ -249,22 +301,81 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 });
             }
 
-            //不加入社区也可发帖，自动加入社区修改
             replyDialog();
 
             return true;
         },
 
-        checkReplyForm: function(replyType) {
-            var content = replyType == 'proposal' ? jq('textarea[name="title"]').val() : jq('textarea[name="content"]').val(),
+        edit: function (url, formType) {
+
+            var replyDialog = function() {
+                var replyForm = template('tmpl_replyForm', {data:{
+                    'formType': formType
+                }});
+
+                // 弹出回复框
+                jq.UTIL.dialog({
+                    content: replyForm,
+                    id: 'replyForm',
+                    isHtml: true,
+                    isMask: true,
+                    top: 0,
+                    // 弹出后执行
+                    callback:function() {
+                        if (formType != 'opinion') {
+                            jq('textarea[name="title"]').val(jq('#editTitle').val());
+                        }
+                        jq('textarea[name="content"]').val(jq('#editCon').val());
+
+                        jq('.threadPic img').each(function() {
+                            var url = jq(this).data('src'),
+                                id = url.split('/')[3],
+                                html = '<li id="li' + id + '"><div class="photoCut"><img src="' + url + '?imageView2/1/w/200/h/200' + '" class="attchImg" alt="photo"></div>' +
+                                    '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="'+id+'">关闭</a></li>',
+                                input = '<input type="hidden" id="input' + id + '" name="pickeys" value="' + id + '">';
+
+                            jq('#addPic').before(html);
+                            jq('#replyForm').append(input);
+                        });
+
+                        if (jq('.threadPic img').length > 0) {
+                            jq('.photoTipsBox').show();
+                            uploadImg.uploadRemaining();
+                        }
+
+                        var obj = {
+                            url: url,
+                            formId: 'replyForm',
+                            success: function() {
+                                jq.UTIL.dialog({id:'replyForm'});
+                                jq.UTIL.reload('', 500);
+                            }
+                        };
+
+                        exports.initFormEvents(obj);
+
+                    },
+                    // 关闭回复框
+                    close: function() {
+                       return true;
+                    }
+                });
+            }
+
+            replyDialog();
+            return true;
+        },
+
+        checkForm: function(formType) {
+            var content = formType == 'proposal' ? jq('textarea[name="title"]').val() : jq('textarea[name="content"]').val(),
                 contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
 
-            if (uploadImg.isBusy && (replyType == 'proposal' || replyType == 'opinion')) {
+            if (uploadImg.isBusy && (formType == 'proposal' || formType == 'opinion')) {
                 jq.UTIL.dialog({content:'图片上传中，请稍候', autoClose:true});
                 return false;
             }
 
-            if (replyType == 'proposal') {
+            if (formType == 'proposal') {
                 if (contentLen <= 0) {
                     jq.UTIL.dialog({content:'选项不能为空', autoClose:true});
                     return false;
@@ -274,7 +385,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     jq.UTIL.dialog({content:'选项最好不要超过60字', autoClose:true});
                     return false;
                 }
-            } else if (replyType == 'opinion') {
+            } else if (formType == 'opinion') {
                 if (contentLen <= 0) {
                     jq.UTIL.dialog({content:'看法不能为空', autoClose:true});
                     return false;
@@ -284,7 +395,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     jq.UTIL.dialog({content:'看法最好不要超过20000字', autoClose:true});
                     return false;
                 }
-            } else if (replyType === 'comment') {
+            } else if (formType === 'comment') {
                 if (contentLen <= 0) {
                     jq.UTIL.dialog({content:'评论不能为空', autoClose:true});
                     return false;
@@ -299,17 +410,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             return true;
         },
 
-        initReplyEvents: function(obj){
-            var storageKey = obj.storageKey;
+        initFormEvents: function(obj){
 
-            jq('#replyForm').attr('action', '/api/v1' + obj.url);
-
-            if (obj.toCoId && obj.replyType == 'comment') {
-                jq('textarea[name="content"]').attr('placeholder', '回复 ' + obj.author + '：');
-            } else {
-                // 信息恢复
-                jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
-            }
+            jq('#' + obj.formId).attr('action', '/api/v1' + obj.url);
 
             var isSendBtnClicked = false;
             jq('#comBtn').on('click', function() {
@@ -318,51 +421,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 }
                 var opt = {
                     success:function(re) {
-                        var status = parseInt(re.code);
-                        if (status === 0) {
-                            if (!(obj.toCoId && obj.replyType == 'comment')) {
-                                localStorage.removeItem(storageKey);
+                        if (parseInt(re.code) === 0) {
+                            if (typeof obj.success == 'function') {
+                                obj.success(re)
                             }
-                            var allLabelBox = jq('#allLabelBox'),
-                                //replyList = jq('#replyList'),
-                                replyData = {data_list:[re.data]};
-
-                            jq('.emptyList').hide()
-
-                            if (obj.replyType === 'opinion') {
-                                var listHtml = template('tmpl_opinions', replyData);
-                                if(jq.trim(listHtml)!==''){
-                                    allLabelBox.show();
-                                    jq('#allReplyList').append(listHtml);
-                                }
-
-                            } else if (obj.replyType === 'proposal') {
-
-                                var listHtml = template('tmpl_proposals', replyData);
-                                if(jq.trim(listHtml)!==''){
-                                    //jq('#hotLabelBox').show();
-                                    jq('#hotReplyList').append(listHtml);
-                                }
-
-                            } else if (obj.replyType === 'comment') {
-                                var listHtml = template('tmpl_reply', replyData);
-                                allLabelBox.show();
-                                //allLabelBox.next('.topicList').show();
-
-                                if (true && !exports.desc) {
-                                    jq('#allReplyList').append(listHtml);
-                                } else {
-                                    jq('#allReplyList').prepend(listHtml);
-                                }
-                            }
-
-                            clearInterval(obj.replyTimer);
-
-                            // 关闭弹窗
-                            //exports.isNoShowToTop = false;
-                            jq.UTIL.dialog({id:'replyForm'});
-                            //jq('.bNav').show();
-                            //jq('.floatLayer').show();
                         }
                         isSendBtnClicked = false;
                     },
@@ -370,11 +432,11 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         isSendBtnClicked = false;
                     }
                 };
-                if (!exports.checkReplyForm(obj.replyType)) {
+                if (!exports.checkForm(obj.formType)) {
                     return false;
                 }
                 isSendBtnClicked = true;
-                jq.UTIL.ajaxForm('replyForm', opt, true);
+                jq.UTIL.ajaxForm(obj.formId, opt, true);
                 return false;
             });
 
@@ -403,6 +465,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             exports.initUpload();
 
         },
+
         checkIsRegistered: function(callback) {
             if (!window.isRegistered) {
                 var opts = {
