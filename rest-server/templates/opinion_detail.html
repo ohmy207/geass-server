@@ -79,23 +79,16 @@
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
-        <% if (data.formType == 'proposal') { %>
-        <div class="sendTit pr">
-            <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的选项"></textarea> 
-        </div>
-        <% } %>
 
         <div class="sendRCon">
-            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType == 'proposal') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="写下你的看法"></textarea>
         </div>
 
         <div class="sendInfo wot pr">
-            <%if (data.isAnonymBox) { %>
-                <label class="f13 fl">
-                 <input type="checkbox" name="isanon" value="1">
-                 匿名
-                </label>
-            <% } %>
+            <label class="f13 fl">
+             <input type="checkbox" name="isanon" value="1" <% if (data.isAnonymous) { %>checked="checked"<% } %> >
+             匿名
+            </label>
         </div>
 
         <div class="sendNav">
@@ -137,7 +130,7 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconEdit2 threadReply">修改</a>
+   <a href="javascript:;" class="item cf iconEdit2 threadReply">编辑</a>
    <a href="/comment_list?parent=opinions&parent_id={{ state['oid'] }}" class="item cf iconReply"></a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>

@@ -156,7 +156,18 @@ class ProposalsHandler(BaseHandler):
         self._data = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(data))
 
 
-class DetailProposalHandler(BaseHandler):
+class OneProposalHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('title', basestring),
+        ],
+        'option': [
+            ('content', basestring, ''),
+            ('pickeys', list, []),
+            #('isanon', bool, False),
+        ]
+    }
 
     #@authenticated
     def GET(self, pid):
@@ -179,6 +190,28 @@ class DetailProposalHandler(BaseHandler):
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'vote_total_num': db_user['vote'].find({'tid': tid}).count(),
         }
+
+    @authenticated
+    def POST(self, pid):
+        data = self._params
+        pid = self.to_objectid(pid)
+        uid = self.current_user
+
+        proposal = db_topic['proposal'].find_one({'_id': pid})
+
+        if not proposal:
+            raise ResponseError(404)
+
+        if len(data['title']) <= 0:
+            raise ResponseError(30)
+
+        if len(data['pickeys']) > 8:
+            raise ResponseError(31)
+
+        db_topic['proposal'].update({'_id': pid}, {'$set': data})
+        proposal.update(data)
+
+        self._data = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(proposal))
 
 
 class OpinionsHandler(BaseHandler):
@@ -281,6 +314,7 @@ class OneOpinionHandler(BaseHandler):
 
         self._data = {
             'opinion': data,
+            'is_author': data['author_uid'] == unicode(uid),
             'comments_count': db_topic['comment'].get_comments_count('opinions', oid),
             'has_user_voted': db_user['vote'].has_user_voted(uid, data['tid']),
         }

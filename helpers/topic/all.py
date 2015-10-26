@@ -71,6 +71,7 @@ class Opinion(BaseHelper, topic_model.Opinion):
             'author_uid': record['uid'],
             'approve_num': record['anum'],
             'is_lz': record['islz'],
+            'is_anonymous': record['isanon'],
             'is_approved': False,
         }
 

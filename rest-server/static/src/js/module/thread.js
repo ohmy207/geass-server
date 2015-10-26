@@ -306,11 +306,12 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             return true;
         },
 
-        edit: function (url, formType) {
+        edit: function (url, formType, isAnonymous) {
 
             var replyDialog = function() {
                 var replyForm = template('tmpl_replyForm', {data:{
-                    'formType': formType
+                    'formType': formType,
+                    'isAnonymous': isAnonymous
                 }});
 
                 // 弹出回复框
@@ -357,7 +358,24 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     },
                     // 关闭回复框
                     close: function() {
-                       return true;
+                        var opts = {
+                            'id':'operationConfirm',
+                            'isMask':true,
+                            'title':'确定放弃编辑？',
+                            'content':'已编辑的内容将丢失',
+                            'okValue':'确定',
+                            'cancelValue':'取消',
+                            'ok':function() {
+                                var maskId = 'fwin_mask_replyForm';
+                                    dialogId = 'fwin_dialog_replyForm';
+
+                                jQuery('#' + maskId).hide();
+                                jQuery('#' + maskId).remove();
+                                jQuery('#' + dialogId).hide();
+                                jQuery('#' + dialogId).remove();
+                            },
+                        };
+                        jq.UTIL.dialog(opts);
                     }
                 });
             }

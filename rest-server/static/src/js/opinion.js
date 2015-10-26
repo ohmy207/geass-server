@@ -25,18 +25,20 @@ require.config({
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
-        //hasVoted: false,
 
         // render data
         render: function(re) {
             var opinionHtml = template('tmpl_opinion', re.data);
             jq('.warp').prepend(opinionHtml);
 
+            if (!re.data.is_author) {
+                jq('#bottomBar .iconEdit2').remove();
+            }
             jq('#bottomBar .iconReply').html(re.data.comments_count);
             jq('.warp, #bottomBar').show()
             //jq('.warp, #bottomBar, .recommendTitle').show()
 
-            //exports.hasVoted = re.data.has_user_voted || false;
+            exports.isAnonymous = re.data.opinion.is_anonymous || false;
         },
 
         init: function() {
@@ -54,7 +56,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var callback = function() {
-                    thread.edit(loadOpts.url, 'opinion');
+                    thread.edit(loadOpts.url, 'opinion', exports.isAnonymous);
                 };
                 thread.checkIsRegistered(callback);
             });

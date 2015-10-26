@@ -57,7 +57,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var callback = function() {
-                    thread.edit('', 'proposal');
+                    thread.edit(loadOpts.url, 'proposal');
                 };
                 thread.checkIsRegistered(callback);
             });

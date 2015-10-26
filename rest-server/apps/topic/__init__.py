@@ -10,7 +10,7 @@ urls = [
     ('/topics/([0-9a-f]{24})', app.DetailTopicHandler),
 
     ('/topics/([0-9a-f]{24})/proposals', app.ProposalsHandler),
-    ('/proposals/([0-9a-f]{24})', app.DetailProposalHandler),
+    ('/proposals/([0-9a-f]{24})', app.OneProposalHandler),
 
     ('/topics/([0-9a-f]{24})/opinions', app.OpinionsHandler),
     ('/opinions/([0-9a-f]{24})', app.OneOpinionHandler),
