@@ -722,6 +722,15 @@ img {
     height: 28px;
 }
 
+.topicInfo a {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.topicInfo .iconEdit {
+    margin-right: 5px;
+}
+
 .topicBtn {
     display: -webkit-box;
     visibility: visible;
@@ -1235,9 +1244,9 @@ img {
 }
 
 .proposaList .proposalWrap .imgGallary {
-    width: 60px;
-    height: 60px;
-    margin-left: 8px;
+    width: 77px;
+    height: 77px;
+    margin-left: 6px;
 }
 
 .imgGallary img {
@@ -1309,6 +1318,7 @@ img {
 
 .proposalWrap .info {
     margin-top: 5px;
+    margin-right: 84px;
 }
 
 .info .flRight {
@@ -4817,7 +4827,7 @@ i {
 .opoutbar {
     overflow: hidden;
     position: relative;
-    width: 30%;
+    width: 45%;
     background-color: #f3f3f3;
     /*
     background-color: #F7F7F7;

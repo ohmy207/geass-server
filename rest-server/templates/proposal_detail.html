@@ -60,9 +60,11 @@
 
       </div>
 
+      <% if (false) { %>
       <div class="detailTime"> 
        <span class="authorList fr">由<a href="javascript:;"><%= proposal.authors.join('、') %></a><%if (proposal.author_count > 2) { %>…等 <%= proposal.author_count %> 人<% } %>编辑</span>
       </div>
+      <% } %>
      </div>
     </div>
    </div>
@@ -131,7 +133,7 @@
 {% block footer %}
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconEdit2 threadReply">编辑</a>
+   <a href="javascript:;" class="item cf iconEdit2 threadEdit">编辑</a>
    <a href="/personal" class="item cf iconUser">我的</a>
   </div>
 

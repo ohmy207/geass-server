@@ -380,7 +380,24 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 });
             }
 
-            replyDialog();
+
+            if (formType != 'opinion') {
+                var opts = {
+                    'id':'operationConfirm',
+                    'isMask':true,
+                    'title':'公共编辑',
+                    'content':'请确信您的修改能够帮助改进内容，该修改将即时生效，请慎重对待。',
+                    'okValue':'确定',
+                    'cancelValue':'取消',
+                    'ok':function() {
+                        replyDialog();
+                    },
+                };
+                jq.UTIL.dialog(opts);
+            } else {
+                replyDialog();
+            }
+
             return true;
         },
 

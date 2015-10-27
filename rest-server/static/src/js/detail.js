@@ -50,12 +50,12 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 follow_html = is_topic_followed ? '已关注' : '关注';
 
             jq('.detailBox').prepend(topicHtml);
-            jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
-            jq('.topicInfo span').html('参与 ' + thread.voteTotalNum + ' 人');
-            jq('#bottomBar .iconReply').html(re.data.comments_count);
-
             exports.renderProposals(re)
             exports.renderList(re)
+
+            jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
+            //jq('.topicInfo .iconTotal').after(thread.voteTotalNum + ' 票');
+            jq('#bottomBar .iconReply').html(re.data.comments_count);
 
             jq('.warp, #bottomBar').show();
 
@@ -180,6 +180,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                         thread.reply(url, null, '', formType);
                     };
                 jq.UTIL.touchStateNow(thisObj);
+                thread.checkIsRegistered(callback);
+            });
+
+            jq('.topicInfo').on('click', '.threadEdit', function() {
+                var callback = function() {
+                    thread.edit(loadOpts.url, 'topic', exports.isAnonymous);
+                };
                 thread.checkIsRegistered(callback);
             });
 

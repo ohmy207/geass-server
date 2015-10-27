@@ -25,7 +25,8 @@
    <div class="detailBox">
 
     <div class="topicInfo">
-     <span class="db c9 fl f13" style="display:none;"></span>
+     <a href="javascript:;" class="f14 c9" style="margin-right:10px;display:none;"><i class="iconTotal cf cc"></i></a>
+     <a href="javascript:;" class="f14 c9 threadEdit"><i class="iconEdit cf cc"></i>编辑</a>
      <a id="" href="javascript:;" class="followBtn f14 c2 fr">关注</a>
     </div>
 
@@ -71,6 +72,7 @@
      <div class="titleWrap c11">
 
       <div class="titleDetail allowCopy"><%= topic['title'] %></div>
+      <textarea id="editTitle" style="display:none;"><%== topic['title'] %></textarea>
 
      </div>
 
@@ -78,6 +80,8 @@
       <div class="dCon f15">
         <%== topic['content'].replace(/\n/g, '<br>') %>
       </div>
+      <textarea id="editCon" style="display:none;"><%== topic['content'] %></textarea>
+
       <div class="threadPic pr">
 
       <% for (var i in topic['picture_urls']) { %>
@@ -133,10 +137,12 @@
                       </span>
                       <span class="oppi"></span>
                   </div>
+                  <% if (false) { %>
                   <div class="flRight">
                       <span class="iconEdit cf cc"></span>
                       <span><%= proposals[i].author_count %></span>
                   </div>
+                  <% } %>
               </div>
 
           </div>
@@ -207,14 +213,14 @@
     <div class="popLayer pSpace brNone" style="width:100%">
     <form method="post" id="replyForm">
         {% raw xsrf_form_html() %}
-        <% if (data.formType == 'proposal') { %>
+        <% if (data.formType != 'opinion') { %>
         <div class="sendTit pr">
-            <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的选项"></textarea> 
+            <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType == 'proposal') { %>写下你的选项<% } else { %>写下你的话题<% } %>"></textarea> 
         </div>
         <% } %>
 
         <div class="sendRCon">
-            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType == 'proposal') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType != 'opinion') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
         </div>
 
         <div class="sendInfo wot pr">

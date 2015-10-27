@@ -54,7 +54,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
 
-            jq('.warp, #bottomBar').on('click', '.threadReply', function() {
+            jq('.warp, #bottomBar').on('click', '.threadEdit', function() {
                 var callback = function() {
                     thread.edit(loadOpts.url, 'opinion', exports.isAnonymous);
                 };

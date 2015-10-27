@@ -44,7 +44,19 @@ class TopicsHandler(BaseHandler):
         self._jump = '/topic?tid='+unicode(tid)
 
 
-class DetailTopicHandler(BaseHandler):
+class OneTopicHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('title', basestring),
+        ],
+        'option': [
+            ('content', basestring, ''),
+            #('ispriv', bool, False),
+            #('isanon', bool, False),
+            ('pickeys', list, []),
+        ]
+    }
 
     _get_params = {
         'need': [
@@ -86,6 +98,28 @@ class DetailTopicHandler(BaseHandler):
 
             'next_start': self._skip + self._limit,
         }
+
+    @authenticated
+    def POST(self, tid):
+        data = self._params
+        tid = self.to_objectid(tid)
+        uid = self.current_user
+
+        topic = db_topic['topic'].find_one({'_id': tid})
+
+        if not topic:
+            raise ResponseError(404)
+
+        if len(data['title']) <= 0:
+            raise ResponseError(30)
+
+        if len(data['pickeys']) > 8:
+            raise ResponseError(31)
+
+        db_topic['topic'].update({'_id': tid}, {'$set': data})
+        topic.update(data)
+
+        self._data = db_topic['topic'].callback(db_topic['topic'].to_one_str(topic))
 
 
 class ProposalsHandler(BaseHandler):
