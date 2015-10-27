@@ -180,7 +180,7 @@ class ProposalsHandler(BaseHandler):
             raise ResponseError(31)
 
         data['tid'] = tid
-        data['uids'] = [self.current_user]
+        data['uid'] = self.current_user
         data['ctime'] = datetime.now()
 
         pid = db_topic['proposal'].create(data)
@@ -216,8 +216,6 @@ class OneProposalHandler(BaseHandler):
         proposal = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(record))
         proposal['is_voted'] = db_user['vote'].is_proposal_voted(uid, pid)
         proposal['topic_title'] = db_topic['topic'].find_one({'_id': tid}, {'title': 1})['title']
-        proposal['authors'] = [
-            db_user['user'].get_simple_user(u)['nickname'] for u in record['uids'][-2:]]
 
         self._data = {
             'proposal': proposal,

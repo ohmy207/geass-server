@@ -11,7 +11,7 @@ class Topic(Model):
         'title':            (basestring, ''),
         'content':          (basestring, ''),
 
-        'uid':              (basestring, ''),
+        'uid':              (ObjectId, None),
 
         'ispriv':           (bool, False)   ,
         'isanon':           (bool, False)   ,
@@ -28,13 +28,13 @@ class Proposal(Model):
 
     field = {
         'tid':              (ObjectId, None),
+        'uid':              (ObjectId, None),
 
         #'isanon':           (bool, False)   ,
 
         'title':            (basestring, ''),
         'content':          (basestring, ''),
 
-        'uids':             (list, [])      ,
         'pickeys':          (list, [])      ,
 
         'vnum':             (int, 0)        ,

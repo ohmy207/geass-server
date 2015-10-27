@@ -44,6 +44,7 @@ class Proposal(BaseHelper, topic_model.Proposal):
         result = {
             'tid': record['tid'],
             'pid': record['_id'],
+            'author_uid': record['uid'],
             'title': record['title'],
             'vote_num': record['vnum'],
             'is_voted': False,
@@ -52,7 +53,6 @@ class Proposal(BaseHelper, topic_model.Proposal):
         result['content'] = Opinion.xhtml_escape(record['content'])
         result['f_created_time'] = Opinion._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
-        result['author_count'] = len(record['uids'])
 
         return result
 
