@@ -398,7 +398,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
                         var offset = {x:startX - endX, y:startY - endY};
                         opts.move(event, offset);
                     }
-                    if (!jQuery.os.ios) {
+                    if (true || !jQuery.os.ios) {
                         jq.UTIL.timerId = window.setTimeout(function() {
                             touchEnd();
                         }, 50);
@@ -413,9 +413,9 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
 
                 obj.addEventListener('touchstart', touchStart, false);
                 obj.addEventListener('touchmove', touchMove, false);
-                if (jQuery.os.ios) {
-                    obj.addEventListener('touchend', touchEnd, false);
-                }
+                //if (jQuery.os.ios) {
+                //    obj.addEventListener('touchend', touchEnd, false);
+                //}
             },
             showLoading: function(display, waiting, autoClose) {
                 var display = display || 'block';
