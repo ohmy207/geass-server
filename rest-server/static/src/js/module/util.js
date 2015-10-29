@@ -852,6 +852,7 @@ define(['jquery', 'vendor/jquery.form.min'], function(jQuery) {
             setTimeout(function() {
                 // console.log('lazyload init');
                 jq(container).lazyLoadXT(conf);
+                jq(window).trigger('touchmove');
             }, 50);
         });
     }
