@@ -113,3 +113,41 @@ class OpinionComment(Model):
         'ctime':            (datetime, None),
     }
 
+
+class TopicEditLog(Model):
+
+    name = 'topic_edit_log'
+
+    field = {
+        'tid':              (ObjectId, None),
+        'uid':              (ObjectId, None),
+
+        'title':            (basestring, ''),
+        'content':          (basestring, ''),
+
+        'pickeys':          (list, [])      ,
+
+        'status':           (int, 0)        ,
+
+        'ctime':            (datetime, None),
+    }
+
+
+class ProposalEditLog(Model):
+
+    name = 'proposal_edit_log'
+
+    field = {
+        'pid':              (ObjectId, None),
+        'uid':              (ObjectId, None),
+
+        'title':            (basestring, ''),
+        'content':          (basestring, ''),
+
+        'pickeys':          (list, [])      ,
+
+        'status':           (int, 0)        ,
+
+        'ctime':            (datetime, None),
+    }
+

@@ -10,7 +10,7 @@ from config.global_setting import PIC_URL
 
 logger = log.getLogger(__file__)
 
-MODEL_SLOTS = ['Topic', 'Proposal', 'Opinion', 'Comment']
+MODEL_SLOTS = ['Topic', 'Proposal', 'Opinion', 'Comment', 'PublicEdit']
 
 
 class Topic(BaseHelper, topic_model.Topic):
@@ -182,4 +182,22 @@ class Comment(BaseHelper):
             {'$inc': {'lnum': 1}, '$push': {'like': uid}},
             w=1
         )
+
+
+class PublicEdit(BaseHelper):
+
+    _field_map = {
+        'topics': 'tid',
+        'proposals': 'pid',
+    }
+
+    _coll_map = {
+        'topics': topic_model.TopicEditLog(),
+        'proposals': topic_model.ProposalEditLog(),
+    }
+
+    def add_log(self, route, route_id, uid, doc):
+        route_id, uid = self.to_objectids(route_id, uid)
+        doc.update({'uid': uid, self._field_map[route]: route_id})
+        self._coll_map[route].create(doc)
 

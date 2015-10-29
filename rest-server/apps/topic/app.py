@@ -32,14 +32,17 @@ class TopicsHandler(BaseHandler):
     @authenticated
     def POST(self):
         data = self._params
+        uid = self.current_user
 
         if len(data['title']) <= 0:
             raise ResponseError(30)
 
-        data['uid'] = self.current_user
+        data['uid'] = uid
         data['ctime'] = datetime.now()
 
         tid = db_topic['topic'].create(data)
+        db_topic['public_edit'].add_log(
+            'topics', tid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 
         self._jump = '/topic?tid='+unicode(tid)
 
@@ -117,8 +120,10 @@ class OneTopicHandler(BaseHandler):
             raise ResponseError(31)
 
         db_topic['topic'].update({'_id': tid}, {'$set': data})
-        topic.update(data)
+        db_topic['public_edit'].add_log(
+            'topics', tid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 
+        topic.update(data)
         self._data = db_topic['topic'].callback(db_topic['topic'].to_one_str(topic))
 
 
@@ -169,6 +174,7 @@ class ProposalsHandler(BaseHandler):
     def POST(self, tid):
         data = self._params
         tid = self.to_objectid(tid)
+        uid = self.current_user
 
         if not db_topic['topic'].find_one({'_id': tid}):
             raise ResponseError(404)
@@ -180,13 +186,15 @@ class ProposalsHandler(BaseHandler):
             raise ResponseError(31)
 
         data['tid'] = tid
-        data['uid'] = self.current_user
+        data['uid'] = uid
         data['ctime'] = datetime.now()
 
         pid = db_topic['proposal'].create(data)
-        data['_id'] = pid
         #db_user['notice'].update_notice(tid, 1)
+        db_topic['public_edit'].add_log(
+            'proposals', pid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 
+        data['_id'] = pid
         self._data = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(data))
 
 
@@ -241,8 +249,10 @@ class OneProposalHandler(BaseHandler):
             raise ResponseError(31)
 
         db_topic['proposal'].update({'_id': pid}, {'$set': data})
-        proposal.update(data)
+        db_topic['public_edit'].add_log(
+            'proposals', pid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 
+        proposal.update(data)
         self._data = db_topic['proposal'].callback(db_topic['proposal'].to_one_str(proposal))
 
 
