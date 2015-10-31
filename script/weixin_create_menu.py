@@ -2,7 +2,7 @@
 
 import realpath
 
-from helpers import weixin as wx
+from helpers import wechat as wc
 
 
 menu_data = {
@@ -17,7 +17,7 @@ menu_data = {
         {
             'type': 'view',
             'name': '我的话题',
-            'url': 'http://geass.t207.me/new'
+            'url': 'http://geass.t207.me/personal'
         },
 
         {
@@ -45,4 +45,4 @@ menu_data = {
 
     ]}
 
-print wx['wei_xin'].create_menu(menu_data)
+print wc['wechat'].create_menu(menu_data)
