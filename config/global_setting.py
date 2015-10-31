@@ -94,7 +94,7 @@ QINIU = {
         'avatar': 'geass-avatar',
     },
 
-    'expires': 3600,
+    'expires': 7200,
 
     'policy': {
         #'saveKey': '$(etag)$(ext)',

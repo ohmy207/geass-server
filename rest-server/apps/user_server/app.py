@@ -18,6 +18,7 @@ from apps.base import ResponseError
 
 from helpers import user as db_user
 from helpers import wechat as wc
+from cache.object_cache import ObjectCache
 from config.global_setting import WEIXIN, APP_HOST, QINIU
 
 logger = log.getLogger(__file__)
@@ -31,17 +32,17 @@ class ForbiddenHandler(BaseHandler):
 
 class UploadTokenHandler(BaseHandler):
 
+    def load_upload_token(self):
+        q = Auth(QINIU['access_key'], QINIU['secret_key'])
+        return q.upload_token(
+            bucket=QINIU['bucket_name']['image'], expires=QINIU['expires'], policy=QINIU['policy'])
+
     @authenticated
     def get(self):
-        q = Auth(QINIU['access_key'], QINIU['secret_key'])
-
-        token = q.upload_token(
-            bucket=QINIU['bucket_name']['image'],
-            expires=QINIU['expires'],
-            policy=QINIU['policy'],
-        )
-
-        self.wo_json({'token': token})
+        name = 'upload_token'
+        if not ObjectCache.exists(name):
+            ObjectCache.create(self.load_upload_token, name=name, expire=3600)
+        self.wo_json({'token': ObjectCache.get(name)})
 
 
 class PageHandler(BaseHandler, WeiXinMixin):
