@@ -120,6 +120,7 @@ class OneTopicHandler(BaseHandler):
             raise ResponseError(31)
 
         db_topic['topic'].update({'_id': tid}, {'$set': data})
+        db_user['notice'].update_notice(tid, 9)
         db_topic['public_edit'].add_log(
             'topics', tid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 
@@ -190,7 +191,7 @@ class ProposalsHandler(BaseHandler):
         data['ctime'] = datetime.now()
 
         pid = db_topic['proposal'].create(data)
-        #db_user['notice'].update_notice(tid, 1)
+        db_user['notice'].update_notice(tid, 1)
         db_topic['public_edit'].add_log(
             'proposals', pid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 

@@ -147,6 +147,8 @@ class Notice(BaseHelper, user_model.Notice):
         6: _opinioncomment,
         7: user_model.Approve2Opinion(),
         8: user_model.Vote2Proposal(),
+        9: topic_model.TopicEditLog(),
+        10: topic_model.ProposalEditLog(),
     }
 
     _parent_map = {
@@ -158,6 +160,8 @@ class Notice(BaseHelper, user_model.Notice):
         6: topic_helper['opinion'],
         7: topic_helper['opinion'],
         8: topic_helper['proposal'],
+        9: _topic,
+        10: topic_helper['proposal'],
     }
 
     def update_notice(self, parent_id, action, uid=None):
@@ -177,7 +181,7 @@ class Notice(BaseHelper, user_model.Notice):
 
     def get_notices(self, uid, filter_type, skip, limit):
         spec = {'uid': uid,
-                'action': {'$in': [7, 8]} if filter_type == 'support' else {'$lt': 7}}
+            'action': {'$in': [7, 8]} if filter_type == 'support' else {'$nin': [7, 8]}}
         notices = self.find(spec, limit=limit, skip=skip, sort=[('ctime', -1)])
 
         result_list = []
@@ -185,14 +189,14 @@ class Notice(BaseHelper, user_model.Notice):
             action = notice['action']
             result = self._parent_map[action].get_one({'_id': notice['paid']})
 
-            key = 'pid' if action in [8] else 'oid' if action in [5, 6, 7] else 'tid'
+            key = 'pid' if action in [8, 10] else 'oid' if action in [5, 6, 7] else 'tid'
             uids = self._child_map[action].find(
                 {key: self.to_objectid(result[key])}, sort=[('ctime', -1)]).distinct('uid')
 
             if not uids:
                 continue
 
-            if action not in [1, 2, 3, 4]:
+            if action not in [1, 2, 3, 4, 9]:
                 result['topic_title'] = self._topic.find_one(
                     {'_id': self.to_objectid(result['tid'])}, {'title': 1})['title']
 
@@ -208,7 +212,7 @@ class Notice(BaseHelper, user_model.Notice):
 
     def check_all_notices(self, uid, filter_type):
         spec = {'uid': uid, 'isread': False,
-                'action': {'$in': [7, 8]} if filter_type == 'support' else {'$lt': 7}}
+            'action': {'$in': [7, 8]} if filter_type == 'support' else {'$nin': [7, 8]}}
 
         if not self.find_one(spec):
             return

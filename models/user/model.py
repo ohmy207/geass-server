@@ -63,6 +63,8 @@ class Notice(Model):
         6: 回复看法评论
         7: 赞同看法
         8: 投票
+        9: 修改话题
+        10: 修改选项
 
     paid: parent id
     """
