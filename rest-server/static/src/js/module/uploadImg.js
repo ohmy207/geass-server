@@ -146,7 +146,7 @@ define(['jpegMeta', 'imageCompresser'], function(JpegMeta, ImageCompresser) {
                     if (percent == 100) {
                         /*jq('#li' + id).find('.maskLay').remove();
                         jq('#li' + id).find('.progress').remove();*/
-                        donePic(id);
+                        //donePic(id);
                         if(uploadTimer){
                             clearInterval(uploadTimer);
                         }

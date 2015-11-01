@@ -240,6 +240,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         var obj = {
                             url: url,
                             formId: 'replyForm',
+                            formType: formType,
                             success: function(re) {
                                 if (!(toCoId && formType == 'comment')) {
                                     localStorage.removeItem(storageKey);
@@ -347,6 +348,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         var obj = {
                             url: url,
                             formId: 'replyForm',
+                            formType: formType,
                             success: function() {
                                 jq.UTIL.dialog({id:'replyForm'});
                                 jq.UTIL.reload('', 500);
