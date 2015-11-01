@@ -5,6 +5,5 @@ INSTALLED_APPS = (
     'topic',
     'user',
     'user_server',
-    'weixin',
 )
 
