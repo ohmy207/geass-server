@@ -192,9 +192,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         },
 
         reply: function (url, toCoId, author, formType) {
-            var author = author || '',
-                isLZ = window.isLZ || false,
-                isAnonymBox = formType == 'opinion' && !isLZ;
+            var author = author || '';
 
             // 未登录
             //if (authUrl) {
@@ -207,7 +205,6 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     storageKey = formType + '_content',
                     replyForm = template('tmpl_replyForm', {data:{
                     'toCoId':toCoId,
-                    'isAnonymBox':isAnonymBox,
                     'formType': formType
                 }});
 
@@ -307,12 +304,13 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             return true;
         },
 
-        edit: function (url, formType, isAnonymous) {
+        edit: function (url, formType, isAnonymous, isAuthor) {
 
             var replyDialog = function() {
                 var replyForm = template('tmpl_replyForm', {data:{
                     'formType': formType,
-                    'isAnonymous': isAnonymous
+                    'isAnonymous': isAnonymous,
+                    'isAuthor': isAuthor,
                 }});
 
                 // 弹出回复框

@@ -41,7 +41,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         // render data
         render: function(re) {
-            window.isLZ = re.data.is_lz || false;
             exports.hasVoted = re.data.has_user_voted || false;
 
             var topicHtml = template('tmpl_topic', re.data);
@@ -59,7 +58,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.warp, #bottomBar').show();
 
-            thread.initShare(re.data.topic)
+            exports.isAnonymous = re.data.topic.is_anonymous || false;
+            exports.isAuthor = re.data.is_author || false;
+            thread.initShare(re.data.topic);
         },
 
         renderProposals: function(re) {
@@ -185,7 +186,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.topicInfo').on('click', '.threadEdit', function() {
                 var callback = function() {
-                    thread.edit(loadOpts.url, 'topic', exports.isAnonymous);
+                    thread.edit(loadOpts.url, 'topic', exports.isAnonymous, exports.isAuthor);
                 };
                 thread.checkIsRegistered(callback);
             });

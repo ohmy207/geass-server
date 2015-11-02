@@ -13,7 +13,7 @@ class Topic(Model):
 
         'uid':              (ObjectId, None),
 
-        'ispriv':           (bool, False)   ,
+        #'ispriv':           (bool, False)   ,
         'isanon':           (bool, False)   ,
 
         'pickeys':          (list, [])      ,
@@ -30,16 +30,12 @@ class Proposal(Model):
         'tid':              (ObjectId, None),
         'uid':              (ObjectId, None),
 
-        #'isanon':           (bool, False)   ,
-
         'title':            (basestring, ''),
         'content':          (basestring, ''),
 
         'pickeys':          (list, [])      ,
 
         'vnum':             (int, 0)        ,
-
-        #'islz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }
@@ -51,7 +47,6 @@ class Opinion(Model):
 
     field = {
         'tid':              (ObjectId, None),
-        'pid':              (ObjectId, None),
         'uid':              (ObjectId, None),
 
         'isanon':           (bool, False)   ,
@@ -61,8 +56,6 @@ class Opinion(Model):
         'pickeys':          (list, [])      ,
 
         'anum':             (int, 0)        ,
-
-        'islz':             (bool, False)   ,
 
         'ctime':            (datetime, None),
     }
@@ -76,8 +69,6 @@ class TopicComment(Model):
         'tid':              (ObjectId, None),
         'uid':              (ObjectId, None),
         'target':           (dict, {})      ,
-
-        'isanon':           (bool, False)   ,
 
         'content':          (basestring, ''),
 
@@ -99,8 +90,6 @@ class OpinionComment(Model):
         'oid':              (ObjectId, None),
         'uid':              (ObjectId, None),
         'target':           (dict, {})      ,
-
-        'isanon':           (bool, False)   ,
 
         'content':          (basestring, ''),
 

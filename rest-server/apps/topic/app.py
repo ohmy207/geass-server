@@ -23,7 +23,6 @@ class TopicsHandler(BaseHandler):
         ],
         'option': [
             ('content', basestring, ''),
-            ('ispriv', bool, False),
             ('isanon', bool, False),
             ('pickeys', list, []),
         ]
@@ -55,8 +54,7 @@ class OneTopicHandler(BaseHandler):
         ],
         'option': [
             ('content', basestring, ''),
-            #('ispriv', bool, False),
-            #('isanon', bool, False),
+            ('isanon', bool, False),
             ('pickeys', list, []),
         ]
     }
@@ -75,7 +73,7 @@ class OneTopicHandler(BaseHandler):
         tid = self.to_objectid(tid)
         uid = self.current_user
         spec = {'tid': tid}
-        sort=[('vnum', -1), ('islz', -1), ('ctime', 1)]
+        sort=[('vnum', -1), ('ctime', 1)]
         topic = db_topic['topic'].get_one({'_id': tid})
 
         if not topic:
@@ -83,7 +81,7 @@ class OneTopicHandler(BaseHandler):
 
         proposals = db_topic['proposal'].get_all(spec, skip=0, limit=5, sort=sort)
 
-        sort=[('lnum', -1), ('islz', -1), ('ctime', 1)]
+        sort=[('lnum', -1), ('ctime', 1)]
         opinions = db_topic['opinion'].get_all(spec, skip=0, limit=self._limit, sort=sort)
 
         self._data = {
@@ -94,7 +92,7 @@ class OneTopicHandler(BaseHandler):
             'comments_count': db_topic['comment'].get_comments_count('topics', tid),
             'vote_total_num': db_user['vote'].find(spec).count(),
 
-            'is_lz': topic['author_uid'] == unicode(uid),
+            'is_author': topic['author_uid'] == unicode(uid),
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'is_topic_followed': db_user['follow'].is_topic_followed(uid, tid),
             'has_more_proposals': True if db_topic['proposal'].get_all(spec, skip=5, limit=1, sort=sort) else False,
@@ -119,6 +117,9 @@ class OneTopicHandler(BaseHandler):
         if len(data['pickeys']) > 8:
             raise ResponseError(31)
 
+        if uid != topic['uid']:
+            data.pop('isanon')
+
         db_topic['topic'].update({'_id': tid}, {'$set': data})
         db_user['notice'].update_notice(tid, 9)
         db_topic['public_edit'].add_log(
@@ -137,7 +138,6 @@ class ProposalsHandler(BaseHandler):
         'option': [
             ('content', basestring, ''),
             ('pickeys', list, []),
-            #('isanon', bool, False),
         ]
     }
 
@@ -153,7 +153,7 @@ class ProposalsHandler(BaseHandler):
     def GET(self, tid):
         tid = self.to_objectid(tid)
         spec = {'tid': tid}
-        sort=[('vnum', -1), ('islz', -1), ('ctime', 1)]
+        sort=[('vnum', -1), ('ctime', 1)]
 
         proposals = []
         has_more_proposals = False
@@ -208,7 +208,6 @@ class OneProposalHandler(BaseHandler):
         'option': [
             ('content', basestring, ''),
             ('pickeys', list, []),
-            #('isanon', bool, False),
         ]
     }
 
@@ -281,7 +280,7 @@ class OpinionsHandler(BaseHandler):
     #@authenticated
     def GET(self, tid):
         spec = {'tid': self.to_objectid(tid)}
-        sort=[('vnum', -1), ('islz', -1), ('ctime', 1)]
+        sort=[('vnum', -1), ('ctime', 1)]
 
         opinions = db_topic['opinion'].get_all(
             spec=spec,
@@ -303,7 +302,6 @@ class OpinionsHandler(BaseHandler):
         uid = self.current_user
         topic = db_topic['topic'].find_one({'_id': tid})
         opinion_count = db_topic['opinion'].find({'tid': tid, 'uid': uid}).count()
-        is_lz = True if uid == topic['uid'] else False
 
         if not topic:
             raise ResponseError(404)
@@ -320,9 +318,6 @@ class OpinionsHandler(BaseHandler):
         data['tid'] = tid
         data['uid'] = uid
         data['ctime'] = datetime.now()
-        data['islz'] = is_lz
-        if is_lz:
-            data['isanon'] = topic['isanon']
 
         oid = db_topic['opinion'].create(data)
         db_user['notice'].update_notice(tid, 2)
@@ -379,6 +374,9 @@ class OneOpinionHandler(BaseHandler):
         if len(data['pickeys']) > 8:
             raise ResponseError(31)
 
+        if uid != opinion['uid']:
+            raise ResponseError(403)
+
         db_topic['opinion'].update({'_id': oid}, {'$set': data})
         opinion.update(data)
 
@@ -429,20 +427,13 @@ class CommentsHandler(BaseHandler):
 
         spec = {'_id': parent_id}
         parent_rd = db_topic['topic'].find_one(spec) if parent == 'topics' else db_topic['opinion'].find_one(spec)
-        is_lz=parent_rd['uid'] == uid
 
         if not parent_rd:
             raise ResponseError(404)
 
         data = db_topic['comment'].add_comment(
-            parent=parent,
-            parent_id=parent_id,
-            uid=uid,
-            content=self._params['content'],
-            tocoid = self._params['tocoid'],
-            is_lz=is_lz,
-            is_anon=is_lz and parent_rd['isanon']
-        )
+            parent=parent, parent_id=parent_id, uid=uid, content=self._params['content'],
+            tocoid=self._params['tocoid'], is_lz=parent_rd['uid']==uid)
 
         action = 3 if parent == 'topics' else 5
         if data['target']:

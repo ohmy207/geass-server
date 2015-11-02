@@ -176,7 +176,7 @@
 
               <div class="textContainer">
                   <h3 class="text">
-                      <%= opinions[i].author %><% if (opinions[i].is_lz) { %><span style="color:gray">（作者）</span><%}%>
+                      <%= opinions[i].author %>
                   </h3>
 
                   <div class="listContent ">
@@ -218,9 +218,9 @@
         </div>
 
         <div class="sendInfo wot pr">
-            <%if (data.isAnonymBox) { %>
+            <%if (data.formType == 'opinion' || (data.formType == 'topic' && data.isAuthor)) { %>
                 <label class="f13 fl">
-                 <input type="checkbox" name="isanon" value="1">
+                 <input type="checkbox" name="isanon" value="1" <% if (data.formType == 'topic' && data.isAnonymous) { %>checked="checked"<% } %> >
                  匿名
                 </label>
             <% } %>

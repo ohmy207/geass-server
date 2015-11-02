@@ -23,8 +23,7 @@ class Topic(BaseHelper, topic_model.Topic):
             'tid':  record['_id'],
             'title': record['title'],
             'author_uid': record['uid'],
-            'is_private': record['ispriv'],
-            #'is_anonymous': record['isanon'],
+            'is_anonymous': record['isanon'],
         }
 
         result['content'] = Topic.xhtml_escape(record['content'])
@@ -66,11 +65,9 @@ class Opinion(BaseHelper, topic_model.Opinion):
     def callback(record):
         result = {
             'tid': record['tid'],
-            'pid': record['pid'],
             'oid': record['_id'],
             'author_uid': record['uid'],
             'approve_num': record['anum'],
-            'is_lz': record['islz'],
             'is_anonymous': record['isanon'],
             'is_approved': False,
         }
@@ -88,6 +85,8 @@ class Opinion(BaseHelper, topic_model.Opinion):
 
 class Comment(BaseHelper):
 
+    _topic = Topic()
+    _opinion = Opinion()
     _user = UserHelper()
 
     _field_map = {
@@ -118,15 +117,18 @@ class Comment(BaseHelper):
             'target': {},
         }
 
-        for k in record:
-            if k in ['tid', 'oid']:
-                result[k] = record[k]
-
         result['content'] = self.xhtml_escape(record['content'])
         result['f_created_time'] = self._simple_time(record['ctime'])
         result['is_liked'] = True if unicode(uid) in record['like'] else False
 
-        simple_user = self._user.get_simple_user(record['uid'], record['isanon'])
+        parent_key = (set(['tid', 'oid']) & set(record.keys())).pop()
+        parent_id = result[parent_key] = record[parent_key]
+        parent_coll = self._topic if parent_key == 'tid' else self._opinion
+
+        is_anon = parent_coll.find_one(
+            {'_id': parent_coll.to_objectid(parent_id)})['isanon'] if result['is_lz'] else False
+
+        simple_user = self._user.get_simple_user(record['uid'], is_anon)
         result['author'] = simple_user['nickname']
         result['avatar'] = simple_user['avatar']
 
@@ -138,7 +140,10 @@ class Comment(BaseHelper):
                 'is_lz': record['target']['islz'],
             }
 
-            to_user = self._user.get_simple_user(record['target']['uid'], record['target']['isanon'])
+            is_target_anon = parent_coll.find_one(
+                {'_id': parent_coll.to_objectid(parent_id)})['isanon'] if result['target']['is_lz'] else False
+
+            to_user = self._user.get_simple_user(record['target']['uid'], is_target_anon)
             result['target']['author'] = to_user['nickname']
 
         return result
@@ -151,7 +156,7 @@ class Comment(BaseHelper):
 
         return [self.format(rd, uid) for rd in records]
 
-    def add_comment(self, parent, parent_id, uid, content, tocoid=None, is_lz=False, is_anon=False):
+    def add_comment(self, parent, parent_id, uid, content, tocoid=None, is_lz=False):
         parent_id, uid, tocoid= self.to_objectids(parent_id, uid, tocoid)
         key, coll = self._field_map[parent], self._coll_map[parent]
         doc = {
@@ -160,7 +165,6 @@ class Comment(BaseHelper):
             'target': {},
             'content': content,
             'islz': is_lz,
-            'isanon': is_anon,
             'ctime': datetime.now(),
         }
         target = coll.find_one({'_id': tocoid}) if tocoid else None
@@ -168,7 +172,6 @@ class Comment(BaseHelper):
             doc['target']['coid'] = target['_id']
             doc['target']['content'] = target['content']
             doc['target']['uid'] = target['uid']
-            doc['target']['isanon'] = target['isanon']
             doc['target']['islz'] = target['islz']
 
         coid = coll.create(doc)
@@ -178,10 +181,7 @@ class Comment(BaseHelper):
     def like_comment(self, parent, coid, uid):
         coid, uid = self.to_objectids(coid, uid)
         self._coll_map[parent].update(
-            {'_id': coid},
-            {'$inc': {'lnum': 1}, '$push': {'like': uid}},
-            w=1
-        )
+            {'_id': coid}, {'$inc': {'lnum': 1}, '$push': {'like': uid}}, w=1)
 
 
 class PublicEdit(BaseHelper):
