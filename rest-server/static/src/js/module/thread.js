@@ -203,6 +203,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             var replyDialog = function() {
                 var replyTimer = null,
                     storageKey = formType + '_content',
+                    storageTitleKey = formType + '_title',
                     replyForm = template('tmpl_replyForm', {data:{
                     'toCoId':toCoId,
                     'formType': formType
@@ -213,6 +214,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         if (jq('textarea[name="content"]').val()) {
                             localStorage.removeItem(storageKey);
                             localStorage.setItem(storageKey, jq('textarea[name="content"]').val());
+                        }
+                        if (formType == 'proposal' && jq('textarea[name="title"]').val()) {
+                            localStorage.removeItem(storageTitleKey);
+                            localStorage.setItem(storageTitleKey, jq('textarea[name="title"]').val());
                         }
                     }, 1000);
                 }
@@ -233,6 +238,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                             // 信息恢复
                             jq('textarea[name="content"]').val(localStorage.getItem(storageKey));
                         }
+                        if (formType == 'proposal') {
+                            jq('textarea[name="title"]').val(localStorage.getItem(storageTitleKey));
+                        }
 
                         var obj = {
                             url: url,
@@ -242,6 +250,10 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                 if (!(toCoId && formType == 'comment')) {
                                     localStorage.removeItem(storageKey);
                                 }
+                                if (formType == 'proposal') {
+                                    localStorage.removeItem(storageTitleKey);
+                                }
+
                                 var allLabelBox = jq('#allLabelBox'),
                                     //replyList = jq('#replyList'),
                                     replyData = {data_list:[re.data]};
