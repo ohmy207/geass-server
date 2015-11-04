@@ -6,7 +6,7 @@ import log
 
 from apps.base import BaseHandler
 
-from helpers import wechat as wx
+from helpers import wechat as wc
 
 logger = log.getLogger(__file__)
 
@@ -25,11 +25,11 @@ class WeiXinHandler(BaseHandler):
     }
 
     # server verify
-    # def get(self):
-    #    if wx.check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
-    #        self.write(self._params['echostr'])
+    def get(self):
+       if wc['wechat'].check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
+           self.write(self._params['echostr'])
 
     def post(self):
-        # if wx.check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
+        # if wc['wechat'].check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
         #   body_text = self.request.body
         pass
