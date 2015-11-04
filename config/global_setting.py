@@ -18,7 +18,7 @@ else:
     TEST_MODE = False
 
 
-APP_HOST = 'http://geass.t207.me'
+APP_HOST = 'http://geass.me'
 #REDIS_HOSTS = [('localhost', 6379, 0)]
 REDIS = {
     'host': 'localhost',
