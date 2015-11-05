@@ -125,6 +125,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                             var jobId = uploadImg.uploadQueue.shift();
                             uploadImg.isBusy = true;
                             uploadImg.createUpload(jobId, 'newthread', uploadTimer);
+                            jq('#li'+jobId+' .cBtn').show();
                         }
                     }, 10);
                 }, 300);
@@ -162,7 +163,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
                     var html = '<li id="li' + id + '"><div class="photoCut"><img src="https://dn-geass-static.qbox.me/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
                             '<div class="maskLay"></div>' +
-                            '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="'+id+'">关闭</a></li>';
+                            '<a href="javascript:;" class="cBtn cBtnOn pa db" style="display:none;" title="" _id="'+id+'">关闭</a></li>';
                     jq('#addPic').before(html);
 
                     uploadImg.previewQueue.push(id);

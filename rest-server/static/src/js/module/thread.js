@@ -619,6 +619,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                             var jobId = uploadImg.uploadQueue.shift();
                             uploadImg.isBusy = true;
                             uploadImg.createUpload(jobId, 'replyForm', uploadTimer);
+                            jq('#li'+jobId+' .cBtn').show();
                         }
                     }, 10);
                 }, 300);
@@ -656,7 +657,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
                     var html = '<li id="li' + id + '"><div class="photoCut"><img src="https://dn-geass-static.qbox.me/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
                             '<div class="maskLay"></div>' +
-                            '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="'+id+'">关闭</a></li>';
+                            '<a href="javascript:;" class="cBtn cBtnOn pa db" style="display:none;" title="" _id="'+id+'">关闭</a></li>';
                     jq('#addPic').before(html);
 
                     uploadImg.previewQueue.push(id);
