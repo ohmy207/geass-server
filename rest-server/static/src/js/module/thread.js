@@ -273,6 +273,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     if(jq.trim(listHtml)!==''){
                                         //jq('#hotLabelBox').show();
                                         jq('#hotReplyList').append(listHtml);
+                                        exports.resetAllOpbar();
                                     }
 
                                 } else if (formType === 'comment') {
