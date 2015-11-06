@@ -43,7 +43,7 @@
       <% for (var i in topicList) { %>
 
       <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
-      <li class="" id="t_<%=topicList[i].tid%>" >
+      <li class="borderBtm1" id="t_<%=topicList[i].tid%>" >
 
           <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
               <%if (topicList[i].picture_urls.length > 0) { %>
@@ -95,7 +95,7 @@
       <% for (var i in opinionList) { %>
 
       <% if (!isDOMExist('t_' + opinionList[i].tid)) { %>
-      <li class="" id="t_<%=opinionList[i].tid%>" >
+      <li class="borderBtm1" id="t_<%=opinionList[i].tid%>" >
 
           <div class="topicWrap" data-link="/opinion?tid=<%= opinionList[i].tid %>&oid=<%= opinionList[i].oid %>" >
               <%if (opinionList[i].picture_urls.length > 0) { %>

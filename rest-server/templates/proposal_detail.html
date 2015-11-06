@@ -30,7 +30,7 @@
 
      <div class="titleWrap proposal">
 
-      <div class="voteWrap">
+      <div class="voteWrap borderBtm1">
        <div class="opWrap">
            <a class="voteCount <% if (proposal.is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposal.pid %>" data-num="<%= proposal.vote_num %>" <% if (proposal.is_voted) { %>style="background:<%= colorList[{{state['pos']}}%10] %>"<%  } %> ><% if (proposal.vote_num) { %> <%= proposal.vote_num %> <%  } else { %>0<%  } %></a>
            <div class="opoutbar fl">
@@ -100,7 +100,7 @@
         <div class="operatingBox">
             <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
             </div>
-            <div class="operatList photoTipsBox" style="display:none;height:auto;background-color:#efefef;border-top:1px solid #e2e2e2;">
+            <div class="operatList photoTipsBox" style="display:none;height:auto;">
                 <div class="photoList">
                     <ul>
                         <li class="on" id="addPic">

@@ -24,13 +24,13 @@
 
    <div class="detailBox">
 
-    <div class="topicInfo">
+    <div class="topicInfo borderBtm1">
      <a href="javascript:;" class="f14 c9" style="margin-right:10px;display:none;"><i class="iconTotal cf cc"></i></a>
      <a href="javascript:;" class="f14 c9 threadEdit"><i class="iconEdit cf cc"></i>编辑</a>
      <a id="" href="javascript:;" class="followBtn f14 c2 fr">关注</a>
     </div>
 
-    <div class="topicBtn">
+    <div class="topicBtn borderBtm1">
       <a href="javascript:;" class="threadReply" data-type="proposal"><i class="iconWrite f18 cf cc"></i>添加选项</a>
       <a href="javascript:;" class="threadReply" data-type="opinion"><i class="iconReply2 f18 cf cc"></i>添加看法</a>
     </div>
@@ -46,7 +46,7 @@
      <a href="javascript:;" class="loadMore" style="display:none;"><span>显示更多选项</span></a>
     </div>
 
-    <div id="allLabelBox" class="hotLabel" style="display:none;">
+    <div id="allLabelBox" class="hotLabel borderBtm1" style="display:none;">
      <div class="leftSideIcon all"></div><span>看法</span>
     </div>
 
@@ -107,7 +107,7 @@
       <% for (var i=0;i<proposals.length;i++) { %>
 
       <% if (!isDOMExist('p_' + proposals[i].tid + '_' + proposals[i].pid)) { %>
-      <li class="opWrap" id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" author="<%= proposals[i].author %>">
+      <li class="opWrap borderBtm1" id="p_<%=proposals[i].tid%>_<%=proposals[i].pid%>" author="<%= proposals[i].author %>">
           <a class="voteCount <% if (proposals[i].is_voted) { %>voted<%  } %> vote" href="javascript:;" pId="<%= proposals[i].pid %>" data-num="<%= proposals[i].vote_num %>" <% if (proposals[i].is_voted) { %>style="background:<%= colorList[(startPos+i)%10] %>"<%  } %> ><% if (proposals[i].vote_num) { %> <%= proposals[i].vote_num %> <%  } else { %>0<%  } %></a>
 
           <div class="proposalWrap" data-link="/proposal?tid=<%=proposals[i].tid%>&pid=<%=proposals[i].pid%>&pos=<%=startPos+i%>" >
@@ -158,7 +158,7 @@
       <% for (var i in opinions) { %>
 
       <% if (!isDOMExist('p_' + opinions[i].tid + '_' + opinions[i].oid)) { %>
-      <li id="p_<%=opinions[i].tid%>_<%=opinions[i].oid%>" author="<%= opinions[i].author %>">
+      <li id="p_<%=opinions[i].tid%>_<%=opinions[i].oid%>" class="borderBtm1" author="<%= opinions[i].author %>">
 
           <img data-src="<%=opinions[i].avatar%>" class="sImg brBig pa db" width="20" height="20">
 
@@ -243,7 +243,7 @@
         <div class="operatingBox">
             <div class="operatList tipLayer" style="display:none;margin:0;border:0;">
             </div>
-            <div class="operatList photoTipsBox" style="display:none;height:auto;background-color:#efefef;border-top:1px solid #e2e2e2;">
+            <div class="operatList photoTipsBox" style="display:none;height:auto;">
                 <div class="photoList">
                     <ul>
                         <li class="on" id="addPic">

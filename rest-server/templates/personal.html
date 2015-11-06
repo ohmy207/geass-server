@@ -27,7 +27,7 @@
 
    <div id="notice">
     <div class="pWrap pr">
-     <h1 class="pTitle pr" data-link="/notice_list">
+     <h1 class="pTitle pr borderBtm1" data-link="/notice_list">
       <span class="cf iconNotice"></span>
        我的消息
       <span class="notiNumber" style="display:none;"></span>
@@ -71,7 +71,7 @@
 
     <div class="pWrap pr">
 
-     <h1 class="pTitle pr" data-link="<%= link %>" ><span class="cf <%= icon %>"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
+     <h1 class="pTitle pr borderBtm1" data-link="<%= link %>" ><span class="cf <%= icon %>"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
      </h1>
 
      <ul class="pTopicList">
@@ -79,7 +79,7 @@
       <% for (var i in topicList) { %>
 
       <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
-      <li class="" id="t_<%=topicList[i].tid%>" >
+      <li class="borderBtm1" id="t_<%=topicList[i].tid%>" >
 
           <div class="topicWrap" data-link="/topic?tid=<%=topicList[i].tid%>" >
               <%if (topicList[i].picture_urls.length > 0) { %>
@@ -133,7 +133,7 @@
 
     <div class="pWrap pr">
 
-     <h1 class="pTitle pr" data-link="<%= link %>" ><span class="cf <%= icon %>"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
+     <h1 class="pTitle pr borderBtm1" data-link="<%= link %>" ><span class="cf <%= icon %>"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
      </h1>
 
      <ul class="pTopicList">
@@ -141,7 +141,7 @@
       <% for (var i in opinionList) { %>
 
       <% if (!isDOMExist('t_' + opinionList[i].tid)) { %>
-      <li class="" id="t_<%=opinionList[i].tid%>" >
+      <li class="borderBtm1" id="t_<%=opinionList[i].tid%>" >
 
           <div class="topicWrap" data-link="/opinion?tid=<%= opinionList[i].tid %>&oid=<%= opinionList[i].oid %>" >
               <%if (opinionList[i].picture_urls.length > 0) { %>
