@@ -3957,8 +3957,11 @@ i {
 
     line-height: 20px;
     color: #000;
+}
 
-    font-size: 15px;
+.pName strong {
+    font: inherit;
+    font-size: 16px;
 }
 
 .person .pAvatar {
