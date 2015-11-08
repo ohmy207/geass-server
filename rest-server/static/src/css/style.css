@@ -1633,47 +1633,103 @@ auto
     text-align: center
 }
 
-.editTCon {
-    margin: 10px 15px 20px;
-    text-align: left;
-    line-height: 25px;
-    color: #434343;
-    font-size: 17px;
-}
-
-.editTitle {
-    padding: 10px 15px;
-    text-align: left;
-    line-height: 28px;
-    color: #2FB3E3;
-    font-size: 20px;
-    font-weight: 600;
-    border-bottom: 2px solid #2FB3E3;
-}
-
-.editArea {
-    display: -webkit-box;
-    border-top: 1px solid #e5e5e5;
+.popDialog {
+    position: fixed;
+    width: 85%;
+    background-color: #FAFAFC;
     text-align: center;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    line-height: 1.6;
     /*
-    height: 50px;
-    padding: 13px 15px 0;
-    margin: 0 -10px;
-    background-color: #f8f8f8;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
      */
 }
 
-.editBtn1, .editBtn2 {
-    -webkit-box-flex: 1;
-    height: 45px;
-    line-height: 45px;
-    color: #434343;
-    border-radius: 2px;
-    text-align: center;
+@media screen and (min-width: 1024px) {
+    .popDialog {
+        width: 35%;
+    }
 }
 
-.editBtn2 {
-    border-right: 1px solid #e5e5e5;
+.editTCon {
+    text-align: left;
+    padding: 0 20px;
+    font-size: 15px;
+    color: #888;
+}
+
+.editTitle {
+    text-align: left;
+    padding: 19px 20px 8px;
+    /*
+    padding: 1.2em 20px .5em;
+    */
+}
+
+.editTitle strong {
+    font-weight: 400;
+    font-size: 17px;
+}
+
+.editArea {
+    position: relative;
+    line-height: 42px;
+    margin-top: 20px;
+    font-size: 17px;
+}
+
+.editArea:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 1px;
+    border-top: 1px solid #D5D5D6;
+    -webkit-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    -ms-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+.editBtn1, .editBtn2 {
+    display: block;
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    position: relative;
+    float: left;
+    width: 50%;
+    color: #353535;
+    font-size: 17px;
+}
+
+.editBtn1 {
+    float: none;
+    width: auto;
+    overflow: hidden;
+    color: #2791dc;
+}
+
+.editBtn1:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    border-left: 1px solid #D5D5D6;
+    -webkit-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleX(0.5);
+    -ms-transform: scaleX(0.5);
+    transform: scaleX(0.5);
 }
 
 .tipsCon {
@@ -3960,7 +4016,7 @@ i {
 }
 
 .pName strong {
-    font: inherit;
+    font-weight: 500;
     font-size: 16px;
 }
 
