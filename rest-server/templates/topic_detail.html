@@ -219,9 +219,14 @@
 
         <div class="sendInfo wot pr">
             <%if (data.formType == 'opinion' || (data.formType == 'topic' && data.isAuthor)) { %>
-                <label class="f13 fl">
-                 <input type="checkbox" name="isanon" value="1" <% if (data.formType == 'topic' && data.isAnonymous) { %>checked="checked"<% } %> >
-                 匿名
+                <label class="checkLabel">
+                    <div class="checkHead">
+                        <input type="checkbox" class="check" name="isanon" value="1" <% if (data.formType == 'topic' && data.isAnonymous) { %>checked="checked"<% } %> >
+                        <i class="iconChecked cf"></i>
+                    </div>
+                    <div class="checkInfo">
+                        <p class="f13">匿名</p>
+                    </div>
                 </label>
             <% } %>
         </div>
@@ -229,14 +234,14 @@
         <div class="sendNav">
             <ul>
                 <li class="pr uploadPicBox">
-                    <a data-id='1' href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
+                    <a data-id='1' href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr fl" style="margin-left:15px;z-index:1;"></a>
                     <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
                 </li>
                 <li>&nbsp;</li>
                 <li>&nbsp;</li>
                 <li>&nbsp;</li>
-                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn brSmall f13 db fr c3 close">取消</a></li>
-                <li><a id="comBtn" href="javascript:;" class="sendBtn brSmall f13 db c2">发送</a>
+                <li><a id="cBtn" href="javascript:;" class="cancelNewBtn db fr c3 close">取消</a></li>
+                <li><a id="comBtn" href="javascript:;" class="sendBtn db c2">发表</a>
                 </li>
             </ul>
         </div>
@@ -250,7 +255,6 @@
                         <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single>
                         </li>
                     </ul>
-                    <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p>
                 </div>
             </div>
 

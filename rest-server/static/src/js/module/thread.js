@@ -634,7 +634,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
                 for (var i = 0; i<fileList.length; i++) {
                     if (uploadNum > 8) {
-                        jq.UTIL.dialog({content:'你最多只能上传8张照片',autoClose:true});
+                        jq.UTIL.dialog({content:'最多只能上传8张图片',autoClose:true});
                         break;
                     }
 

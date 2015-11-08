@@ -138,7 +138,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
 
                 for (var i = 0; i<fileList.length; i++) {
                     if (uploadImg.countUpload() >= uploadImg.maxUpload) {
-                        jq.UTIL.dialog({content:'你最多只能上传8张照片',autoClose:true});
+                        jq.UTIL.dialog({content:'最多只能上传8张图片',autoClose:true});
                         break;
                     }
 

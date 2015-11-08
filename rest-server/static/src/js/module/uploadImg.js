@@ -311,7 +311,7 @@ define(['jpegMeta', 'imageCompresser'], function(JpegMeta, ImageCompresser) {
                   break;
             }
             //更新剩余可上传图片数
-            jq('#onlyUploadNum').html(canOnlyUploadNum);
+            //jq('#onlyUploadNum').html(canOnlyUploadNum);
         },
 
         // 检查图片大小

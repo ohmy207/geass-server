@@ -14,10 +14,6 @@
    <form method="post" action="/api/v1/topics" id="newthread">
     {% raw xsrf_form_html() %}
 
-    <div class="sendInfo wot pr" style="display:none;">
-     <span class="locationCon address f13 c1" closestatus="2">问题：</span> 
-    </div>
-
     <div class="sendTit pr">
      <span class="tagTopic db pa" style="width:50px;display:none;"></span> 
      <textarea id="title" name="title" cols="" rows="" class="sInput f15" placeholder="写下你的话题"></textarea> 
@@ -29,21 +25,21 @@
     </div> 
 
     <div class="sendInfo wot pr">
-     <label class="f13" >
-      <input type="checkbox" name="isprivate" value="1">
-       私有
-     </label>
-     <span class="form-split">&nbsp;</span>
-     <label class="f13" >
-      <input type="checkbox" name="isanon" value="1">
-      匿名
+     <label class="checkLabel">
+      <div class="checkHead">
+       <input type="checkbox" class="check" name="isanon" value="1">
+       <i class="iconChecked cf"></i>
+      </div>
+      <div class="checkInfo">
+       <p class="f13">匿名</p>
+      </div>
      </label>
     </div>
 
     <div class="sendNav">
      <ul>
       <li class="pr">
-        <a data-id="1" href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr" style="z-index:1;"></a>
+        <a data-id="1" href="javascript:;" class="operatIcon iconSendImg db f21 c9 cf pr fl" style="margin-left:15px;z-index:1;"></a>
         <input type="file" class="pa" style="height:100%;width:100%;left:0;top:0;z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="fistUploadFile" accept="image/*" single="" />
       </li>
       <li>&nbsp;</li>
@@ -52,7 +48,7 @@
       <li>&nbsp;</li>
       <li>&nbsp;</li>
       <li>
-       <a href="javascript:;" class="sendBtn brSmall f13 db c2" id="submitButton">发送</a> 
+       <a href="javascript:;" class="sendBtn db c2" id="submitButton">发表</a> 
       </li>
      </ul>
     </div>
@@ -61,7 +57,6 @@
      <ul> 
       <li class="on" id="addPic"> <input type="file" class="on needsclick" style="z-index:200;opacity:0;filter:alpha(opacity=0);-ms-filter:'alpha(opacity=0)';" id="uploadFile" accept="image/*" single="" /> </li> 
      </ul> 
-     <p class="textTip f12">还可上传<span id="onlyUploadNum">8</span>张照片呦~</p> 
     </div> 
 
     <div class="operatingBox"> 
