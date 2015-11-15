@@ -32,7 +32,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 isList: true,
                 isEmptyShow: true,
                 url: '/user/notifications',
-                emptyCon: '还没有消息！',
+                emptyCon: '还没有消息',
                 type: exports.filterType,
                 callback: exports.renderList,
             }, action);

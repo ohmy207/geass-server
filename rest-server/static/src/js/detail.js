@@ -64,9 +64,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         renderProposals: function(re) {
-            //var ReplyHtml = template('tmpl_proposals', {
-            //    'data_list': re.data.proposal_list,
-            //});
 
             if (re.data.has_more_proposals) {
                 if (exports.moreType === 'all') {
@@ -223,7 +220,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     exports.moreType = 'all';
                 }
                 thread.load(loadOpts, 'more');
-                //jq.UTIL.reload('/proposal_list' + '?tid=' + tId);
             });
 
             // follow

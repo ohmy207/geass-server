@@ -516,40 +516,24 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         checkIsRegistered: function(callback) {
             if (!window.isRegistered) {
-                var opts = {
-                    'id':'operationConfirm',
-                    'isMask':true,
-                    'title':'前往微信授权？',
-                    'content':'本操作需要获取用户昵称及头像信息，要继续吗？',
-                    'okValue':'确定',
-                    'cancelValue':'取消',
-                    'ok':function() {
-                        jq.UTIL.reload(window.registerURL)
-                    },
-                };
-                jq.UTIL.dialog(opts);
+                //var opts = {
+                //    'id':'operationConfirm',
+                //    'isMask':true,
+                //    'title':'前往微信授权？',
+                //    'content':'本操作需要获取用户昵称及头像信息，要继续吗？',
+                //    'okValue':'确定',
+                //    'cancelValue':'取消',
+                //    'ok':function() {
+                //        jq.UTIL.reload(window.registerURL)
+                //    },
+                //};
+                //jq.UTIL.dialog(opts);
+                jq.UTIL.reload(window.registerURL)
             } else {
                 callback();
             }
         },
-        //checkForm: function() {
 
-        //    jq.each(uploadImg.uploadInfo, function(i,n) {
-        //        if (n && !n.isDone) {
-        //            jq.UTIL.dialog({content:'图片上传中，请等待', autoClose:true});
-        //            return false;
-        //        }
-        //    });
-
-        //    var content = jq('#content').val();
-        //    var contentLen = jq.UTIL.mb_strlen(jq.UTIL.trim(content));
-        //    if (contentLen < 15) {
-        //        jq.UTIL.dialog({content:'内容过短', autoClose:true});
-        //        return false;
-        //    }
-
-        //    return true;
-        //},
         initUpload: function() {
             // 上传图片的绑定
             jq('#addPic, .uploadPicBox').on('click', function() {

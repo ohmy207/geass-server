@@ -32,7 +32,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 isList: true,
                 isEmptyShow: true,
                 url: '/topics/' + window.tId + '/proposals',
-                emptyCon: '还没有选项哦！',
+                emptyCon: '还没有选项',
                 callback: exports.renderList,
             }, action);
         },

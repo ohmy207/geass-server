@@ -214,7 +214,7 @@
         <% } %>
 
         <div class="sendRCon">
-            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType != 'opinion') { %>描述（可选）<% } else { %>写下你的看法<% } %>"></textarea>
+            <textarea id="content" name="content" cols="" rows="" class="sInput f15" placeholder="<% if (data.formType == 'proposal') { %>添加描述（可选）<% } else if (data.formType == 'opinion') { %>写下你的看法<% } else { %>添加补充说明（可选）<% } %>"></textarea>
         </div>
 
         <div class="sendInfo wot pr">
