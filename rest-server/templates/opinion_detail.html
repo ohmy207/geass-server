@@ -61,7 +61,7 @@
       <div class="threadPic pr"> 
 
       <% for (var i in opinion.picture_urls) { %>
-        <span> <img class="dImg" data-src="<%= opinion.picture_urls[i]['origin'] %>"/> </span>
+        <span><img class="dImg" data-src="<%= opinion.picture_urls[i]['origin'] %>" data-origin="<%= opinion.picture_urls[i]['origin'] %>"/></span>
       <% } %>
 
       </div>

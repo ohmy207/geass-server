@@ -64,11 +64,11 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             jq('.warp').on('click', '.threadPic img', function() {
                 var thisObj = jq(this),
-                    current = thisObj.data('src'),
+                    current = thisObj.data('origin'),
                     urls = [];
 
                 jq('.threadPic img').each(function() {
-                    urls.push(jq(this).data('src'));
+                    urls.push(jq(this).data('origin'));
                 });
 
                 wx.previewImage({

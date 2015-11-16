@@ -345,7 +345,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         jq('textarea[name="content"]').val(jq('#editCon').val());
 
                         jq('.threadPic img').each(function() {
-                            var url = jq(this).data('src'),
+                            var url = jq(this).data('origin'),
                                 id = url.split('/')[3],
                                 html = '<li id="li' + id + '"><div class="photoCut"><img src="' + url + '?imageView2/1/w/200/h/200' + '" class="attchImg" alt="photo"></div>' +
                                     '<a href="javascript:;" class="cBtn cBtnOn pa db" title="" _id="'+id+'">关闭</a></li>',

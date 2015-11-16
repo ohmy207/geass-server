@@ -55,7 +55,7 @@
       <div class="threadPic pr"> 
 
       <% for (var i in proposal.picture_urls) { %>
-        <span> <img class="dImg" data-src="<%= proposal.picture_urls[i]['origin'] %>"/> </span>
+        <span><img class="dImg" data-src="<%= proposal.picture_urls[i]['origin'] %>" data-origin="<%= proposal.picture_urls[i]['origin'] %>"/></span>
       <% } %>
 
       </div>
