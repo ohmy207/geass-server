@@ -26,8 +26,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
     var exports = {
         hasVoted: false,
-        moreType: 'more',
-        startPos: 0,
+        //moreType: 'more',
+        nextStart: 0,
+        //startPos: 0,
 
         load: function(action) {
             thread.load({
@@ -66,16 +67,17 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         renderProposals: function(re) {
 
             if (re.data.has_more_proposals) {
-                if (exports.moreType === 'all') {
-                    jq('.loadMore span').html('显示全部选项');
-                }
+                //if (exports.moreType === 'all') {
+                //    jq('.loadMore span').html('显示全部选项');
+                //}
                 jq('.loadMore').show();
             } else {
                 jq('.loadMore').hide();
             }
 
             thread.voteTotalNum = re.data.vote_total_num || 0;
-            re.data.startPos = exports.startPos;
+            //re.data.startPos = exports.startPos;
+            re.data.startPos = exports.nextStart;
             re.data.colorList = thread.colorList;
 
             var listHtml = template('tmpl_proposals', re.data);
@@ -84,6 +86,10 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq('#hotReplyList').append(listHtml);
                 jq('#hotReplyList').css({height:'auto'});
                 thread.resetAllOpbar();
+            }
+
+            if (re.data.next_start) {
+                exports.nextStart = re.data.next_start;
             }
         },
 
@@ -205,20 +211,22 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 jq.UTIL.touchStateNow(jq(this));
 
                 var loadOpts = {
-                    isList: false,
+                    isList: true,
                     isEmptyShow: false,
                     url: '/topics/' + tId + '/proposals',
                     emptyCon: '',
-                    type: exports.moreType,
+                    //type: exports.moreType,
+                    nextStart: exports.nextStart,
+                    isNextStartUpdate: false,
                     callback: exports.renderProposals,
                 };
 
-                if (exports.moreType === 'all') {
-                    exports.startPos = 15;
-                } else if (exports.moreType === 'more') {
-                    exports.startPos = 5;
-                    exports.moreType = 'all';
-                }
+                //if (exports.moreType === 'all') {
+                //    exports.startPos = 15;
+                //} else if (exports.moreType === 'more') {
+                //    exports.startPos = 5;
+                //    exports.moreType = 'all';
+                //}
                 thread.load(loadOpts, 'more');
             });
 

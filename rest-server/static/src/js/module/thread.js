@@ -32,15 +32,15 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             exports.isLoading = true;
 
             var isList = loadOpts.isList || false,
-                filterType = loadOpts.type || null,
+                //filterType = loadOpts.type || null,
                 url = loadOpts.url,
                 action = action || '',
-                start = exports.nextStart;
+                start = loadOpts.nextStart || exports.nextStart;
 
-            if (filterType) {
-                url = url.indexOf('?') === -1 ? url + '?' : url + '&';
-                url = url + 'type=' + filterType;
-            }
+            //if (filterType) {
+            //    url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+            //    url = url + 'type=' + filterType;
+            //}
             if (isList) {
                 url = url.indexOf('?') === -1 ? url + '?' : url + '&';
                 url = url + 'skip=' + start;
@@ -119,7 +119,11 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             if (typeof opts.callback == 'function') {
                 opts.callback(re, clear);
             }
-            if (re.data.next_start) {
+
+            if (opts.isNextStartUpdate === undefined) {
+                opts.isNextStartUpdate = true;
+            }
+            if (opts.isNextStartUpdate && re.data.next_start) {
                 exports.nextStart = re.data.next_start;
             }
             jq('#loadNext').hide();
