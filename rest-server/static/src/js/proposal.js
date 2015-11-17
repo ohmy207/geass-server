@@ -40,6 +40,11 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             thread.resetOpbar(jq('.opWrap'), thread.voteTotalNum, window.pos);
 
             exports.hasVoted = re.data.has_user_voted || false;
+            thread.initShare({
+                title: re.data.proposal.topic_title,
+                desc: re.data.proposal.title,
+                imgUrl: re.data.proposal.picture_urls.length > 0 ? re.data.proposal.picture_urls[0]['origin'] : '',
+            });
         },
 
         init: function() {

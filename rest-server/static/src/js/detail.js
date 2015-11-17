@@ -61,7 +61,11 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             exports.isAnonymous = re.data.topic.is_anonymous || false;
             exports.isAuthor = re.data.is_author || false;
-            thread.initShare(re.data.topic);
+            thread.initShare({
+                title: re.data.topic.title,
+                desc: re.data.topic.content,
+                imgUrl: re.data.topic.picture_urls.length > 0 ? re.data.topic.picture_urls[0]['origin'] : jq('.proposaList img').first().data('src'),
+            });
         },
 
         renderProposals: function(re) {

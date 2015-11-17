@@ -129,13 +129,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             jq('#loadNext').hide();
         },
 
-        initShare: function(data) {
-            var shareData = {
-                title: data.title,
-                desc: data.content,
-                link: window.location.href,
-                imgUrl: data.picture_urls.length > 0 ? data.picture_urls[0] : 'https://dn-geass-images.qbox.me/Fs0t-OATExfbYJO7EqWrVq1YmfbP',
-            };
+        initShare: function(shareData) {
+            shareData.link = window.location.href;
+            shareData.imgUrl = shareData.imgUrl || 'https://dn-geass-images.qbox.me/Fs0t-OATExfbYJO7EqWrVq1YmfbP';
 
             wx.onMenuShareAppMessage(shareData);
             wx.onMenuShareTimeline(shareData);
