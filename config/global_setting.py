@@ -82,6 +82,10 @@ ANONYMOUS_USER = {
     'avatar': 'https://dn-geass-static.qbox.me/anonymous_avatar.jpg',
 }
 
+DEFAULT_USER = {
+    'avatar': 'https://dn-geass-static.qbox.me/default_avatar.jpg',
+}
+
 # Third-party
 
 # qiniu config

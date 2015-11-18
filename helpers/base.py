@@ -10,7 +10,7 @@ from tornado.escape import xhtml_escape
 
 from setting import COLLECTION_PREFIX as _PREFIX
 from utils import escape as _es
-from config.global_setting import PIC_URL, ANONYMOUS_USER
+from config.global_setting import PIC_URL, ANONYMOUS_USER, DEFAULT_USER
 from models.user import model as user_model
 
 
@@ -75,7 +75,7 @@ class UserHelper(BaseHelper, user_model.User):
         result = {
             'uid': record['_id'],
             'nickname': record['nickname'] or record['open']['wx']['nickname'],
-            'avatar': PIC_URL['avatar'](record['avatar']) if record['avatar'] else record['open']['wx']['headimgurl'],
+            'avatar': PIC_URL['avatar'](record['avatar']) if record['avatar'] else record['open']['wx']['headimgurl'] if record['open']['wx']['headimgurl'] else DEFAULT_USER['avatar'],
             'sex': record['sex'] or record['open']['wx']['sex'],
         }
 
