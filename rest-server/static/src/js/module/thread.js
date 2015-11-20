@@ -398,8 +398,9 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 var opts = {
                     'id':'operationConfirm',
                     'isMask':true,
-                    'title':'公共编辑',
-                    'content':'请确信您的修改能够帮助改进内容，该修改将即时生效，请慎重对待。',
+                    'title':'帮助改进内容',
+                    'content':'修改将即时生效，请慎重对待'
+                             + '<br><a href="http://mp.weixin.qq.com/s?__biz=MzAxODc0NzQ0NQ==&mid=400394968&idx=1&sn=8a95e3d8404f23eee7673617ab8d27e5&scene=1&srcid=1119UrLnEcP1How0DsuqPCHB&from=singlemessage&isappinstalled=0#wechat_redirect">为什么可以公共编辑？</a>',
                     'okValue':'确定',
                     'cancelValue':'取消',
                     'ok':function() {

@@ -764,7 +764,7 @@ img {
 }
 
 .titleWrap .personImgDate, .titleWrap .voteWrap {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     border-color: rgba(231, 231, 232, 0.5);
 }
 
@@ -776,7 +776,7 @@ img {
 
 .titleWrap .personImgDate .perImg {
     padding-right: 10px;
-    width: 25px;
+    width: 30px;
 }
 
 .titleWrap .personImgDate .titleBottomWrap {

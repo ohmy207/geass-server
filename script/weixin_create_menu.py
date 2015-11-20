@@ -10,18 +10,18 @@ menu_data = {
 
         {
             'type': 'view',
-            'name': '创建话题',
+            'name': '发起投票',
             'url': 'http://geass.me/new'
         },
 
         {
             'type': 'view',
-            'name': '我的话题',
+            'name': '我的投票',
             'url': 'http://geass.me/personal'
         },
 
         {
-            'name': '菜单',
+            'name': '更多服务',
             'sub_button': [
 
                 {
