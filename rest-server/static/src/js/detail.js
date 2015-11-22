@@ -27,7 +27,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
     var exports = {
         hasVoted: false,
         //moreType: 'more',
-        nextStart: 0,
+        nextStart: 5,
         //startPos: 0,
 
         load: function(action) {
@@ -41,7 +41,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         },
 
         // render data
-        render: function(re) {
+        render: function(re, clear) {
             exports.hasVoted = re.data.has_user_voted || false;
 
             var topicHtml = template('tmpl_topic', re.data);
@@ -50,7 +50,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 follow_html = is_topic_followed ? '已关注' : '关注';
 
             jq('.detailBox').prepend(topicHtml);
-            exports.renderProposals(re)
+            exports.renderProposals(re, clear)
             exports.renderList(re)
 
             if (re.data.has_opinion) {
@@ -71,7 +71,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             });
         },
 
-        renderProposals: function(re) {
+        renderProposals: function(re, clear) {
 
             if (re.data.has_more_proposals) {
                 //if (exports.moreType === 'all') {
@@ -95,7 +95,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 thread.resetAllOpbar();
             }
 
-            if (re.data.next_start) {
+            if (!clear && re.data.next_start) {
                 exports.nextStart = re.data.next_start;
             }
         },
