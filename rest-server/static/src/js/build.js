@@ -22,7 +22,6 @@
         "comment": "comment",
         "personal": "personal",
         "personal_list": "personal_list",
-        "proposal_list": "proposal_list",
         "notice_list": "notice_list",
     },
     shim:{
@@ -49,9 +48,6 @@
         },
         {
             name: "personal_list",
-        },
-        {
-            name: "proposal_list",
         },
         {
             name: "notice_list",

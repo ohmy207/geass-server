@@ -20,7 +20,7 @@ class Topic(BaseHelper, topic_model.Topic):
     @staticmethod
     def callback(record):
         result = {
-            'tid':  record['_id'],
+            'tid': record['_id'],
             'title': record['title'],
             'author_uid': record['uid'],
             'is_anonymous': record['isanon'],
@@ -76,7 +76,8 @@ class Opinion(BaseHelper, topic_model.Opinion):
         result['f_created_time'] = Opinion._format_time(record['ctime'])
         result['picture_urls'] = map(PIC_URL['img'], record['pickeys'])
 
-        simple_user = Opinion._user.get_simple_user(record['uid'], record['isanon'])
+        simple_user = Opinion._user.get_simple_user(
+            record['uid'], record['isanon'])
         result['author'] = simple_user['nickname']
         result['avatar'] = simple_user['avatar']
 
@@ -143,12 +144,14 @@ class Comment(BaseHelper):
             is_target_anon = parent_coll.find_one(
                 {'_id': parent_coll.to_objectid(parent_id)})['isanon'] if result['target']['is_lz'] else False
 
-            to_user = self._user.get_simple_user(record['target']['uid'], is_target_anon)
+            to_user = self._user.get_simple_user(
+                record['target']['uid'], is_target_anon)
             result['target']['author'] = to_user['nickname']
 
         return result
 
-    def get_comments(self, parent, parent_id, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
+    def get_comments(
+            self, parent, parent_id, uid=None, skip=0, limit=5, sort=[('ctime', 1)]):
         coll = self._coll_map[parent]
         parent_id = coll.to_objectid(parent_id)
         spec = {self._field_map[parent]: parent_id}
@@ -156,8 +159,9 @@ class Comment(BaseHelper):
 
         return [self.format(rd, uid) for rd in records]
 
-    def add_comment(self, parent, parent_id, uid, content, tocoid=None, is_lz=False):
-        parent_id, uid, tocoid= self.to_objectids(parent_id, uid, tocoid)
+    def add_comment(
+            self, parent, parent_id, uid, content, tocoid=None, is_lz=False):
+        parent_id, uid, tocoid = self.to_objectids(parent_id, uid, tocoid)
         key, coll = self._field_map[parent], self._coll_map[parent]
         doc = {
             key: parent_id,
@@ -200,4 +204,3 @@ class PublicEdit(BaseHelper):
         route_id, uid = self.to_objectids(route_id, uid)
         doc.update({'uid': uid, self._field_map[route]: route_id})
         self._coll_map[route].create(doc)
-

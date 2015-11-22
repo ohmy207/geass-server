@@ -25,7 +25,8 @@ class Wechat(WechatBasic):
             token=WEIXIN['token'], appid=WEIXIN['appid'], appsecret=WEIXIN['appsecret'])
 
     def _create_nonce_str(self):
-        return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(15))
+        return ''.join(random.choice(
+            string.ascii_letters + string.digits) for _ in range(15))
 
     def _create_timestamp(self):
         return int(time.time())
@@ -39,4 +40,3 @@ class Wechat(WechatBasic):
         sign_package['signature'] = self.generate_jsapi_signature(
             sign_package['timestamp'], sign_package['nonceStr'], url, jsapi_ticket=None)
         return sign_package
-

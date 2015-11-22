@@ -32,15 +32,15 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             exports.isLoading = true;
 
             var isList = loadOpts.isList || false,
-                //filterType = loadOpts.type || null,
+                filterType = loadOpts.type || null,
                 url = loadOpts.url,
                 action = action || '',
                 start = loadOpts.nextStart || exports.nextStart;
 
-            //if (filterType) {
-            //    url = url.indexOf('?') === -1 ? url + '?' : url + '&';
-            //    url = url + 'type=' + filterType;
-            //}
+            if (filterType) {
+                url = url.indexOf('?') === -1 ? url + '?' : url + '&';
+                url = url + 'type=' + filterType;
+            }
             if (isList) {
                 url = url.indexOf('?') === -1 ? url + '?' : url + '&';
                 url = url + 'skip=' + start;
@@ -265,6 +265,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                                     if(jq.trim(listHtml)!==''){
                                         allLabelBox.show();
                                         jq('#allReplyList').append(listHtml);
+                                        jq('.topicBtn').find('[data-type="opinion"]').html('<i class="iconReply2 f18 cf cc"></i>已发表看法').addClass('hasReply')
                                     }
 
                                 } else if (formType === 'proposal') {

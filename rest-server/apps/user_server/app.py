@@ -69,7 +69,6 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'personal': 'personal',
         'notice_list': 'notice_list',
 
-        'proposal_list': 'proposal_list',
         'following': 'personal_list',
         'publish_topics': 'personal_list',
         'publish_opinions': 'personal_list',

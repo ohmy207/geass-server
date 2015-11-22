@@ -67,7 +67,6 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //    scroll(0,0);
             //});
 
-            // 主题和底部bar 帖点击回复
             jq('.warp, #bottomBar').on('click', '.threadReply', function() {
                 var thisObj = jq(this),
                     callback = function() {

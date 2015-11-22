@@ -1,8 +1,4 @@
 /**
- * @filename main
- * @description
- * 作者: xuguangzhou
- * 创建时间: 2015-03-24 20:01:03
  **/
 
 require.config({

@@ -53,6 +53,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             exports.renderProposals(re)
             exports.renderList(re)
 
+            if (re.data.has_opinion) {
+                jq('.topicBtn').find('[data-type="opinion"]').html('<i class="iconReply2 f18 cf cc"></i>已发表看法').addClass('hasReply')
+            }
             jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
             //jq('.topicInfo .iconTotal').after(thread.voteTotalNum + ' 票');
             jq('#bottomBar .iconReply').html(re.data.comments_count);
@@ -179,16 +182,19 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //    scroll(0,0);
             //});
 
-            // 主题和底部bar 帖点击回复
             jq('.topicBtn').on('click', '.threadReply', function() {
-                var thisObj = jq(this),
-                    callback = function() {
-                        var formType = thisObj.data('type');
-                            url = formType == 'proposal' ? '/topics/'+tId+'/proposals' : '/topics/'+tId+'/opinions'
-                        thread.reply(url, null, '', formType);
-                    };
+                var thisObj = jq(this);
                 jq.UTIL.touchStateNow(thisObj);
-                thread.checkIsRegistered(callback);
+
+                if (thisObj.hasClass('hasReply')) {
+                    return false;
+                }
+
+                thread.checkIsRegistered(function() {
+                    var formType = thisObj.data('type'),
+                        url = formType == 'proposal' ? '/topics/'+tId+'/proposals' : '/topics/'+tId+'/opinions'
+                    thread.reply(url, null, '', formType);
+                });
             });
 
             jq('.topicInfo').on('click', '.threadEdit', function() {

@@ -12,4 +12,3 @@ COLLECTION_PREFIX = ''
 
 # helper name prefix
 HELPER_PREFIX = ''
-

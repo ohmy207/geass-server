@@ -52,7 +52,7 @@ class UserSourceHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 10),
+            ('limit', int, 15),
         ]
     }
 
@@ -122,7 +122,7 @@ class NotificationHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 5),
+            ('limit', int, 15),
             ('type', basestring, None),
         ]
     }

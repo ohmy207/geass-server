@@ -59,15 +59,6 @@ class OneTopicHandler(BaseHandler):
         ]
     }
 
-    _get_params = {
-        'need': [
-        ],
-        'option': [
-            ('skip', int, 0),
-            ('limit', int, 5),
-        ]
-    }
-
     #@authenticated
     def GET(self, tid):
         tid = self.to_objectid(tid)
@@ -82,7 +73,7 @@ class OneTopicHandler(BaseHandler):
         proposals = db_topic['proposal'].get_all(spec, skip=0, limit=5, sort=sort)
 
         sort=[('lnum', -1), ('ctime', 1)]
-        opinions = db_topic['opinion'].get_all(spec, skip=0, limit=self._limit, sort=sort)
+        opinions = db_topic['opinion'].get_all(spec, skip=0, limit=10, sort=sort)
 
         self._data = {
             'topic': topic,
@@ -96,8 +87,9 @@ class OneTopicHandler(BaseHandler):
             'has_user_voted': db_user['vote'].has_user_voted(uid, tid),
             'is_topic_followed': db_user['follow'].is_topic_followed(uid, tid),
             'has_more_proposals': True if db_topic['proposal'].get_all(spec, skip=5, limit=1, sort=sort) else False,
+            'has_opinion': True if db_topic['opinion'].find_one({'tid': tid, 'uid': uid}) else False,
 
-            'next_start': self._skip + self._limit,
+            'next_start': 10,
         }
 
     @authenticated
@@ -146,17 +138,9 @@ class ProposalsHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 5),
+            ('limit', int, 15),
         ]
     }
-
-    #_get_params = {
-    #    'need': [
-    #    ],
-    #    'option': [
-    #        ('type', basestring, None),
-    #    ]
-    #}
 
     #@authenticated
     def GET(self, tid):
@@ -167,13 +151,6 @@ class ProposalsHandler(BaseHandler):
 
         proposals = db_topic['proposal'].get_all(spec, skip=self._skip, limit=self._limit, sort=sort)
         has_more_proposals = True if db_topic['proposal'].get_all(spec, skip=next_start, limit=1, sort=sort) else False
-        #proposals = []
-        #has_more_proposals = False
-        #if self._params['type'] == 'more':
-        #    proposals = db_topic['proposal'].get_all(spec, skip=5, limit=10, sort=sort)
-        #    has_more_proposals = True if db_topic['proposal'].get_all(spec, skip=15, limit=1, sort=sort) else False
-        #if self._params['type'] == 'all':
-        #    proposals = db_topic['proposal'].get_all(spec, skip=15, limit=100, sort=sort)
 
         self._data = {
             'data_list': db_user['vote'].format_proposals(self.current_user, proposals),
@@ -285,7 +262,7 @@ class OpinionsHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 5),
+            ('limit', int, 15),
         ]
     }
 
@@ -313,13 +290,12 @@ class OpinionsHandler(BaseHandler):
         tid = self.to_objectid(tid)
         uid = self.current_user
         topic = db_topic['topic'].find_one({'_id': tid})
-        opinion_count = db_topic['opinion'].find({'tid': tid, 'uid': uid}).count()
 
         if not topic:
             raise ResponseError(404)
 
-        #if opinion_count > 0:
-        #    raise ResponseError(71)
+        if db_topic['opinion'].find_one({'tid': tid, 'uid': uid}):
+            raise ResponseError(71)
 
         if len(data['content']) <= 0:
             raise ResponseError(30)
@@ -402,7 +378,7 @@ class CommentsHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 5),
+            ('limit', int, 15),
         ]
     }
 

@@ -8,7 +8,7 @@ import redis
 from tornado.escape import xhtml_escape
 #from pymongo import DESCENDING, ASCENDING
 
-from setting import COLLECTION_PREFIX as _PREFIX
+from .setting import COLLECTION_PREFIX as _PREFIX
 from utils import escape as _es
 from config.global_setting import PIC_URL, ANONYMOUS_USER, DEFAULT_USER
 from models.user import model as user_model
@@ -19,7 +19,8 @@ class Helper(dict):
     __prefix = _PREFIX
 
     def __setitem__(self, k, v):
-        return super(Helper, self).setdefault('%s%s'%(self.__prefix, self.__convert_name(k)), v)
+        return super(Helper, self).setdefault(
+            '%s%s' % (self.__prefix, self.__convert_name(k)), v)
 
     def __getattr__(self, name):
         collect = self.get(name, None)
@@ -32,8 +33,8 @@ class Helper(dict):
         as_list = []
         length = len(name)
         for index, i in enumerate(name):
-            if index !=0 and index != length-1 and i.isupper():
-                as_list.append('_%s'%i.lower())
+            if index != 0 and index != length - 1 and i.isupper():
+                as_list.append('_%s' % i.lower())
             else:
                 as_list.append(i.lower())
 
@@ -65,7 +66,8 @@ class BaseHelper(object):
         #ftime = time.strftime('%Y-%m-%d %H:%M:%S')
         ftime = time.strftime('%Y-%m-%d')
 
-        return ftime if total_seconds > 2*24*60*60 else str(total_seconds/24/60/60)+'天前' if total_seconds > 24*60*60 else str(total_seconds/60/60)+'小时前' if total_seconds > 60*60 else str(total_seconds/60)+'分钟前' if total_seconds > 60 else '刚刚'
+        return ftime if total_seconds > 2 * 24 * 60 * 60 else str(total_seconds / 24 / 60 / 60) + '天前' if total_seconds > 24 * 60 * 60 else str(
+            total_seconds / 60 / 60) + '小时前' if total_seconds > 60 * 60 else str(total_seconds / 60) + '分钟前' if total_seconds > 60 else '刚刚'
 
 
 class UserHelper(BaseHelper, user_model.User):
@@ -82,11 +84,13 @@ class UserHelper(BaseHelper, user_model.User):
         return result
 
     def get_simple_user(self, uid, isanon=False):
-        user = ANONYMOUS_USER if isanon else self.get_one({'_id': self.to_objectid(uid)})
-        return {'nickname': user['nickname'], 'avatar': user['avatar']} if user else {'nickname': '', 'avatar': ''}
+        user = ANONYMOUS_USER if isanon else self.get_one(
+            {'_id': self.to_objectid(uid)})
+        return {'nickname': user['nickname'], 'avatar': user['avatar']} if user else {
+            'nickname': '', 'avatar': ''}
 
 
-#class DataProvider(object):
+# class DataProvider(object):
 #
 #    def get_all(self, spec=None, skip=0, limit=20, order=None, sort=None):
 #
@@ -114,7 +118,7 @@ class UserHelper(BaseHelper, user_model.User):
 #        return self.find(spec=spec).count()
 #
 #
-#class UserHelper(model.User):
+# class UserHelper(model.User):
 #
 #    def __init__(self, host='127.0.0.1', port=6379, db=1, master=True):
 #        super(UserHelper, self).__init__()
@@ -131,7 +135,7 @@ class UserHelper(BaseHelper, user_model.User):
 #                return pickle.loads(self.r.get(key))
 #            except:
 #                pass
-#        #logging.info("user: load user %s from DB..." % uid)
+#        logging.info("user: load user %s from DB..." % uid)
 #        user = self.load_simple_user(uid)
 #        self.r.set(key, pickle.dumps(user))
 #        self.r.expire(key, duration)
