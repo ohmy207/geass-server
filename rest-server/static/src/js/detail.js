@@ -84,7 +84,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             thread.voteTotalNum = re.data.vote_total_num || 0;
             //re.data.startPos = exports.startPos;
-            re.data.startPos = exports.nextStart;
+            re.data.startPos = clear ? 0 : exports.nextStart;
             re.data.colorList = thread.colorList;
 
             var listHtml = template('tmpl_proposals', re.data);
