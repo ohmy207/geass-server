@@ -45,14 +45,23 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             }
 
             var listHtml = template('tmpl_noticeList', re.data);
-            jq('#list').append(listHtml);
+            if(jq.trim(listHtml)!=='') {
+                jq('#list').append(listHtml);
+            }
         },
 
         init: function() {
-            var tId = window.tId;
+            var tId = window.tId,
+                loadOpts = {
+                    isList: false,
+                    isEmptyShow: true,
+                    url: '/user/notifications?skip=0',
+                    emptyCon: '还没有消息',
+                    type: exports.filterType,
+                    callback: exports.renderList,
+                };
 
-            exports.load('drag');
-
+            thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
 
             // 回复楼中楼
