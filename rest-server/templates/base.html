@@ -55,10 +55,43 @@
 
   {% block body %}{% end %}
 
+  {% block jweixin %}
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+  <script>
+    {% set sign_package = state['sign_package'] %}
+    wx.config({
+      debug: false,
+      appId: "{{ sign_package['appId'] }}",
+      timestamp: {{ sign_package['timestamp'] }},
+      nonceStr: "{{ sign_package['nonceStr'] }}",
+      signature: "{{ sign_package['signature'] }}",
+      jsApiList: [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone',
+        'previewImage',
+        'hideMenuItems',
+        'showMenuItems',
+      ]
+    });
+
+    wx.ready(function(){
+        wx.showMenuItems({
+            menuList: [
+                'menuItem:profile',
+                'menuItem:addContact',
+            ]
+        });
+    });
+  </script>
+  {% end %}
+
   {% block footer %}{% end %}
 
   {% block analytics %}
-
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -69,7 +102,6 @@
     ga('send', 'pageview');
 
   </script>
-
   {% end %}
 
  </body>

@@ -113,10 +113,9 @@ class PageHandler(BaseHandler, WeiXinMixin):
 
         state['is_authorized'] = 1 if self.current_user else 0
         state['authorize_url'] = authorize_url
+        state['sign_package'] = wc['wechat'].get_jssign_package(
+            APP_HOST + self.request.uri)
 
-        if route in ['topic', 'proposal', 'opinion']:
-            state['sign_package'] = wc['wechat'].get_jssign_package(
-                APP_HOST + self.request.uri)
         if route in ['following', 'publish_topics', 'publish_opinions']:
             state['type'] = route
 

@@ -164,20 +164,6 @@
     var oId = "{{state['oid']}}";
   </script>
 
-  <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
-  <script>
-    {% set sign_package = state['sign_package'] %}
-    wx.config({
-      debug: false,
-      appId: "{{ sign_package['appId'] }}",
-      timestamp: {{ sign_package['timestamp'] }},
-      nonceStr: "{{ sign_package['nonceStr'] }}",
-      signature: "{{ sign_package['signature'] }}",
-      jsApiList: ['previewImage']
-    });
-  </script>
-
   <script data-main="{{ static_url('js/opinion.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
 
 {% end %}
