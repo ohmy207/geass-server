@@ -131,7 +131,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         initShare: function(shareData) {
             shareData.link = window.location.href;
-            shareData.imgUrl = shareData.imgUrl || 'https://dn-geass-static.qbox.me/favicon.png';
+            shareData.imgUrl = shareData.imgUrl || 'https://dn-geass-static.qbox.me/favicon.jpg';
 
             wx.onMenuShareAppMessage(shareData);
             wx.onMenuShareTimeline(shareData);

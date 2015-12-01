@@ -92,6 +92,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
             ))
             return
 
+        route = route or 'new'
         authorize_url = self.get_authorize_redirect(
             redirect_uri='%s%s?%s' % (
                 APP_HOST,
