@@ -119,37 +119,30 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     callback: exports.render,
                 };
 
-            // 分享遮罩，一次性
-            //var action = jq.UTIL.getQuery('action');
-            //var reapp = /qqdownloader\/([^\s]+)/i;
-
             thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
 
-            // appbar no share mask
-            //if (action == 'share' && !reapp.test(navigator.userAgent)) {
-            //    var hadShowShareMask = localStorage.getItem('hadShowShareMask'),
-            //        isMask = false;
-            //    if (!hadShowShareMask) {
-            //        isMask = true;
-            //    }
-            //    var tmpl = template.render('tmpl_pageTip', {'msg':'喜欢这个话题，请点击右上角图标分享'});
+            //var action = jq.UTIL.getQuery('action');
+            //var hadShowGuide = localStorage.getItem('hadShowGuide')
+
+            //if (!hadShowGuide) {
+            //    var tmpl = template('tmpl_pageGuide', {'msg':'可以从个人页关注投票Hub公众号'});
             //    jq.UTIL.dialog({
-            //        id: 'shareMask',
+            //        id: 'guideMask',
             //        top:0,
             //        content: tmpl,
             //        isHtml: true,
-            //        isMask: isMask,
+            //        isMask: true,
             //        callback: function() {
             //            jq('.gMask').on('click', function() {
-            //                jq.UTIL.dialog({id:'shareMask'});
+            //                jq.UTIL.dialog({id:'guideMask'});
             //            });
-            //            jq('#showShare').on('click', function() {
-            //                jq(this).hide();
-            //            });
+            //            //jq('#showShare').on('click', function() {
+            //            //    jq(this).hide();
+            //            //});
             //        }
             //    });
-            //    localStorage.setItem('hadShowShareMask', 1);
+            //    localStorage.setItem('hadShowGuide', 1);
             //}
 
             // 点击查看大图

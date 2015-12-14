@@ -3877,7 +3877,9 @@ i {
 }
 
 .person .pWrap {
+    /*
     margin-bottom: 15px;
+     */
     background-color: #fafafa;
 }
 
@@ -3984,7 +3986,7 @@ i {
 
 .person .pHeader {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     overflow: hidden;
 
     z-index: 2;
@@ -4202,11 +4204,11 @@ i {
 }
 
 .iconEdit:before {
-    content: "\e903";
+    content: "\e906";
 }
 
 .iconEdit2:before {
-    content: "\e902";
+    content: "\e905";
 }
 
 .flRight .iconEdit {
@@ -4236,7 +4238,7 @@ i {
 }
 
 .upBtn:before {
-    content: "\e603";
+    content: "\e605";
     color: #FFF;
     line-height: 28px;
     font-size: 40px
@@ -4275,6 +4277,22 @@ i {
 
 .iconOpinion:before {
     content: "\e611";
+    color: #FFC649;
+}
+
+.iconAccount:before {
+    content: "\e901";
+}
+
+.pTitle .iconAccount:before {
+    font-size: 22px;
+    color: #72B4F5;
+    vertical-align: -4%;
+    margin-right: 5px;
+}
+
+.iconQuestion:before {
+    content: "\e900";
     color: #7AC743;
 }
 
@@ -4292,10 +4310,14 @@ i {
     vertical-align: -4%;
 }
 
-.pTitle .iconNotice:before, .pTitle .iconMark:before, .pTitle .iconOpinion:before, .pTitle .iconTopic:before {
+.pTitle .iconQuestion:before, .pTitle .iconNotice:before, .pTitle .iconMark:before, .pTitle .iconOpinion:before, .pTitle .iconTopic:before {
     margin-right: 7px;
     font-size: 20px;
     vertical-align: -3%;
+}
+
+.pTitle .iconOpinion:before {
+    font-size: 18px;
 }
 
 .iconPraise:before,.iconNoPraise:before {
@@ -4385,14 +4407,14 @@ i {
 }
 
 .iconChecked:before {
-    content: '\e901';
+    content: '\e904';
     color: rgba(201, 201, 201, 0.7);
     font-size: 12px;
     display: block;
 }
 
 .check:checked + .iconChecked:before {
-    content: '\e900';
+    content: '\e903';
     color: #2791dc;
 }
 

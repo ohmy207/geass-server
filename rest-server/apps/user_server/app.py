@@ -72,6 +72,9 @@ class PageHandler(BaseHandler, WeiXinMixin):
         'following': 'personal_list',
         'publish_topics': 'personal_list',
         'publish_opinions': 'personal_list',
+
+        'help_list': 'help_list',
+        'help': 'help',
     }
 
     _DIRECT_AUTHORIZE_PAGES = [

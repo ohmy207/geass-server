@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block header %}
+
+  <title>帮助中心</title>
+
+  <style type="text/css">
+    .detailCon {
+      padding-top: 13px;
+    }
+
+    .detailCon p, .detailCon li {
+      margin-bottom: 1em;
+    }
+
+    .detailCon p, .detailCon li, .detailCon a {
+      font-size: 16px;
+    }
+
+    .detailCon ol {
+      list-style-type: decimal;
+      margin: 0;
+      padding: 0;
+      margin-left: 30px;
+    }
+
+    h1 {
+      font-size: 17px;
+      font-weight: 700;
+      outline: 0;
+      margin: 0;
+      line-height: 1.7;
+      margin-bottom: 1em;
+    }
+
+    .hidden {
+      top: -13px;
+      position: relative;
+      display: block;
+      width: 0;
+      font: 0/0 a;
+    }
+  </style>
+
+{% end %}
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}
+  </style>
+
+  <div class="warp">
+   <div class="detailCon c11 allowCopy">
+    <div class="dCon f17">
+
+     <a name="what" class="hidden"></a>
+     <h1>投票Hub 是什么？</h1>
+     <p>投票Hub 是一个网络调查社区，在这里用户可以温和地表达自己的意愿和态度，分享彼此的看法和见解。通过对投票结果的分析，展示分歧和意见分布，为中文互联网提供有价值的参考数据，帮助达成共识。</p>
+
+     <a name="how" class="hidden"></a>
+     <h1>投票Hub 的正确打开方式是什么？</h1>
+     <p>我们希望用户在使用投票Hub 时能够保持尊重，尊重其他用户和他（她）所写的内容，尊重不同的意见，我们相信尊重会使你还有投票Hub 都看起来更好。</p>
+
+     <a name="rule" class="hidden"></a>
+     <h1>发表和回复内容有哪些规范？</h1>
+     <ol>
+      <li>对于共同编辑的内容，如话题、选项等，投票Hub 鼓励去个人化。若内容与用户并不直接相关，请不要在编辑时带入个人色彩和主观判断。</li>
+      <li>对于原创内容，如看法、评论等，用户可以完全按照个人习惯书写。</li>
+      <li>每个用户都有添加选项（提议）的权利，投票Hub 不会在任何话题下限制用户添加选项。但仍应注意，重复或与话题完全无关的选项将有可能被合并、折叠或删除。</li>
+      <li>包含不文明或不尊重他人言词的看法、评论等将被视为不友善的内容，投票Hub 会关闭、建议修改甚至删除该内容。</li>
+     </ol>
+
+     <a name="copyright" class="hidden"></a>
+     <h1>创作内容的版权归属谁？</h1>
+     <ol>
+      <li>投票Hub 上共同编辑的内容（如话题、选项等）采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可，本许可协议授权之外的使用请联系投票Hub 。</li>
+      <li>投票Hub 上的用户原创内容，如看法、评论等，版权归用户本人所有。第三方转载、复制、修改等任何形式的使用都需要在用户的授权下进行。</li>
+     </ol>
+
+     <a name="public_edit" class="hidden"></a>
+     <h1>如何参与公共编辑？</h1>
+     <p>每个用户都可以对投票Hub 上的话题或选项作出改进，比如，把内容修改得更准确，规范格式，替换图片等等。通过共同编辑，投票Hub 上的内容将得到持续的优化，同时也避免了因描述上的区别产生过多分歧。</p>
+     <p>但在作出修改时，我们仍希望用户保持慎重。修改应遵循客观陈述事实和以改进内容为目的的原则，不恰当的修改会被即时撤销。</p>
+
+    </div>
+   </div>
+  </div>
+
+{% end %}
+
+
+{% block footer %}
+
+  <div id="goTop" class="floatLayer br db" style="display: none;">
+   <a href="javascript:;" class="upBtn cf db"></a>
+  </div>
+
+{% end %}

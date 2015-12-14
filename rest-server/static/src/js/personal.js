@@ -32,21 +32,21 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //jq('html, body').css('background-color', '#f3f3f3')
 
             var headerHtml = template('tmpl_header', re.data),
-                followHtml = template('tmpl_topicList', {
-                    'data_list': re.data.follow_topics.data_list,
+                followHtml = template('tmpl_pTitle', {
+                    //'data_list': re.data.follow_topics.data_list,
                     'count': re.data.follow_topics.count, 'title': '我的关注',
                     'link': '/following',
                     'icon': 'iconMark',
                 }),
-                topicHtml = template('tmpl_topicList', {
-                    'data_list': re.data.publish_topics.data_list,
+                topicHtml = template('tmpl_pTitle', {
+                    //'data_list': re.data.publish_topics.data_list,
                     'count': re.data.publish_topics.count,
-                    'title': '发表的话题',
+                    'title': '我的发起',
                     'link': '/publish_topics',
                     'icon': 'iconTopic',
                 });
-                opinionHtml = template('tmpl_opinionList', {
-                    'data_list': re.data.publish_opinions.data_list,
+                opinionHtml = template('tmpl_pTitle', {
+                    //'data_list': re.data.publish_opinions.data_list,
                     'count': re.data.publish_opinions.count,
                     'title': '我的看法',
                     'link': '/publish_opinions',

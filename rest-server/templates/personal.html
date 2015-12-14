@@ -25,11 +25,10 @@
    <div id="header">
    </div>
 
-   <div id="notice">
+   <div id="notice" style="margin-bottom:20px;">
     <div class="pWrap pr">
      <h1 class="pTitle pr borderBtm1" data-link="/notice_list">
-      <span class="cf iconNotice"></span>
-       我的消息
+      <span class="cf iconNotice"></span>我的消息
       <span class="notiNumber" style="display:none;"></span>
       <span class="cf iconArrowR"></span>
      </h1>
@@ -43,6 +42,24 @@
    </div>
 
    <div id="opinion">
+   </div>
+
+   <div id="help" style="margin-top:20px;">
+    <div class="pWrap pr">
+     <h1 class="pTitle pr borderBtm1" data-link="/help_list">
+      <span class="cf iconQuestion"></span>帮助中心
+      <span class="cf iconArrowR"></span>
+     </h1>
+    </div>
+   </div>
+
+   <div id="account">
+    <div class="pWrap pr">
+     <h1 class="pTitle pr borderBtm1" data-link="/notice_list">
+      <span class="cf iconAccount"></span>公众账号
+      <span class="cf iconArrowR"></span>
+     </h1>
+    </div>
    </div>
 
   </div>
@@ -59,6 +76,15 @@
      </div>
 
     </div>
+  </script>
+
+  <script id="tmpl_pTitle" type="text/html">
+
+    <div class="pWrap pr">
+     <h1 class="pTitle pr borderBtm1" data-link="<%= link %>" ><span class="cf <%= icon %>"></span><%= title %> (<%= count %>) <span class="cf iconArrowR"></span>
+     </h1>
+    </div>
+
   </script>
 
   <script id="tmpl_topicList" type="text/html">
