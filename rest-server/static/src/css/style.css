@@ -4258,12 +4258,12 @@ i {
 
 .iconNotice:before {
     content: "\e60b";
-    color: #7AC743;
+    color: #39BFFC;
 }
 
 .iconTopic:before {
     content: "\e60c";
-    color: #39BFFC;
+    color: #7AC743;
 }
 
 .iconTopic2:before {
@@ -4293,7 +4293,7 @@ i {
 
 .iconQuestion:before {
     content: "\e900";
-    color: #7AC743;
+    color: #00B387;
 }
 
 .iconBars:before {

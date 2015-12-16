@@ -131,7 +131,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         initShare: function(shareData) {
             shareData.link = window.location.href;
-            shareData.imgUrl = shareData.imgUrl || 'https://dn-geass-static.qbox.me/favicon.jpg';
+            shareData.imgUrl = shareData.imgUrl || '/static/img/share.jpg';
 
             wx.onMenuShareAppMessage(shareData);
             wx.onMenuShareTimeline(shareData);
@@ -641,7 +641,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                         isDone: false,
                     };
 
-                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="https://dn-geass-static.qbox.me/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
+                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
                             '<div class="maskLay"></div>' +
                             '<a href="javascript:;" class="cBtn cBtnOn pa db" style="display:none;" title="" _id="'+id+'">关闭</a></li>';
                     jq('#addPic').before(html);

@@ -7,7 +7,7 @@ import tornado.web
 
 import log
 
-from config.global_setting import ERROR_PAGE_MESSAGE, MESSAGE, CDN
+from config.global_setting import ERROR_PAGE_MESSAGE, MESSAGE
 from utils import (
     escape as _es,
     httputil as _ht,

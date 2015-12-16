@@ -35,7 +35,7 @@ REDIS = {
 # cdn setting
 CDN = {
     'is_disabled': False,
-    'host': 'https://dn-geass-static.qbox.me/static'
+    'host': 'http://static.geass.me/static'
 }
 
 # response message
@@ -71,19 +71,19 @@ MESSAGE = {
 }
 
 ERROR_PAGE_MESSAGE = {
-    401: u'呜~获取用户信息没有成功。。',
+    401: u'获取用户信息没有成功。。',
     403: u'要先获取权限才能访问哦！',
-    404: u'哦~好像没有找到要找的页面。。',
+    404: u'好像没有找到要找的页面。。',
     500: u'啊~好像出错了。。',
+}
+
+DEFAULT_USER = {
+    'avatar': ('' if TEST_MODE else CDN['host']) + '/static/img/avatar.jpg',
 }
 
 ANONYMOUS_USER = {
     'nickname': '匿名用户',
-    'avatar': 'https://dn-geass-static.qbox.me/anonymous_avatar.jpg',
-}
-
-DEFAULT_USER = {
-    'avatar': 'https://dn-geass-static.qbox.me/default_avatar.jpg',
+    'avatar': DEFAULT_USER['avatar'],
 }
 
 # Third-party
@@ -94,8 +94,8 @@ QINIU = {
     'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
 
     'bucket_name': {
-        'image': 'geass-images',
-        'avatar': 'geass-avatar',
+        'avatar': 'geass-img1',
+        'image': 'geass-img2',
     },
 
     'expires': 7200,
@@ -106,9 +106,8 @@ QINIU = {
         #'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
     },
 
-    'img_url': 'https://dn-geass-images.qbox.me/',
-    #'avatar_url': 'https://dn-geass-avatar.qbox.me/',
-    'avatar_url': 'http://7xlbmo.com1.z0.glb.clouddn.com/',
+    'avatar_url': 'http://img1.geass.me/',
+    'img_url': 'http://img2.geass.me/',
     'thumb_suffix': '?imageView2/1/w/200/h/200',
 }
 

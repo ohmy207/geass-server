@@ -157,7 +157,7 @@ require(['uploadImg', 'util'],function (uploadImg, util){
                         isDone: false,
                     };
 
-                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="https://dn-geass-static.qbox.me/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
+                    var html = '<li id="li' + id + '"><div class="photoCut"><img src="/static/img/defaultImg.png" class="attchImg" alt="photo"></div>' +
                             '<div class="maskLay"></div>' +
                             '<a href="javascript:;" class="cBtn cBtnOn pa db" style="display:none;" title="" _id="'+id+'">关闭</a></li>';
                     jq('#addPic').before(html);
