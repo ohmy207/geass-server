@@ -78,7 +78,7 @@ ERROR_PAGE_MESSAGE = {
 }
 
 DEFAULT_USER = {
-    'avatar': ('' if TEST_MODE else CDN['host']) + '/static/img/avatar.jpg',
+    'avatar': ('/static' if TEST_MODE else CDN['host']) + '/img/avatar.jpg',
 }
 
 ANONYMOUS_USER = {
