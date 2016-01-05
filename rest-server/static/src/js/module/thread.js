@@ -400,7 +400,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                     'id':'operationConfirm',
                     'isMask':true,
                     'title':'帮助改进内容',
-                    'content':'投票Hub 鼓励用户参与公共编辑，同时请注意，修改将即时生效，请慎重对待',
+                    'content':'There 鼓励用户参与公共编辑，同时请注意，修改将即时生效，请慎重对待',
                     'okValue':'确定',
                     'cancelValue':'取消',
                     'ok':function() {

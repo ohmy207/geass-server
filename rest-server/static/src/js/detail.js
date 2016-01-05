@@ -126,7 +126,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //var hadShowGuide = localStorage.getItem('hadShowGuide')
 
             //if (!hadShowGuide) {
-            //    var tmpl = template('tmpl_pageGuide', {'msg':'可以从个人页关注投票Hub公众号'});
+            //    var tmpl = template('tmpl_pageGuide', {'msg':'可以从个人页关注There 公众号'});
             //    jq.UTIL.dialog({
             //        id: 'guideMask',
             //        top:0,
