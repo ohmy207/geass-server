@@ -58,7 +58,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             }
             jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
             //jq('.topicInfo .iconTotal').after(thread.voteTotalNum + ' 票');
-            jq('#bottomBar .iconReply').html(re.data.comments_count);
+            jq('#bottomBar .iconReply').parent('.item').html('<i class="cf iconReply"></i>' + re.data.comments_count);
 
             jq('.warp, #bottomBar').show();
 

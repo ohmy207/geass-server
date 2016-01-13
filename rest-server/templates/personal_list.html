@@ -34,11 +34,11 @@
 
   <script id="tmpl_topicList" type="text/html">
 
-    <%
-    if (typeof(topicList) == 'undefined') {
-        var topicList = data_list;
-    }
-    %>
+      <%
+      if (typeof(topicList) == 'undefined') {
+          var topicList = data_list;
+      }
+      %>
 
       <% for (var i in topicList) { %>
 
@@ -81,16 +81,15 @@
     <% } %>
     <% } %>
 
-
   </script>
 
   <script id="tmpl_opinionList" type="text/html">
 
-    <%
-    if (typeof(opinionList) == 'undefined') {
-        var opinionList = data_list;
-    }
-    %>
+      <%
+      if (typeof(opinionList) == 'undefined') {
+          var opinionList = data_list;
+      }
+      %>
 
       <% for (var i in opinionList) { %>
 
@@ -142,10 +141,6 @@
 
 
 {% block footer %}
-
-  <div class="bottomBar" id="bottomBar" style="display:none;">
-   <a href="javascript:;" class="item cf iconReply threadReply" id="to_reply">添加评论</a>
-  </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">
    <a href="javascript:;" class="upBtn cf db"></a>

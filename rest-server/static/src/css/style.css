@@ -1013,6 +1013,10 @@ p {
     font-size: 13px;
 }
 
+.homeList li {
+    padding: 14px 16px 15px;
+}
+
 .proposaList li {
     padding: 14px 15px 0 52px;
 }
@@ -1195,6 +1199,15 @@ p {
 .proposaList .imgContainer {
     height: 62px;
     min-height: 40px;
+    max-height: 62px;
+}
+
+.homeList .textContainer {
+    height: auto;
+}
+
+.homeList .imgContainer {
+    height: 62px;
     max-height: 62px;
 }
 
@@ -3953,6 +3966,12 @@ i {
     font-weight: 500;
 }
 
+.homeList h3.text {
+    font-size: 17px;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
 .person .notice h3.text {
     font: inherit;
     font-size: 17px;
@@ -3969,7 +3988,7 @@ i {
     margin-bottom: 5px;
 }
 
-.person .imgGallary {
+.homeList .imgGallary, .person .imgGallary {
     width: 60px;
     height: 60px;
 }
@@ -4052,7 +4071,8 @@ i {
     padding-left: 35px;
 }
 
-.person .approveCount {
+.homeList .approveCount, .person .approveCount {
+    position: inherit;
     display: inline-block;
     float: left;
     margin-right: 6px;
@@ -4304,7 +4324,7 @@ i {
     content: "\f004";
 }
 
-.item.iconEdit2:before, .item.iconTopic2:before, .item.iconReply:before, .item.iconUser:before {
+.item .iconEdit2:before, .item .iconTopic2:before, .item .iconReply:before, .item .iconUser:before {
     font-size: 16px;
     margin-right: 5px;
     vertical-align: -4%;

@@ -32,9 +32,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             jq('.warp').prepend(opinionHtml);
 
             if (!re.data.is_author) {
-                jq('#bottomBar .iconEdit2').remove();
+                jq('#bottomBar .threadEdit').remove();
             }
-            jq('#bottomBar .iconReply').html(re.data.comments_count);
+            jq('#bottomBar .iconReply').parent('.item').html('<i class="cf iconReply"></i>' + re.data.comments_count);
             jq('.warp, #bottomBar').show()
             //jq('.warp, #bottomBar, .recommendTitle').show()
 

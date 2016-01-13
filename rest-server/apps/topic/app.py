@@ -28,6 +28,15 @@ class TopicsHandler(BaseHandler):
         ]
     }
 
+    _get_params = {
+        'need': [
+        ],
+        'option': [
+            ('skip', int, 0),
+            ('limit', int, 15),
+        ]
+    }
+
     @authenticated
     def POST(self):
         data = self._params
@@ -44,6 +53,20 @@ class TopicsHandler(BaseHandler):
             'topics', tid, uid, {'title': data['title'], 'content': data['content'], 'pickeys': data['pickeys']})
 
         self._jump = '/topic?tid='+unicode(tid)
+
+    def GET(self):
+        topics = db_topic['topic'].get_all(
+            {}, skip=self._skip, limit=self._limit, sort=[('ctime', -1)])
+
+        for topic in topics:
+            opinion = db_topic['opinion'].get_all(
+                {'tid': self.to_objectid(topic['tid'])}, skip=0, limit=1, sort=[('anum', -1), ('ctime', 1)])
+            topic['opinion'] = opinion[0] if opinion else {}
+
+        self._data = {
+            'data_list': topics,
+            'next_start': self._skip + self._limit
+        }
 
 
 class OneTopicHandler(BaseHandler):

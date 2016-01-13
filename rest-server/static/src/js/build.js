@@ -16,6 +16,7 @@
         "thread": "module/thread",
 
         "new": "new",
+        "home": "home",
         "detail": "detail",
         "proposal": "proposal",
         "opinion": "opinion",
@@ -30,6 +31,9 @@
     modules: [
         {
             name: "new",
+        },
+        {
+            name: "home",
         },
         {
             name: "detail",
