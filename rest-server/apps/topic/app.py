@@ -95,7 +95,7 @@ class OneTopicHandler(BaseHandler):
 
         proposals = db_topic['proposal'].get_all(spec, skip=0, limit=5, sort=sort)
 
-        sort=[('lnum', -1), ('ctime', 1)]
+        sort=[('anum', -1), ('ctime', 1)]
         opinions = db_topic['opinion'].get_all(spec, skip=0, limit=10, sort=sort)
 
         self._data = {
@@ -292,7 +292,7 @@ class OpinionsHandler(BaseHandler):
     #@authenticated
     def GET(self, tid):
         spec = {'tid': self.to_objectid(tid)}
-        sort=[('vnum', -1), ('ctime', 1)]
+        sort=[('anum', -1), ('ctime', 1)]
 
         opinions = db_topic['opinion'].get_all(
             spec=spec,
