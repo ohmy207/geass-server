@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block html_style %}
+<html style="background-color: #f3f3f3;">
+{% end %}
+
+{% block body_style %}
+ <body class="darkBg" style="zoom: 1;">
+{% end %}
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}
+  </style>
+
+  <div class="warp" onselectstart="return false;"> 
+
+   <div class="detailBox">
+
+    <div id="opinionList" class="topicList homeList">
+     <ul id="topicList" style="height:auto;">
+     </ul>
+    </div>
+
+   </div>
+
+  </div>
+
+  <script id="tmpl_topicList" type="text/html">
+
+      <%
+      if (typeof(topicList) == 'undefined') {
+          var topicList = data_list;
+      }
+      %>
+
+      <% for (var i in topicList) { %>
+
+      <% if (!isDOMExist('t_' + topicList[i].tid)) { %>
+      <li class="borderBtm1" id="t_<%=topicList[i].tid%>" >
+
+          <div class="topicWrap">
+              <h3 class="text topicTitle" data-link="/topic?tid=<%= topicList[i].tid %>">
+                  <%= topicList[i].title %>
+              </h3>
+
+              <%if (topicList[i].opinion.oid) { %>
+
+                  <%if (topicList[i].opinion.picture_urls.length > 0) { %>
+                      <div class="imgGallary">
+                          <img data-src="<%= topicList[i].opinion.picture_urls[0]['thumb'] %>" >
+                          <%if (topicList[i].opinion.picture_urls.length > 1) { %>
+                              <div class="picCount"><%= topicList[i].opinion.picture_urls.length %>图</div>
+                          <% } %>
+                      </div>
+                  <% } %>
+
+                  <div class="<%if (topicList[i].opinion.picture_urls.length > 0) { %>imgContainer<% } else { %>textContainer<% } %>">
+                   <div>
+                       <a class="approveCount" href="javascript:;" ><% if (topicList[i].opinion.approve_num) { %> <%= topicList[i].opinion.approve_num %> <%  } else { %>0<%  } %></a>
+
+                       <div class="listContent" data-link="/opinion?tid=<%= topicList[i].tid %>&oid=<%= topicList[i].opinion.oid %>">
+                           <%== topicList[i].opinion.content %>
+                       </div>
+                   </div>
+                  </div>
+
+              <% } else { %>
+
+                  <%if (topicList[i].picture_urls.length > 0) { %>
+                      <div class="imgGallary">
+                          <img data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
+                          <%if (topicList[i].picture_urls.length > 1) { %>
+                              <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
+                          <% } %>
+                      </div>
+                  <% } %>
+
+                  <div class="<%if (topicList[i].picture_urls.length > 0) { %>imgContainer<% } else { %>textContainer<% } %>">
+                   <div>
+                       <div class="listContent" data-link="/topic?tid=<%= topicList[i].tid %>">
+                           <%== topicList[i].content %>
+                       </div>
+                   </div>
+                  </div>
+
+              <% } %>
+
+              <div class="info" style="display:none;">
+                  <div>
+                      <span>
+                          <span class="time"><%= topicList[i].f_created_time %></span>
+                      </span>
+                  </div>
+                  <div class="flRight">
+                  </div>
+              </div>
+
+          </div>
+
+      </li>
+    <% } %>
+    <% } %>
+
+  </script>
+
+{% end %}
+
+
+{% block footer %}
+
+  <div class="bottomBar pr" id="bottomBar">
+   <a href="/new" class="item"><i class="cf iconEdit2"></i>发布话题</a>
+   <a href="/personal" class="item" style="display:none;"><i class="cf iconUser"></i>我的</a>
+  </div>
+
+  <div id="goTop" class="floatLayer br db" style="display: none;">
+   <a href="javascript:;" class="upBtn cf db"></a>
+  </div>
+
+  <div class="emptyList"></div>
+
+  <div class="loading" style="min-height: 23px;">
+   <div id="loadNext">
+    <div class="spinner">
+     <span class="circleG" id="rotateG_01"></span>
+     <span class="circleG" id="rotateG_02"></span>
+     <span class="circleG" id="rotateG_03"></span>
+     <span class="circleG" id="rotateG_04"></span>
+     <span class="circleG" id="rotateG_05"></span>
+     <span class="circleG" id="rotateG_06"></span>
+     <span class="circleG" id="rotateG_07"></span>
+     <span class="circleG" id="rotateG_08"></span>
+    </div>正在加载...
+   </div>
+  </div>
+
+  <div id="loadNextPos"></div> 
+
+  <div class="hotLabel recommendTitle" style="display:none;">
+  </div>
+
+  <script type="text/javascript">
+  </script>
+
+  <script data-main="{{ static_url('js/home.js') }}" src="{{ static_url('js/vendor/require.js') }}"></script>
+
+{% end %}

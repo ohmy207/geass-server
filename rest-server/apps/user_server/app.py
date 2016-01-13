@@ -61,6 +61,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
     }
 
     _PAGES = {
+        'home': 'home',
         'new': 'topic_new',
         'topic': 'topic_detail',
         'proposal': 'proposal_detail',
@@ -95,7 +96,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
             ))
             return
 
-        route = route or 'new'
+        route = route or 'home'
         authorize_url = self.get_authorize_redirect(
             redirect_uri='%s%s?%s' % (
                 APP_HOST,
