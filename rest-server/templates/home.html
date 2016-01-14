@@ -43,7 +43,7 @@
           <div class="topicWrap">
               <div class="authorList">
                   <%if (topicList[i].voter_count > 0) { %>
-                      <a href="javascript:;"><%= topicList[i].voter_nickname %></a><%if (topicList[i].voter_count > 2) { %>等 <%= topicList[i].voter_count %> 人<% } %>参与投票
+                      <a href="javascript:;"><%= topicList[i].voter_nickname %></a><%if (topicList[i].voter_count > 1) { %>等 <%= topicList[i].voter_count %> 人<% } %>参与投票
 
                       <img data-src="<%=topicList[i].voter_avatar%>" class="sImg brSmall" width="20" height="20">
                   <% } else { %>
