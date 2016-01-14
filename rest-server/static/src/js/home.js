@@ -39,26 +39,13 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         // render data
         render: function(re, clear) {
 
-            var topicHtml = template('tmpl_topic', re.data);
-                is_topic_followed = re.data.is_topic_followed || false,
-                follow_html = is_topic_followed ? '已关注' : '关注';
-
-            jq('.detailBox').prepend(topicHtml);
             exports.renderList(re)
+            jq('.warp, .publishBar').show();
 
-            if (re.data.has_opinion) {
-                jq('.topicBtn').find('[data-type="opinion"]').html('<i class="iconReply2 f18 cf cc"></i>已发表看法').addClass('hasReply')
-            }
-            jq('#bottomBar .iconReply').html(re.data.comments_count);
-
-            jq('.warp, #bottomBar').show();
-
-            exports.isAnonymous = re.data.topic.is_anonymous || false;
-            exports.isAuthor = re.data.is_author || false;
             thread.initShare({
-                title: re.data.topic.title,
-                desc: re.data.topic.content,
-                imgUrl: re.data.topic.picture_urls.length > 0 ? re.data.topic.picture_urls[0]['origin'] : jq('.proposaList img').first().data('src'),
+                title: '',
+                desc: '',
+                imgUrl: '',
             });
         },
 
@@ -71,7 +58,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         init: function() {
 
-            exports.load('drag');
+            thread.load({
+                isList: true,
+                isEmptyShow: false,
+                url: '/topics',
+                emptyCon: '',
+                callback: exports.render,
+            }, 'drag');
+
             initLazyload('.warp img');
 
             //var action = jq.UTIL.getQuery('action');

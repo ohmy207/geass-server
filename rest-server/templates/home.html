@@ -41,48 +41,58 @@
       <li class="borderBtm1" id="t_<%=topicList[i].tid%>" >
 
           <div class="topicWrap">
-              <h3 class="text topicTitle" data-link="/topic?tid=<%= topicList[i].tid %>">
+              <div class="authorList">
+                  <%if (topicList[i].voter_count > 0) { %>
+                      <a href="javascript:;"><%= topicList[i].voter_nickname %></a><%if (topicList[i].voter_count > 2) { %>等 <%= topicList[i].voter_count %> 人<% } %>参与投票
+
+                      <img data-src="<%=topicList[i].voter_avatar%>" class="sImg brSmall" width="20" height="20">
+                  <% } else { %>
+                      还没有人投票
+                  <% } %>
+              </div>
+
+              <h3 class="text topicTitle" <% if (!topicList[i].opinion.oid && topicList[i].content.length <= 0 && topicList[i].picture_urls.length <= 0) { %>style="padding-bottom:10px;"<% } %> data-link="/topic?tid=<%= topicList[i].tid %>">
                   <%= topicList[i].title %>
               </h3>
 
               <%if (topicList[i].opinion.oid) { %>
 
-                  <%if (topicList[i].opinion.picture_urls.length > 0) { %>
-                      <div class="imgGallary">
-                          <img data-src="<%= topicList[i].opinion.picture_urls[0]['thumb'] %>" >
-                          <%if (topicList[i].opinion.picture_urls.length > 1) { %>
-                              <div class="picCount"><%= topicList[i].opinion.picture_urls.length %>图</div>
-                          <% } %>
-                      </div>
-                  <% } %>
-
                   <div class="<%if (topicList[i].opinion.picture_urls.length > 0) { %>imgContainer<% } else { %>textContainer<% } %>">
-                   <div>
-                       <a class="approveCount" href="javascript:;" ><% if (topicList[i].opinion.approve_num) { %> <%= topicList[i].opinion.approve_num %> <%  } else { %>0<%  } %></a>
+                      <%if (topicList[i].opinion.picture_urls.length > 0) { %>
+                          <div class="imgGallary">
+                              <img data-src="<%= topicList[i].opinion.picture_urls[0]['thumb'] %>" >
+                              <%if (topicList[i].opinion.picture_urls.length > 1) { %>
+                                  <div class="picCount"><%= topicList[i].opinion.picture_urls.length %>图</div>
+                              <% } %>
+                          </div>
+                      <% } %>
 
-                       <div class="listContent" data-link="/opinion?tid=<%= topicList[i].tid %>&oid=<%= topicList[i].opinion.oid %>">
-                           <%== topicList[i].opinion.content %>
-                       </div>
-                   </div>
+                      <div>
+                          <a class="approveCount" href="javascript:;" ><% if (topicList[i].opinion.approve_num) { %> <%= topicList[i].opinion.approve_num %> <%  } else { %>0<%  } %></a>
+
+                          <div class="listContent" data-link="/opinion?tid=<%= topicList[i].tid %>&oid=<%= topicList[i].opinion.oid %>">
+                              <%== topicList[i].opinion.content %>
+                          </div>
+                      </div>
                   </div>
 
-              <% } else { %>
-
-                  <%if (topicList[i].picture_urls.length > 0) { %>
-                      <div class="imgGallary">
-                          <img data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
-                          <%if (topicList[i].picture_urls.length > 1) { %>
-                              <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
-                          <% } %>
-                      </div>
-                  <% } %>
+              <% } else if (topicList[i].content.length > 0 || topicList[i].picture_urls.length > 0) { %>
 
                   <div class="<%if (topicList[i].picture_urls.length > 0) { %>imgContainer<% } else { %>textContainer<% } %>">
-                   <div>
-                       <div class="listContent" data-link="/topic?tid=<%= topicList[i].tid %>">
-                           <%== topicList[i].content %>
-                       </div>
-                   </div>
+                      <%if (topicList[i].picture_urls.length > 0) { %>
+                          <div class="imgGallary">
+                              <img data-src="<%= topicList[i].picture_urls[0]['thumb'] %>" >
+                              <%if (topicList[i].picture_urls.length > 1) { %>
+                                  <div class="picCount"><%= topicList[i].picture_urls.length %>图</div>
+                              <% } %>
+                          </div>
+                      <% } %>
+
+                      <div>
+                          <div class="listContent" data-link="/topic?tid=<%= topicList[i].tid %>">
+                              <%== topicList[i].content %>
+                          </div>
+                      </div>
                   </div>
 
               <% } %>
@@ -110,9 +120,11 @@
 
 {% block footer %}
 
-  <div class="bottomBar pr" id="bottomBar">
-   <a href="/new" class="item"><i class="cf iconEdit2"></i>发布话题</a>
-   <a href="/personal" class="item" style="display:none;"><i class="cf iconUser"></i>我的</a>
+  <div class="publishBar" style="display: none;">
+   <div class="publishBtn" onclick="javascript:location.href='/new'">
+    <i class="cf iconEdit2"></i>
+    发布话题
+   </div>
   </div>
 
   <div id="goTop" class="floatLayer br db" style="display: none;">

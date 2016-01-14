@@ -1,10 +1,11 @@
 #-*- coding:utf-8 -*-
 
+from random import randint
+from datetime import datetime
+
 from tornado.web import authenticated
 
 import log
-
-from datetime import datetime
 
 from apps.base import BaseHandler
 from apps.base import ResponseError
@@ -33,7 +34,7 @@ class TopicsHandler(BaseHandler):
         ],
         'option': [
             ('skip', int, 0),
-            ('limit', int, 15),
+            ('limit', int, 10),
         ]
     }
 
@@ -59,9 +60,18 @@ class TopicsHandler(BaseHandler):
             {}, skip=self._skip, limit=self._limit, sort=[('ctime', -1)])
 
         for topic in topics:
+            tid = self.to_objectid(topic['tid'])
             opinion = db_topic['opinion'].get_all(
-                {'tid': self.to_objectid(topic['tid'])}, skip=0, limit=1, sort=[('anum', -1), ('ctime', 1)])
+                {'tid': tid}, skip=0, limit=1, sort=[('anum', -1), ('ctime', 1)])
+            cursor = db_user['vote'].find({'tid': tid})
             topic['opinion'] = opinion[0] if opinion else {}
+            topic['voter_count'] = cursor.count()
+            topic['voter_nickname'] = ''
+            if topic['voter_count'] > 0:
+                voter = db_user['user'].get_simple_user(
+                    cursor.limit(1).skip(randint(0, topic['voter_count']-1)).next()['uid'])
+                topic['voter_nickname'] = voter['nickname']
+                topic['voter_avatar'] = voter['avatar']
 
         self._data = {
             'data_list': topics,
