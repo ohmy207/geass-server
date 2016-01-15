@@ -39,7 +39,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             //jq('.warp, #bottomBar, .recommendTitle').show()
 
             exports.isAnonymous = re.data.opinion.is_anonymous || false;
-            thread.initShare({
+            thread.initWeixin({
                 title: re.data.opinion.topic_title,
                 desc: re.data.opinion.content,
                 imgUrl: re.data.opinion.picture_urls.length > 0 ? re.data.opinion.picture_urls[0]['origin'] : '',

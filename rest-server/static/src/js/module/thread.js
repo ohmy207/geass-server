@@ -129,15 +129,24 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
             jq('#loadNext').hide();
         },
 
-        initShare: function(shareData) {
-            shareData.link = window.location.href;
-            shareData.imgUrl = shareData.imgUrl || '/static/img/share.jpg';
+        initWeixin: function(share) {
+            share.link = window.location.href;
+            share.imgUrl = share.imgUrl || '/static/img/share.jpg';
 
-            wx.onMenuShareAppMessage(shareData);
-            wx.onMenuShareTimeline(shareData);
-            wx.onMenuShareQQ(shareData);
-            wx.onMenuShareQZone(shareData);
-            wx.onMenuShareWeibo(shareData);
+            wx.ready(function(){
+                wx.showMenuItems({
+                    menuList: [
+                        'menuItem:profile',
+                        'menuItem:addContact',
+                    ]
+                });
+
+                wx.onMenuShareAppMessage(share);
+                wx.onMenuShareTimeline(share);
+                wx.onMenuShareQQ(share);
+                wx.onMenuShareQZone(share);
+                wx.onMenuShareWeibo(share);
+            });
         },
 
         initTouchRefresh: function (load) {

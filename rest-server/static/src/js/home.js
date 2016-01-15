@@ -42,7 +42,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             exports.renderList(re)
             jq('.warp, .publishBar').show();
 
-            thread.initShare({
+            thread.initWeixin({
                 title: '',
                 desc: '',
                 imgUrl: '',
