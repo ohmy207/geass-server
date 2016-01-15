@@ -62,32 +62,33 @@
 
   <script>
     {% set sign_package = state['sign_package'] %}
-    wx.config({
-      debug: false,
-      appId: "{{ sign_package['appId'] }}",
-      timestamp: {{ sign_package['timestamp'] }},
-      nonceStr: "{{ sign_package['nonceStr'] }}",
-      signature: "{{ sign_package['signature'] }}",
-      jsApiList: [
-        'onMenuShareTimeline',
-        'onMenuShareAppMessage',
-        'onMenuShareQQ',
-        'onMenuShareWeibo',
-        'onMenuShareQZone',
-        'previewImage',
-        'hideMenuItems',
-        'showMenuItems',
-      ]
-    });
+    //wx.config({
+    //  debug: false,
+    //  appId: "{{ sign_package['appId'] }}",
+    //  timestamp: {{ sign_package['timestamp'] }},
+    //  nonceStr: "{{ sign_package['nonceStr'] }}",
+    //  signature: "{{ sign_package['signature'] }}",
+    //  jsApiList: [
+    //    'onMenuShareTimeline',
+    //    'onMenuShareAppMessage',
+    //    'onMenuShareQQ',
+    //    'onMenuShareWeibo',
+    //    'onMenuShareQZone',
+    //    'previewImage',
+    //    'hideMenuItems',
+    //    'showMenuItems',
+    //  ]
+    //});
 
-    wx.ready(function(){
-        wx.showMenuItems({
-            menuList: [
-                'menuItem:profile',
-                'menuItem:addContact',
-            ]
-        });
-    });
+    //wx.ready(function(){
+    //    wx.showMenuItems({
+    //        menuList: [
+    //            'menuItem:profile',
+    //            'menuItem:addContact',
+    //        ]
+    //    });
+    //});
+    var weixin = {appId: "{{ sign_package['appId'] }}", timestamp: {{ sign_package['timestamp'] }}, nonceStr: "{{ sign_package['nonceStr'] }}", signature: "{{ sign_package['signature'] }}", debug: false};
   </script>
   {% end %}
 
