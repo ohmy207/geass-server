@@ -131,7 +131,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
 
         initWeixin: function(share) {
             share.link = window.location.href;
-            share.imgUrl = share.imgUrl || '/static/img/share.jpg';
+            share.imgUrl = share.imgUrl || 'http://geass.me/static/img/share.jpg';
 
             wx.ready(function(){
                 wx.showMenuItems({
@@ -142,8 +142,8 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
                 });
 
                 wx.onMenuShareAppMessage(share);
-                wx.onMenuShareTimeline(share);
                 wx.onMenuShareQQ(share);
+                wx.onMenuShareTimeline(share);
                 wx.onMenuShareQZone(share);
                 wx.onMenuShareWeibo(share);
             });

@@ -41,8 +41,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             exports.hasVoted = re.data.has_user_voted || false;
             thread.initWeixin({
-                title: re.data.proposal.topic_title,
-                desc: re.data.proposal.title,
+                title: re.data.proposal.topic_title + ' - ' + re.data.proposal.title,
+                desc: re.data.proposal.content,
                 imgUrl: re.data.proposal.picture_urls.length > 0 ? re.data.proposal.picture_urls[0]['origin'] : '',
             });
         },
