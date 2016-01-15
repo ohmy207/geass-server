@@ -59,8 +59,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var tId = window.tId;
 
             exports.load('drag');
-
             initLazyload('.warp img');
+            thread.initWeixin();
 
             thread.initTouchRefresh(exports.load);
 

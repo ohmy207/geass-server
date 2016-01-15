@@ -63,6 +63,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
+            thread.initWeixin();
 
             // 回复楼中楼
             jq('.warp').on('click', '.replyFloor', function(e) {

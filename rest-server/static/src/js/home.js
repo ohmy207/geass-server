@@ -38,14 +38,8 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
         // render data
         render: function(re, clear) {
-
             exports.renderList(re)
             jq('.warp, .publishBar').show();
-
-            thread.initWeixin({
-                title: 'There - 投票社区',
-                desc: 'There 是一个社区化的数据调查平台，在这里用户可以温和地表达自己的意愿和态度，分享彼此的看法和见解。通过数据分析，There 能够帮助展示分歧和意见分布，促进达成共识，为中文互联网提供有价值的参考数据。',
-            });
         },
 
         renderList: function(re) {
@@ -66,6 +60,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             }, 'drag');
 
             initLazyload('.warp img');
+            thread.initWeixin();
 
             //var action = jq.UTIL.getQuery('action');
             //var hadShowGuide = localStorage.getItem('hadShowGuide')

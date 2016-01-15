@@ -52,6 +52,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             exports.load('drag');
             initLazyload('.warp img');
+            thread.initWeixin();
 
             //setInterval(function() {
             //    if (window.pageYOffset > 1000 && !thread.isNoShowToTop) {

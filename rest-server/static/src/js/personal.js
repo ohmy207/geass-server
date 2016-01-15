@@ -78,6 +78,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
 
             thread.load(loadOpts, 'drag');
             initLazyload('.warp img');
+            thread.initWeixin();
 
             jq('.warp').on('click', '.pTitle', function(e) {
                 jq.UTIL.touchStateNow(jq(this));
