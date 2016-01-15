@@ -116,8 +116,8 @@ WEIXIN = {
 
     # general
     'token': 'geass',
-    'appid': 'wx02a1f4a182252307',
-    'appsecret': 'a20441c7c4ffc64e193ed1c67f087441',
+    'appid': 'wxa8e41846ff86c459',
+    'appsecret': '8337c1065ac5eaf3e1a09f5dc71e3249',
 
     # authorize
     'scope': {
