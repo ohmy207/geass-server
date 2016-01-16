@@ -31,30 +31,42 @@
     modules: [
         {
             name: "new",
+            exclude: ["util"]
         },
         {
             name: "home",
+            exclude: ["util"]
         },
         {
             name: "detail",
+            exclude: ["util"]
         },
         {
             name: "proposal",
+            exclude: ["util"]
         },
         {
             name: "opinion",
+            exclude: ["util"]
         },
         {
             name: "comment",
+            exclude: ["util"]
         },
         {
             name: "personal",
+            exclude: ["util"]
         },
         {
             name: "personal_list",
+            exclude: ["util"]
         },
         {
             name: "notice_list",
+            exclude: ["util"]
+        },
+        {
+            name: "util",
         },
     ],
     //fileExclusionRegExp: /^(?:module|vendor|(?:r|build)\.js)$/,
