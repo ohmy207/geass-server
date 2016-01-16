@@ -132,7 +132,7 @@ define(['uploadImg', 'art-template'], function(uploadImg, template) {
         initWeixin: function(share) {
 
             if (share) {
-                share.link = window.location.href;
+                share.link = share.link || window.location.href;
             } else {
                 share = {
                     title: 'There - 投票社区',

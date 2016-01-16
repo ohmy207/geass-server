@@ -44,12 +44,14 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 thread.initWeixin({
                     title: re.data.topic.title,
                     desc: re.data.topic.content,
+                    link: 'http://geass.me/topic?tid=' + re.data.topic.tid,
                     imgUrl: re.data.topic.picture_urls.length > 0 ? re.data.topic.picture_urls[0]['origin'] : '',
                 });
             } else if (re.data.opinion) {
                 thread.initWeixin({
                     title: re.data.opinion.topic_title,
                     desc: re.data.opinion.content,
+                    link: 'http://geass.me/opinion?tid=' + re.data.opinion.tid + '&oid=' + re.data.opinion.oid,
                     imgUrl: re.data.opinion.picture_urls.length > 0 ? re.data.opinion.picture_urls[0]['origin'] : '',
                 });
             } else {
