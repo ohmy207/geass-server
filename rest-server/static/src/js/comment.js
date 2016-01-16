@@ -73,9 +73,9 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                 url = '/' + coParent + '/' + window.parentId + '/comments';
 
             thread.load({
-                isList: true,
+                isList: false,
                 isEmptyShow: true,
-                url: '/' + window.coParent + '/' + window.parentId + '/comments?first=1',
+                url: '/' + window.coParent + '/' + window.parentId + '/comments?first=1&skip=0',
                 emptyCon: '还没有任何评论',
                 callback: exports.render,
             }, 'drag');
