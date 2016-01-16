@@ -412,6 +412,7 @@ class CommentsHandler(BaseHandler):
         'option': [
             ('skip', int, 0),
             ('limit', int, 15),
+            ('first', int, 0),
         ]
     }
 
@@ -425,6 +426,8 @@ class CommentsHandler(BaseHandler):
     }
 
     def GET(self, parent, parent_id):
+        parent_id = self.to_objectid(parent_id)
+
         data_list = db_topic['comment'].get_comments(
             parent=parent,
             parent_id=parent_id,
@@ -437,6 +440,15 @@ class CommentsHandler(BaseHandler):
             'data_list': data_list,
             'next_start': self._skip + self._limit
         }
+
+        if self._params['first'] == 1:
+            if parent == 'topics':
+                self._data['topic'] = db_topic['topic'].get_one({'_id': parent_id})
+            elif parent == 'opinions':
+                opinion = db_topic['opinion'].get_one({'_id': parent_id})
+                opinion['topic_title'] = db_topic['topic'].find_one({'_id': self.to_objectid(opinion['tid'])}, {'title': 1})['title']
+                self._data['opinion'] = opinion
+
 
     @authenticated
     def POST(self, parent, parent_id):

@@ -29,14 +29,34 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
         load: function(action) {
             thread.load({
                 isList: true,
-                isEmptyShow: true,
+                isEmptyShow: false,
                 url: '/' + window.coParent + '/' + window.parentId + '/comments',
-                emptyCon: '还没有任何评论',
+                emptyCon: '',
                 callback: exports.renderList,
             }, action);
         },
 
         // render data
+        render: function(re, clear) {
+            exports.renderList(re)
+
+            if (re.data.topic) {
+                thread.initWeixin({
+                    title: re.data.topic.title,
+                    desc: re.data.topic.content,
+                    imgUrl: re.data.topic.picture_urls.length > 0 ? re.data.topic.picture_urls[0]['origin'] : '',
+                });
+            } else if (re.data.opinion) {
+                thread.initWeixin({
+                    title: re.data.opinion.topic_title,
+                    desc: re.data.opinion.content,
+                    imgUrl: re.data.opinion.picture_urls.length > 0 ? re.data.opinion.picture_urls[0]['origin'] : '',
+                });
+            } else {
+                thread.initWeixin();
+            }
+        },
+
         renderList: function(re) {
             var allReplyHtml = template('tmpl_reply', re.data);
             if(jq.trim(allReplyHtml)!==''){
@@ -50,9 +70,15 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             var coParent = window.coParent,
                 url = '/' + coParent + '/' + window.parentId + '/comments';
 
-            exports.load('drag');
+            thread.load({
+                isList: true,
+                isEmptyShow: true,
+                url: '/' + window.coParent + '/' + window.parentId + '/comments?first=1',
+                emptyCon: '还没有任何评论',
+                callback: exports.render,
+            }, 'drag');
+
             initLazyload('.warp img');
-            thread.initWeixin();
 
             //setInterval(function() {
             //    if (window.pageYOffset > 1000 && !thread.isNoShowToTop) {
