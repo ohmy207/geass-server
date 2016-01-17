@@ -3,7 +3,7 @@ var require = {
 
     waitSeconds: 15,
     //urlArgs: "t=" + (new Date()).getTime(),
-    urlArgs: "v=100",
+    urlArgs: "t=100",
 
     paths: {
 
