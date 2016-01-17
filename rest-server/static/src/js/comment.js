@@ -1,26 +1,3 @@
-/**
- **/
-
-require.config({
-
-    waitSeconds: 15,
-    urlArgs: "t=" + (new Date()).getTime(),
-
-    paths: {
-
-        //"jquery": "vendor/jquery-1.11.2.min",
-        "jquery": "vendor/jquery.min",
-        "art-template": "vendor/art-template",
-        "util": "module/util",
-
-        "jpegMeta": "module/jpegMeta",
-        "JPEGEncoder": "module/JPEGEncoder",
-        "imageCompresser": "module/imageCompresser",
-        "uploadImg": "module/uploadImg",
-        "thread": "module/thread",
-    }
-
-});
 
 require(['art-template', 'util', 'thread'],function (template, util, thread){
 

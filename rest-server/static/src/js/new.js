@@ -1,25 +1,3 @@
-/**
- **/
-
-require.config({
-
-    waitSeconds: 15,
-    urlArgs: "t=" + (new Date()).getTime(),
-
-    paths: {
-
-        "jquery": "vendor/jquery-1.11.2.min",
-        "jqueryForm": "vendor/jquery.form.min",
-        "util": "module/util",
-
-        "jpegMeta": "module/jpegMeta",
-        "JPEGEncoder": "module/JPEGEncoder",
-        "imageCompresser": "module/imageCompresser",
-        "uploadImg": "module/uploadImg",
-
-    }
-
-});
 
 require(['uploadImg', 'util'],function (uploadImg, util){
 
