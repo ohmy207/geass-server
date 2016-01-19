@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block header %}
+
+  <title>傀儡术</title>
+
+  <style type="text/css">
+    .topicList {
+      padding: 15px 30px;
+    }
+
+    .link {
+      padding: 30px 15px 15px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .link a {
+      font-size: 15px;
+    }
+
+    .topicList li {
+      padding: 35px 15px 35px 80px;
+    }
+
+    .topicList li img {
+      top: 21px;
+      height: 50px;
+      width: 50px;
+    }
+
+    .pName {
+      height: 22px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      line-height: 20px;
+      color: #000;
+    }
+  </style>
+
+{% end %}
+
+{% block script %}
+
+  <!--debug-->
+  <script type="text/javascript">
+      document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+          WeixinJSBridge.call('hideToolbar');
+          WeixinJSBridge.call('showOptionMenu');
+      });
+  </script>
+
+{% end %}
+
+{% block body %}
+
+  <style>
+   #wrap>div{-webkit-transform:translateZ(0);}
+  </style>
+
+  <div class="link"><a href="/">前往首页</a></div>
+  <div class="topicList">
+   <ul>
+    {% for p in puppets %}
+    <li class="borderBtm1" onclick="checkForm('{{ p['uid'] }}', '{{ p['nickname'] }}')">
+      <form id="submit{{ p['uid'] }}" action="/puppet_list" method="post">
+       {% raw xsrf_form_html() %}
+       <input type="hidden" name="uid" value="{{ p['uid'] }}">
+       <img data-src="/static/img/avatar.jpg" class="sImg br pa db " width="50" height="50" src="{{ p['avatar'] }}">
+       <div class="pName"><strong>{{ p['nickname'] }}</strong></div>
+      </form>
+     </li>
+    {% end %}
+   </ul>
+  </div>
+
+{% end %}
+
+{% block config %}{% end %}
+
+{% block jweixin %}{% end %}
+
+{% block footer %}
+
+  <script type="text/javascript">
+    function checkForm(formId, nickname) {
+      var form = document.getElementById('submit'+formId),
+          result = confirm('确定要切换成 ' + nickname + '吗？');
+
+      if (result==true) {
+          form.submit();
+      }
+    }
+  </script>
+
+{% end %}
