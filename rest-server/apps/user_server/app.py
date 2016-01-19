@@ -24,6 +24,43 @@ from config.global_setting import WEIXIN, APP_HOST, QINIU
 logger = log.getLogger(__file__)
 
 
+class PuppetsHandler(BaseHandler):
+
+    _post_params = {
+        'need': [
+            ('uid', basestring),
+        ],
+        'option': [
+        ]
+    }
+
+    special_users = ['569e088e3e9ff6721a8f8e81', '569dd28c3e9ff6720f61b0b1',
+        '569cb0213e9ff6720f61b0aa', '569caab33e9ff6720f61b0a2']
+
+    def get(self):
+        uid = self.to_objectid(self.session['origin_uid']) or self.current_user
+
+        if unicode(uid) not in self.special_users:
+            self.redirect('/')
+            return
+
+        puppets = db_user['user'].get_all({'open': {}})
+        current_user = db_user['user'].get_one({'_id': uid})
+        puppets.insert(0, current_user)
+
+        self.render('puppet_list.html', puppets=puppets)
+
+    def post(self):
+        uid = self.to_objectid(self.session['origin_uid']) or self.current_user
+
+        if unicode(uid) in self.special_users:
+            if not self.session['origin_uid']:
+                self.session['origin_uid'] = unicode(uid)
+            self.session['uid'] = self._params['uid']
+
+        self.redirect('/')
+
+
 class ForbiddenHandler(BaseHandler):
 
     def GET(self):
