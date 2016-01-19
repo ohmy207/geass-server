@@ -4,8 +4,8 @@ import random
 import string
 import time
 
-import log
 from config.global_setting import WEIXIN
+import log
 from wechat_sdk import WechatBasic
 from wechat_sdk.messages import (EventMessage, ImageMessage, LinkMessage,
                                  LocationMessage, TextMessage, VideoMessage,

@@ -8,9 +8,9 @@ import tornado.options
 import tornado.web
 from tornado.options import define, options
 
-import log
 from apps import urlpatterns
 from setting import APPLICATION_SETTING, LOG_SETTING
+import log
 
 
 define("port", default=8888, type=int)
@@ -51,4 +51,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
