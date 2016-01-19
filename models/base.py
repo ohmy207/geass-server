@@ -1,19 +1,14 @@
 # -*- coding:utf-8 -*-
 
-from datetime import datetime
-
-from bson.objectid import ObjectId
-from pymongo import ASCENDING, DESCENDING
-
-from utils.util import import_object
+# from pymongo import DESCENDING
 
 import db as _db
-
 from setting import MONGO_DB_MAPPING as _MONGO_DB_MAPPING
+from utils.util import import_object
 
 
 class MixinModel(_db.MixinModel):
-    
+
     _instance = {}
 
     @staticmethod
@@ -33,8 +28,8 @@ class BaseModel(_db.BaseModel, MixinModel):
 
     def get_all(self, spec=None, skip=0, limit=20, order=None, sort=None):
 
-        #if order:
-        #    sort = order == 'new' and [('ctime', DESCENDING)] or (order == 'hot' and [('rank', DESCENDING)]) or sort
+        # if order:
+        #     sort = order == 'new' and [('ctime', DESCENDING)] or (order == 'hot' and [('rank', DESCENDING)]) or sort
 
         return self.to_str(self.find(spec=spec, skip=skip, limit=limit, sort=sort), self.callback if hasattr(self, 'callback') else None)
 

@@ -1,25 +1,23 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import thread
-from urllib import quote
-from urllib import urlencode
-#from datetime import datetime
+from urllib import quote, urlencode
 
-import log
 import tornado.web
-
+from qiniu import Auth, BucketManager
 from tornado import gen
 from tornado.web import authenticated
-from qiniu import Auth, BucketManager
 
-from .base import BaseHandler
-from .base import WeiXinMixin
+import log
 from apps.base import ResponseError
-
+from cache.object_cache import ObjectCache
+from config.global_setting import APP_HOST, QINIU, WEIXIN
 from helpers import user as db_user
 from helpers import wechat as wc
-from cache.object_cache import ObjectCache
-from config.global_setting import WEIXIN, APP_HOST, QINIU
+
+from .base import BaseHandler, WeiXinMixin
+
+#from datetime import datetime
 
 logger = log.getLogger(__file__)
 
@@ -35,7 +33,7 @@ class PuppetsHandler(BaseHandler):
     }
 
     special_users = ['569e088e3e9ff6721a8f8e81', '569dd28c3e9ff6720f61b0b1',
-        '569cb0213e9ff6720f61b0aa', '569caab33e9ff6720f61b0a2']
+                     '569cb0213e9ff6720f61b0aa', '569caab33e9ff6720f61b0a2']
 
     def get(self):
         uid = self.to_objectid(self.session['origin_uid']) or self.current_user
@@ -161,7 +159,7 @@ class PageHandler(BaseHandler, WeiXinMixin):
         if route in ['following', 'publish_topics', 'publish_opinions']:
             state['type'] = route
 
-        self.render('%s.html'%self._PAGES[route], state=state)
+        self.render('%s.html' % self._PAGES[route], state=state)
 
 
 class BaseAuthorizeHandler(BaseHandler, WeiXinMixin):
@@ -261,4 +259,3 @@ class UserInfoAuthorizeHandler(BaseHandler, WeiXinMixin):
             return
 
         db_user['user'].update({'_id': self.to_objectid(uid)}, {'$set': {'avatar': ret['key']}}, w=1)
-

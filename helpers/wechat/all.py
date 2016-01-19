@@ -1,17 +1,15 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
-import string
 import random
+import string
 import time
 
 import log
-
-from wechat_sdk import WechatBasic
-from wechat_sdk.messages import (
-    TextMessage, VoiceMessage, ImageMessage, VideoMessage, LinkMessage, LocationMessage, EventMessage
-)
-
 from config.global_setting import WEIXIN
+from wechat_sdk import WechatBasic
+from wechat_sdk.messages import (EventMessage, ImageMessage, LinkMessage,
+                                 LocationMessage, TextMessage, VideoMessage,
+                                 VoiceMessage)
 
 logger = log.getLogger(__file__)
 

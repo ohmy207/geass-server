@@ -1,14 +1,9 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from tornado.web import authenticated
 
 import log
-
-from datetime import datetime
-
-from apps.base import BaseHandler
-from apps.base import ResponseError
-
+from apps.base import BaseHandler, ResponseError
 from helpers import topic as db_topic
 from helpers import user as db_user
 

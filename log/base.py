@@ -2,15 +2,14 @@ import os
 import logging
 import logging.handlers
 
-from setting import LOG_SETTING, APP_NAME
-
+from setting import APP_NAME, LOG_SETTING
 
 _formatter = logging.Formatter('%(levelname)s:%(asctime)s %(name)s:%(lineno)d:%(funcName)s %(message)s')
 
 
 def _init_file_logger(logger, level, log_path, log_size, log_count):
     """
-    one logger only have one level RotatingFileHandler 
+    one logger only have one level RotatingFileHandler
     """
     if level not in [logging.NOTSET, logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL]:
         level = logging.DEBUG
@@ -24,7 +23,7 @@ def _init_file_logger(logger, level, log_path, log_size, log_count):
     fh.setLevel(level)
     fh.setFormatter(_formatter)
     logger.addHandler(fh)
-    
+
 
 def _init_stream_logger(logger):
     ch = logging.StreamHandler()

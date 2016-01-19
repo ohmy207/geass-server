@@ -1,15 +1,15 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
-import os
-import sys
-import unittest
-import random
-import time
-import threading
 import logging
+import os
+import random
+import sys
+import threading
+import time
+import unittest
 
-import realpath
 import log
+import realpath
 
 test_log = log.getLogger(__file__)
 

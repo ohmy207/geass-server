@@ -15,6 +15,6 @@ def encode_http_params(**kw):
     except:
         _fo = lambda k, v: '%s=%s' % (k,urllib.quote(v))
 
-    _en = utf8 
+    _en = utf8
 
     return '&'.join([_fo(_en(k), _en(v)) for k, v in kw.items() if v is not None])
