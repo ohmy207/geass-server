@@ -88,8 +88,8 @@ ANONYMOUS_USER = {
 
 # qiniu config
 QINIU = {
-    'access_key': '-T4p3--nu5Byod30detbf9SSrC-p9RmLrEJdG_gR',
-    'secret_key': '7FB32WhNIgCNCHVyWko47WPHLlcXk6sN0EKgvgty',
+    'access_key': 'BfPDKIlW8NEnTuzaUvvive58C9c-9XyhAQPFNeCc',
+    'secret_key': 'xFFW7cm9DFtdj9U2K6tQtEgNDwBsRL_NncthWqaC',
 
     'bucket_name': {
         'avatar': 'geass-img1',
@@ -115,7 +115,7 @@ WEIXIN = {
     # general
     'token': 'geass',
     'appid': 'wxa8e41846ff86c459',
-    'appsecret': '8337c1065ac5eaf3e1a09f5dc71e3249',
+    'appsecret': 'a13763a07de91741a0fd67c2540a380b',
 
     # authorize
     'scope': {
