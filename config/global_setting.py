@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import os
 
@@ -19,15 +19,13 @@ else:
 
 
 APP_HOST = 'http://geass.me'
-#REDIS_HOSTS = [('localhost', 6379, 0)]
+# REDIS_HOSTS = [('localhost', 6379, 0)]
 REDIS = {
     'host': 'localhost',
     'port': 6379,
-
     'db': {
         'session': 0,
     },
-
     'key': {
     },
 }
@@ -101,9 +99,9 @@ QINIU = {
     'expires': 7200,
 
     'policy': {
-        #'saveKey': '$(etag)$(ext)',
+        # 'saveKey': '$(etag)$(ext)',
         'saveKey': '$(etag)',
-        #'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
+        # 'returnBody': 'key=$(key)hash=$(etag)ext$(ext)',
     },
 
     'avatar_url': 'http://img1.geass.me/',

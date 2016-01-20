@@ -1,12 +1,11 @@
-#-*- coding:utf-8 -*-
-
-import log
+# -*- coding:utf-8 -*-
 
 from datetime import datetime
 
-from models.topic import model as topic_model
-from helpers.base import BaseHelper, UserHelper
+import log
 from config.global_setting import PIC_URL
+from helpers.base import BaseHelper, UserHelper
+from models.topic import model as topic_model
 
 logger = log.getLogger(__file__)
 

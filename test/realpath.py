@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import os
 import sys
 
@@ -6,6 +6,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 # load app path into sys.path
+
 def app_path_load(dir_level_num=2):
     app_root_path = os.path.abspath(__file__)
     for i in xrange(0, dir_level_num):

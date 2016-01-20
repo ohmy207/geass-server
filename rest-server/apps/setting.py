@@ -6,4 +6,3 @@ INSTALLED_APPS = (
     'user',
     'user_server',
 )
-

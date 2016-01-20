@@ -1,13 +1,11 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import re
 
-from tornado import gen
-from tornado import httpclient
-from tornado import escape
-from tornado.httputil import url_concat
+from tornado import escape, gen, httpclient
+from tornado.auth import AuthError, OAuth2Mixin, _auth_return_future
 from tornado.concurrent import Future
-from tornado.auth import OAuth2Mixin, _auth_return_future, AuthError
+from tornado.httputil import url_concat
 
 from apps import base
 from config.global_setting import WEIXIN
@@ -94,7 +92,7 @@ class WeiXinMixin(OAuth2Mixin):
 
     def _on_authenticated_user(self, future, response):
         if response.error:
-            future.set_exception(AuthError('Error response %s fetching %s', 
+            future.set_exception(AuthError('Error response %s fetching %s',
                                            response.error, response.request.url))
             return
 

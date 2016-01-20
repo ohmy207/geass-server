@@ -1,7 +1,6 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 # installed app list
 INSTALLED_APPS = (
     'wechat',
 )
-

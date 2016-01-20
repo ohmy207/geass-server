@@ -1,15 +1,12 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
-from random import randint
 from datetime import datetime
+from random import randint
 
 from tornado.web import authenticated
 
 import log
-
-from apps.base import BaseHandler
-from apps.base import ResponseError
-
+from apps.base import BaseHandler, ResponseError
 from helpers import topic as db_topic
 from helpers import user as db_user
 
@@ -92,12 +89,12 @@ class OneTopicHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    # @authenticated
     def GET(self, tid):
         tid = self.to_objectid(tid)
         uid = self.current_user
         spec = {'tid': tid}
-        sort=[('vnum', -1), ('ctime', 1)]
+        sort = [('vnum', -1), ('ctime', 1)]
         topic = db_topic['topic'].get_one({'_id': tid})
 
         if not topic:
@@ -105,7 +102,7 @@ class OneTopicHandler(BaseHandler):
 
         proposals = db_topic['proposal'].get_all(spec, skip=0, limit=5, sort=sort)
 
-        sort=[('anum', -1), ('ctime', 1)]
+        sort = [('anum', -1), ('ctime', 1)]
         opinions = db_topic['opinion'].get_all(spec, skip=0, limit=10, sort=sort)
 
         self._data = {
@@ -175,11 +172,11 @@ class ProposalsHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    # @authenticated
     def GET(self, tid):
         tid = self.to_objectid(tid)
         spec = {'tid': tid}
-        sort=[('vnum', -1), ('ctime', 1)]
+        sort = [('vnum', -1), ('ctime', 1)]
         next_start = self._skip + self._limit
 
         proposals = db_topic['proposal'].get_all(spec, skip=self._skip, limit=self._limit, sort=sort)
@@ -233,7 +230,7 @@ class OneProposalHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    # @authenticated
     def GET(self, pid):
         uid = self.current_user
         pid = self.to_objectid(pid)
@@ -299,10 +296,10 @@ class OpinionsHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    # @authenticated
     def GET(self, tid):
         spec = {'tid': self.to_objectid(tid)}
-        sort=[('anum', -1), ('ctime', 1)]
+        sort = [('anum', -1), ('ctime', 1)]
 
         opinions = db_topic['opinion'].get_all(
             spec=spec,
@@ -359,7 +356,7 @@ class OneOpinionHandler(BaseHandler):
         ]
     }
 
-    #@authenticated
+    # @authenticated
     def GET(self, oid):
         uid = self.current_user
         oid = self.to_objectid(oid)
@@ -475,4 +472,3 @@ class CommentsHandler(BaseHandler):
         db_user['notice'].update_notice(parent_id, action, data['target'].get('uid', None))
 
         self._data = data
-

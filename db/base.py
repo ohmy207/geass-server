@@ -1,14 +1,13 @@
 # -*- coding:utf-8 -*-
 
-from datetime import datetime
-import time
 import functools
+import time
+from datetime import datetime
 
 from bson.objectid import ObjectId
 from pymongo import ASCENDING, DESCENDING
 
 import log
-
 from utils import escape as _es
 
 logger = log.getLogger(__file__)
@@ -143,7 +142,7 @@ class BaseBaseModel(MixinModel):
         # databases file
         self.__db_file = _MONGO_DB_MAPPING['db_file']
 
-        #databse name
+        # databse name
         if db_name not in self.__db or self.__db.get(db_name, None) is None:
             raise Exception("%s is invalid databse" % db_name)
 
@@ -160,9 +159,9 @@ class BaseBaseModel(MixinModel):
         if self.__collect is None:
             raise Exception("%s is invalid collection" % self.name)
 
-        #TODO gridfs as private variable
-        #self.__gridfs = self.__db_file.get(db_name, None)
-        #if self.__gridfs is None:
+        # TODO gridfs as private variable
+        # self.__gridfs = self.__db_file.get(db_name, None)
+        # if self.__gridfs is None:
         #    logger.warning("%s is invalid gridfs" % self.__gridfs)
 
     def __setitem__(self, k, v):
@@ -191,7 +190,7 @@ class BaseBaseModel(MixinModel):
             If replication does not complete in the given timeframe, a timeout exception is raised.
 
         """
-        if not kwargs.get('check') == False:
+        if not kwargs.get('check') is False:
             return self.create(doc_or_docs, **kwargs)
 
         return self.__collect.insert(doc_or_docs, **kwargs)
@@ -260,28 +259,28 @@ class BaseBaseModel(MixinModel):
         return self.__collect.remove(spec_or_id, **kwargs)
 
     # TODO gridfs method
-    #def put(self, value, **kwargs):
-    #    """gridfs put method
-    #    """
-    #    if value:
-    #        return self.__gridfs.put(value, **kwargs)
+    # def put(self, value, **kwargs):
+    #     """gridfs put method
+    #     """
+    #     if value:
+    #         return self.__gridfs.put(value, **kwargs)
 
-    #    return None
+    #     return None
 
-    #def delete(self, objid):
-    #    """gridfs delete method
-    #    """
-    #    return self.__gridfs.delete(self.to_objectid(objid))
+    # def delete(self, objid):
+    #     """gridfs delete method
+    #     """
+    #     return self.__gridfs.delete(self.to_objectid(objid))
 
-    #def get(self, objid):
-    #    """gridfs get method
-    #    """
-    #    return self.__gridfs.get(self.to_objectid(objid))
+    # def get(self, objid):
+    #     """gridfs get method
+    #     """
+    #     return self.__gridfs.get(self.to_objectid(objid))
 
-    #def read(self, objid):
-    #    """gridfs read method
-    #    """
-    #    return self.__gridfs.get(self.to_objectid(objid)).read()
+    # def read(self, objid):
+    #     """gridfs read method
+    #     """
+    #     return self.__gridfs.get(self.to_objectid(objid)).read()
 
     def find_by_id(self, objid, column=None):
         """find record by _id
@@ -297,7 +296,7 @@ class BaseBaseModel(MixinModel):
         return self.__collect.find_one({'_id': document_id}, column)
 
     def find_and_modify(self, query=None, update=None, upsert=False, sort=None, full_response=False, **kwargs):
-        return  self.__collect.find_and_modify(query=query, update=update, upsert=upsert, sort=sort, full_response=full_response, **kwargs)
+        return self.__collect.find_and_modify(query=query, update=update, upsert=upsert, sort=sort, full_response=full_response, **kwargs)
 
     def ensure_index(self, key_or_list, cache_for=300, **kwargs):
         return self.__collect.ensure_index(key_or_list, cache_for=cache_for, **kwargs)
@@ -389,7 +388,6 @@ class BaseBaseModel(MixinModel):
                 raise Exception("callback argument is not callable")
 
             return [callback(self.to_one_str(i)) for i in values]
-
 
 
 class BaseModel(BaseBaseModel):

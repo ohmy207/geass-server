@@ -1,18 +1,17 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
-import sys
 import os
+import sys
 
-import tornado.web
 import tornado.httpserver
 import tornado.options
-
+import tornado.web
 from tornado.options import define, options
 
 from apps import urlpatterns
 from setting import APPLICATION_SETTING, LOG_SETTING
-#from utils import session
 import log
+
 
 define("port", default=8888, type=int)
 
