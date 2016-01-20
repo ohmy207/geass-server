@@ -1,12 +1,10 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import log
-
-#from tornado.web import authenticated
-
 from apps.base import BaseHandler
-
 from helpers import wechat as wc
+
+# from tornado.web import authenticated
 
 logger = log.getLogger(__file__)
 
@@ -26,8 +24,8 @@ class WeiXinHandler(BaseHandler):
 
     # server verify
     def get(self):
-       if wc['wechat'].check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
-           self.write(self._params['echostr'])
+        if wc['wechat'].check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):
+            self.write(self._params['echostr'])
 
     def post(self):
         # if wc['wechat'].check_signature(signature=self._params['signature'], timestamp=self._params['timestamp'], nonce=self._params['nonce']):

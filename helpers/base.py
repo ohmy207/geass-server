@@ -1,17 +1,19 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
+# import cPickle as pickle
 from datetime import datetime
-import cPickle as pickle
 
-import redis
-
+# import redis
 from tornado.escape import xhtml_escape
-#from pymongo import DESCENDING, ASCENDING
+
+from config.global_setting import ANONYMOUS_USER, DEFAULT_USER, PIC_URL
+from models.user import model as user_model
+from utils import escape as _es
 
 from .setting import COLLECTION_PREFIX as _PREFIX
-from utils import escape as _es
-from config.global_setting import PIC_URL, ANONYMOUS_USER, DEFAULT_USER
-from models.user import model as user_model
+
+
+# from pymongo import DESCENDING, ASCENDING
 
 
 class Helper(dict):

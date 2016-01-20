@@ -1,5 +1,4 @@
-
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from .base import *
 
@@ -10,7 +9,7 @@ class User(Model):
 
     field = {
         'nickname':         (basestring, ''),
-        'open':             (dict, {})      ,
+        'open':             (dict,       {}),
         'sex':              (basestring, ''),
         'avatar':           (basestring, ''),
     }
@@ -75,10 +74,9 @@ class Notice(Model):
         'uid':             (ObjectId, None),
         'paid':            (ObjectId, None),
 
-        'action':          (int, 0)        ,
+        'action':          (int,         0),
 
-        'isread':          (bool, False)   ,
+        'isread':          (bool,    False),
 
         'ctime':           (datetime, None),
     }
-

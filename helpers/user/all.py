@@ -1,13 +1,12 @@
-#-*- coding:utf-8 -*-
-
-import log
+# -*- coding:utf-8 -*-
 
 from datetime import datetime
 
-from helpers.base import BaseHelper, UserHelper
-from models.user import model as user_model
-from models.topic import model as topic_model
+import log
 from helpers import topic as topic_helper
+from helpers.base import BaseHelper, UserHelper
+from models.topic import model as topic_model
+from models.user import model as user_model
 
 logger = log.getLogger(__file__)
 
@@ -212,7 +211,7 @@ class Notice(BaseHelper, user_model.Notice):
 
     def check_all_notices(self, uid, filter_type):
         spec = {'uid': uid, 'isread': False,
-            'action': {'$in': [7, 8]} if filter_type == 'support' else {'$nin': [7, 8]}}
+                'action': {'$in': [7, 8]} if filter_type == 'support' else {'$nin': [7, 8]}}
 
         if not self.find_one(spec):
             return

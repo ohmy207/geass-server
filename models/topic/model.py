@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from .base import *
 
@@ -139,4 +139,3 @@ class ProposalEditLog(Model):
 
         'ctime':            (datetime, None),
     }
-

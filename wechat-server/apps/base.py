@@ -1,18 +1,14 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
+import tornado.web
 from bson import json_util
 from bson.objectid import ObjectId
 
-import tornado.web
-
 import log
-
 from config.global_setting import ERROR_PAGE_MESSAGE, MESSAGE
-from utils import (
-    escape as _es,
-    httputil as _ht,
-    session
-)
+from utils import escape as _es
+from utils import httputil as _ht
+from utils import session
 
 logger = log.getLogger(__file__)
 

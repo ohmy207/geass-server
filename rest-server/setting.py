@@ -1,10 +1,11 @@
+import logging
 import os
 import sys
-import logging
 
 from tornado.util import ObjectDict
+
+from config.global_setting import REDIS, TEST_MODE
 from utils import session
-from config.global_setting import TEST_MODE, REDIS
 
 # app name
 APP_NAME = 'geass-server'
@@ -28,7 +29,7 @@ APPLICATION_SETTING = ObjectDict(
     #autoescape=None,
 )
 
-# app setting 
+# app setting
 LOG_SETTING = ObjectDict(
     log_level=logging.INFO,
     log_path=os.path.join("/var/log/", APP_NAME+'.log'),

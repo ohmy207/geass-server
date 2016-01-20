@@ -1,4 +1,4 @@
-#-*- conding:utf-8-*-
+# -*- conding:utf-8-*-
 
 import time
 import inspect
@@ -36,7 +36,7 @@ class ObjectCache(object):
     def create(data_source, name=None, expire=600, **kwargs):
         if not inspect.isroutine(data_source):
             raise Exception("data_source %s must be callable function" % data_source)
-        
+
         if not isinstance(expire, int):
             raise Exception("expire %s must be int type" % expire)
 

@@ -1,18 +1,14 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
+import tornado.web
 from bson import json_util
 from bson.objectid import ObjectId
 
-import tornado.web
-
 import log
-
-from config.global_setting import ERROR_PAGE_MESSAGE, MESSAGE, CDN
-from utils import (
-    escape as _es,
-    httputil as _ht,
-    session
-)
+from config.global_setting import CDN, ERROR_PAGE_MESSAGE, MESSAGE
+from utils import escape as _es
+from utils import httputil as _ht
+from utils import session
 
 logger = log.getLogger(__file__)
 
@@ -181,7 +177,7 @@ class BaseHandler(tornado.web.RequestHandler):
         pass
 
     def route(self, route, *args, **kwargs):
-        getattr(self,  "do_%s"%route, lambda *args, **kwargs: None)(*args, **kwargs)
+        getattr(self,  "do_%s" % route, lambda *args, **kwargs: None)(*args, **kwargs)
 
     def wo_resp(self, resp):
         if resp['code'] != 0:
@@ -297,3 +293,4 @@ class BaseHandler(tornado.web.RequestHandler):
             return '%s/%s?v=%s' % (CDN['host'], path, v)
         else:
             return '%s/%s' % (CDN['host'], path)
+
