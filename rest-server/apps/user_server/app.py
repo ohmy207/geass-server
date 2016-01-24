@@ -33,7 +33,8 @@ class PuppetsHandler(BaseHandler):
     }
 
     special_users = ['569e088e3e9ff6721a8f8e81', '569dd28c3e9ff6720f61b0b1',
-                     '569cb0213e9ff6720f61b0aa', '569caab33e9ff6720f61b0a2']
+                     '569cb0213e9ff6720f61b0aa', '569caab33e9ff6720f61b0a2',
+                     '56a0d08b3e9ff62784eaa034', '56a0d0363e9ff62784eaa033']
 
     def get(self):
         uid = self.to_objectid(self.session['origin_uid']) or self.current_user
