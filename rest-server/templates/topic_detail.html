@@ -19,8 +19,8 @@
    <div class="detailBox">
 
     <div class="topicInfo borderBtm1">
-     <a href="javascript:;" class="f14 c9" style="margin-right:10px;display:none;"><i class="iconTotal cf cc"></i></a>
-     <a href="javascript:;" class="f14 c9 threadEdit"><i class="iconEdit cf cc"></i>编辑</a>
+     <a href="javascript:;" class="f14 c9 threadEdit" style="margin-right:10px;"><i class="iconEdit cf cc"></i>编辑</a>
+     <a href="javascript:;" data-link="/comment_list?parent=topics&parent_id={{ state['tid'] }}" class="f14 c9"><i class="iconReply3 cf cc"></i></a>
      <a id="" href="javascript:;" class="followBtn f14 c2 fr">关注</a>
     </div>
 
@@ -270,7 +270,6 @@
 
   <div class="bottomBar pr" id="bottomBar" style="display:none;">
    <a href="/" class="item"><i class="cf iconTopic2"></i>首页</a>
-   <a href="/comment_list?parent=topics&parent_id={{ state['tid'] }}" class="item"><i class="cf iconReply"></i></a>
    <a href="/personal" class="item"><i class="cf iconUser"></i>我的</a>
   </div>
 

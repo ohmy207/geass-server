@@ -35,7 +35,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
             }
             jq('.topicInfo .followBtn').attr('class', follow_class).html(follow_html);
             //jq('.topicInfo .iconTotal').after(thread.voteTotalNum + ' 票');
-            jq('#bottomBar .iconReply').parent('.item').html('<i class="cf iconReply"></i>' + re.data.comments_count);
+            jq('.topicInfo .iconReply3').after(re.data.comments_count);
 
             jq('.warp, #bottomBar').show();
 
@@ -172,6 +172,17 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     thread.edit(loadOpts.url, 'topic', exports.isAnonymous, exports.isAuthor);
                 };
                 thread.checkIsRegistered(callback);
+            });
+
+            jq('.topicInfo').on('click', '[data-link]', function(e) {
+                var thisObj = jq(this), link;
+                jq.UTIL.touchStateNow(thisObj, 'tapFg');
+
+                link = thisObj.attr('data-link') || '';
+                if (link) {
+                    jq.UTIL.reload(link);
+                }
+                return false;
             });
 
             thread.initTouchRefresh(exports.load);
