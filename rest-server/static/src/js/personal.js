@@ -27,7 +27,7 @@ require(['art-template', 'util', 'thread'],function (template, util, thread){
                     'count': re.data.publish_opinions.count,
                     'title': '我的看法',
                     'link': '/publish_opinions',
-                    'icon': 'iconOpinion',
+                    'icon': 'iconReply3',
                 });
 
             jq('#header').append(headerHtml);

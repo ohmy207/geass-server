@@ -57,10 +57,11 @@ a {
     color: #3668b2
 }
 
-a:visited,a:active {
-    outline: 0
-none;
+a:visited, a:active {
+    outline: 0 none;
+    /*
     color: #5a85ce
+    */
 }
 
 .fl {
@@ -283,6 +284,14 @@ img {
 
 .tapBg1 {
     background-color: #97BCDF!important;
+}
+
+.tapFg {
+    color: #97BCDF!important;
+}
+
+.tapFg .iconReply3:before {
+    color: #97BCDF!important;
 }
 
 .honorBg,.honorBg1,.master,.gBg1,.gBg2,.gBg3 {
@@ -689,7 +698,7 @@ img {
     vertical-align: middle;
 }
 
-.topicInfo .iconEdit {
+.topicInfo .iconEdit, .topicInfo .iconReply3 {
     margin-right: 5px;
 }
 
@@ -4353,9 +4362,8 @@ i {
     color: #FF8345;
 }
 
-.iconOpinion:before {
+.iconReply3:before {
     content: "\e611";
-    color: #FFC649;
 }
 
 .iconAccount:before {
@@ -4388,14 +4396,15 @@ i {
     vertical-align: -4%;
 }
 
-.pTitle .iconQuestion:before, .pTitle .iconNotice:before, .pTitle .iconMark:before, .pTitle .iconOpinion:before, .pTitle .iconTopic:before {
+.pTitle .iconQuestion:before, .pTitle .iconNotice:before, .pTitle .iconMark:before, .pTitle .iconReply3:before, .pTitle .iconTopic:before {
     margin-right: 7px;
     font-size: 20px;
     vertical-align: -3%;
 }
 
-.pTitle .iconOpinion:before {
+.pTitle .iconReply3:before {
     font-size: 18px;
+    color: #FFC649;
 }
 
 .iconPraise:before,.iconNoPraise:before {
