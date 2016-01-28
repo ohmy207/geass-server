@@ -26,7 +26,7 @@ class LoginHandler(BaseHandler):
             ('password', basestring),
         ],
         'option': [
-            ('next', basestring, '/'),
+            ('next', basestring, '/god'),
         ]
     }
 
