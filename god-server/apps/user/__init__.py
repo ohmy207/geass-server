@@ -2,7 +2,7 @@
 
 import app
 
-prefix = ''
+prefix = '/god'
 
 urls = [
 
